@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import "./assets/css/tailwind.css"
-import './assets/tailwind.css'
+import "./assets/style/app.scss"
 
-createApp(App).use(router).mount('#app')
+import "@fontsource/alata"
+
+createApp(App).use(router).mount('#oswapApp')

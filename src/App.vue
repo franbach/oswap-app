@@ -1,30 +1,32 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div id="root" class="antialiased flex flex-col h-screen">
+    
+    <div id="header" class="w-full">
+      <Header />
+    </div>
+    
+    <div id="body" class="w-full h-full">
+      <router-view/>
+    </div>
+
+    <div id="footer" class="w-full">
+      <Footer />
+    </div>
+
   </div>
-  <router-view/>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+export default {
+  name: 'OpenSwap',
+  components: {
+    Header,
+    Footer
   }
 }
-</style>
+
+</script>
