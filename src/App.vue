@@ -1,5 +1,5 @@
 <template>
-  <div id="root" class="antialiased flex flex-col h-screen">
+  <div id="root" class="antialiased flex flex-col h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100">
     
     <div id="header" class="w-full">
       <Header />
