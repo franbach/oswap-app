@@ -1,8 +1,8 @@
 <template>
   <Menu as="div" class="relative">
-    <MenuButton class="flex items-center space-x-2 p-2 px-3 rounded-lg group cursor-pointer bg-gray-50 bg-opacity-0 hover:bg-opacity-20 focus:outline-none focus:ring-1 focus:ring-black active:bg-oswapGreen-light focus:ring-opacity-20">
-      <i class="las la-stream text-xl group-hover:text-oswapGreen"></i>
-      <p class="text-sm group-hover:text-oswapBlue-light">More</p>
+    <MenuButton class="flex items-center space-x-2 p-2 px-3 rounded-lg group cursor-pointer focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
+      <i class="las la-icons text-2xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
+      <p class="group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
     </MenuButton>
 
     
@@ -17,63 +17,63 @@
       <MenuItems class="absolute z-10">
         <div class="absolute z-10 w-72 mt-3 left-0">
           <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-            <div class="relative grid gap-8 bg-white p-4 lg:grid-cols-1">
+            <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 lg:grid-cols-1">
               <MenuItem>
-                <router-link to="/pairs" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/pairs" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-                    <div class="flex flex-1 h-full items-center bg-gray-100 justify-center rounded-lg">
+                    <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
                       <i class="las la-balance-scale text-3xl text-oswapGreen"></i>
                     </div>
                   </div>
                   <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-900">Pairs</p>
-                    <p class="text-sm text-gray-500">Check pair adresses</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-oswapGreen">Pairs</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">Check pair adresses</p>
                   </div>
                 </router-link>
               </MenuItem>
               <MenuItem>
-                <router-link to="/tokens" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/tokens" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-                    <div class="flex flex-1 h-full items-center bg-gray-100 justify-center rounded-lg">
+                    <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
                       <i class="las la-tasks text-3xl text-oswapGreen"></i>
                     </div>
                   </div>
                   <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-900">Tokens</p>
-                    <p class="text-sm text-gray-500">Check tokens available</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-oswapGreen">Tokens</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">Check tokens available</p>
                   </div>
                 </router-link>
               </MenuItem>
               <MenuItem>
-                <router-link to="/migrate" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/migrate" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-                    <div class="flex flex-1 h-full items-center bg-gray-100 justify-center rounded-lg">
+                    <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
                       <i class="las la-share text-3xl text-oswapGreen"></i>
                     </div>
                   </div>
                   <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-900">Migrate</p>
-                    <p class="text-sm text-gray-500">Migrate your assets</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-oswapGreen">Migrate</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">Migrate your assets</p>
                   </div>
                 </router-link>
               </MenuItem>
               <MenuItem>
-                <router-link to="/information" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/information" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-                    <div class="flex flex-1 h-full items-center bg-gray-100 justify-center rounded-lg">
+                    <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
                       <i class="las la-info-circle text-3xl text-oswapGreen"></i>
                     </div>
                   </div>
                   <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-900">Infomation</p>
-                    <p class="text-sm text-gray-500">OpenSwap useful information</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-oswapGreen">Infomation</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">OpenSwap useful information</p>
                   </div>
                 </router-link>
               </MenuItem>
             </div>
-            <div class="p-2 bg-gray-50">
-              <a href="##" class="flow-root p-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                <span class="flex items-center"><span class="text-sm font-medium text-gray-900"> Documentation </span></span><span class="block text-sm text-gray-500">Read the official documentation for OpenSwap</span>
+            <div class="p-2 bg-gray-50 dark:bg-gray-600">
+              <a href="##" class="flow-root p-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <span class="flex items-center"><span class="text-sm font-medium text-gray-900 dark:text-oswapGreen"> Documentation </span></span><span class="block text-sm text-gray-500 dark:text-gray-300">Read the official documentation for OpenSwap</span>
               </a>
             </div>
           </div>

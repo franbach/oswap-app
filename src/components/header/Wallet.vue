@@ -1,8 +1,8 @@
 <template>
-  <div id="walletState">
+  <div id="walletState" class="pl-3">
     <!-- Wallet disconnected state styling -->
-    <div v-show="connected === false" class="flex w-44 items-center text-gray-500 space-x-1 pr-2 p-1 rounded-lg bg-gray-50 bg-opacity-20 hover:bg-opacity-50 cursor-pointer shadow ring-2 ring-black ring-opacity-5">
-      <div class="flex items-center p-1 bg-gray-200 rounded-md">
+    <div v-show="connected === false" class="flex w-44 items-center text-gray-500 space-x-1 pr-2 p-1 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-100 cursor-pointer ring-2 ring-black ring-opacity-5">
+      <div class="flex items-center p-1 bg-gray-200 dark:bg-oswapDark-gray rounded-md">
         <i class="las la-wallet text-xl"></i>
       </div>
       <div class="flex w-full items-center p-1 text-sm justify-center">
@@ -13,12 +13,12 @@
     </div>
 
     <!-- Wallet connected state styling -->
-    <div v-show="connected" class="flex w-44 items-center space-x-1 pr-2 p-1 rounded-lg bg-opacity-20 hover:bg-opacity-50 cursor-pointer border shadow-lg ring-2 ring-oswapGreen ring-opacity-20">
+    <div v-show="connected" class="flex w-44 items-center space-x-1 pr-2 p-1 rounded-lg bg-opacity-20 hover:bg-opacity-50 cursor-pointer border-oswapGreen-dark border-2 glow-oswapGreen-light-md">
       <div class="flex items-center p-1 bg-oswapGreen rounded-md">
-        <i class="las la-wallet text-xl text-white"></i>
+        <i class="las la-wallet text-xl text-white dark:text-oswapDark-gray"></i>
       </div>
       <div class="flex w-full items-center p-1 text-sm justify-center">
-        <p>
+        <p class="dark:text-oswapGreen">
           Wallet Connected
         </p>
       </div>

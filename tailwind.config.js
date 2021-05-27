@@ -11,8 +11,23 @@ module.exports = {
     ]
   },
   presets: [],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
+    glow: {
+      styles: { // Defaults to these values
+        default: baseColor =>
+          `0 1px 3px 0 rgba(${baseColor}, 0.4), 0 1px 2px 0 rgba(${baseColor}, 0.24)`,
+        md: baseColor =>
+          `0 4px 6px -1px rgba(${baseColor}, 0.4), 0 2px 4px -1px rgba(${baseColor}, 0.24)`,
+        lg: baseColor =>
+          `0 10px 15px -3px rgba(${baseColor}, 0.4), 0 4px 6px -2px rgba(${baseColor}, 0.20)`,
+        xl: baseColor =>
+          `0 20px 25px -5px rgba(${baseColor}, 0.4), 0 10px 10px -5px rgba(${baseColor}, 0.16)`,
+        "2xl": baseColor => `0 25px 50px -12px rgba(${baseColor}, 1)`,
+        outline: baseColor => `0 0 0 3px rgba(${baseColor}, 0.5)`,
+        none: "none"
+      }
+    },
     container: {
       center: true
     },
@@ -40,6 +55,12 @@ module.exports = {
         light: '#109dbb',
         DEFAULT: '#0462b3',
         dark: '#077db5',
+      },
+      oswapDark: {
+        gray: '#262334',
+        DEFAULT: '#2a2138',
+        purple: '#241b2e',
+        dark: '#17151f'
       },
 
       transparent: 'transparent',
@@ -927,5 +948,6 @@ module.exports = {
     }
   },
   plugins: [
+    require("tailwindcss-glow")(),
   ],
 }
