@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@fontsource/alata": "^4.3.0",
+    "@headlessui/vue": "^1.2.0",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
