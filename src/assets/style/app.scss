@@ -5,3 +5,24 @@
 // Line Awesome Icons
 $la-font-path: "~line-awesome/dist/line-awesome/fonts" !default;
 @import '~line-awesome/dist/line-awesome/scss/line-awesome.scss';
+
+/* list transitions */
+.token-list-enter-from {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.token-list-enter-active {
+  transition: all 0.4s ease;
+}
+.token-list-leave-to {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.token-list-leave-active {
+  transition: all 0.4s ease;
+  position: absolute; /* for move transition after item leaves */
+}
+.token-list-move {
+  transition: all 0.3s ease;
+}
+

@@ -5,7 +5,6 @@
       <p class="group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
     </MenuButton>
 
-    
     <transition
       enter-active-class="transform transition duration-200 ease-out"
       enter-from-class="translate-x-4 opacity-0"
@@ -19,10 +18,10 @@
           <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
             <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 lg:grid-cols-1">
               <MenuItem>
-                <router-link to="/pairs" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/pairs" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
                     <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
-                      <i class="las la-balance-scale text-3xl text-oswapGreen"></i>
+                      <i class="las la-balance-scale text-3xl text-oswapGreen group-hover:text-oswapBlue-light"></i>
                     </div>
                   </div>
                   <div class="ml-4">
@@ -32,10 +31,10 @@
                 </router-link>
               </MenuItem>
               <MenuItem>
-                <router-link to="/tokens" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/tokens" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
                     <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
-                      <i class="las la-tasks text-3xl text-oswapGreen"></i>
+                      <i class="las la-tasks text-3xl text-oswapGreen group-hover:text-oswapBlue-light"></i>
                     </div>
                   </div>
                   <div class="ml-4">
@@ -45,10 +44,10 @@
                 </router-link>
               </MenuItem>
               <MenuItem>
-                <router-link to="/migrate" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/migrate" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
                     <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
-                      <i class="las la-share text-3xl text-oswapGreen"></i>
+                      <i class="las la-share text-3xl text-oswapGreen group-hover:text-oswapBlue-light"></i>
                     </div>
                   </div>
                   <div class="ml-4">
@@ -58,10 +57,10 @@
                 </router-link>
               </MenuItem>
               <MenuItem>
-                <router-link to="/information" class="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/information" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
                     <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
-                      <i class="las la-info-circle text-3xl text-oswapGreen"></i>
+                      <i class="las la-info-circle text-3xl text-oswapGreen group-hover:text-oswapBlue-light"></i>
                     </div>
                   </div>
                   <div class="ml-4">
