@@ -1,8 +1,8 @@
 <template>
   <Menu as="div" class="relative">
     <MenuButton class="flex items-center space-x-2 p-2 px-3 rounded-lg group cursor-pointer focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-      <i class="las la-icons text-2xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
-      <p class="group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
+      <i class="las la-icons text-xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
+      <p class="text-sm group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
     </MenuButton>
 
     <transition

@@ -5,8 +5,7 @@
 </template>
 
 <script>
-
-export default {
-  name: 'Tokens'
-}
+  export default {
+    name: 'Tokens'
+  }
 </script>

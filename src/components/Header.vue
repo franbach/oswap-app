@@ -5,18 +5,18 @@
     <div class="flex items-center space-x-2 text-gray-500">
 
       <router-link to="/" class="flex items-center space-x-2 p-2 px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-        <i class="las la-random text-2xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
-        <p class="group-hover:text-oswapBlue-light dark:text-oswapGreen">Exchange</p>
+        <i class="las la-random text-xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
+        <p class="text-sm group-hover:text-oswapBlue-light dark:text-oswapGreen">Exchange</p>
       </router-link>
 
       <router-link to="/liquidity" class="flex items-center space-x-2 p-2 px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-        <i class="las la-tint text-2xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
-        <p class="group-hover:text-oswapBlue-light dark:text-oswapGreen">Liquidity</p>
+        <i class="las la-tint text-xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
+        <p class="text-sm group-hover:text-oswapBlue-light dark:text-oswapGreen">Liquidity</p>
       </router-link>
 
       <router-link to="/farm" class="flex items-center space-x-2 p-2 px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-        <i class="las la-tractor text-2xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
-        <p class="group-hover:text-oswapBlue-light dark:text-oswapGreen">Farm</p>
+        <i class="las la-tractor text-xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
+        <p class="text-sm group-hover:text-oswapBlue-light dark:text-oswapGreen">Farm</p>
       </router-link>
 
       <!-- Menu 'More' (dropdown) -->
@@ -25,7 +25,7 @@
       <!-- Oswap token info -->
       <div class="flex items-center space-x-2 p-2 px-3 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-black">
         <img alt="Vue logo" src="../assets/oswap_asset.png" class="h-6">
-        <p class="text-sm dark:text-oswapGreen">$1.00</p>
+        <p class="text-xs dark:text-oswapGreen">$1.00</p>
       </div>
 
       <!-- Wallet Button  -->
