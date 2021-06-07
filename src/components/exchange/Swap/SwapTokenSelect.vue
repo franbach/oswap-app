@@ -9,7 +9,7 @@
     <!-- if token selected -->
     <div v-else class="flex flex-1 items-center animate__animated animate__fadeInLeft animate__faster">
       <div class="flex items-center">
-        <img :src="this.getToken()[whichToken].imgSrc" class="h-12 m-3" alt="">            
+        <img :src="this.getToken()[whichToken].imgSrc" class="h-12 w-12 rounded-full flex items-center justify-center  m-3" alt="">            
       </div>
       <div class="flex flex-1 flex-col items-start justify-center">
         <p class="dark:text-gray-300">{{this.getToken()[whichToken].Symbol}}</p>

@@ -31,7 +31,7 @@
             <div class="flex flex-wrap w-full mt-2 px-2">
               <!-- icons -->
               <div @click="selectToken(token)" v-for="(token, idx) in network.tokens" :key="idx" class="flex flex-col space-y-2 w-1/5 h-16 rounded-xl items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer mb-2">
-                <img :src="token.imgSrc" alt="" class="h-8">
+                <img :src="token.imgSrc" alt="" class="h-8 w-8 rounded-full flex items-center justify-center">
                 <p class="text-xs dark:text-gray-300">
                   {{token.Symbol}}
                 </p>
