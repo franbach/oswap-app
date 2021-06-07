@@ -3,11 +3,16 @@ const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
 const { bsctokens } = require("./exchange_tokens/bscTokens.js");
 
 export default {
+  // --------------------------------------------------------------------------
+  // Everything Related to Swap Component -------------------------------------
+  // to map this functions to components you must add:
+  // ...mapGetters('exchange', ['functionName, ...'])
+  // then to call the function in the component: this.functionName()
+  // --------------------------------------------------------------------------
   namespaced: true,
 
   state: {
     swap: {},
-
     allTokens: [ 
       { 
         name: 'Harmony Native Tokens',
@@ -91,6 +96,52 @@ export default {
     _resetTokens: (state) => {
       state.swap = {}
     }
-  }
+  },
 
+  modules: {
+    // ------------------------------------------------------------------------
+    // Everything Related to Swapper Component --------------------------------
+    // to map this functions to components you must add:
+    // ...mapGetters('exchange/swapper', ['functionName, ...'])
+    // then to call the function in the component: this.functionName()
+    // ------------------------------------------------------------------------
+    swapper: {
+      namespaced: true,
+  
+      state: {
+        warning: {
+          highImpact: {
+            show: false,
+            msg: "Price impact high. Check reserves. Continue only if you know what you are doing."
+          },
+          error: {
+            show: false,
+            msg: "Pool Doesn't Exist : Using routing if available.",
+          }
+        }
+      },
+  
+      // this.warning('error').msg
+      // this.warning('highImpact').msg
+      getters: {
+        warning: (state) => (type) => {
+          return state.warning[type]
+        }
+      },
+
+      // this.warn('error')
+      // this.warn('highImpact')
+      actions: {
+        warn({ commit }, warning) {
+          commit('_warn', warning)
+        }
+      },
+
+      mutations: {
+        _warn: (state, warning) => {
+          state.warning[warning].show = !state.warning[warning].show
+        }
+      }
+    }
+  }
 }
