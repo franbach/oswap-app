@@ -9,6 +9,8 @@ import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 import "./assets/style/app.scss"
 import "@fontsource/alata"
 
+import 'animate.css';
+
 const app = createApp(App)
 
 app.use(router);
