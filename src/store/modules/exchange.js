@@ -35,7 +35,9 @@ export default {
       state.allTokens.forEach(network => {
         Object.fromEntries(
           Object.entries(network.tokens).filter(([k, v]) => {
-            if (k.match(new RegExp(`^${search}$`, 'i'))) {
+            let regex = RegExp(`^${search}`, 'i')
+            regex.ignoreCase;
+            if (k.match(regex )) {
               filtered.push(
                 { 
                   name: network.name, 
