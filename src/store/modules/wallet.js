@@ -1,3 +1,4 @@
+
 export default {
   namespaced: true,
 
@@ -46,8 +47,8 @@ export default {
   		}
   		
   	},
-  	getWallet: () => {
-  		return state.wallet
+  	getWallet: (state) => {
+  		return state.wallet;
   	}
 
   },
@@ -66,4 +67,4 @@ export default {
   	}
   },
   modules: {}
-}
+};
