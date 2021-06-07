@@ -34,6 +34,9 @@ import wallet from '../../shared/wallet.js'
 export default {
   name: 'Wallet',
   mixins: [wallet],
+  mounted(){
+    this.connectWallet();
+  },
   data() {
     return {
       walletConnected: false
