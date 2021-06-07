@@ -36,24 +36,24 @@ export default {
     // Retrieves All tokens or by user input
     retrieveTokens: (state) => (search) => {
       let filtered = [];
+      let regex = RegExp(`\w?${search}`, 'i')
   
       state.allTokens.forEach(network => {
-        Object.fromEntries(
-          Object.entries(network.tokens).filter(([k, v]) => {
-            let regex = RegExp(`^${search}`, 'i')
-            regex.ignoreCase;
-            if (k.match(regex )) {
-              filtered.push(
-                { 
-                  name: network.name, 
-                  icon: network.icon, 
-                  tokens: { token: network.tokens[k] } 
-                }
-              )
-            }      
+        let tokenFound = {}
+        Object.entries(network.tokens).forEach(([k, v]) => {
+          if (v.Symbol.match(regex)) {
+            tokenFound[k] = v
+          }
+        });
+        if (Object.keys(tokenFound).length > 0) {
+          filtered.push({
+            name: network.name,
+            icon: network.icon,
+            tokens: tokenFound
           })
-        )
+        }
       });
+
       if (search !== '') { 
         return filtered
       } else { 
