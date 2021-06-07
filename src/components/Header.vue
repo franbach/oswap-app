@@ -1,6 +1,6 @@
 <template>
   <header class="max-w-screen-xl mx-auto flex justify-between h-14 py-9 xl:px-0 px-3 items-center">
-    <img alt="Vue logo" src="../assets/oswap_logo.png" class="h-12">
+    <img alt="OpenSwap" src="../assets/oswap_logo.png" class="h-12">
     <!-- Navigation Start -->
     <div class="flex items-center space-x-2 text-gray-500">
 
@@ -24,7 +24,7 @@
 
       <!-- Oswap token info -->
       <div class="flex items-center space-x-2 p-2 px-3 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-black">
-        <img alt="Vue logo" src="../assets/oswap_asset.png" class="h-6">
+        <img alt="Oswap Info" src="../assets/oswap_asset.png" class="h-6">
         <p class="text-xs dark:text-oswapGreen">${{oswapPrice}}</p>
       </div>
 
@@ -39,11 +39,11 @@
 <script>
   import Wallet from '@/components/header/Wallet'
   import MoreButton from '@/components/header/MoreButton'
-  import store from "../store";
   import { mapGetters, mapActions } from 'vuex'
-
   import Web3 from "web3";
+
   const { Fetcher, ChainId } = require("openswap-sdk");
+
   export default {
     name: 'Header',
     components: {
@@ -57,19 +57,13 @@
       }
     },
     mounted: async function() {
-    
-    await this.getOswapPrice();
+      await this.getOswapPrice();
     },
     computed: {
-      ...mapGetters('wallet', ['getUserSignedIn']),
-      ...mapGetters('wallet', ['getUserSignedOut']),
-      ...mapGetters('wallet', ['getUserAddress']),
+      ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
     },
     methods: {
-      ...mapActions('wallet', ['setSignedIn']),
-      ...mapActions('wallet', ['setSignedOut']),
-      ...mapActions('wallet', ['setUserAddress']),
-      ...mapActions('wallet', ['setUserWallet']),
+      ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet']),
 
       connectWallet: async function() {
         if(this.getUserSignedIn == true){
