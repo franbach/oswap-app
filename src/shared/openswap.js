@@ -33,7 +33,6 @@ export default {
     getAllRewards: async function () {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const address = this.getUserAddress();
-      console.log("addr : " + address)
       if (address != "0x0000000000000000000000000000000000000003") {
         var i = 0, n;
         var totalUnclaimedRewards = ethers.BigNumber.from("0");
@@ -52,7 +51,7 @@ export default {
 
           const pending = await contract
             .pendingSushi(i, address);
-          console.log(pending);
+        
           const pendingsushi = ethers.BigNumber.from(pending);
           totalUnclaimedRewards =
             totalUnclaimedRewards.add(pendingsushi);
@@ -66,7 +65,7 @@ export default {
 
     },
     getSingleRewards: async function(){
-      var totalUnclaimedRewards = 0;
+      var totalUnclaimedRewards = ethers.BigNumber.from("0");
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const address = this.getUserAddress();
       const abi = MasterChef.abi;
@@ -77,52 +76,44 @@ export default {
       const pendingsushi = ethers.BigNumber.from(pending);
       totalUnclaimedRewards = totalUnclaimedRewards.add(pendingsushi);
     },
-    collectAll: async function () {
-      var i = 0,
-        n;
-      //await this.collectSingles();
-      const abi = MasterChef.abi;
-      const address = this.getUserAddress();
-      const masterChef = this.oSWAPCHEF();
-      const wallet = this.getWallet();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(masterChef, abi, provider);
-      for (n in Pools) {
-        if (i == 8) {
-          i++;
-        }
+    collectAll: async function(){
+      
+        
+        let abi = [
+              {
+                "inputs": [],
+                "name": "masterchef",
+                "outputs": [
+                  {
+                    "internalType": "contract IMASTERCHEF",
+                    "name": "",
+                    "type": "address"
+                  }
+                ],
+                "stateMutability": "view",
+                "type": "function",
+                "constant": true
+              },
+              {
+                "inputs": [],
+                "name": "collectAll",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+              }
+            ]
 
-        const pending = await contract
-        .pendingSushi(i, address);
 
-          const pendingsushi = ethers.BigNumber.from(pending);
-        if (pendingsushi > 0) {
-         // const withdraw = await contract.withdraw(i, "0");
 
-            // .send({
-            //   from: address,
-            //   gasPrice: "1000000000",
-            //   gas: "200000"
-            // })
-            // .on("error", (error, receipt) => {
-            //   // receipt example
-            //   console.log(error);
-
-            //   console.log(receipt);
-            //   this.txhash = receipt.transactionHash;
-            //   //this.txlink = store.state.explorer + this.txhash;
-            //   this.tradesuccesful = false;
-            // })
-            // .catch(err => {
-            //   console.log(err);
-            // });
-        }
-
-        i++;
-      }
-
-      this.getAllRewards();
-      return n;
-    }
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner()
+            //const address = this.getUserAddress();
+//
+            const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
+            contract
+            .collectAll()
+ 
+            this.getAllRewards();
+    },
   }
 };

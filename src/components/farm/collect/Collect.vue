@@ -29,7 +29,7 @@
     },
     mixins: [openswap],
     mounted: async function (){
-      this.unclaimedTotal = await this.getAllRewards();
+      await this.getAllRewards();
       await setInterval(
         async function() {
           await this.getAllRewards();
@@ -39,7 +39,7 @@
     },
     data() {
       return {
-        unclaimedTotal: 0
+        unclaimedTotal: 0.0
       }
     },
     methods: {
