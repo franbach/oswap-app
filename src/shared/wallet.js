@@ -5,29 +5,27 @@ export default {
     created: function () { 
     },
     computed: {
-        ...mapGetters('wallet', ['getUserSignedIn']),
-        ...mapGetters('wallet', ['getUserSignedOut']),
-        ...mapGetters('wallet', ['getUserAddress']),
+        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
     },
-    methods:{      
-        ...mapActions('wallet', ['setSignedIn']),
-        ...mapActions('wallet', ['setSignedOut']),
-        ...mapActions('wallet', ['setUserAddress']),
-        ...mapActions('wallet', ['setUserWallet']),
+    methods: {
+        ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet']),
   
         connectWallet: async function() {
+          console.log("connecting wallet")
           if(this.getUserSignedIn == true){
             this.disconnectWallet();
             return;
           }
           if (typeof window.ethereum !== undefined) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
             const signer = await provider.getSigner();
             const network = await provider.getNetwork();
-            const chainID = network.chainId;
-            // await window.ethereum.enable();
-            const accounts = await provider.listAccounts();
-            this.setUserAddress({accounts});
+            const chainID = await network.chainId;
+            
+            const accounts = await signer.getAddress();
+            console.log(accounts)
+            this.setUserAddress(accounts);
             if (network.chainId != 1666600000) {
               this.wrongChain = true; //this need to pop up a modal that changes chain if in metamask if chainID set incorrectly
               return;

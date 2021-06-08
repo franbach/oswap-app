@@ -1,6 +1,6 @@
 <template>
   <div v-if="token('token1', 'token2')" @click="this.switchTokens()" class="flex items-center justify-center relative z-20 cursor-pointer">
-    <div class="flex absolute items-center p-1 rounded-lg ring-1 ring-black dark:ring-gray-600 ring-opacity-5 bg-opacity-100 glow-oswapBlue-light-lg border-2 border-oswapGreen-dark dark:border-oswapBlue-dark dark:bg-oswapBlue-light bg-oswapGreen hover:bg-oswapGreen-dark dark:hover:bg-oswapBlue-dark">
+    <div class="flex absolute items-center p-1 rounded-lg ring-1 ring-black dark:ring-gray-600 ring-opacity-5 bg-opacity-100 glow-oswapBlue-light-lg border-2 border-oswapGreen-dark dark:border-oswapBlue-dark dark:bg-oswapBlue-light bg-oswapGreen hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen">
       <i class="las la-exchange-alt text-xl text-gray-200 dark:text-gray-700"></i>
     </div>
   </div>

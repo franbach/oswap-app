@@ -8,7 +8,7 @@
 
 <script>
 import openswap from "../../shared/openswap.js"
-const { Fetcher, ChainId } = require("openswap-sdk");
+
 export default {
     name: "Oswap",
     data() {
@@ -18,7 +18,7 @@ export default {
     },
     mixins: [openswap],
     mounted: async function() {
-        await this.getOswapPrice();
+        this.oswapPrice = await this.getOswapPrice();
     },
     methods: {
     }

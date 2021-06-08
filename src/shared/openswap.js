@@ -1,14 +1,18 @@
-import store from "../store/modules/wallet.js";
 import MasterChef from "openswap-core/build/contracts/MasterChef.json";
 import { ethers } from "ethers";
-
+import { mapGetters } from 'vuex';
 const { Fetcher, ChainId } = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
 
 export default {
     created: function () { 
     },
-    methods:{     
+    computed: {
+        
+    },
+    methods:{
+    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
+        ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF']),   
         getOswapPrice: async function() {
             this.balances = [];
             const Oswap = await Fetcher.fetchTokenData(
@@ -25,86 +29,40 @@ export default {
                 this.error = 1;
                 this.errormessage = "Pool Doesn't Exist";
             });
-            this.oswapPrice = pair.token1Price.toSignificant(2);
+            return pair.token1Price.toSignificant(2);
         },
-        getSingleRewards: async function(){
-            var totalUnclaimedRewards = 0;
-            const abi = MasterChef.abi;
-            const wallet = store.state.wallet;
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const masterChef = store.state.MasterChef;
-            const contract = new ethers.Contract(masterChef, abi, provider);
-            const i = 11;
-    
-              const pending = await contract
-                .pendingSushi(i, store.state.address[0])
-                .call();
-              const pendingsushi = wallet.utils.fromWei(pending, "ether");
-              totalUnclaimedRewards =
-                totalUnclaimedRewards + parseFloat((pendingsushi / 1).toFixed(4));
-              this.unclaimedTotal = this.unclaimedTotal + totalUnclaimedRewards
-        },
-        collectSingles:async function(){
-          const abi = MasterChef.abi;
-          const wallet = store.state.wallet;
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const masterChef = store.state.MasterChef;
-          const contract = new ethers.Contract(masterChef, abi, provider);
-          const i = 11
-          const pending = await contract
-              .pendingSushi(i, store.state.address[0])
-              .call();
-            const pendingsushi = wallet.utils.fromWei(pending, "ether");
-            if ((pendingsushi / 1).toFixed(4) > 0) {
-              contract
-                .withdraw(i, "0")
-                .send({
-                  from: store.state.address[0],
-                  gasPrice: "1000000000",
-                  gas: "200000"
-                })
-                .on("error", (error, receipt) => {
-                  // receipt example
-                  console.log(error);
-                  console.log(receipt);
-    
-                })
-                .catch(err => {
-                  console.log(err);
-                });
-            }
-    
-        }, 
         getAllRewards: async function() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const address = store.state.address[0];
-          if(provider && address != "0x0000000000000000000000000000000000000003"){
+        const address = this.getUserAddress();
+        console.log("addr : " +address)
+        if(address != "0x0000000000000000000000000000000000000003"){
               var i = 0,
             n;
-          var totalUnclaimedRewards = 0;
+          var totalUnclaimedRewards = ethers.BigNumber.from("0");
     
           const abi = MasterChef.abi;
-          const wallet = store.state.wallet;
-          const masterChef = store.state.MasterChef;
+          const masterChef = this.oSWAPCHEF();
           const contract = new ethers.Contract(masterChef, abi, provider);
-          var i = 1;
+          var i = 0;
     
           for (n in Pools) {
             
-            //what does this do?
+            //what does this do? 
+            // I was stupid enough to fuck up a Farm with an invalid address so it skips it.
             if (i == 8) {
               i++;
             }
     
             const pending = await contract
               .pendingSushi(i, address);
-            const pendingsushi = wallet.utils.fromWei(pending, "ether");
+              console.log(pending)
+            const pendingsushi = ethers.BigNumber.from(pending)
             totalUnclaimedRewards =
-              totalUnclaimedRewards + parseFloat((pendingsushi / 1).toFixed(4));
+              totalUnclaimedRewards.add(pendingsushi);
     
             i++;
           }
-          this.unclaimedTotal = totalUnclaimedRewards;
+          this.unclaimedTotal = ethers.utils.formatUnits(totalUnclaimedRewards.toString(), 18).toString();
     
           await this.getSingleRewards();
           return n;

@@ -1,6 +1,6 @@
 <template>
   <header class="max-w-screen-xl mx-auto flex justify-between h-14 py-9 xl:px-0 px-3 items-center">
-    <img alt="Vue logo" src="../assets/oswap_logo.png" class="h-12">
+    <img alt="OpenSwap" src="../assets/oswap_logo.png" class="h-12">
     <!-- Navigation Start -->
     <div class="flex items-center space-x-2 text-gray-500">
 
@@ -22,8 +22,10 @@
       <!-- Menu 'More' (dropdown) -->
       <MoreButton />
 
+
       <!-- display oswap price -->
       <Oswap />
+
 
       <!-- Wallet Button  -->
       <Wallet/>
@@ -36,9 +38,10 @@
 <script>
   import Wallet from '@/components/header/Wallet'
   import MoreButton from '@/components/header/MoreButton'
+
   import Oswap from '@/components/header/OswapPrice'
   import store from "../store";
-
+  
   export default {
     name: 'Header',
     components: {
@@ -50,6 +53,7 @@
       return {        
       }
     },
+
     methods: {
     }
   }
