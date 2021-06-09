@@ -13,24 +13,26 @@ export default {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF']),
     getOswapPrice: async function () {
-      this.balances = [];
-      const Oswap = await Fetcher.fetchTokenData(
-        ChainId.MAINNET,
-        "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC"
-      );
-      const Busd = await Fetcher.fetchTokenData(
-        ChainId.MAINNET,
-        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"
-      );
+        this.balances = [];
+        const Oswap = await Fetcher.fetchTokenData(
+          ChainId.MAINNET,
+          "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC"
+        );
+        const Busd = await Fetcher.fetchTokenData(
+          ChainId.MAINNET,
+          "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"
+        );
 
-      const pair = await Fetcher.fetchPairData(Oswap, Busd).catch(error => {
-        console.log(error);
-        this.error = 1;
-        this.errormessage = "Pool Doesn't Exist";
-      });
-      return pair.token1Price.toSignificant(2);
+        const pair = await Fetcher.fetchPairData(Oswap, Busd).catch(error => {
+          console.log(error);
+          this.error = 1;
+          this.errormessage = "Pool Doesn't Exist";
+        });
+        return pair.token1Price.toSignificant(2);
+
     },
     getAllRewards: async function () {
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const address = this.getUserAddress();
       if (address != "0x0000000000000000000000000000000000000003") {
@@ -39,7 +41,7 @@ export default {
 
         const abi = MasterChef.abi;
         const masterChef = this.oSWAPCHEF();
-        const contract = new ethers.Contract(masterChef, abi, provider);
+        const contract = new ethers.Contract(masterChef, abi, provider)
 
         for (n in Pools) {
 
@@ -50,7 +52,11 @@ export default {
           }
 
           const pending = await contract
-            .pendingSushi(i, address);
+            .pendingSushi(i, address).catch(error => {
+              console.log(error);
+              this.error = 1;
+              this.errormessage = "Error getting reward amount.";
+            });
         
           const pendingsushi = ethers.BigNumber.from(pending);
           totalUnclaimedRewards =
@@ -59,10 +65,9 @@ export default {
           i++;
         }
         this.unclaimedTotal = ethers.utils.formatUnits(totalUnclaimedRewards.toString(), 18).toString();
-
-        await this.getSingleRewards();
       }
 
+      await this.getSingleRewards();
     },
     getSingleRewards: async function(){
       var totalUnclaimedRewards = ethers.BigNumber.from("0");
@@ -72,7 +77,11 @@ export default {
       const masterChef = this.oSWAPCHEF();
       const contract = new ethers.Contract(masterChef, abi, provider);
       const i = 11;
-      const pending = await contract.pendingSushi(i, address);
+      const pending = await contract.pendingSushi(i, address).catch(error => {
+        console.log(error);
+        this.error = 1;
+        this.errormessage = "Error getting reward amount.";
+      });;
       const pendingsushi = ethers.BigNumber.from(pending);
       totalUnclaimedRewards = totalUnclaimedRewards.add(pendingsushi);
     },
@@ -106,12 +115,12 @@ export default {
 
 
             const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner()
+            const signer = provider.getSigner();
             //const address = this.getUserAddress();
 //
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
             contract
-            .collectAll()
+            .collectAll();
  
             this.getAllRewards();
     },
