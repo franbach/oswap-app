@@ -8,10 +8,10 @@
         <SwapperToken whichToken="token1" />
         <SwapperToken whichToken="token2" />
       </div>
-      <SwapperReserves />
+      <SwapperReserves/>
     </div>
-    <SwapperAmount />
-    <SwapperRate />
+    <SwapperAmount @amount="setAmount" />
+    <SwapperRate :key="amount" :amount="amount"/>
     <SwapperButtons />
   </div>
 </template>
@@ -34,11 +34,20 @@
       SwapperRate,
       SwapperButtons
     },
-    computed: {
+    mounted: function() {
+
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
-      ...mapActions('exchange', ['goTo'])
+      ...mapActions('exchange', ['goTo']),
+      setAmount(value) {
+      this.amount = value; 
+    },
+    },
+    data() {
+      return {
+        amount: null,
+      }
     }
   }
 </script>
