@@ -5,3 +5,12 @@
 // Line Awesome Icons
 $la-font-path: "~line-awesome/dist/line-awesome/fonts" !default;
 @import '~line-awesome/dist/line-awesome/scss/line-awesome.scss';
+
+@import './animations.scss';
+
+.center-component {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -1,0 +1,39 @@
+// Swap Modal Transition 
+.modal-enter-active {
+  @apply transform transition duration-200 ease-out
+}
+.modal-enter-from {
+  @apply translate-y-4 opacity-0
+}
+.modal-enter-to {
+  @apply translate-y-0 opacity-100
+}
+.modal-leave-active {
+  @apply transform transition duration-150 ease-out
+}
+.modal-leave-from {
+  @apply translate-y-0 opacity-100
+}
+.modal-leave-to {
+  @apply translate-y-4 opacity-0
+}
+
+// Swap Transitions
+.swap-enter-active {
+  @apply transform transition duration-200 ease-out
+}
+.swap-enter-from {
+  @apply translate-x-4 opacity-0
+}
+.swap-enter-to {
+  @apply translate-x-0 opacity-100
+}
+.swap-leave-active {
+  @apply transform transition duration-150 ease-out
+}
+.swap-leave-from {
+  @apply translate-x-0 opacity-100
+}
+.swap-leave-to {
+  @apply -translate-x-4 opacity-0
+}

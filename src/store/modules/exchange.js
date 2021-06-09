@@ -12,7 +12,13 @@ export default {
   namespaced: true,
 
   state: {
+    step: {
+      swap: true,
+      swapper: false
+    },
+
     swap: {},
+
     allTokens: [ 
       { 
         name: 'Harmony Native Tokens',
@@ -40,6 +46,7 @@ export default {
   
       state.allTokens.forEach(network => {
         let tokenFound = {}
+        
         Object.entries(network.tokens).forEach(([k, v]) => {
           if (v.Symbol.match(regex)) {
             tokenFound[k] = v
@@ -64,10 +71,20 @@ export default {
     // It retrieves the current state of token selection
     getToken: (state) => {
       return state.swap
-    }
+    },
+
+    // get current step state
+    getStepState: (state) => (step) => {
+      return state.step[step]
+    },
   },
   
   actions: {
+    // Navigate through Swap feature
+    goTo({ commit }, value) {
+      commit('_goTo', value)
+    },
+
     // Triggers the 'twin' method in the mutations to
     // change the state.swap
     setToken({ commit }, value) {
@@ -87,6 +104,12 @@ export default {
   },
 
   mutations: {
+    _goTo: (state, value) => {
+      state.step = Object.fromEntries(
+        Object.entries(state.step).map(([k, v]) => [ k, !v ])
+      );
+    },
+
     _setToken: (state, value) => {
       state.swap[value.tokenRef] = value.token
     },

@@ -1,17 +1,9 @@
 <template>
   <!-- Backdrop Modal -->
-  <div v-show="select.modal" @click="closeModal()" style="backdrop-filter: blur(5px)" class="flex justify-center items-center fixed inset-0 z-20"></div>
+  <div v-show="select.modal" @click="closeModal()" style="backdrop-filter: blur(3px)" class="fixed w-screen h-screen inset-0 z-20"></div>
   <!-- Modal -->
-  <transition
-    enter-active-class="transform transition duration-200 ease-out"
-    enter-from-class="translate-x-4 opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-150 ease-out"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-4 opacity-0"
-    appear
-  >
-    <div v-show="select.modal" style="height: 600px;" class="flex flex-col absolute p-2 z-30 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+  <transition name="swap">
+    <div v-show="select.modal" style="height: 600px;" class="flex flex-col center-component p-2 z-30 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
       <div class="flex items-center mb-2 relative">
         <i class="las la-search absolute left-3 text-2xl text-gray-200 dark:text-gray-600"></i>
         <input type="text" v-model="search" @input="this.retrieveTokens(search)" class="flex flex-1 ring-1 focus:outline-none focus:ring-2 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-2xl py-2 items-center pl-11 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
