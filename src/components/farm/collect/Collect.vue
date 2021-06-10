@@ -14,7 +14,7 @@
 				</p>
 			</div>
 		</div>
-		<button mat-icon-button="" class="flex-no-shrink bg-oswapGreen dark:bg-oswapDark-gray px-5 ml-4 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-oswapGreen dark:text-oswapGreen text-white rounded-full" @click="this.collectAll()">Collect</button>
+		<button mat-icon-button="" class="flex-no-shrink bg-oswapGreen dark:bg-oswapDark-gray px-5 ml-4 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-oswapGreen dark:text-oswapGreen text-white rounded-full" @click="collectAllButton()">Collect</button>
 	</div>
 </div>
 
@@ -22,6 +22,7 @@
 
 <script>
   import openswap from "../../../shared/openswap.js";
+  import { toastMe } from '@/components/toaster/toaster.js'
 
   export default {
     name: 'Collect',
@@ -43,6 +44,27 @@
       }
     },
     methods: {
+      collectAllButton: async function(){
+        const tx = await this.collectAll()
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = tx.hash
+
+        toastMe('info', {
+            title: 'Transaction Sent',
+            msg: "Collect All Sent to network. waiting for confirmation",
+            link: false,
+            href: `${explorer}${transaction}`
+          })
+        await tx.wait(1)
+        toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+      
+
+      }
     }
   }
 </script>

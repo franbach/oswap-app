@@ -19,6 +19,7 @@ export default {
 
     swap: {},
 
+
     allTokens: [ 
       { 
         name: 'Harmony Native Tokens',
@@ -67,6 +68,7 @@ export default {
         return state.allTokens 
       }
     },
+
 
     // It retrieves the current state of token selection
     getToken: (state) => {

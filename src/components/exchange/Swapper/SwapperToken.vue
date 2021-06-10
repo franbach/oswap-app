@@ -8,7 +8,7 @@
       </div>
       <div class="flex flex-col items-end">
         <p class="text-xs dark:text-oswapGreen-dark">Available</p>
-        <p class=" text-gray-600 dark:text-gray-400">250</p>
+        <p class=" text-gray-600 dark:text-gray-400">{{balance}}</p>
       </div>
     </div>
   </div>
@@ -16,11 +16,20 @@
 
 <script>
   import { mapGetters } from 'vuex';
-
+  import openswap from "../../../shared/openswap.js";
   export default {
     name: 'SwapperToken',
     props: {
       whichToken: String
+    },
+    mixins: [openswap],
+    mounted: async function() {
+      this.balance = await this.getTokenBalance(this.getToken()[this.whichToken])
+    },
+    data() {
+      return {
+        balance: 0.0
+      }
     },
     computed: {
     },
