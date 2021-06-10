@@ -4,8 +4,12 @@ import router from './router'
 import store from './store'
 
 import Toast from "vue-toastification";
-import "vue-toastification/dist/index.css";
-const options = {};
+const options = {
+  transition: "Vue-Toastification__fade",
+  maxToasts: 20,
+  newestOnTop: true
+};
+
 
 import PerfectScrollbar from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'

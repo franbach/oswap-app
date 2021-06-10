@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-4 dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+  <div class="flex flex-col p-4 bg-gray-200 dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <div class="flex mb-3">
       <p class="text-sm dark:text-gray-400">Swap</p>
     </div>
