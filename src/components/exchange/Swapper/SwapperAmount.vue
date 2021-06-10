@@ -21,11 +21,12 @@
 </template>
 
 <script>
-  import { useToast } from "vue-toastification";
+  import { toastMe } from '@/components/toaster/toaster.js'
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'SwapperAmount',
+    components: {},
     data() {
       return {
         amount: ''
@@ -34,21 +35,21 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
+
+      // Just for testing the component Toaster
+      inputValid() {
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = '0x5152b185a39c7d454910266d0ab7db10c892a762665151aa952e922367101bf3'
+
+        if (this.amount == 'test') {
+          toastMe('success', {
+            title: 'Transaction ID',
+            msg: transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
     }
   }
 </script>
-
-<style>
-  /* This will only affect the top-right container
-  .Vue-Toastification__container {
-    width: 1280px !important;
-  }
-
-  .Vue-Toastification__container.top-right {
-    background-color: aquamarine;
-    opacity: 30%;
-    @apply overflow-hidden pt-14;
-    left: 50%;
-    transform: translate(-50%);
-  } */
-</style>
