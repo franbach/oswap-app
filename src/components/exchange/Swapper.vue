@@ -40,9 +40,10 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
+      
       setAmount(value) {
-      this.amount = value; 
-    },
+        this.amount = value; 
+      },
     },
     data() {
       return {

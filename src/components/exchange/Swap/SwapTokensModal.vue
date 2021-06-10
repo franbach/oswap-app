@@ -4,9 +4,11 @@
   <!-- Modal -->
   <transition name="swap">
     <div v-show="select.modal" style="height: 600px;" class="flex flex-col center-component p-2 z-30 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
-      <div class="flex items-center mb-2 relative">
-        <i class="las la-search absolute left-3 text-2xl text-gray-200 dark:text-gray-600"></i>
-        <input type="text" v-model="search" @input="this.retrieveTokens(search)" class="flex flex-1 ring-1 focus:outline-none focus:ring-2 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-2xl py-2 items-center pl-11 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
+      <div class="relative flex items-center mb-2 dark:text-gray-600 text-gray-200 focus-within:text-oswapGreen dark:focus-within:text-oswapGreen">
+        <div class="flex flex-1 items-center">
+          <i class="absolute las la-search text-2xl pl-2"></i>
+          <input type="text" v-model="search" @input="this.retrieveTokens(search)" class="flex flex-1 ring-1 focus:outline-none focus:ring-1 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-2xl py-2 items-center pl-10 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
+        </div>
         <div @click="closeModal()" class="flex items-center rounded-full">
           <i class="las la-times text-2xl p-2 dark:text-gray-500 dark:hover:text-oswapGreen hover:text-oswapGreen cursor-pointer text-gray-300"></i>
         </div>
