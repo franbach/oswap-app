@@ -51,7 +51,7 @@
         let transaction = '0x5152b185a39c7d454910266d0ab7db10c892a762665151aa952e922367101bf3'
 
         if (this.amount == 'test') {
-          toastMe('success', {
+          toastMe('error', {
             title: 'Transaction ID',
             msg: transaction,
             link: true,

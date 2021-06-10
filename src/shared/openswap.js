@@ -158,10 +158,11 @@ export default {
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
-            contract
+            const tx = await contract
             .collectAll();
- 
+            
             this.getAllRewards();
+            return tx;
     },
     //----------------------------------------SDK------------------------------------------
     getPair: async function(token0, token1){
