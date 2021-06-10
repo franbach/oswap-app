@@ -1,0 +1,67 @@
+$vt-namespace: 'Vue-Toastification' !default;
+$vt-toast-min-width: 150px !default;
+$vt-toast-max-width: 400px !default;
+$vt-toast-background: #ffffff !default;
+
+$vt-toast-min-height: 0px !default;
+$vt-toast-max-height: 300px !default;
+
+$vt-color-default: #109dbb !default;
+$vt-text-color-default: rgba(243, 244, 246, 1) !default;
+$vt-color-info: #109dbb !default;
+$vt-text-color-info: rgba(243, 244, 246, 1) !default;
+$vt-color-success: #18d5bb !default;
+$vt-text-color-success: rgba(243, 244, 246, 1) !default;
+$vt-color-warning: #FBBF24 !default;
+$vt-text-color-warning: rgba(243, 244, 246, 1) !default;
+$vt-color-error: #F87171 !default;
+$vt-text-color-error: rgba(243, 244, 246, 1) !default;
+
+$vt-color-progress-default: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55) !default;
+
+$vt-mobile: "only screen and (max-width : 600px)" !default;
+$vt-not-mobile: "only screen and (min-width : 600px)" !default;
+$vt-font-family: "Alata" !default;
+$vt-z-index: 9999 !default;
+
+// Import the regular Vue Toastification stylesheets (or create your own)
+@import "vue-toastification/src/scss/_variables";
+@import "vue-toastification/src/scss/_toastContainer";
+@import "vue-toastification/src/scss/_toast";
+@import "vue-toastification/src/scss/_closeButton";
+@import "vue-toastification/src/scss/_progressBar";
+@import "vue-toastification/src/scss/_icon";
+@import "vue-toastification/src/scss/animations/_bounce";
+@import "vue-toastification/src/scss/animations/_fade";
+
+@media screen and (min-width: 1280px) {
+  .Vue-Toastification__container.top-right {
+    width: 1280px;
+    margin-right: -5px !important;
+    padding-right: 0px !important;
+    left: 50%;
+    transform: translate(-50%);
+    @apply overflow-hidden pt-14;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .Vue-Toastification__container.top-right {
+    width: 100vh;
+    margin-right: -5px !important;
+    padding-right: 0px !important;
+    @apply overflow-hidden pt-14;
+  }
+}
+
+.Vue-Toastification__toast {
+  @apply p-3 flex
+}
+
+.Vue-Toastification__icon {
+  @apply m-0 text-gray-50;
+}
+
+.Vue-Toastification__close-button {
+  @apply m-0 flex items-start focus:outline-none
+}

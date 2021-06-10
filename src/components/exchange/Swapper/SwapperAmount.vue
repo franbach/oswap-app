@@ -21,12 +21,13 @@
 </template>
 
 <script>
-  import { useToast } from "vue-toastification";
+  import { toastMe } from '@/components/toaster/toaster.js'
   import { mapGetters, mapActions } from 'vuex';
   import openswap from "../../../shared/openswap.js";
   export default {
     name: 'SwapperAmount',
     mixins: [openswap],
+    components: {},
     data() {
       return {
         amount: "1",
@@ -40,11 +41,23 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
+
       inputValid: function(){
         let float = parseFloat(this.amount)
         console.log(float)
         //have to find a way to throw error if value is wrong parsefloat returns NaN or partial info
         this.$emit("amount", this.amount);
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = '0x5152b185a39c7d454910266d0ab7db10c892a762665151aa952e922367101bf3'
+
+        if (this.amount == 'test') {
+          toastMe('success', {
+            title: 'Transaction ID',
+            msg: transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
       },
       setMax: async function(){
         this.amount = await this.getTokenBalance(this.getToken()['token1'])
@@ -52,19 +65,6 @@
       }
     }
   }
+
+
 </script>
-
-<style>
-  /* This will only affect the top-right container
-  .Vue-Toastification__container {
-    width: 1280px !important;
-  }
-
-  .Vue-Toastification__container.top-right {
-    background-color: aquamarine;
-    opacity: 30%;
-    @apply overflow-hidden pt-14;
-    left: 50%;
-    transform: translate(-50%);
-  } */
-</style>
