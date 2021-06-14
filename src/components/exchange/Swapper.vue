@@ -1,18 +1,24 @@
 <template>
-  <div class="flex flex-col p-4 bg-gray-200 dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
-    <div class="flex mb-3">
-      <p class="text-sm dark:text-gray-400">Swap</p>
-    </div>
-    <div class="flex flex-col dark:bg-gray-600 bg-gray-100 rounded-2xl">
-      <div class="flex shadow-lg flex-col space-y-3 dark:bg-oswapDark-gray p-3 rounded-2xl">
-        <SwapperToken whichToken="token1" />
-        <SwapperToken whichToken="token2" />
+  <div class="flex flex-col">
+    <div class="flex flex-col p-4 bg-gray-200 dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
+      <div class="flex mb-3">
+        <p @click="warn()" class="text-sm dark:text-gray-400">Swap</p>
       </div>
-      <SwapperReserves/>
+      <div class="flex flex-col dark:bg-gray-600 bg-gray-100 rounded-2xl">
+        <div class="flex shadow-lg flex-col space-y-3 dark:bg-oswapDark-gray p-3 rounded-2xl">
+          <SwapperToken whichToken="token1" @balance="setBalance" :amount="this.amount" />
+          <SwapperToken whichToken="token2" />
+        </div>
+        <SwapperReserves/>
+      </div>
+      <SwapperAmount @amount="setAmount" :balance="balance" />
+      <SwapperRate :key="amount" :amount="amount"/>
+      <SwapperButtons />
     </div>
-    <SwapperAmount @amount="setAmount" />
-    <SwapperRate :key="amount" :amount="amount"/>
-    <SwapperButtons />
+
+    <div v-if="warning" class="flex w-96">
+      <Warning />
+    </div>
   </div>
 </template>
 
@@ -22,7 +28,7 @@
   import SwapperAmount from '@/components/exchange/Swapper/SwapperAmount'
   import SwapperRate from '@/components/exchange/Swapper/SwapperRate'
   import SwapperButtons from '@/components/exchange/Swapper/SwapperButtons'
-  
+  import Warning from '@/components/exchange/Warning'
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -32,7 +38,15 @@
       SwapperReserves,
       SwapperAmount,
       SwapperRate,
-      SwapperButtons
+      SwapperButtons,
+      Warning
+    },
+    data() {
+      return {
+        amount: null,
+        balance: null,
+        warning: false
+      }
     },
     mounted: function() {
 
@@ -41,13 +55,16 @@
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
       
+      // only for testing!
+      warn() {
+        this.warning = !this.warning
+      },
+
       setAmount(value) {
         this.amount = value; 
       },
-    },
-    data() {
-      return {
-        amount: null,
+      setBalance(value) {
+        this.balance = value
       }
     }
   }
