@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative max-w-screen-xl space-y-1 mx-auto text-gray-500 justify-center flex flex-col h-14 items-center p-3 py-8 xl:px-0 px-3">
+  <footer class="relative max-w-screen-xl space-y-1 mx-auto text-gray-500 justify-center flex flex-col h-14 items-center p-3 py-8 xl:px-0 px-3 bg-gray-200 dark:bg-oswapDark-gray">
     <div class="absolute xl:left-0 left-3 flex items-center space-x-1">
       <i @click="setColorMode()" class="las la-lightbulb text-2xl dark:hover:text-oswapGreen dark:text-gray-500 text-oswapGreen cursor-pointer"></i>
       <p class="text-sm dark:text-oswapGreen">{{colorMode}}</p>

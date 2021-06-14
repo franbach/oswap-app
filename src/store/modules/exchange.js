@@ -14,11 +14,11 @@ export default {
   state: {
     step: {
       swap: true,
+      swapmodal: false,
       swapper: false
     },
 
     swap: {},
-
 
     allTokens: [ 
       { 
@@ -69,6 +69,18 @@ export default {
       }
     },
 
+    // It retrieves the exact token requested
+    findToken: (state) => (token) => { 
+      let found
+      state.allTokens.forEach(network => {        
+        Object.entries(network.tokens).forEach(([k, v]) => {
+          if (v.Symbol.match(token)) {
+            found = v
+          }
+        });
+      });
+      return found
+    },
 
     // It retrieves the current state of token selection
     getToken: (state) => {
@@ -102,14 +114,13 @@ export default {
     resetTokens({ commit }) {
       commit('_resetTokens')
     }
-
   },
 
   mutations: {
     _goTo: (state, value) => {
-      state.step = Object.fromEntries(
-        Object.entries(state.step).map(([k, v]) => [ k, !v ])
-      );
+      Object.keys(state.step).forEach((s) => {
+        s == String(value) ? state.step[s] = true : state.step[s] = false
+      });
     },
 
     _setToken: (state, value) => {
@@ -134,15 +145,15 @@ export default {
     // ------------------------------------------------------------------------
     swapper: {
       namespaced: true,
-  
+
       state: {
         warning: {
           highImpact: {
-            show: false,
+            show: true,
             msg: "Price impact high. Check reserves. Continue only if you know what you are doing."
           },
           error: {
-            show: false,
+            show: true,
             msg: "Pool Doesn't Exist : Using routing if available.",
           }
         }

@@ -5,10 +5,10 @@
     </div>
     <div v-if="toast.link" class="flex items-start space-x-1 px-2 rounded-lg bg-opacity-100 hover:bg-opacity-5 hover:bg-oswapDark-gray">
       <i class="las la-link pt-2"></i>
-      <a target="_blank" :href="toast.href" class="text-xs p-1 px-2 rounded-lg">{{toast.msg}}</a>
+      <a target="_blank" :href="toast.href" class="text-xs p-1 px-2 rounded-lg" v-html="toast.msg"></a>
     </div>
     <div v-else class="flex">
-      <p class="text-xs">{{toast.msg}}</p>
+      <div v-html="toast.msg" class="text-xs"></div>
     </div>
   </div>
 </template>
@@ -18,6 +18,6 @@
     name: 'Toaster',
     props: {
       toast: Object
-    }
+    },
   }
 </script>

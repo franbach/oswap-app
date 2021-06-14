@@ -1,10 +1,10 @@
 <template>
-  <div id="root" :class="darkmode ? 'dark' : ''" class="antialiased flex flex-col h-screen bg-gray-200">
+  <div id="root" :class="darkmode ? 'dark' : ''" class="antialiased flex flex-col h-screen bg-gray-200 z-50">
     <div id="header" class="w-full dark:bg-oswapDark-gray">
       <Header />
     </div>
     
-    <div id="body" class="w-full h-full dark:bg-oswapDark-gray">
+    <div id="body" class="w-full h-full dark:bg-oswapDark-gray overflow-hidden">
       <router-view/>
     </div>
 
