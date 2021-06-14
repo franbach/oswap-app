@@ -1,8 +1,8 @@
 <template>
   <Menu as="div" class="relative">
-    <MenuButton class="flex items-center space-x-2 p-2 px-3 rounded-lg group cursor-pointer focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
+    <MenuButton class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group cursor-pointer focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
       <i class="las la-icons text-xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
-      <p class="text-sm group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
+      <p class="text-sm hidden md:block group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
     </MenuButton>
 
     <transition
@@ -13,10 +13,10 @@
       leave-from-class="translate-x-0 opacity-100"
       leave-to-class="translate-x-4 opacity-0"
     >
-      <MenuItems class="absolute z-10">
-        <div class="absolute z-10 w-72 mt-3 left-0">
+      <MenuItems class="absolute z-50">
+        <div class="absolute z-10 w-72 mt-3 -left-36 md:-left-28 lg:left-0">
           <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-            <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 lg:grid-cols-1">
+            <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 md:grid-cols-1">
               <MenuItem>
                 <router-link to="/pairs" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">

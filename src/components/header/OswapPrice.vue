@@ -1,6 +1,6 @@
 <template>
     <!-- Oswap token info -->
-    <div class="flex items-center space-x-2 p-2 px-3 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-black">
+    <div class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-black">
     <img alt="Vue logo" src="../../assets/oswap_asset.png" class="h-6">
     <p class="text-xs dark:text-oswapGreen">${{oswapPrice}}</p>
     </div>
