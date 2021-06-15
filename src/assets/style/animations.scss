@@ -37,3 +37,42 @@
 .modal-leave-to {
   @apply -translate-y-4 opacity-0
 }
+
+// Invalid Input animations
+.invalid-input-body-enter-active {
+  @apply transform transition-all duration-200 ease-out
+}
+.invalid-input-body-enter-from {
+  @apply -translate-y-2 opacity-0
+}
+.invalid-input-body-enter-to {
+  @apply translate-y-0 opacity-100
+}
+.invalid-input-body-leave-active {
+  @apply transform transition-all duration-150 ease-out
+}
+.invalid-input-body-leave-from {
+  @apply translate-y-0 opacity-100
+}
+.invalid-input-body-leave-to {
+  @apply -translate-y-2 opacity-0
+}
+
+.invalid-input-list-enter-active {
+  @apply transform transition-all duration-300 ease-in
+}
+.invalid-input-list-enter-from {
+  @apply max-h-0 opacity-0
+}
+.invalid-input-list-enter-to {
+  @apply max-h-96 opacity-100
+}
+.invalid-input-list-leave-active {
+  @apply transform transition-all duration-300 ease-out
+}
+.invalid-input-list-leave-from {
+  @apply max-h-96 opacity-100
+}
+.invalid-input-list-leave-to {
+  @apply max-h-0 opacity-0
+}

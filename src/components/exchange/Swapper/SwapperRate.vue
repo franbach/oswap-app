@@ -32,10 +32,10 @@
 </template>
 
 <script>
-  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate'
 
+  import openswap from "@/shared/openswap.js";
+  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate'
   import { mapGetters, mapActions } from 'vuex';
-  import openswap from "../../../shared/openswap.js";
 
   export default {
     name: 'SwapperRate',
@@ -72,7 +72,6 @@
       updateSelectedRate(rate) {
         this.selectedRate = rate
       }
-
     }
   }
 </script>

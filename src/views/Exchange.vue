@@ -10,6 +10,7 @@
     </transition>
 
     <!-- Token Selection Modal -->
+    <!-- Modal backdrop must be outside of transition tag otherwise it appears only when modal animation ends -->
     <div v-if="this.getStepState('swapmodal')" @click="goTo('swap')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-20"></div>
     <transition name="modal" appear>
       <div v-if="this.getStepState('swapmodal')">

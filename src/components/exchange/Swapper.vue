@@ -6,13 +6,13 @@
       </div>
       <div class="flex flex-col dark:bg-gray-600 bg-gray-100 rounded-2xl">
         <div class="flex shadow-lg flex-col space-y-3 dark:bg-oswapDark-gray p-3 rounded-2xl">
-          <SwapperToken whichToken="token1" @balance="setBalance" :amount="this.amount" />
-          <SwapperToken whichToken="token2" />
+          <SwapperToken whichToken="token1" :amount="this.amount" @balance="setBalance" />
+          <SwapperToken whichToken="token2" :amount="this.amount" @balance="setBalance" />
         </div>
-        <SwapperReserves/>
+        <SwapperReserves />
       </div>
-      <SwapperAmount @amount="setAmount" :balance="balance" />
-      <SwapperRate :key="amount" :amount="amount"/>
+      <SwapperAmount @amount="setAmount" :balance="balance1" />
+      <SwapperRate :key="amount" :amount="amount" />
       <SwapperButtons />
     </div>
 
@@ -29,7 +29,6 @@
   import SwapperRate from '@/components/exchange/Swapper/SwapperRate'
   import SwapperButtons from '@/components/exchange/Swapper/SwapperButtons'
   import Warning from '@/components/exchange/Warning'
-  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'Swapper',
@@ -43,21 +42,19 @@
     },
     data() {
       return {
-        amount: null,
-        balance: null,
+        amount: 0.0,
+        balance1: 0.0,
+        balance2: 0.0,
         warning: false
       }
     },
-    mounted: function() {},
     methods: {
-      ...mapGetters('exchange', ['getToken']),
-      ...mapActions('exchange', ['goTo']),
-      
       setAmount(value) {
-        this.amount = value; 
+        this.amount = value;
       },
       setBalance(value) {
-        this.balance = value
+        if (value.token == 'token1') { this.balance1 = value.balance } 
+        if (value.token == 'token2') { this.balance2 = value.balance }
       }
     }
   }

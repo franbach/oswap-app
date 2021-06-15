@@ -21,10 +21,10 @@
 </template>
 
 <script>
-  import { toastMe } from '@/components/toaster/toaster.js'
+
+  import openswap from "@/shared/openswap.js";
   import InputWithValidation from '@/components/InputWithValidation'
-  import { mapGetters, mapActions } from 'vuex';
-  import openswap from "../../../shared/openswap.js";
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'SwapperAmount',
@@ -37,37 +37,33 @@
     },
     data() {
       return {
-        amount: "1",
+        amount: "",
         rate: "0",
         errors: {}
       }
     },
     mounted: async function(){
-      let pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
+      let pair = await this.getPair(this.getToken()['token1'], this.getToken()['token2'])
       this.rate = pair.token0Price.toFixed(5);
-    },
-    computed: {
-      ...mapGetters('exchange', ['findToken'])
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
-      ...mapActions('exchange', ['goTo']),
 
       inputAmount(value){
         // Checking if the input is in the right format.
         // parseFloat seems to behave like this regex rule.
         if (!value.match(/^\d*\.?\d*$/)) {
           this.errors['format'] = 'Invalid format! e.g: 12345.678';
+          console.log(this.balance, '<00000---LOOK')
         } else {
           delete this.errors['format'];
-          this.$emit("amount", this.amount);
+          this.$emit("amount", value);
         }
-        // Checking if the input exceeds the user balance
         if (parseFloat(value) > parseFloat(this.balance)) {
           this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
         } else {
           delete this.errors['exceed'];
-          this.$emit("amount", this.amount);
+          this.$emit("amount", value);
         }
       },
 
