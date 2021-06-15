@@ -10,8 +10,8 @@
         <p class="text-xs dark:text-oswapGreen-dark">Balance</p>
         <p class=" text-gray-600 dark:text-gray-300">{{balance}}</p>
         <div class="flex h-3">
-          <p v-if="whichToken == 'token1'" class="text-xs text-red-400">{{balanceOut}}</p>
-          <p v-if="whichToken == 'token2'" class="text-xs text-oswapBlue-light">{{balanceIn}}</p>
+          <p v-if="whichToken == 'token1'" class="text-xs text-oswapBlue-light">{{balanceOut}}</p>
+          <p v-if="whichToken == 'token2'" class="text-xs text-oswapGreen">{{balanceIn}}</p>
         </div>
       </div>
     </div>

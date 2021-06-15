@@ -76,3 +76,42 @@
 .invalid-input-list-leave-to {
   @apply max-h-0 opacity-0
 }
+
+/* Warning Body */
+.warning-body-enter-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.warning-body-enter-from {
+  @apply opacity-0 max-h-0
+}
+.warning-body-enter-to {
+  @apply opacity-100 max-h-96
+}
+.warning-body-leave-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.warning-body-leave-from {
+  @apply opacity-100 max-h-96
+}
+.warning-body-leave-to {
+  @apply opacity-0 max-h-0
+}
+
+.warning-body-item-enter-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.warning-body-item-enter-from {
+  @apply max-h-0 opacity-0
+}
+.warning-body-item-enter-to {
+  @apply max-h-96 opacity-100
+}
+.warning-body-item-leave-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.warning-body-item-leave-from {
+  @apply max-h-96 opacity-100
+}
+.warning-body-item-leave-to {
+  @apply max-h-0 opacity-0
+}

@@ -11,14 +11,12 @@
         </div>
         <SwapperReserves />
       </div>
+      <Warning :warnings="warnings" />
       <SwapperAmount @amount="setAmount" :balance="balance1" />
       <SwapperRate :key="amount" :amount="amount" />
       <SwapperButtons />
     </div>
 
-    <div v-if="warning" class="flex w-96">
-      <Warning />
-    </div>
   </div>
 </template>
 
@@ -45,13 +43,19 @@
         amount: 0.0,
         balance1: 0.0,
         balance2: 0.0,
-        warning: false
+        warnings: {}
       }
     },
     methods: {
       setAmount(value) {
         this.amount = value;
+
+        // just for testing purposes
+        if (value == '007') { 
+          this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'
+        } else { delete this.warnings['impact'] }
       },
+
       setBalance(value) {
         if (value.token == 'token1') { this.balance1 = value.balance } 
         if (value.token == 'token2') { this.balance2 = value.balance }
