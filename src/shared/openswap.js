@@ -181,6 +181,18 @@ export default {
     });
     return pair;
     },
+    getRate: function(pair, token1) {
+      let rate = [];
+      if (
+        pair["tokenAmounts"][0].currency.address != token1.oneZeroxAddress
+      ) {
+        rate = pair.token1Price.toFixed(5);
+      } else {
+        rate = pair.token0Price.toFixed(5);
+      }
+
+      return rate;
+    },
     getReserves: function(pair, token1) {
       let reserves = [];
       if (

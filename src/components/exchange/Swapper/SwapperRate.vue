@@ -53,6 +53,8 @@
         nRate: 0.0,
         fee: 0.0, //will set this up
         pImpact: 0.0,
+        outputAmount: 0.0,
+        inputAmount: 0.0,
         selectedRate: ''
       }
     },
@@ -64,6 +66,12 @@
       this.cRate = bestRoute.executionPrice.toFixed(4);
       this.nRate = bestRoute.nextMidPrice.toFixed(4);
       this.pImpact = bestRoute.priceImpact.toFixed(2);
+      this.inputAmount = await bestRoute.inputAmount.toFixed(5)
+      this.outputAmount = await bestRoute.outputAmount.toFixed(5)
+      this.$emit("amountOut", this.outputAmount);
+      console.log("in : " +this.inputAmount)
+      console.log("out : " +this.outputAmount)
+
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
