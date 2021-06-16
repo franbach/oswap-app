@@ -14,7 +14,12 @@
       <Warning :warnings="warnings" />
       <SwapperAmount @amount="setAmount" :balance="balance1" />
       <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" />
-      <SwapperButtons />
+      <div class="flex pt-3">
+        <div class="flex flex-1 items-center relative">
+          <SwapperBackButton />
+          <SwapperApprove :state="approveState" />
+        </div>
+      </div>
     </div>
 
   </div>
