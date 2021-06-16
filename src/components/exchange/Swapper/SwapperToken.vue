@@ -10,8 +10,8 @@
         <p class="text-xs dark:text-oswapGreen-dark">Balance</p>
         <p class=" text-gray-600 dark:text-gray-300">{{balance}}</p>
         <div class="flex h-3">
-          <p v-if="whichToken == 'token1'" class="text-xs text-oswapBlue-light">{{balanceOut}}</p>
-          <p v-if="whichToken == 'token2'" class="text-xs text-oswapGreen">{{balanceIn}}</p>
+          <p v-if="whichToken == 'token1'" class="text-xs text-oswapBlue-light"> - {{balanceOut}}</p>
+          <p v-if="whichToken == 'token2'" class="text-xs text-oswapGreen"> {{balanceIn}}</p>
         </div>
       </div>
     </div>
@@ -27,11 +27,13 @@
     name: 'SwapperToken',
     props: {
       amount: String,
+      amountOut: String,
       whichToken: String
     },
     mixins: [openswap],
     mounted: async function() {
       this.balance = await this.getTokenBalance(this.getToken()[this.whichToken])
+      this.balanceInOut(this.amount)
       this.$emit('balance', { token: [this.whichToken], balance: this.balance })
     },
     data() {
@@ -41,11 +43,7 @@
         balanceIn: "-"
       }
     },
-    watch: {
-      amount(value) {
-        this.balanceInOut(value)
-      }
-    },
+    
     methods: {
       ...mapGetters('exchange', ['getToken']),
 
@@ -54,7 +52,7 @@
         let amount = parseFloat(value)
 
         if (this.whichToken == 'token1') {
-          amount < balance ? this.balanceOut = (balance - amount).toFixed(5) : this.balanceOut = '-'
+          amount < balance ? this.balanceOut = (amount).toFixed(5) : this.balanceOut = '-'
         }
 
         // Must calculate how many tokens can be bought
@@ -62,8 +60,8 @@
         // of the token2. the calc below is just for testing the
         // output.
         if (this.whichToken == 'token2') {
-          let calc = (balance + amount).toFixed(2)
-          this.balanceIn = isNaN(calc) ? "-" : "+ " + calc
+          let calc = (this.amountOut)
+          this.balanceIn = "+ " + calc
         }
 
       },

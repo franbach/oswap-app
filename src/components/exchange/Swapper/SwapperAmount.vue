@@ -44,7 +44,10 @@
     },
     mounted: async function(){
       let pair = await this.getPair(this.getToken()['token1'], this.getToken()['token2'])
-      this.rate = pair.token0Price.toFixed(5);
+
+
+
+      this.rate = this.getRate(pair, this.getToken()['token1'] )
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
