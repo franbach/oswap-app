@@ -10,10 +10,11 @@
     </transition>
 
     <!-- Token Selection Modal -->
+    <!-- Modal backdrop must be outside of transition tag otherwise it appears only when modal animation ends -->
     <div v-if="this.getStepState('swapmodal')" @click="goTo('swap')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-20"></div>
     <transition name="modal" appear>
       <div v-if="this.getStepState('swapmodal')">
-        <SwapTokensModal :whichToken="whichToken" />
+        <SwapModal :whichToken="whichToken" />
       </div>
     </transition>
 
@@ -30,7 +31,7 @@
 <script>
 
   import Swap from '@/components/exchange/Swap'
-  import SwapTokensModal from '@/components/exchange/SwapTokensModal'
+  import SwapModal from '@/components/exchange/SwapModal'
   import Swapper from '@/components/exchange/Swapper'
 
   import { mapActions, mapGetters } from 'vuex';
@@ -39,7 +40,7 @@
     name: 'Exchange',
     components: {
       Swap,
-      SwapTokensModal,
+      SwapModal,
       Swapper,
     },
     data() {

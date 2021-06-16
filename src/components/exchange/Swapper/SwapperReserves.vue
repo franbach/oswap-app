@@ -15,8 +15,9 @@
 </template>
 
 <script>
+
+  import openswap from "@/shared/openswap.js";
   import { mapGetters } from 'vuex';
-  import openswap from "../../../shared/openswap.js";
 
   export default {
     name: 'SwapperReserves',
@@ -26,8 +27,6 @@
         token2: null,
         reserves: []
       }
-    },
-    computed: {
     },
     mixins: [openswap],
     mounted: async function (){

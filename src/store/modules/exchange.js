@@ -146,40 +146,13 @@ export default {
     swapper: {
       namespaced: true,
 
-      state: {
-        warning: {
-          highImpact: {
-            show: true,
-            msg: "Price impact high. Check reserves. Continue only if you know what you are doing."
-          },
-          error: {
-            show: true,
-            msg: "Pool Doesn't Exist : Using routing if available.",
-          }
-        }
-      },
+      state: {},
   
-      // this.warning('error').msg
-      // this.warning('highImpact').msg
-      getters: {
-        warning: (state) => (type) => {
-          return state.warning[type]
-        }
-      },
+      getters: {},
 
-      // this.warn('error')
-      // this.warn('highImpact')
-      actions: {
-        warn({ commit }, warning) {
-          commit('_warn', warning)
-        }
-      },
+      actions: {},
 
-      mutations: {
-        _warn: (state, warning) => {
-          state.warning[warning].show = !state.warning[warning].show
-        }
-      }
+      mutations: {}
     }
   }
 }

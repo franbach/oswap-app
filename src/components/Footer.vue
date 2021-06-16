@@ -20,15 +20,15 @@
 </template>
 
 <script>
-export default {
-  name: 'Footer',
-  props: {
-    colorMode: String
-  },
-  methods: {
-    setColorMode() {
-      this.$emit('dark-mode');
+  export default {
+    name: 'Footer',
+    props: {
+      colorMode: String
+    },
+    methods: {
+      setColorMode() {
+        this.$emit('dark-mode');
+      }
     }
   }
-}
 </script>

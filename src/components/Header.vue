@@ -33,12 +33,11 @@
 </template>
 
 <script>
+  
   import Wallet from '@/components/header/Wallet'
+  import Oswap from '@/components/header/OswapPrice'
   import MoreButton from '@/components/header/MoreButton'
 
-  import Oswap from '@/components/header/OswapPrice'
-  import store from "../store";
-  
   export default {
     name: 'Header',
     components: {
@@ -46,12 +45,5 @@
       MoreButton,
       Oswap
     },
-    data() {
-      return {        
-      }
-    },
-
-    methods: {
-    }
   }
 </script>

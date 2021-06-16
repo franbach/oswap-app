@@ -38,7 +38,7 @@
   import { mapGetters, mapActions } from 'vuex'
 
   export default {
-    name: 'SwapTokensModal',
+    name: 'SwapModal',
     data() {
       return {
         search: ''

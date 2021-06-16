@@ -1,29 +1,36 @@
 <template>
-  <div v-if="(this.warning('highImpact').show || this.warning('error').show)" class="flex items-start w-full p-3 mt-3 px-3 bg-red-50 dark:bg-gray-600 space-x-3 rounded-xl ring-1 ring-red-300 animate__animated animate__fadeIn">
-    <div class="flex justify-start h-full">
-      <i class="las la-exclamation-triangle text-2xl text-red-300"></i>
-    </div>
-    <div class="flex flex-col space-y-3">
-      <div v-if="this.warning('highImpact').show" class="flex justify-start animate__animated animate__fadeIn">
-        <p class="text-sm font-extralight text-red-300 break-words">{{this.warning('highImpact').msg}}</p>
+  <transition tag="div" name="warning-body" class="flex overflow-hidden mt-3 items-start w-full px-3 bg-red-50 dark:bg-gray-600 space-x-3 rounded-xl ring-1 ring-red-300">
+    <div v-if="this.haveWarnings">
+      <div class="flex justify-start my-3">
+        <i class="las la-exclamation-triangle text-xl text-red-300"></i>
       </div>
-      <div v-if="this.warning('error').show" class="flex justify-start animate__animated animate__fadeIn">
-        <p class="text-sm font-extralight break-words dark:text-gray-300">{{this.warning('error').msg}}</p>
-      </div>
+
+      <!-- display warnings -->
+      <transition-group tag="div" name="warning-body-item" class="flex flex-col space-y-2 my-3">
+        <div v-for="(warning, index) in this.warnings" :key="index" class="flex justify-start overflow-hidden">
+          <p class="text-sm font-extralight text-red-300 break-words">
+            {{warning}}
+          </p>
+        </div>
+      </transition-group>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-
   export default {
     name: 'Warning',
-    components: {},
-    computed: {
-      ...mapGetters('exchange/swapper', ['warning'])
+    props: {
+      warnings: Object
     },
-    methods: {
+    computed: {
+      haveWarnings() {
+        if (Object.keys(this.warnings).length > 0) {
+          return true
+        } else { 
+          return false
+        }
+      }
     }
   }
 </script> 

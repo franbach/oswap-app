@@ -4,7 +4,7 @@
       <Header />
     </div>
     
-    <div id="body" class="w-full h-full dark:bg-oswapDark-gray overflow-hidden">
+    <div id="body" class="w-full h-full dark:bg-oswapDark-gray">
       <router-view/>
     </div>
 
