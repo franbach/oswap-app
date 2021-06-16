@@ -6,20 +6,15 @@
       </div>
       <div class="flex flex-col dark:bg-gray-600 bg-gray-100 rounded-2xl">
         <div class="flex shadow-lg flex-col space-y-3 dark:bg-oswapDark-gray p-3 rounded-2xl">
-          <SwapperToken whichToken="token1" :amount="this.amount" @balance="setBalance" />
-          <SwapperToken whichToken="token2" :amount="this.amount" @balance="setBalance" />
+          <SwapperToken :key="amountOut" whichToken="token1" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
+          <SwapperToken :key="amountOut" whichToken="token2" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
         </div>
         <SwapperReserves />
       </div>
       <Warning :warnings="warnings" />
       <SwapperAmount @amount="setAmount" :balance="balance1" />
-      <SwapperRate :key="amount" :amount="amount" />
-      <div class="flex pt-3">
-        <div class="flex flex-1 items-center relative">
-          <SwapperBackButton />
-          <SwapperApprove :state="approveState" />
-        </div>
-      </div>
+      <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" />
+      <SwapperButtons />
     </div>
 
   </div>
@@ -48,6 +43,7 @@
     data() {
       return {
         amount: 0.0,
+        amountOut: 0.0,
         balance1: 0.0,
         balance2: 0.0,
         warnings: {},
@@ -55,6 +51,9 @@
       }
     },
     methods: {
+      setAmountOut(value){
+        this.amountOut = value;
+      },
       setAmount(value) {
         this.amount = value;
 
