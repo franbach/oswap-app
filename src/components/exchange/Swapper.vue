@@ -14,7 +14,12 @@
       <Warning :warnings="warnings" />
       <SwapperAmount @amount="setAmount" :balance="balance1" />
       <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" />
-      <SwapperButtons />
+      <div class="flex pt-3">
+        <div class="flex flex-1 items-center relative">
+          <SwapperBackButton />
+          <SwapperApprove :state="approveState" />
+        </div>
+      </div>
     </div>
 
   </div>
@@ -25,7 +30,8 @@
   import SwapperReserves from '@/components/exchange/Swapper/SwapperReserves'
   import SwapperAmount from '@/components/exchange/Swapper/SwapperAmount'
   import SwapperRate from '@/components/exchange/Swapper/SwapperRate'
-  import SwapperButtons from '@/components/exchange/Swapper/SwapperButtons'
+  import SwapperBackButton from '@/components/exchange/Swapper/SwapperBackButton'
+  import SwapperApprove from '@/components/exchange/Swapper/SwapperApprove'
   import Warning from '@/components/exchange/Warning'
 
   export default {
@@ -35,7 +41,8 @@
       SwapperReserves,
       SwapperAmount,
       SwapperRate,
-      SwapperButtons,
+      SwapperBackButton,
+      SwapperApprove,
       Warning
     },
     data() {
@@ -44,7 +51,8 @@
         amountOut: 0.0,
         balance1: 0.0,
         balance2: 0.0,
-        warnings: {}
+        warnings: {},
+        approveState: 'disabled'
       }
     },
     methods: {
@@ -58,6 +66,17 @@
         if (value == '007') { 
           this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'
         } else { delete this.warnings['impact'] }
+
+        // just for testing purposes
+        if (value == '') {
+          this.approveState = 'disabled'
+        }
+        if (value == '1') {
+          this.approveState = 'loading'
+        }
+        if (value == '12') {
+          this.approveState = 'active'
+        }
       },
 
       setBalance(value) {

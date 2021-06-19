@@ -115,3 +115,23 @@
 .warning-body-item-leave-to {
   @apply max-h-0 opacity-0
 }
+
+/* Approve button */
+.approve-btn-enter-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.approve-btn-enter-from {
+  @apply opacity-0
+}
+.approve-btn-enter-to {
+  @apply opacity-100
+}
+.approve-btn-leave-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.approve-btn-leave-from {
+  @apply opacity-100
+}
+.approve-btn-leave-to {
+  @apply opacity-0
+}

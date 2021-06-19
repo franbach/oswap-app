@@ -6,8 +6,8 @@
       </div>
 
       <!-- display warnings -->
-      <transition-group tag="div" name="warning-body-item" class="flex flex-col space-y-2 my-3">
-        <div v-for="(warning, index) in this.warnings" :key="index" class="flex justify-start overflow-hidden">
+      <transition-group tag="div" name="warning-body-item" class="flex flex-col space-y-2 my-3 overflow-hidden">
+        <div v-for="(warning, index) in this.warnings" :key="index" class="flex justify-start">
           <p class="text-sm font-extralight text-red-300 break-words">
             {{warning}}
           </p>
