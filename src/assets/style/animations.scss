@@ -135,3 +135,23 @@
 .approve-btn-leave-to {
   @apply opacity-0
 }
+
+/* Swap button */
+.swap-btn-enter-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.swap-btn-enter-from {
+  @apply opacity-0
+}
+.swap-btn-enter-to {
+  @apply opacity-100
+}
+.swap-btn-leave-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.swap-btn-leave-from {
+  @apply opacity-100
+}
+.swap-btn-leave-to {
+  @apply opacity-0
+}
