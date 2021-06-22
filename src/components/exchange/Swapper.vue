@@ -13,11 +13,16 @@
       </div>
       <Warning :warnings="warnings" />
       <SwapperAmount @amount="setAmount" :balance="balance1" />
-      <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" />
+      <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @priceImpact="setPriceImpact" />
+      <div class="flex pt-6">
+        <div class="flex flex-1 items-center relative">
+          <SwapperApprove :key="amount" :amount="amount" />
+        </div>
+      </div>
       <div class="flex pt-3">
         <div class="flex flex-1 items-center relative">
           <SwapperBackButton />
-          <SwapperApprove :state="approveState" />
+          
         </div>
       </div>
     </div>
@@ -47,8 +52,9 @@
     },
     data() {
       return {
-        amount: 0.0,
+        amount: '1',
         amountOut: 0.0,
+        priceImpact:0.0,
         balance1: 0.0,
         balance2: 0.0,
         warnings: {},
@@ -59,13 +65,15 @@
       setAmountOut(value){
         this.amountOut = value;
       },
-      setAmount(value) {
-        this.amount = value;
-
-        // just for testing purposes
-        if (value == '007') { 
+      setPriceImpact(value){
+        this.priceImpact = value;
+        if (this.priceImpact > 3) { 
           this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'
         } else { delete this.warnings['impact'] }
+      },
+      setAmount(value) {
+        this.amount = value;
+        
 
         // just for testing purposes
         if (value == '') {

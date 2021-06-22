@@ -54,7 +54,7 @@
         fee: 0.0, //will set this up
         pImpact: 0.0,
         outputAmount: 0.0,
-        inputAmount: 0.0,
+        inputAmount: '1',
         selectedRate: ''
       }
     },
@@ -68,9 +68,8 @@
       this.pImpact = bestRoute.priceImpact.toFixed(2);
       this.inputAmount = await bestRoute.inputAmount.toFixed(5)
       this.outputAmount = await bestRoute.outputAmount.toFixed(5)
+      this.$emit("priceImpact", this.pImpact);
       this.$emit("amountOut", this.outputAmount);
-      console.log("in : " +this.inputAmount)
-      console.log("out : " +this.outputAmount)
 
     },
     methods: {

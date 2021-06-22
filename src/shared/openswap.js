@@ -1,4 +1,5 @@
 import MasterChef from "openswap-core/build/contracts/MasterChef.json";
+import IERC20 from "openswap-core/build/contracts/IERC20.json";
 import { ethers } from "ethers";
 import { mapGetters } from 'vuex';
 const { Fetcher, ChainId, Trade, TokenAmount, TradeType } = require("openswap-sdk");
@@ -164,6 +165,29 @@ export default {
             this.getAllRewards();
             return tx;
     },
+    approveSpending: async function(token1, contractAddr){
+      //biggest wei denomination
+      const wei =
+        ethers.BigNumber.from("115792089237316195423570985008687907853269984665640564039457584007913129639935");
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IERC20.abi;
+
+      const contract = new ethers.Contract(token1.oneZeroxAddress, abi, signer);
+
+      const tx = await contract.approve(contractAddr, wei)
+      return tx;
+    },
+    checkAllowance: async function(token1, amount, contractAddr){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const address = this.getUserAddress();
+      const abi = IERC20.abi;
+      const contract = new ethers.Contract(token1.oneZeroxAddress, abi, provider);
+      let allowance = contract.allowance(address, contractAddr)
+      return allowance;
+    },
     //----------------------------------------SDK------------------------------------------
     getPair: async function(token0, token1){
       const Token0 = await Fetcher.fetchTokenData(
@@ -175,9 +199,7 @@ export default {
       token1.oneZeroxAddress
     );
     const pair = await Fetcher.fetchPairData(Token0, Token1).catch(error => {
-      console.log(error);
-      //do error stuffs if pair doesnt exist
-      
+      console.log(error);  
     });
     return pair;
     },
@@ -284,8 +306,6 @@ export default {
         i++
       }
       console.log(path)
-      //this.$emit("Path", path);
-      console.log(bestRoute[0])
       return bestRoute[0]
       
 
@@ -305,9 +325,7 @@ export default {
     },
     //----------------------------------------Utils------------------------------------------
     getUnits: function(amount, token){
-      console.log(amount)
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
-      console.log(parsedunits)
       return parsedunits;
     }
   }
