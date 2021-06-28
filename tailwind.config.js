@@ -10,7 +10,7 @@ module.exports = {
       './app/**/*.jsx',
     ]
   },
-  presets: [],
+  // presets: [],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     glow: {
@@ -61,6 +61,12 @@ module.exports = {
         DEFAULT: '#2a2138',
         purple: '#241b2e',
         dark: '#17151f'
+      },
+      slightGray: {
+        DEFAULT: '#edeff2'
+      },
+      slightDark: {
+        DEFAULT: '#313547'
       },
 
       transparent: 'transparent',

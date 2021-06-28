@@ -19,22 +19,22 @@
 }
 
 // Modal Transition
-.modal-enter-active {
+.fall-enter-active {
   @apply transform transition-all duration-200 ease-out z-30
 }
-.modal-enter-from {
+.fall-enter-from {
   @apply -translate-y-4 opacity-0
 }
-.modal-enter-to {
+.fall-enter-to {
   @apply translate-y-0 opacity-100
 }
-.modal-leave-active {
+.fall-leave-active {
   @apply transform transition-all duration-150 ease-out z-30
 }
-.modal-leave-from {
+.fall-leave-from {
   @apply translate-y-0 opacity-100
 }
-.modal-leave-to {
+.fall-leave-to {
   @apply -translate-y-4 opacity-0
 }
 
@@ -154,4 +154,24 @@
 }
 .swap-btn-leave-to {
   @apply opacity-0
+}
+
+// Farm Transitions
+.farm-enter-active {
+  @apply transform transition-all duration-200 ease-out
+}
+.farm-enter-from {
+  @apply translate-x-4 opacity-0
+}
+.farm-enter-to {
+  @apply translate-x-0 opacity-100
+}
+.farm-leave-active {
+  @apply transform transition-all duration-150 ease-out
+}
+.farm-leave-from {
+  @apply translate-x-0 opacity-100
+}
+.farm-leave-to {
+  @apply -translate-x-4 opacity-0
 }
