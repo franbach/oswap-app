@@ -3,11 +3,18 @@
     <!-- Header -->
     <PoolHeader :pool="pool" />
     <!-- Body -->
-    <div class="flex flex-col h-full mt-3">
-      <PoolStatsClosed @toggle="togglePool()" :isClosed="detailsShowing" />
-      <PoolStatsInfo :isOpen="detailsShowing" :pool="pool" />
-      <PoolStatsExpected :isOpen="detailsShowing" />
-      <PoolStatsButtons @toggle="togglePool()" :isOpen="detailsShowing" />
+    <div class="flex flex-col h-full mt-3 relative">
+      <!-- Show this when pool details is closed -->
+      <PoolStatsClosed @setPool="setPool" :isOpen="poolStatsOff" />
+
+      <!-- Show this when pool details is opened -->
+      <PoolStatsInfo :isOpen="poolStatsOn" :pool="pool" @setPool="setPool" />
+
+      <!-- Show this when the pool is opened and clicked on Stake -->
+      <PoolStake :isOpen="poolStakeOn" :pool="pool" @setPool="setPool" />
+
+      <!-- Show this when the pool is opened and clicked on Unstake -->
+      <PoolUnstake :isOpen="poolUnstakeOn" :pool="pool" @setPool="setPool" />
     </div>
   </div>
 </template>
@@ -18,8 +25,8 @@
   import PoolHeader from "@/components/farm/FarmPair/PoolHeader"
   import PoolStatsClosed from "@/components/farm/FarmPair/PoolStatsClosed"
   import PoolStatsInfo from "@/components/farm/FarmPair/PoolStatsInfo"
-  import PoolStatsExpected from "@/components/farm/FarmPair/PoolStatsExpected"
-  import PoolStatsButtons from "@/components/farm/FarmPair/PoolStatsButtons"
+  import PoolStake from "@/components/farm/FarmPair/PoolStake"
+  import PoolUnstake from "@/components/farm/FarmPair/PoolUnstake"
 
   export default {
     name: 'FarmPair',
@@ -30,8 +37,8 @@
       PoolHeader,
       PoolStatsClosed,
       PoolStatsInfo,
-      PoolStatsExpected,
-      PoolStatsButtons
+      PoolStake,
+      PoolUnstake
     },
     mixins: [openswap],
     mounted: async function (){
@@ -48,7 +55,10 @@
     data() {
       return {
         //pool: null,
-        detailsShowing: false,
+        poolStatsOff: true,
+        poolStatsOn: false,
+        poolStakeOn: false,
+        poolUnstakeOn: false,
         token0: null,
         token1: null,
         lpBalance: 0,
@@ -81,27 +91,45 @@
       }
     },
     methods: {
-      togglePool() {
-        if (this.poolDetailOpened()) {
-          this.$el.classList.remove('row-span-3');
-          this.$el.classList.remove('ensure-height');
-          this.$el.classList.remove('ring-2', 'ring-inset', 'ring-oswapGreen');
-          this.$el.classList.add('ring-1', 'ring-black', 'ring-opacity-5');
-          this.detailsShowing = false
-
-        } else {
-          this.$el.classList.add('row-span-3')
+      setPool(value) {
+        if (value == 'open') {
           this.$el.classList.remove('ring-1', 'ring-black', 'ring-opacity-5');
+          this.$el.classList.add('row-span-3')
           this.$el.classList.add('ring-2', 'ring-inset', 'ring-oswapGreen');
-          this.detailsShowing = true
+          this.poolStatsOff = false
+          this.poolStatsOn = true
 
           if (this.$el.offsetHeight < 420) {
             this.$el.classList.add('ensure-height');
           }
         }
-      },
-      poolDetailOpened() {
-        return this.$el.classList.contains('row-span-3')
+
+        if (value == 'close') {
+          this.$el.classList.remove('row-span-3');
+          this.$el.classList.remove('ensure-height');
+          this.$el.classList.remove('ring-2', 'ring-inset', 'ring-oswapGreen');
+
+          this.$el.classList.add('ring-1', 'ring-black', 'ring-opacity-5');
+          
+          this.poolStatsOn = false
+          this.poolStatsOff = true
+        }
+
+        if (value == 'stake') {
+          this.poolStatsOn = false
+          this.poolStakeOn = true
+        }
+
+        if (value == 'stats') {
+          this.poolStakeOn = false
+          this.poolUnstakeOn = false
+          this.poolStatsOn = true
+        }
+
+        if (value == 'unstake') {
+          this.poolStatsOn = false
+          this.poolUnstakeOn = true
+        }
       }
     }
   }
