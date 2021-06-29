@@ -33,6 +33,12 @@
     methods: {
       changeColor() {
         this.darkmode = !this.darkmode
+        if (this.darkmode) {
+          document.body.classList.remove('bg-gray-200')
+          document.body.classList.add('bg-oswapDark-gray')
+        } else {
+          document.body.classList.add('bg-gray-200')
+        }
       },
     }
   }
