@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full flex-col py-10">
-    <div class="flex space-x-6 items-center">
-      <div class="flex items-center justify-center h-56 w-80 overflow-hidden">
+    <div class="flex md:space-x-6 items-center">
+      <div class="md:flex hidden items-center justify-center h-56 w-80 overflow-hidden">
         <img src="@/assets/calculator.svg" alt="" class="h-56 object-cover">
       </div>
       <div class="flex flex-col space-y-6">

@@ -3,7 +3,7 @@
     <!-- Steps between Components -->
 
     <!-- Swap -->
-    <transition name="swap" appear>
+    <transition name="horizontal" appear>
       <div v-if="this.getStepState('swap')" class="absolute">
         <Swap @triggerModal="triggerModal" />
       </div>
@@ -12,14 +12,14 @@
     <!-- Token Selection Modal -->
     <!-- Modal backdrop must be outside of transition tag otherwise it appears only when modal animation ends -->
     <div v-if="this.getStepState('swapmodal')" @click="goTo('swap')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-30"></div>
-    <transition name="fall" appear>
+    <transition name="modal-fall" appear>
       <div v-if="this.getStepState('swapmodal')">
         <SwapModal :whichToken="whichToken" />
       </div>
     </transition>
 
     <!-- Swapper -->
-    <transition name="swap" appear>
+    <transition name="horizontal" appear>
       <div v-if="this.getStepState('swapper')" class="absolute">
         <Swapper />
       </div>
