@@ -57,10 +57,10 @@
     },
     data() {
       return {
-        amount: 0.0,
-        amountOut: 0.0,
-        balance1: 0.0,
-        balance2: 0.0,
+        amount: "0",
+        amountOut: "0",
+        balance1: "0",
+        balance2: "0",
         warnings: {},
         approveState: 'disabled',
         swapState: 'disabled'
