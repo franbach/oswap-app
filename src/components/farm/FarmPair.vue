@@ -94,23 +94,14 @@
       setPool(value) {
         if (value == 'open') {
           this.$el.classList.remove('ring-1', 'ring-black', 'ring-opacity-5');
-          this.$el.classList.add('row-span-3')
-          this.$el.classList.add('ring-2', 'ring-inset', 'ring-oswapGreen');
+          this.$el.classList.add('row-span-3', 'ensure-height', 'ring-2', 'ring-inset', 'ring-oswapGreen');
           this.poolStatsOff = false
           this.poolStatsOn = true
-
-          if (this.$el.offsetHeight < 420) {
-            this.$el.classList.add('ensure-height');
-          }
         }
 
         if (value == 'close') {
-          this.$el.classList.remove('row-span-3');
-          this.$el.classList.remove('ensure-height');
-          this.$el.classList.remove('ring-2', 'ring-inset', 'ring-oswapGreen');
-
+          this.$el.classList.remove('row-span-3', 'ensure-height', 'ring-2', 'ring-inset', 'ring-oswapGreen');
           this.$el.classList.add('ring-1', 'ring-black', 'ring-opacity-5');
-          
           this.poolStatsOn = false
           this.poolStatsOff = true
         }
