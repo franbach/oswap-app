@@ -1,4 +1,4 @@
 # OpenSwap new design proposal
 
 ### Preview
-![oswap](https://github.com/franbach/oswap-app/main/public/preview.webm)
+![oswap](https://raw.githubusercontent.com/franbach/oswap-app/main/src/assets/preview/app.gif)
