@@ -54,7 +54,6 @@
         // parseFloat seems to behave like this regex rule.
         if (!value.match(/^\d*\.?\d*$/)) {
           this.errors['format'] = 'Invalid format! e.g: 12345.678';
-          console.log(this.balance, '<00000---LOOK')
         } else {
           delete this.errors['format'];
           this.$emit("amount", value);

@@ -25,7 +25,7 @@
 
 <script>
 
-import wallet from '../../shared/wallet.js'
+import wallet from '@/shared/wallet.js'
 
 export default {
   name: 'Wallet',
