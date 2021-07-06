@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col">
     <div class="flex flex-col p-4 bg-gray-200 dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
-      <div class="flex mb-3">
+      <div class="flex items-center space-x-2 mb-3">
+        <i class="las la-random text-xl dark:text-gray-400"></i>
         <p class="text-sm dark:text-gray-400">Swap</p>
       </div>
       <div class="flex flex-col dark:bg-gray-600 bg-gray-100 rounded-2xl">
@@ -20,9 +21,16 @@
         </div>
       </div>
       <div class="flex pt-3">
-        <div class="flex flex-1 items-center relative">
+        <div class="flex w-full items-center">
           <SwapperBackButton />
-          
+          <div class="flex flex-1 h-full items-center justify-end space-x-3">
+            <div class="flex relative items-center bg-red-300">
+              <SwapperApprove :state="approveState" />
+            </div>
+            <div class="flex relative items-center bg-red-300">
+              <SwapperSwap :state="swapState" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -37,6 +45,7 @@
   import SwapperRate from '@/components/exchange/Swapper/SwapperRate'
   import SwapperBackButton from '@/components/exchange/Swapper/SwapperBackButton'
   import SwapperApprove from '@/components/exchange/Swapper/SwapperApprove'
+  import SwapperSwap from '@/components/exchange/Swapper/SwapperSwap'
   import Warning from '@/components/exchange/Warning'
 
   export default {
@@ -48,17 +57,18 @@
       SwapperRate,
       SwapperBackButton,
       SwapperApprove,
+      SwapperSwap,
       Warning
     },
     data() {
       return {
         amount: '1',
-        amountOut: 0.0,
-        priceImpact:0.0,
-        balance1: 0.0,
-        balance2: 0.0,
+        amountOut: "0",
+        balance1: "0",
+        balance2: "0",
         warnings: {},
-        approveState: 'disabled'
+        approveState: 'disabled',
+        swapState: 'disabled'
       }
     },
     methods: {
@@ -78,12 +88,31 @@
         // just for testing purposes
         if (value == '') {
           this.approveState = 'disabled'
+          this.swapState = 'disabled'
         }
         if (value == '1') {
-          this.approveState = 'loading'
+          this.approveState = 'executing'
+          this.swapState = 'disabled'
         }
         if (value == '12') {
-          this.approveState = 'active'
+          this.approveState = 'ready'
+          this.swapState = 'disabled'
+        }
+        if (value == '123') {
+          this.approveState = 'executing'
+          this.swapState = 'disabled'
+        }
+        if (value == '1234') {
+          this.approveState = 'executed'
+          this.swapState = 'ready'
+        }
+        if (value == '12345') {
+          this.approveState = 'executed'
+          this.swapState = 'executing'
+        }
+        if (value == '123456') {
+          this.approveState = 'executed'
+          this.swapState = 'executed'
         }
       },
 

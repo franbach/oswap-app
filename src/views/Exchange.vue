@@ -1,9 +1,9 @@
 <template>
-  <div id="exchange" class="relative max-w-screen-xl mx-auto flex flex-col items-center justify-center h-full xl:px-0 px-3 text-gray-500">
+  <div id="exchange" class="relative max-w-screen-xl mx-auto flex flex-1 items-center justify-center xl:px-0 px-3 text-gray-500">
     <!-- Steps between Components -->
 
     <!-- Swap -->
-    <transition name="swap" appear>
+    <transition name="horizontal" appear>
       <div v-if="this.getStepState('swap')" class="absolute">
         <Swap @triggerModal="triggerModal" />
       </div>
@@ -11,15 +11,15 @@
 
     <!-- Token Selection Modal -->
     <!-- Modal backdrop must be outside of transition tag otherwise it appears only when modal animation ends -->
-    <div v-if="this.getStepState('swapmodal')" @click="goTo('swap')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-20"></div>
-    <transition name="modal" appear>
+    <div v-if="this.getStepState('swapmodal')" @click="goTo('swap')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-30"></div>
+    <transition name="modal-fall" appear>
       <div v-if="this.getStepState('swapmodal')">
         <SwapModal :whichToken="whichToken" />
       </div>
     </transition>
 
     <!-- Swapper -->
-    <transition name="swap" appear>
+    <transition name="horizontal" appear>
       <div v-if="this.getStepState('swapper')" class="absolute">
         <Swapper />
       </div>

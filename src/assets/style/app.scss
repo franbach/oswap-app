@@ -15,3 +15,28 @@ $la-font-path: "~line-awesome/dist/line-awesome/fonts" !default;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* ScrollBar */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 213, 187, 1);
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #cccccc;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #18d5bb #cccccc;
+}

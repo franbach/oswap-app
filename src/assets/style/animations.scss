@@ -1,40 +1,60 @@
-// Swap Transitions
-.swap-enter-active {
+// Left and Right Transitions
+.horizontal-enter-active {
   @apply transform transition-all duration-200 ease-out
 }
-.swap-enter-from {
+.horizontal-enter-from {
   @apply translate-x-4 opacity-0
 }
-.swap-enter-to {
+.horizontal-enter-to {
   @apply translate-x-0 opacity-100
 }
-.swap-leave-active {
+.horizontal-leave-active {
   @apply transform transition-all duration-150 ease-out
 }
-.swap-leave-from {
+.horizontal-leave-from {
   @apply translate-x-0 opacity-100
 }
-.swap-leave-to {
+.horizontal-leave-to {
   @apply -translate-x-4 opacity-0
 }
 
-// Modal Transition
-.modal-enter-active {
-  @apply transform transition-all duration-200 ease-out z-30
+// Fall Transition
+.fall-enter-active {
+  @apply transform transition-all duration-200 ease-out
 }
-.modal-enter-from {
+.fall-enter-from {
   @apply -translate-y-4 opacity-0
 }
-.modal-enter-to {
+.fall-enter-to {
   @apply translate-y-0 opacity-100
 }
-.modal-leave-active {
+.fall-leave-active {
+  @apply transform transition-all duration-150 ease-out
+}
+.fall-leave-from {
+  @apply translate-y-0 opacity-100
+}
+.fall-leave-to {
+  @apply -translate-y-4 opacity-0
+}
+
+// Modal Fall Transition
+.modal-fall-enter-active {
+  @apply transform transition-all duration-200 ease-out z-30
+}
+.modal-fall-enter-from {
+  @apply -translate-y-4 opacity-0
+}
+.modal-fall-enter-to {
+  @apply translate-y-0 opacity-100
+}
+.modal-fall-leave-active {
   @apply transform transition-all duration-150 ease-out z-30
 }
-.modal-leave-from {
+.modal-fall-leave-from {
   @apply translate-y-0 opacity-100
 }
-.modal-leave-to {
+.modal-fall-leave-to {
   @apply -translate-y-4 opacity-0
 }
 
@@ -134,4 +154,84 @@
 }
 .approve-btn-leave-to {
   @apply opacity-0
+}
+
+/* Swap button */
+.swap-btn-enter-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.swap-btn-enter-from {
+  @apply opacity-0
+}
+.swap-btn-enter-to {
+  @apply opacity-100
+}
+.swap-btn-leave-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.swap-btn-leave-from {
+  @apply opacity-100
+}
+.swap-btn-leave-to {
+  @apply opacity-0
+}
+
+// Farm Transitions
+.farm-enter-active {
+  @apply transform transition-all duration-200 ease-out
+}
+.farm-enter-from {
+  @apply translate-x-4 opacity-0
+}
+.farm-enter-to {
+  @apply translate-x-0 opacity-100
+}
+.farm-leave-active {
+  @apply transform transition-all duration-150 ease-out
+}
+.farm-leave-from {
+  @apply translate-x-0 opacity-100
+}
+.farm-leave-to {
+  @apply -translate-x-4 opacity-0
+}
+
+// Fade-In Transition
+.fade-in-enter-active {
+  @apply transform transition-all duration-500 ease-out
+}
+.fade-in-enter-from {
+  @apply opacity-0
+}
+.fade-in-enter-to {
+  @apply opacity-100
+}
+.fade-in-leave-active {
+  @apply transform transition-all duration-500 ease-out absolute
+}
+.fade-in-leave-from {
+  @apply opacity-100
+}
+.fade-in-leave-to {
+  @apply opacity-0
+}
+
+// Pool Transitions
+.hzpool-enter-active {
+  @apply transform transition-all duration-200 ease-out
+}
+.hzpool-enter-from {
+  @apply translate-x-4 opacity-0
+}
+.hzpool-enter-to {
+  @apply translate-x-0 opacity-100
+}
+.hzpool-leave-active {
+  @apply transform transition-all duration-150 ease-out
+}
+.hzpool-leave-from {
+  @apply translate-x-0 opacity-100
+}
+.hzpool-leave-to {
+  @apply -translate-x-4 opacity-0
 }

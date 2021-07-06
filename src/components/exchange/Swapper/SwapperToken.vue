@@ -54,16 +54,10 @@
         if (this.whichToken == 'token1') {
           amount < balance ? this.balanceOut = (amount).toFixed(5) : this.balanceOut = '-'
         }
-
-        // Must calculate how many tokens can be bought
-        // with the user input amount. Need to get the price
-        // of the token2. the calc below is just for testing the
-        // output.
+        
         if (this.whichToken == 'token2') {
-          let calc = (this.amountOut)
-          this.balanceIn = "+ " + calc
+          this.balanceIn = "+ " + this.amountOut
         }
-
       },
     }
   }
