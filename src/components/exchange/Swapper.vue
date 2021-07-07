@@ -14,16 +14,17 @@
       </div>
       <Warning :warnings="warnings" />
       <SwapperAmount @amount="setAmount" :balance="balance1" />
-      <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" />
+      <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @setSlippageRate="setSlippageRate" @priceImpact="setPriceImpact" @path="setPath" />
+      
       <div class="flex pt-3">
         <div class="flex w-full items-center">
           <SwapperBackButton />
           <div class="flex flex-1 h-full items-center justify-end space-x-3">
             <div class="flex relative items-center bg-red-300">
-              <SwapperApprove :state="approveState" />
+              <SwapperApprove :key="this.amount" :state="approveState" @setSwapState="setSwapState" :amount="this.amount"  />
             </div>
             <div class="flex relative items-center bg-red-300">
-              <SwapperSwap :state="swapState" />
+              <SwapperSwap :key="this.amount" :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :stateProp="swapState" :path="path" />
             </div>
           </div>
         </div>
@@ -57,58 +58,42 @@
     },
     data() {
       return {
-        amount: "0",
+        amount: '1',
         amountOut: "0",
         balance1: "0",
         balance2: "0",
+        slippageRate: '0.5',
+        path: [],
         warnings: {},
         approveState: 'disabled',
         swapState: 'disabled'
       }
     },
+    mounted: async function() {
+
+    },
     methods: {
       setAmountOut(value){
         this.amountOut = value;
       },
-      setAmount(value) {
-        this.amount = value;
-
-        // just for testing purposes
-        if (value == '007') { 
+      setPriceImpact(value){
+        this.priceImpact = value;
+        if (this.priceImpact > 3) { 
           this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'
         } else { delete this.warnings['impact'] }
-
-        // just for testing purposes
-        if (value == '') {
-          this.approveState = 'disabled'
-          this.swapState = 'disabled'
-        }
-        if (value == '1') {
-          this.approveState = 'executing'
-          this.swapState = 'disabled'
-        }
-        if (value == '12') {
-          this.approveState = 'ready'
-          this.swapState = 'disabled'
-        }
-        if (value == '123') {
-          this.approveState = 'executing'
-          this.swapState = 'disabled'
-        }
-        if (value == '1234') {
-          this.approveState = 'executed'
-          this.swapState = 'ready'
-        }
-        if (value == '12345') {
-          this.approveState = 'executed'
-          this.swapState = 'executing'
-        }
-        if (value == '123456') {
-          this.approveState = 'executed'
-          this.swapState = 'executed'
-        }
       },
-
+      setAmount(value) {
+        this.amount = value;
+      },
+      setSwapState(value){
+        this.swapState = value;
+      },
+      setPath(value){
+        this.path = value;
+      },
+      setSlippageRate(value){
+        this.slippageRate = value;
+      },
       setBalance(value) {
         if (value.token == 'token1') { this.balance1 = value.balance } 
         if (value.token == 'token2') { this.balance2 = value.balance }

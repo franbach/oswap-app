@@ -54,23 +54,12 @@
         fee: 0.0, //will set this up
         pImpact: 0.0,
         outputAmount: 0.0,
-        inputAmount: 0.0,
-        selectedRate: ''
+        inputAmount: '1',
+        selectedRate: '0.5'
       }
     },
     async created(){
-      let units = this.getUnits(this.amount, this.getToken()['token1'])
-      let bestRoute = await this.getBestRoute(units, this.getToken()['token1'], this.getToken()['token2'])
-      //let trade = await this.getTrade(bestRoute.route, units,this.getToken()['token1']);
-      this.mRate = bestRoute.route.midPrice.toFixed(4);
-      this.cRate = bestRoute.executionPrice.toFixed(4);
-      this.nRate = bestRoute.nextMidPrice.toFixed(4);
-      this.pImpact = bestRoute.priceImpact.toFixed(2);
-      this.inputAmount = await bestRoute.inputAmount.toFixed(5)
-      this.outputAmount = await bestRoute.outputAmount.toFixed(5)
-      this.$emit("amountOut", this.outputAmount);
-      console.log("in : " +this.inputAmount)
-      console.log("out : " +this.outputAmount)
+     this.updateData();
 
     },
     methods: {
@@ -79,6 +68,28 @@
       
       updateSelectedRate(rate) {
         this.selectedRate = rate
+        this.updateData();
+      },
+      updateData:async function(){
+        let token1 = this.getToken()['token1']
+        let token2 = this.getToken()['token2']
+        let units = this.getUnits(this.amount, token1)
+        let bestRoute = await this.getBestRoute(units, token1, token2)
+        
+        this.mRate = bestRoute.route.midPrice.toFixed(4);
+        this.cRate = bestRoute.executionPrice.toFixed(4);
+        this.nRate = bestRoute.nextMidPrice.toFixed(4);
+        this.pImpact = bestRoute.priceImpact.toFixed(2);
+        this.inputAmount = await bestRoute.inputAmount.toFixed(5)
+        this.outputAmount = await this.getAmountOutWithSlippage(this.amount, bestRoute, this.selectedRate, token1, token2)
+        let path = this.getPath(bestRoute);
+
+
+
+        this.$emit("setSlippageRate", this.selectedRate);
+        this.$emit("path", path);
+        this.$emit("priceImpact", this.pImpact);
+        this.$emit("amountOut", this.outputAmount);
       }
     }
   }

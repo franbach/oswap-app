@@ -37,16 +37,13 @@
     },
     data() {
       return {
-        amount: "",
+        amount: "1",
         rate: "0",
         errors: {}
       }
     },
     mounted: async function(){
       let pair = await this.getPair(this.getToken()['token1'], this.getToken()['token2'])
-
-
-
       this.rate = this.getRate(pair, this.getToken()['token1'] )
     },
     methods: {

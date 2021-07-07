@@ -1,8 +1,13 @@
 import MasterChef from "openswap-core/build/contracts/MasterChef.json";
+import IUniswapV2Router02 from "openswap-core/build/contracts/IUniswapV2Router02.json";
+import IERC20 from "openswap-core/build/contracts/IERC20.json";
+
 import { ethers } from "ethers";
 import { mapGetters } from 'vuex';
-const { Fetcher, ChainId, Trade, TokenAmount, TradeType } = require("openswap-sdk");
+const { Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
+
+import { toastMe } from '@/components/toaster/toaster.js'
 
 export default {
   created: function () {},
@@ -11,7 +16,7 @@ export default {
   },
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
-    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE']),
+    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -164,6 +169,29 @@ export default {
             this.getAllRewards();
             return tx;
     },
+    approveSpending: async function(token1, contractAddr){
+      //biggest wei denomination
+      const wei =
+        ethers.BigNumber.from("115792089237316195423570985008687907853269984665640564039457584007913129639935");
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IERC20.abi;
+
+      const contract = new ethers.Contract(token1.oneZeroxAddress, abi, signer);
+
+      const tx = await contract.approve(contractAddr, wei)
+      return tx;
+    },
+    checkAllowance: async function(token1, amount, contractAddr){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const address = this.getUserAddress();
+      const abi = IERC20.abi;
+      const contract = new ethers.Contract(token1.oneZeroxAddress, abi, provider);
+      let allowance = contract.allowance(address, contractAddr)
+      return allowance;
+    },
     //----------------------------------------SDK------------------------------------------
     getPair: async function(token0, token1){
       const Token0 = await Fetcher.fetchTokenData(
@@ -175,9 +203,7 @@ export default {
       token1.oneZeroxAddress
     );
     const pair = await Fetcher.fetchPairData(Token0, Token1).catch(error => {
-      console.log(error);
-      //do error stuffs if pair doesnt exist
-      
+      console.log(error);  
     });
     return pair;
     },
@@ -274,22 +300,17 @@ export default {
 
       const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
 
-   
-      console.log(bestRoute)
+      return bestRoute[0]
+    },
+    getPath: function(bestRoute){
       var i = 0;
       var path = [];
-      while(bestRoute[0].route.path.length > i){
+      while(bestRoute.route.path.length > i){
         console.log(i)
-        path.push(bestRoute[0].route.path[i].address)
+        path.push(bestRoute.route.path[i].address)
         i++
       }
-      console.log(path)
-      //this.$emit("Path", path);
-      console.log(bestRoute[0])
-      return bestRoute[0]
-      
-
-
+      return path;
     },
     getTrade: async function(route, amount, token0){
        const Token0 = await Fetcher.fetchTokenData(
@@ -303,11 +324,129 @@ export default {
       );
       return trade;
     },
+    //----------------------------------------Swap-------------------------------------------
+    swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
+      
+      let deadline = this.getDeadline()
+      let valueOveride = {
+        value: ethers.utils.parseEther(amountIn)
+      }
+
+      let amountOutParsed = this.getUnits(amountOutMin, token1)
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride)
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Swap sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
+    },
+    swapTokensForExactETH: async function(amountIn, amountOutMin, path, token0){
+      let deadline = this.getDeadline()
+      let amoutInParsed = this.getUnits(amountIn, token0)
+      let amountOutParsed = ethers.utils.parseEther(amountOutMin)
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline)
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Swap sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
+    },
+    swapExactTokensForTokens: async function(amountIn, amountOutMin, path, token0, token1){
+      let deadline = this.getDeadline()
+      let amoutInParsed = this.getUnits(amountIn, token0)
+      let amountOutParsed = this.getUnits(amountOutMin, token1)
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline)
+      
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Swap sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+    },
     //----------------------------------------Utils------------------------------------------
+    getDeadline: function(){
+      var deadline = new Date();
+      deadline = parseInt(deadline / 1000) + 480;
+      return deadline;
+    },
+    getAmountOutWithSlippage: async function(amount, bestRoute, slippageRate, token1, token2){
+
+      let parsedAmount = this.getUnits(amount, token1);
+      let Token0 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        token1.oneZeroxAddress
+        )
+      const trade = new Trade(
+        bestRoute.route,
+        new TokenAmount(Token0, parsedAmount),
+        TradeType.EXACT_INPUT
+      );
+
+      let slippageTolerence = new Percent(String(parseFloat(slippageRate)*10), "1000");
+      let amountOut = trade
+                      .minimumAmountOut(slippageTolerence)
+                      .toSignificant(token2.decimals);
+      
+      return amountOut;
+
+    },
     getUnits: function(amount, token){
-      console.log(amount)
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
-      console.log(parsedunits)
       return parsedunits;
     }
   }
