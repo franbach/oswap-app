@@ -331,10 +331,9 @@ export default {
       let valueOveride = {
         value: ethers.utils.parseEther(amountIn)
       }
-      console.log(token1)
+
       let amountOutParsed = this.getUnits(amountOutMin, token1)
-      console.log(amountOutMin)
-      console.log(amountOutParsed.toString())
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const address = this.getUserAddress();
@@ -360,11 +359,64 @@ export default {
       })
 
     },
-    swapTokensForExactETH: async function(amountOutMin, amountA, path){
+    swapTokensForExactETH: async function(amountIn, amountOutMin, path, token0){
+      let deadline = this.getDeadline()
+      let amoutInParsed = this.getUnits(amountIn, token0)
+      let amountOutParsed = ethers.utils.parseEther(amountOutMin)
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline)
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Swap sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
 
     },
-    swapExactTokensForTokens: async function(amountIn, amountOutMin, path){
+    swapExactTokensForTokens: async function(amountIn, amountOutMin, path, token0, token1){
+      let deadline = this.getDeadline()
+      let amoutInParsed = this.getUnits(amountIn, token0)
+      let amountOutParsed = this.getUnits(amountOutMin, token1)
 
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline)
+      
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Swap sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
     },
     //----------------------------------------Utils------------------------------------------
     getDeadline: function(){

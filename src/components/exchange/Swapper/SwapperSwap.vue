@@ -59,18 +59,20 @@
         
         let token0 = await this.getToken()['token1']
         let token1 = await this.getToken()['token2']
-        this.state = 'executing'
-        if(token0.oneZeroxAddress != this.WONE() && token1 != this.WONE()){
-          this.swapExactTokensForTokens()
+        this.state = 'executing';
+        if(token0.oneZeroxAddress != this.WONE() && token1.oneZeroxAddress != this.WONE()){
+          await this.swapExactTokensForTokens(this.amount, this.amountOut, this.path, token0, token1)
+          this.state = 'executed';
           return;
         }
         if(token0.oneZeroxAddress == this.WONE()){
           await this.swapETHForExactTokens(this.amount, this.amountOut, this.path, token1);
-          this.state = 'executed'
+          this.state = 'executed';
           return;
         }
-        if(token1 == this.WONE()){
-          this.swapTokensForExactETH();
+        if(token1.oneZeroxAddress == this.WONE()){
+          await this.swapTokensForExactETH(this.amount, this.amountOut, this.path, token0);
+          this.state = 'executed';
           return;
         }
 
