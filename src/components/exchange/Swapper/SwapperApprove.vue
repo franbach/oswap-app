@@ -1,31 +1,31 @@
 <template>
   <!-- Approve disabled -->
   <transition tag="div" name="approve-btn" class="inline-block absolute right-20">
-    <div v-if="state == 'disabled'" class="flex items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+    <div v-if="btnState == 'disabled'" class="flex items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
       <p class="text-sm text-gray-300 dark:text-gray-600">Approve</p>
       <i class="las la-times-circle text-xl text-gray-300 dark:text-gray-600"></i>
     </div>
   </transition>
 
-  <!-- Approve Ready -->
+  <!-- Ready to Approve -->
   <transition tag="div" name="approve-btn" class="inline-block absolute right-20">
-    <div @click="approve()" v-if="state == 'ready'" class="flex items-center group border border-oswapGreen-dark dark:hover:bg-oswapGreen hover:bg-oswapGreen space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-pointer">
+    <div @click="approve()" v-if="btnState == 'approve'" class="flex items-center group border border-oswapGreen-dark dark:hover:bg-oswapGreen hover:bg-oswapGreen space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-pointer">
       <p class="text-sm text-oswapGreen-dark group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approve</p>
       <i class="las la-pen-alt text-xl text-oswapGreen-dark group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
     </div>
   </transition>
 
-  <!-- Approve Executing -->
+  <!-- Approving -->
   <transition tag="div" name="approve-btn" class="inline-block absolute right-20">
-    <div v-if="state == 'executing'" class="flex items-center border border-oswapGreen-dark space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-wait">
+    <div v-if="btnState == 'approving'" class="flex items-center border border-oswapGreen-dark space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-wait">
       <p class="text-sm text-oswapGreen-dark">Approving</p>
       <i class="las la-sync text-xl animate-spin text-oswapGreen-dark"></i>
     </div>
   </transition>
 
-  <!-- Approve Executed -->
+  <!-- Approved -->
   <transition tag="div" name="approve-btn" class="inline-block absolute right-20">
-    <div v-if="state == 'executed'" class="flex items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
+    <div v-if="btnState == 'approved'" class="flex items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
       <p class="text-sm text-oswapGreen">Approved</p>
       <i class="las la-check-circle text-xl text-oswapGreen"></i>
     </div> 
@@ -41,36 +41,36 @@
   export default {
     name: 'SwapperApprove',
     mixins: [openswap],
+    emits: ['setSwapState'],
     props: {
       amount: String,
-      state: String,
     },
     data() {
       return {
-          state: "executed",
-          
-        }
+        btnState: 'disabled',          
+      }
     },
     mounted: async function() {
       this.token1 = this.getToken()['token1'];
+      
       if (this.token1.oneZeroxAddress == this.WONE()) {
-        this.state = 'executed';
-        this.$emit('setSwapState', 'ready')
-      }else {
-        this.state = 'executing';
+        this.btnState = 'approved';
+        this.$emit('setSwapState', 'swap')
+      } else {
+        this.btnState = 'approving';
         let routerAddr = this.UNIROUTERV2();
         let parsedInput = this.getUnits(this.amount, this.token1);
         let allowance = await this.checkAllowance(this.token1, this.amount, routerAddr);
         let isAllowanceSufficient = parsedInput.lt(allowance);
-        if(isAllowanceSufficient){
-          this.state = 'executed';
 
-          this.$emit('setSwapState', 'ready')
-        }else{
-          this.state = 'ready';
+        if (isAllowanceSufficient) {
+          this.btnState = 'approved';
+          this.$emit('setSwapState', 'swap')
+        } else {
+          // Ready to approve (Pen Icon)
+          this.btnState = 'approve';
         }
       }
-      
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
@@ -79,29 +79,29 @@
       approve: async function(){
         this.token1 = this.getToken()['token1'];
         let routerAddr = this.UNIROUTERV2();
-        this.state = 'executing'
+        this.btnState = 'approving'
 
         let tx = await this.approveSpending(this.token1, routerAddr);
         let explorer = 'https://explorer.harmony.one/#/tx/'
         let transaction = tx.hash
 
         toastMe('info', {
-            title: 'Transaction Sent',
-            msg: "Approval Sent to network. Waiting for confirmation",
-            link: false,
-            href: `${explorer}${transaction}`
-          })
+          title: 'Transaction Sent',
+          msg: "Approval Sent to network. Waiting for confirmation",
+          link: false,
+          href: `${explorer}${transaction}`
+        })
         await tx.wait(1)
         toastMe('success', {
-            title: 'Tx Successful',
-            msg: "Explore : " + transaction,
-            link: true,
-            href: `${explorer}${transaction}`
-          })
-        this.state = 'executed'
-        this.$emit('setSwapState', 'ready')
-
+          title: 'Tx Successful',
+          msg: "Explore : " + transaction,
+          link: true,
+          href: `${explorer}${transaction}`
+        })
+        this.btnState = 'approved'
+        this.$emit('setSwapState', 'swap')
       }
+
     }
   }
 </script>

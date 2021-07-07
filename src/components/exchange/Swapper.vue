@@ -21,10 +21,10 @@
           <SwapperBackButton />
           <div class="flex flex-1 h-full items-center justify-end space-x-3">
             <div class="flex relative items-center bg-red-300">
-              <SwapperApprove :key="this.amount" :state="approveState" @setSwapState="setSwapState" :amount="this.amount"  />
+              <SwapperApprove @setSwapState="setSwapState" :amount="this.amount" />
             </div>
             <div class="flex relative items-center bg-red-300">
-              <SwapperSwap :key="this.amount" :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :stateProp="swapState" :path="path" />
+              <SwapperSwap :state="swapState" :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :path="path" />
             </div>
           </div>
         </div>
@@ -65,13 +65,10 @@
         slippageRate: '0.5',
         path: [],
         warnings: {},
-        approveState: 'disabled',
         swapState: 'disabled'
       }
     },
-    mounted: async function() {
-
-    },
+    mounted: async function() {},
     methods: {
       setAmountOut(value){
         this.amountOut = value;
@@ -85,8 +82,8 @@
       setAmount(value) {
         this.amount = value;
       },
-      setSwapState(value){
-        this.swapState = value;
+      setSwapState(value) {
+        this.swapState = value
       },
       setPath(value){
         this.path = value;
