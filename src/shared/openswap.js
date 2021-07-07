@@ -1,9 +1,13 @@
 import MasterChef from "openswap-core/build/contracts/MasterChef.json";
+import IUniswapV2Router02 from "openswap-core/build/contracts/IUniswapV2Router02.json";
 import IERC20 from "openswap-core/build/contracts/IERC20.json";
+
 import { ethers } from "ethers";
 import { mapGetters } from 'vuex';
-const { Fetcher, ChainId, Trade, TokenAmount, TradeType } = require("openswap-sdk");
+const { Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
+
+import { toastMe } from '@/components/toaster/toaster.js'
 
 export default {
   created: function () {},
@@ -12,7 +16,7 @@ export default {
   },
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
-    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE']),
+    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -296,20 +300,17 @@ export default {
 
       const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
 
-   
-      console.log(bestRoute)
+      return bestRoute[0]
+    },
+    getPath: function(bestRoute){
       var i = 0;
       var path = [];
-      while(bestRoute[0].route.path.length > i){
+      while(bestRoute.route.path.length > i){
         console.log(i)
-        path.push(bestRoute[0].route.path[i].address)
+        path.push(bestRoute.route.path[i].address)
         i++
       }
-      console.log(path)
-      return bestRoute[0]
-      
-
-
+      return path;
     },
     getTrade: async function(route, amount, token0){
        const Token0 = await Fetcher.fetchTokenData(
@@ -323,7 +324,75 @@ export default {
       );
       return trade;
     },
+    //----------------------------------------Swap-------------------------------------------
+    swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
+      
+      let deadline = this.getDeadline()
+      let valueOveride = {
+        value: ethers.utils.parseEther(amountIn)
+      }
+      console.log(token1)
+      let amountOutParsed = this.getUnits(amountOutMin, token1)
+      console.log(amountOutMin)
+      console.log(amountOutParsed.toString())
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride)
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Swap sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
+    },
+    swapTokensForExactETH: async function(amountOutMin, amountA, path){
+
+    },
+    swapExactTokensForTokens: async function(amountIn, amountOutMin, path){
+
+    },
     //----------------------------------------Utils------------------------------------------
+    getDeadline: function(){
+      var deadline = new Date();
+      deadline = parseInt(deadline / 1000) + 480;
+      return deadline;
+    },
+    getAmountOutWithSlippage: async function(amount, bestRoute, slippageRate, token1, token2){
+
+      let parsedAmount = this.getUnits(amount, token1);
+      let Token0 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        token1.oneZeroxAddress
+        )
+      const trade = new Trade(
+        bestRoute.route,
+        new TokenAmount(Token0, parsedAmount),
+        TradeType.EXACT_INPUT
+      );
+
+      let slippageTolerence = new Percent(String(parseFloat(slippageRate)*10), "1000");
+      let amountOut = trade
+                      .minimumAmountOut(slippageTolerence)
+                      .toSignificant(token2.decimals);
+      
+      return amountOut;
+
+    },
     getUnits: function(amount, token){
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
       return parsedunits;
