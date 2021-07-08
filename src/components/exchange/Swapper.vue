@@ -19,18 +19,17 @@
       <div class="flex pt-3">
         <div class="flex w-full items-center">
           <SwapperBackButton />
-          <div class="flex flex-1 h-full items-center justify-end space-x-3">
-            <div class="flex relative items-center bg-red-300">
+          <div class="flex flex-1 h-full space-x-2 justify-end">
+            <div class="flex items-center w-28 h-full relative">
               <SwapperApprove @setSwapState="setSwapState" :amount="this.amount" />
             </div>
-            <div class="flex relative items-center bg-red-300">
+            <div class="flex items-center w-28 h-full relative">
               <SwapperSwap :state="swapState" :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :path="path" />
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -81,6 +80,10 @@
       },
       setAmount(value) {
         this.amount = value;
+        // testing purposes
+        if (this.amount == '007') {
+          this.swapState = 'swapping'
+        }
       },
       setSwapState(value) {
         this.swapState = value
