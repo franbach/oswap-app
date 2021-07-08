@@ -80,10 +80,6 @@
       },
       setAmount(value) {
         this.amount = value;
-        // testing purposes
-        if (this.amount == '007') {
-          this.swapState = 'swapping'
-        }
       },
       setSwapState(value) {
         this.swapState = value
