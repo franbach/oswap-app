@@ -8,6 +8,8 @@ export default {
     oSWAPToken: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
     oSWAPMaker: "0x7954dA0b4A81019A9313403FCDe072B93Aa41d36",
     oSWAPChef: "0xaC71B617a58B3CC136D1f6A118252f331faB44fC",
+	harmonyMulticall : "0xFE4980f62D708c2A84D3929859Ea226340759320",
+	harmonyRPC: "https://api.harmony.one"
   },
   mutations: {},
   getters:{
@@ -28,7 +30,13 @@ export default {
   	},
   	UNIFACTORY: (state) => {
   		return state.UniswapV2Factory;
-  	}
+  	},
+	hMULTICALL: (state) => {
+		return state.harmonyMulticall;
+	},
+	hRPC: (state) => {
+		return state.harmonyRPC;
+	}
 
   },
   actions: {},

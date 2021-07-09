@@ -324,6 +324,44 @@ export default {
       );
       return trade;
     },
+    getTokenAmounts: async function(pool, LPsupply, staked, totalStaked) {
+      
+
+      let tempToken = {decimals: 18};
+
+      const token0 = await Fetcher.fetchTokenData(ChainId.MAINNET, pool.token0address);
+      const token1 = await Fetcher.fetchTokenData(ChainId.MAINNET, pool.token1address);
+      const tokenLP = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        pool.pairaddress
+      );
+      
+      const supply = new TokenAmount(tokenLP, this.getUnits(LPsupply, tempToken));
+      const liquidity = new TokenAmount(tokenLP, this.getUnits(staked, tempToken));
+      const Tliquidity = new TokenAmount(
+        tokenLP,
+        this.getUnits(totalStaked, tempToken)
+      );
+     
+      console.log('supply ' + supply.toFixed(4));
+      console.log('li ' +liquidity.toFixed(4));
+      console.log('Tli ' +Tliquidity.toFixed(4));
+      const pair = await Fetcher.fetchPairData(token0, token1);
+      const value0 = await pair.getLiquidityValue(token0, supply, liquidity);
+      const token0Pstaked = ethers.utils.commify(value0.toFixed(4));
+      const value1 = await pair.getLiquidityValue(token1, supply, liquidity);
+      const token1Pstaked = ethers.utils.commify(value1.toFixed(4));
+      
+      
+      const tvalue0 = await pair.getLiquidityValue(token0, supply, Tliquidity);
+      const token0Tstaked = ethers.utils.commify(tvalue0.toFixed(4));
+      const tvalue1 = await pair.getLiquidityValue(token1, supply, Tliquidity);
+      const token1Tstaked = ethers.utils.commify(tvalue1.toFixed(4));
+      console.log('tts0 ' +token0Tstaked)
+      console.log('tts1 ' +token1Tstaked)
+
+      return [value0.toFixed(4), value1.toFixed(4), token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked]
+    },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
       

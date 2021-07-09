@@ -4,8 +4,8 @@
       <FarmHeader />
     </transition>
     <transition name="farm" appear>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        <FarmPair v-for="(pool, index) in Pools" :key="index" :pool="pool" />
+      <div v-if="farmData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+        <FarmPair  v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
       </div>
     </transition>
   </div>
@@ -14,6 +14,9 @@
 <script>
   import FarmHeader from "@/components/farm/FarmHeader"
   import FarmPair from '@/components/farm/FarmPair'
+
+  import { createWatcher } from '@makerdao/multicall';
+  import { mapGetters } from 'vuex';
 
   const { Pools } = require("@/store/modules/farm/pools.js")
 
@@ -25,12 +28,116 @@
     },
     mounted: async function () {
       this.Pools = Pools;
+      this.initMulticall()
+      
     },
     data() {
       return {
-        Pools
+        Pools,
+        farmData: null
       }
     },
-    methods: {}
+    methods: {
+      ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
+      ...mapGetters('wallet', ['getUserAddress']),
+      initMulticall: async function(){
+
+        
+        //const OPENMAKER = this.oSWAPMAKER();
+        const MULTICALL = this.hMULTICALL();
+        const RPC = this.hRPC();
+        const CALL = this.generateCalls();
+        var results= [];
+
+        const config = {
+          rpcUrl: RPC,
+          multicallAddress: MULTICALL
+        };
+
+        const watcher = createWatcher(
+            CALL,
+            config
+          );
+        
+        watcher.subscribe(update => { results.push(update) });
+        watcher.start();
+        await watcher.awaitInitialFetch()
+        this.parseResults(results)
+      },
+      parseResults: function(results){
+        let count = results.length
+        console.log(count)
+        let dataObj = []
+        var i,j, temporary, chunk = 5;
+        for (i = 0,j = results.length; i < j; i += chunk) {
+            temporary = results.slice(i, i + chunk);
+            dataObj.push([temporary])
+        }
+        console.log(dataObj)
+        this.farmData = dataObj;
+        
+
+
+
+
+      },
+      generateCalls: function(){
+        let CALL = [];
+        let userAddress = this.getUserAddress();
+        const MASTERCHEF = this.oSWAPCHEF();
+        var i = 0;
+
+        for (var n in Pools) {
+          
+          //SKIP PID 8
+          if (i == 8) {
+            i++;
+          }
+          //LP Balance CALLS
+          CALL.push(
+            {
+              target: Pools[n].pairaddress,
+              call: ['balanceOf(address)(uint256)', userAddress],
+              returns: [['BALANCE_OF_' + n , val => val / 10 ** 18]]
+            }
+          );
+          //Staked LP Balance Calls
+          CALL.push(
+            {
+              target: Pools[n].pairaddress,
+              call: ['balanceOf(address)(uint256)', MASTERCHEF],
+              returns: [['TOTAL_LP_STAKED_OF_' + n , val => val / 10 ** 18]]
+            }
+          );
+          
+          //unclaimed rewards calls
+          CALL.push(
+            {
+              target: MASTERCHEF,
+              call: ['pendingSushi(uint256,address)(uint256)', i, userAddress],
+              returns: [['PENDING_OF_' + n , val => val / 10 ** 18]]
+            }
+          ); 
+          //total LP staked calls
+          CALL.push(
+            {
+              target: MASTERCHEF,
+              call: ['amountStaked(uint256,address)(uint256)', i, userAddress],
+              returns: [['LP_STAKED_OF_' + n , val => val / 10 ** 18]]
+            }
+          );
+          CALL.push(
+            {
+              target: Pools[n].pairaddress,
+              call: ['totalSupply()(uint256)'],
+              returns: [['TOTAL_SUPPLY_OF_' + n , val => val / 10 ** 18]]
+            }
+          );
+          i++;
+        }
+        return CALL;
+      }
+    }
+    
   }
 </script>

@@ -5,10 +5,10 @@
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
-      <PoolStatsClosed @setPool="setPool" :isOpen="poolStatsOff" />
+      <PoolStatsClosed @setPool="setPool" :pending="poolData[0][2]['value']" :isOpen="poolStatsOff" />
 
       <!-- Show this when pool details is opened -->
-      <PoolStatsInfo :isOpen="poolStatsOn" :pool="pool" @setPool="setPool" />
+      <PoolStatsInfo :isOpen="poolStatsOn" :poolInfo="poolData" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Stake -->
       <PoolStake :isOpen="poolStakeOn" :pool="pool" @setPool="setPool" />
@@ -31,7 +31,8 @@
   export default {
     name: 'FarmPair',
     props: {
-      pool: Object
+      pool: Object,
+      poolData: Array,
     },
     components: {
       PoolHeader,
@@ -42,15 +43,7 @@
     },
     mixins: [openswap],
     mounted: async function (){
-      //this.token0 = this.pool;
-      //this.token1 = this.pool.name;
-    //   await this.getAllRewards();
-    //   await setInterval(
-    //     async function() {
-    //       await this.getAllRewards();
-    //     }.bind(this),
-    //     10000
-    //   );
+      
     },
     data() {
       return {

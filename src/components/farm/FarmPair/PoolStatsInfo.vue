@@ -6,7 +6,7 @@
           <div class="flex flex-1 items-center justify-between">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
-              <p class="text-2xl dark:text-gray-300">1750.5479</p>
+              <p class="text-2xl dark:text-gray-300">{{poolInfo[0][2]['value']}}</p>
             </div>
             <div class="flex space-x-2 px-3 py-3 items-center rounded-lg bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
               <i class="las la-hand-holding-usd text-3xl text-gray-200 dark:text-gray-700"></i>
@@ -27,7 +27,7 @@
               <i class="las la-coins text-xl text-oswapGreen"></i>
               <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
             </div>
-            <p class="text-xl dark:text-gray-300">2157.345</p>
+            <p class="text-xl dark:text-gray-300">{{poolInfo[0][3]['value']}}</p>
           </div>
           <div class="flex flex-col justify-between h-12">
             <div class="flex items-center space-x-2">
@@ -36,7 +36,7 @@
               </div>
               <p class="text-xs text-oswapBlue-light">{{pool.name[0]}} Staked</p>
             </div>
-            <p class="text-xl dark:text-gray-300">4503.2158</p>
+            <p class="text-xl dark:text-gray-300">12.0124</p>
           </div>
           <div class="flex flex-col justify-between h-12">
             <div class="flex items-center space-x-2">
@@ -61,7 +61,7 @@
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-coins dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: 3000.00</p>
+          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: {{poolInfo[0][0]['value']}}</p>
         </div>
       </div>
 
@@ -100,11 +100,29 @@
 </template>
 
 <script>
+import openswap from "@/shared/openswap.js";
   export default {
     name: 'PoolStatsInfo',
+    mixins: [openswap],
     props: {
       isOpen: Boolean,
-      pool: Object
+      pool: Object,
+      poolInfo: Array,
+    },
+    mounted: async function(){
+      if(this.pool.i != 1){
+let valueData = await this.getTokenAmounts(
+        this.pool,
+        String(this.poolInfo[0][4]['value']),
+        String(this.poolInfo[0][3]['value']),
+        String(this.poolInfo[0][1]['value'])
+      );
+      
+      }
+      
+    },
+    methods:{
+      
     }
   }
 </script>

@@ -9,7 +9,8 @@ export const Pools = {
     name: ["OPENSWAP", "ONE"],
     decimals: [18, 18],
     pid: "0",
-    rewards: "3X"
+    rewards: "3X",
+    i: 0
   },
     oSWAPvONE: {
     pair: "OPENSWAP/ONE (VENOM LP)",
@@ -21,7 +22,8 @@ export const Pools = {
     name: ["OPENSWAP", "ONE"],
     decimals: [18, 18],
     pid: "12",
-    rewards: "2X"
+    rewards: "2X",
+    i: 1
   },
   oSWAPbBUSD: {
     pair: "OPENSWAP/bBUSD",
@@ -33,7 +35,8 @@ export const Pools = {
     name: ["OPENSWAP", "bBUSD"],
     decimals: [18, 18],
     pid: "1",
-    rewards: "3X"
+    rewards: "3X",
+    i: 2
   },//**************************************************************************
   oSWAPbMATIC: {
     pair: "OPENSWAP/bMATIC",
@@ -45,7 +48,8 @@ export const Pools = {
     name: ["OPENSWAP", "bMATIC"],
     decimals: [18, 18],
     pid: "13",
-    rewards: "3X"
+    rewards: "3X",
+    i: 3
   },
     oSWAPbBNB: {
     pair: "OPENSWAP/bBNB",
@@ -57,7 +61,8 @@ export const Pools = {
     name: ["OPENSWAP", "bBNB"],
     decimals: [18, 18],
     pid: "14",
-    rewards: "3X"
+    rewards: "3X",
+    i: 4
   },
 
     oSWAPbADA: {
@@ -70,7 +75,8 @@ export const Pools = {
     name: ["OPENSWAP", "bADA"],
     decimals: [18, 18],
     pid: "15",
-    rewards: "3X"
+    rewards: "3X",
+    i: 5
   },
 
 //**************************************************************************
@@ -84,7 +90,8 @@ export const Pools = {
     name: ["ONE", "bBUSD"],
     decimals: [18, 18],
     pid: "2",
-    rewards: "1X"
+    rewards: "1X",
+    i: 6
   },
 
   WBTCWONE: {
@@ -97,7 +104,8 @@ export const Pools = {
     name: ["eWBTC", "ONE"],
     decimals: [8, 18],
     pid: "3",
-    rewards: "1X"
+    rewards: "1X",
+    i: 7
   },
   bBUSDeWBTC: {
     pair: "bBUSD/eWBTC",
@@ -109,7 +117,8 @@ export const Pools = {
     name: ["bBUSD", "eWBTC"],
     decimals: [18, 8],
     pid: "4",
-    rewards: "1X"
+    rewards: "1X",
+    i: 8
   },
   eBUSDeWBTC: {
     pair: "eBUSD/eWBTC",
@@ -121,7 +130,8 @@ export const Pools = {
     name: ["eBUSD", "eWBTC"],
     decimals: [18, 8],
     pid: "5",
-    rewards: "1X"
+    rewards: "1X",
+    i: 9
   },
   eBUSDWONE: {
     pair: "eBUSD/ONE",
@@ -133,7 +143,8 @@ export const Pools = {
     name: ["eBUSD", "ONE"],
     decimals: [18, 18],
     pid: "6",
-    rewards: "1X"
+    rewards: "1X",
+    i: 10
   },
   eETHeBUSD: {
     pair: "eETH/eBUSD",
@@ -145,7 +156,8 @@ export const Pools = {
     name: ["eETH", "eBUSD"],
     decimals: [18, 18],
     pid: "7",
-    rewards: "1X"
+    rewards: "1X",
+    i: 11
   } /*
     BNBONE: {
     pair: "bBNB/ONE",
@@ -168,7 +180,8 @@ export const Pools = {
     name: ["bBNB", "ONE"],
     decimals: [18, 18],
     pid: "9",
-    rewards: "1X"
+    rewards: "1X",
+    i: 12
   },
   eUSDCONE: {
     pair: "eUSDC/ONE",
@@ -180,6 +193,7 @@ export const Pools = {
     name: ["eUSDC", "ONE"],
     decimals: [6, 18],
     pid: "10",
-    rewards: "1X"
+    rewards: "1X",
+    i: 13
   }
 };
