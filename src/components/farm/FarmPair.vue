@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-col p-3 group bg-gray-200 hover:bg-slightGray dark:hover:bg-slightDark dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <!-- Header -->
-    <PoolHeader :pool="pool" />
+    <PoolHeader  :pool="pool" :poolData="poolData[0]"/>
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
       <PoolStatsClosed @setPool="setPool" :pending="poolData[0][2]['value']" :isOpen="poolStatsOff" />
 
       <!-- Show this when pool details is opened -->
-      <PoolStatsInfo :isOpen="poolStatsOn" :poolInfo="poolData" :pool="pool" @setPool="setPool" />
+      <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData[0]" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Stake -->
       <PoolStake :isOpen="poolStakeOn" :pool="pool" @setPool="setPool" />

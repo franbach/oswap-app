@@ -28,10 +28,10 @@
                 <p>{{pool.pair}} Staked: 260,754.97</p>
               </div>
               <div class="flex items-center text-xs">
-                <p>{{pool.name[0]}} Staked: 199,554.13</p>
+                <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
               </div>
               <div class="flex items-center text-xs">
-                <p>{{pool.name[1]}} Staked: 430,954.89</p>
+                <p>{{pool.name[1]}} Staked: {{tt1s}}</p>
               </div>
             </div>
           </tooltip-me-content>
@@ -46,10 +46,41 @@
 </template>
 
 <script>
+import openswap from "@/shared/openswap.js";
+
   export default {
     name: 'PoolHeader',
+    mixins: [openswap],
     props: {
-      pool: Object
-    }
+      pool: Object,
+      poolData: Array
+    },
+    data() {
+      return {
+        tt0s: '?',
+        tt1s: '?',
+        tas: '?'
+      } 
+    },
+    mounted: async function(){
+      if(this.pool.i != 1){
+        var valueData = await this.getTokenAmounts(
+          this.pool,
+          String(this.poolData[4]['value']),
+          String(this.poolData[3]['value']),
+          String(this.poolData[1]['value'])
+        );
+        this.tt0s = valueData[2]
+        this.tt1s = valueData[3]
+        this.tas = String(this.poolData[1]['value'])
+      }
+      else{
+        this.tt0s = '?'
+        this.tt1s = '?'
+        this.tas = String(this.poolData[1]['value'])
+      }
+      console.log(valueData)
+
+    },
   }
 </script>

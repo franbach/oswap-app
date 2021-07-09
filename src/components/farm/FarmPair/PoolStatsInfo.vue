@@ -6,7 +6,7 @@
           <div class="flex flex-1 items-center justify-between">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
-              <p class="text-2xl dark:text-gray-300">{{poolInfo[0][2]['value']}}</p>
+              <p class="text-2xl dark:text-gray-300">{{poolData[2]['value']}}</p>
             </div>
             <div class="flex space-x-2 px-3 py-3 items-center rounded-lg bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
               <i class="las la-hand-holding-usd text-3xl text-gray-200 dark:text-gray-700"></i>
@@ -27,7 +27,7 @@
               <i class="las la-coins text-xl text-oswapGreen"></i>
               <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{poolInfo[0][3]['value']}}</p>
+            <p class="text-xl dark:text-gray-300">{{poolData[3]['value']}}</p>
           </div>
           <div class="flex flex-col justify-between h-12">
             <div class="flex items-center space-x-2">
@@ -36,7 +36,7 @@
               </div>
               <p class="text-xs text-oswapBlue-light">{{pool.name[0]}} Staked</p>
             </div>
-            <p class="text-xl dark:text-gray-300">12.0124</p>
+            <p class="text-xl dark:text-gray-300">{{pt0s}}</p>
           </div>
           <div class="flex flex-col justify-between h-12">
             <div class="flex items-center space-x-2">
@@ -45,7 +45,7 @@
               </div>
               <p class="text-xs text-oswapBlue-light">{{pool.name[1]}} Staked</p>
             </div>
-            <p class="text-xl dark:text-gray-300">1077.984</p>
+            <p class="text-xl dark:text-gray-300">{{pt1s}}</p>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-coins dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: {{poolInfo[0][0]['value']}}</p>
+          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: {{poolData[0]['value']}}</p>
         </div>
       </div>
 
@@ -107,22 +107,31 @@ import openswap from "@/shared/openswap.js";
     props: {
       isOpen: Boolean,
       pool: Object,
-      poolInfo: Array,
+      poolData: Array,
+    },
+    data() {
+      return {
+        pt0s: '?',
+        pt1s: '?'
+      } 
     },
     mounted: async function(){
       if(this.pool.i != 1){
-let valueData = await this.getTokenAmounts(
-        this.pool,
-        String(this.poolInfo[0][4]['value']),
-        String(this.poolInfo[0][3]['value']),
-        String(this.poolInfo[0][1]['value'])
-      );
-      
+        var valueData = await this.getTokenAmounts(
+          this.pool,
+          String(this.poolData[4]['value']),
+          String(this.poolData[3]['value']),
+          String(this.poolData[1]['value'])
+        );
+        this.pt0s = valueData[0]
+        this.pt1s = valueData[1]
+              }
+      else{
+        this.pt0s = 'untracked'
+        this.pt1s = 'untracked'
       }
-      
-    },
-    methods:{
-      
+      console.log(valueData)
+
     }
   }
 </script>

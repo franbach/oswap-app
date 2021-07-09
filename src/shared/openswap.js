@@ -357,10 +357,10 @@ export default {
       const token0Tstaked = ethers.utils.commify(tvalue0.toFixed(4));
       const tvalue1 = await pair.getLiquidityValue(token1, supply, Tliquidity);
       const token1Tstaked = ethers.utils.commify(tvalue1.toFixed(4));
-      console.log('tts0 ' +token0Tstaked)
+      console.log(typeof token0Tstaked)
       console.log('tts1 ' +token1Tstaked)
 
-      return [value0.toFixed(4), value1.toFixed(4), token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked]
+      return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked]
     },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
