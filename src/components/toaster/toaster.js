@@ -1,6 +1,6 @@
 import { useToast } from 'vue-toastification';
 import { optToast } from './toaster_options';
-import Toaster from './Toaster'
+import Toaster from './Toaster.vue'
 
 // How to use - super easy!
 // import into your component, ex.: import { toastMe } from '@/components/toaster/toaster.js'
