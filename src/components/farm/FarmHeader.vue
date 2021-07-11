@@ -38,6 +38,8 @@
 
 <script>
 import openswap from "../../shared/openswap.js";
+import { toastMe } from '@/components/toaster/toaster.js'
+
   export default {
     name: 'FarmHeader',
     mixins: [openswap],

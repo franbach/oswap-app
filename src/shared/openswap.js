@@ -434,6 +434,14 @@ export default {
 
       return reserves;
     },
+    getLiquidityValueSolo: async function(pool, staked){
+      let token0 = {oneZeroxAddress : pool.token0address} 
+      let token1 = {oneZeroxAddress : "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"} //BUSD
+      const pair = await this.getPair(token1, token0)
+      let rate = this.getRate(pair, token0)
+      console.log(staked)
+      return rate * staked
+    },
     getLiquidityValue: async function(pool, tt0s, tt1s){
       let is0Stable = this.isStablecoin(pool.token0address)
       let is1Stable = this.isStablecoin(pool.token1address)

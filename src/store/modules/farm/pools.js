@@ -26,8 +26,6 @@ export const Pools = {
     rewards: "3X",
     i: 1
   },
-
-//**************************************************************************
   bBUSDWONE: {
     pair: "ONE/bBUSD",
     pairaddress: "0xF880c5D048696d80425C183b3f77b8693d0B34D5",
@@ -41,7 +39,6 @@ export const Pools = {
     rewards: "1X",
     i: 2
   },
-
   WBTCWONE: {
     pair: "eWBTC/ONE",
     pairaddress: "0xBc309D31C937E4db0e9737244C5a2cF4Cc80251A", //
@@ -185,3 +182,18 @@ export const Pools = {
     i: 12
   }
 };
+export const SoloPools = {
+  oSWAPWONE: {
+    token: "OPENSWAP",
+    pairaddress: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token1address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
+    imgtoken1: "https://openfi.dev/tokens/default/oSWAP.png",
+    
+    decimals: [18, 18],
+    pid: "11",
+    rewards: "3X",
+    i: 0
+  }
+}
