@@ -6,7 +6,7 @@
     </transition>
 
     <transition name="farm" appear>
-      <div v-if="soloData != null" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+      <div v-if="soloData != null" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-3 w-full">
         <SoloFarmPair  v-for="(pool, index) in SoloPools" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
       </div>
     </transition>
