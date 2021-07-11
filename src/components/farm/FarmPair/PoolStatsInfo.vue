@@ -10,7 +10,7 @@
             </div>
             <div class="flex space-x-2 px-3 py-3 items-center rounded-lg bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
               <i class="las la-hand-holding-usd text-3xl text-gray-200 dark:text-gray-700"></i>
-              <p class="text-lg text-gray-200 dark:text-gray-700">Collect !</p>
+              <p @click="this.collectOSWAP(this.pool)" class="text-lg text-gray-200 dark:text-gray-700">Collect !</p>
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@
       <PoolStake :isOpen="poolStakeOn" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Unstake -->
-      <PoolUnstake :isOpen="poolUnstakeOn" :pool="pool" @setPool="setPool" />
+      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData[0][3]['value']" :pool="pool" @setPool="setPool" />
     </div>
   </div>
 </template>

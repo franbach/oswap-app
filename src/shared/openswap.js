@@ -164,11 +164,109 @@ export default {
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
-            const tx = await contract
-            .collectAll();
+            const tx = await contract.collectAll().catch(err => {
+
+              var message;
+              if(!err.data?.message){
+                message = err.message
+              }else{
+                message = err.data.message
+              }
+              toastMe('error', {
+                title: 'Error :',
+                msg: message,
+                link: false
+              })
+              return
+            })
             
             this.getAllRewards();
             return tx;
+    },
+    collectOSWAP: async function(pool){
+      
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      const tx = await contract.withdraw(pid, '0').catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
+    },
+    unstakeLP: async function(pool, amount){
+      
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+      const tx = await contract.withdraw(pid, amount).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
     },
     approveSpending: async function(token1, contractAddr){
       //biggest wei denomination
@@ -209,13 +307,20 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
-
+      
       
 
       const tx = await contract.convertMultiple(token0arr, token1arr).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
         toastMe('error', {
           title: 'Error :',
-          msg: err.data.message,
+          msg: message,
           link: false
         })
         return
