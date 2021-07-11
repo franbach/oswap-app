@@ -7,7 +7,7 @@
           <i class="las la-hand-holding-usd text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Earned</p>
         </div>
-        <p class="text-xl font-extralight dark:text-gray-400">{{parseFloat(pending).toFixed(5)}}</p>
+        <p class="text-xl font-extralight dark:text-gray-400">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
       </div>
       <!-- Liquidity Info -->
       <div class="flex flex-col justify-between">
@@ -15,7 +15,7 @@
           <i class="las la-tint text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Liquidity</p>
         </div>
-        <p class="text-sm font-extralight pl-1 dark:text-gray-400">$ 3,663,455.23</p>
+        <p class="text-sm font-extralight pl-1 dark:text-gray-400">$ {{liquidityValue}}</p>
       </div>
     </div>
     <!-- Open Details Button -->
@@ -29,11 +29,30 @@
 </template>
 
 <script>
+  import openswap from "@/shared/openswap.js";
   export default {
     name: 'PoolStatsClosed',
+    mixins: [openswap],
     props: {
       isOpen: Boolean,
-      pending: Number
+      pool: Object,
+      poolData: Array
+    },
+    data() {
+      return {
+        liquidityValue: '?'
+      }
+    },
+    mounted: async function (){
+      var valueData = await this.getTokenAmounts(
+          this.pool,
+          String(this.poolData[4]['value']),
+          String(this.poolData[3]['value']),
+          String(this.poolData[1]['value'])
+        );
+
+      this.liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
+      
     }
   }
 </script>

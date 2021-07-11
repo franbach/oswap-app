@@ -5,7 +5,7 @@
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
-      <PoolStatsClosed @setPool="setPool" :pending="poolData[0][2]['value']" :isOpen="poolStatsOff" />
+      <PoolStatsClosed @setPool="setPool" :poolData="poolData[0]" :pool="pool"  :isOpen="poolStatsOff" />
 
       <!-- Show this when pool details is opened -->
       <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData[0]" :pool="pool" @setPool="setPool" />

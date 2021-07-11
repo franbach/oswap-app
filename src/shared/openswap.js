@@ -234,6 +234,26 @@ export default {
 
       return reserves;
     },
+    getLiquidityValue: async function(pool, tt0s, tt1s){
+      let is0Stable = this.isStablecoin(pool.token0address)
+      let is1Stable = this.isStablecoin(pool.token1address)
+ 
+      if(is0Stable == true ){
+        return ethers.utils.commify(parseFloat(tt0s).toFixed(2) * 2);
+      }
+       
+      if(is1Stable == true){
+        return ethers.utils.commify(parseFloat(tt1s).toFixed(2) * 2);
+      }else{
+        var Token0 = {oneZeroxAddress: pool.token0address} 
+        let Token1 = {oneZeroxAddress: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"}
+        let wei = ethers.utils.parseUnits('1', 18)
+        var route = await this.getBestRoute(wei, Token0, Token1);
+        
+        
+        return  ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed())
+      }
+    },
     getBestRoute: async function(parsedAmount, token0, token1) {
 
       const [
@@ -388,7 +408,7 @@ export default {
       const token1Tstaked = ethers.utils.commify(tvalue1.toFixed(4));
 
 
-      return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked]
+      return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, tvalue0, tvalue1]
     },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
@@ -497,6 +517,22 @@ export default {
         var poolWeight = 0;
       }
       return poolWeight
+    },
+    isStablecoin: function(tokenAddress){
+      var stablecoins = [
+        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA", //bBUSD
+        "0x9A89d0e1b051640C6704Dde4dF881f73ADFEf39a", //bUSDT
+        "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa", //bUSDC
+        "0xE176EBE47d621b984a73036B9DA5d834411ef734", //eBUSD
+        "0x985458E523dB3d53125813eD68c274899e9DfAb4", //eUSDC
+        "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f" //eUSDT
+      ]
+      for(let i in stablecoins){
+        if(stablecoins[i] == tokenAddress){
+          return true;
+        }
+      }
+      return false;
     },
     getAmountOutWithSlippage: async function(amount, bestRoute, slippageRate, token1, token2){
 
