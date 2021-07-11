@@ -7,7 +7,7 @@
           <i class="las la-hand-holding-usd text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Earned</p>
         </div>
-        <p class="text-xl font-extralight dark:text-gray-400">{{pending}}</p>
+        <p class="text-xl font-extralight dark:text-gray-400">{{parseFloat(pending).toFixed(5)}}</p>
       </div>
       <!-- Liquidity Info -->
       <div class="flex flex-col justify-between">

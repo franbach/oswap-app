@@ -25,7 +25,7 @@
             <div class="flex flex-1 flex-col space-y-2 text-gray-50">
               <p class="text-sm mt-1">Total Staked</p>
               <div class="flex items-center text-xs">
-                <p>{{pool.pair}} Staked: 260,754.97</p>
+                <p>{{pool.pair}} Staked: {{tas}}</p>
               </div>
               <div class="flex items-center text-xs">
                 <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
@@ -47,6 +47,7 @@
 
 <script>
 import openswap from "@/shared/openswap.js";
+import { ethers } from "ethers";
 
   export default {
     name: 'PoolHeader',
@@ -63,7 +64,7 @@ import openswap from "@/shared/openswap.js";
       } 
     },
     mounted: async function(){
-      if(this.pool.i != 1){
+   
         var valueData = await this.getTokenAmounts(
           this.pool,
           String(this.poolData[4]['value']),
@@ -72,15 +73,7 @@ import openswap from "@/shared/openswap.js";
         );
         this.tt0s = valueData[2]
         this.tt1s = valueData[3]
-        this.tas = String(this.poolData[1]['value'])
-      }
-      else{
-        this.tt0s = '?'
-        this.tt1s = '?'
-        this.tas = String(this.poolData[1]['value'])
-      }
-      console.log(valueData)
-
+        this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
     },
   }
 </script>

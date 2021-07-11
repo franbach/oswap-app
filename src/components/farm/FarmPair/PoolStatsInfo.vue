@@ -6,7 +6,7 @@
           <div class="flex flex-1 items-center justify-between">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
-              <p class="text-2xl dark:text-gray-300">{{poolData[2]['value']}}</p>
+              <p class="text-2xl dark:text-gray-300">{{parseFloat(poolData[2]['value']).toFixed(6)}}</p>
             </div>
             <div class="flex space-x-2 px-3 py-3 items-center rounded-lg bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
               <i class="las la-hand-holding-usd text-3xl text-gray-200 dark:text-gray-700"></i>
@@ -20,14 +20,14 @@
               <i class="las la-balance-scale-left text-xl text-oswapGreen"></i>
               <p class="text-xs text-oswapBlue-light">Stake Weight</p>
             </div>
-            <p class="text-xl dark:text-gray-300">0.25%</p>
+            <p class="text-xl dark:text-gray-300">{{stakeWeight}} %</p>
           </div>
           <div class="flex flex-col justify-between h-12">
             <div class="flex items-center space-x-2">
               <i class="las la-coins text-xl text-oswapGreen"></i>
               <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{poolData[3]['value']}}</p>
+            <p class="text-xl dark:text-gray-300">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
           </div>
           <div class="flex flex-col justify-between h-12">
             <div class="flex items-center space-x-2">
@@ -53,15 +53,15 @@
       <div class="flex flex-col ml-2 mt-2 mb-1 h-full justify-between">
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar-day dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">Expected Weekly Rewards: $ 250.00</p>
+          <p class="text-sm font-thin dark:text-gray-300">Expected Weekly Rewards: $ {{weeklyRewards}}</p>
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">Expected Monthly Rewards: $ 1000.00</p>
+          <p class="text-sm font-thin dark:text-gray-300">Expected Monthly Rewards: $ {{monthlyRewards}}</p>
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-coins dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: {{poolData[0]['value']}}</p>
+          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: {{parseFloat(poolData[0]['value']).toFixed(5)}}</p>
         </div>
       </div>
 
@@ -112,11 +112,15 @@ import openswap from "@/shared/openswap.js";
     data() {
       return {
         pt0s: '?',
-        pt1s: '?'
+        pt1s: '?',
+        stakeWeight: '0 ',
+        stakeWeight: '0 ',
+        weeklyRewards: '0.00',
+        monthlyRewards: '0.00'
       } 
     },
     mounted: async function(){
-      if(this.pool.i != 1){
+     
         var valueData = await this.getTokenAmounts(
           this.pool,
           String(this.poolData[4]['value']),
@@ -125,12 +129,11 @@ import openswap from "@/shared/openswap.js";
         );
         this.pt0s = valueData[0]
         this.pt1s = valueData[1]
-              }
-      else{
-        this.pt0s = 'untracked'
-        this.pt1s = 'untracked'
-      }
-      console.log(valueData)
+        this.stakeWeight = this.getStakeWeight(this.poolData[3]['value'], this.poolData[1]['value'])
+        let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
+    
+        this.weeklyRewards = rewards[0];
+        this.monthlyRewards = rewards[1];
 
     }
   }

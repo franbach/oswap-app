@@ -12,19 +12,7 @@ export const Pools = {
     rewards: "3X",
     i: 0
   },
-    oSWAPvONE: {
-    pair: "OPENSWAP/ONE (VENOM LP)",
-    pairaddress: "0xd302166217cd90d398ffd7ba75e51dd99fe66fde",
-    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
-    token1address: "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
-    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
-    imgtoken1: "https://openfi.dev/tokens/default/ONE.png",
-    name: ["OPENSWAP", "ONE"],
-    decimals: [18, 18],
-    pid: "12",
-    rewards: "2X",
-    i: 1
-  },
+    
   oSWAPbBUSD: {
     pair: "OPENSWAP/bBUSD",
     pairaddress: "0x4BEc01D58cfdBB9D3b83dDa34Be950f936395D82",
@@ -36,47 +24,7 @@ export const Pools = {
     decimals: [18, 18],
     pid: "1",
     rewards: "3X",
-    i: 2
-  },//**************************************************************************
-  oSWAPbMATIC: {
-    pair: "OPENSWAP/bMATIC",
-    pairaddress: "0x670E114f3D4845BaB7CCb01fFC4033419050fCb3",
-    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
-    token1address: "0x6E7bE5B9B4C9953434CD83950D61408f1cCc3bee",
-    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
-    imgtoken1: "https://openfi.dev/tokens/default/MATIC.png",
-    name: ["OPENSWAP", "bMATIC"],
-    decimals: [18, 18],
-    pid: "13",
-    rewards: "3X",
-    i: 3
-  },
-    oSWAPbBNB: {
-    pair: "OPENSWAP/bBNB",
-    pairaddress: "0x5D951e050247518abA916B7C0099FdCCa9aBCEFC",
-    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
-    token1address: "0xb1f6E61E1e113625593a22fa6aa94F8052bc39E0",
-    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
-    imgtoken1: "https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png",
-    name: ["OPENSWAP", "bBNB"],
-    decimals: [18, 18],
-    pid: "14",
-    rewards: "3X",
-    i: 4
-  },
-
-    oSWAPbADA: {
-    pair: "OPENSWAP/bADA",
-    pairaddress: "0x100C1bD0E5D5ac7A365545553B33878D8EF04Ee2",
-    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
-    token1address: "0x582617bD8Ca80d22D4432E63Fda52D74dcDCEe4c",
-    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
-    imgtoken1: "https://s2.coinmarketcap.com/static/img/coins/128x128/2010.png",
-    name: ["OPENSWAP", "bADA"],
-    decimals: [18, 18],
-    pid: "15",
-    rewards: "3X",
-    i: 5
+    i: 1
   },
 
 //**************************************************************************
@@ -91,7 +39,7 @@ export const Pools = {
     decimals: [18, 18],
     pid: "2",
     rewards: "1X",
-    i: 6
+    i: 2
   },
 
   WBTCWONE: {
@@ -105,7 +53,7 @@ export const Pools = {
     decimals: [8, 18],
     pid: "3",
     rewards: "1X",
-    i: 7
+    i: 3
   },
   bBUSDeWBTC: {
     pair: "bBUSD/eWBTC",
@@ -118,7 +66,7 @@ export const Pools = {
     decimals: [18, 8],
     pid: "4",
     rewards: "1X",
-    i: 8
+    i: 4
   },
   eBUSDeWBTC: {
     pair: "eBUSD/eWBTC",
@@ -131,7 +79,7 @@ export const Pools = {
     decimals: [18, 8],
     pid: "5",
     rewards: "1X",
-    i: 9
+    i: 5
   },
   eBUSDWONE: {
     pair: "eBUSD/ONE",
@@ -144,7 +92,7 @@ export const Pools = {
     decimals: [18, 18],
     pid: "6",
     rewards: "1X",
-    i: 10
+    i: 6
   },
   eETHeBUSD: {
     pair: "eETH/eBUSD",
@@ -157,7 +105,7 @@ export const Pools = {
     decimals: [18, 18],
     pid: "7",
     rewards: "1X",
-    i: 11
+    i: 7
   } /*
     BNBONE: {
     pair: "bBNB/ONE",
@@ -181,7 +129,7 @@ export const Pools = {
     decimals: [18, 18],
     pid: "9",
     rewards: "1X",
-    i: 12
+    i: 8
   },
   eUSDCONE: {
     pair: "eUSDC/ONE",
@@ -194,6 +142,46 @@ export const Pools = {
     decimals: [6, 18],
     pid: "10",
     rewards: "1X",
-    i: 13
+    i: 9
+  },//**************************************************************************
+  oSWAPbMATIC: {
+    pair: "OPENSWAP/bMATIC",
+    pairaddress: "0x670E114f3D4845BaB7CCb01fFC4033419050fCb3",
+    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token1address: "0x6E7bE5B9B4C9953434CD83950D61408f1cCc3bee",
+    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
+    imgtoken1: "https://openfi.dev/tokens/default/MATIC.png",
+    name: ["OPENSWAP", "bMATIC"],
+    decimals: [18, 18],
+    pid: "13",
+    rewards: "3X",
+    i: 10
+  },
+    oSWAPbBNB: {
+    pair: "OPENSWAP/bBNB",
+    pairaddress: "0x5D951e050247518abA916B7C0099FdCCa9aBCEFC",
+    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token1address: "0xb1f6E61E1e113625593a22fa6aa94F8052bc39E0",
+    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
+    imgtoken1: "https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png",
+    name: ["OPENSWAP", "bBNB"],
+    decimals: [18, 18],
+    pid: "14",
+    rewards: "3X",
+    i: 11
+  },
+
+    oSWAPbADA: {
+    pair: "OPENSWAP/bADA",
+    pairaddress: "0x100C1bD0E5D5ac7A365545553B33878D8EF04Ee2",
+    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token1address: "0x582617bD8Ca80d22D4432E63Fda52D74dcDCEe4c",
+    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
+    imgtoken1: "https://s2.coinmarketcap.com/static/img/coins/128x128/2010.png",
+    name: ["OPENSWAP", "bADA"],
+    decimals: [18, 18],
+    pid: "15",
+    rewards: "3X",
+    i: 12
   }
 };

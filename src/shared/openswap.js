@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
-    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2']),
+    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -324,6 +324,37 @@ export default {
       );
       return trade;
     },
+    getRewardValue: async function(pool, poolWeight) {
+      //onst BN = require("bn.js");
+      const token0 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        this.oSWAPTOKEN()
+      );
+      const token1 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA" //BUSD
+      );
+      const pair = await Fetcher.fetchPairData(token0, token1);
+      const price = parseFloat(pair.token1Price.toFixed(4));
+      
+      const aWeekly = 8851;
+      const aMonthly = 35404;
+
+    
+      var weekly = ((price * aWeekly * poolWeight) / 100).toFixed(4);
+      var monthly = ((price * aMonthly * poolWeight) / 100).toFixed(4);
+
+      if (pool.pid == "0" || pool.pid == "1" || pool.pid == "13"  || pool.pid == "14" || pool.pid == "15") {
+        weekly = weekly * 3;
+        monthly = monthly * 3;
+      }
+      if (pool.pid == "12" ) {
+        weekly = weekly * 2;
+        monthly = monthly * 2;
+      }
+
+      return [parseFloat(weekly).toFixed(6), parseFloat(monthly).toFixed(6)];
+    },
     getTokenAmounts: async function(pool, LPsupply, staked, totalStaked) {
       
 
@@ -343,9 +374,7 @@ export default {
         this.getUnits(totalStaked, tempToken)
       );
      
-      console.log('supply ' + supply.toFixed(4));
-      console.log('li ' +liquidity.toFixed(4));
-      console.log('Tli ' +Tliquidity.toFixed(4));
+
       const pair = await Fetcher.fetchPairData(token0, token1);
       const value0 = await pair.getLiquidityValue(token0, supply, liquidity);
       const token0Pstaked = ethers.utils.commify(value0.toFixed(4));
@@ -357,8 +386,7 @@ export default {
       const token0Tstaked = ethers.utils.commify(tvalue0.toFixed(4));
       const tvalue1 = await pair.getLiquidityValue(token1, supply, Tliquidity);
       const token1Tstaked = ethers.utils.commify(tvalue1.toFixed(4));
-      console.log(typeof token0Tstaked)
-      console.log('tts1 ' +token1Tstaked)
+
 
       return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked]
     },
@@ -386,7 +414,7 @@ export default {
         title: 'Transaction Sent',
         msg: "Swap sent to network. Waiting for confirmation",
         link: false,
-        href: `${explorer}${transaction}`
+        href: `${explorer}${transactionswapETHForExactTokens}`
       })
       await tx.wait(1)
       toastMe('success', {
@@ -461,6 +489,14 @@ export default {
       var deadline = new Date();
       deadline = parseInt(deadline / 1000) + 480;
       return deadline;
+    },
+    getStakeWeight: function(staked, totalStaked) {
+      if (staked != 0) {
+        var poolWeight = ((staked / totalStaked) * 100).toFixed(4);
+      } else {
+        var poolWeight = 0;
+      }
+      return poolWeight
     },
     getAmountOutWithSlippage: async function(amount, bestRoute, slippageRate, token1, token2){
 

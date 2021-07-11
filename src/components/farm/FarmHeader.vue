@@ -24,7 +24,7 @@
               <i class="las la-hand-holding-usd text-3xl text-gray-50 dark:text-gray-700"></i>
               <p class="text-gray-50 dark:text-gray-700">Collect All</p>
               <p class="text-xs bg-gray-200 p-2 dark:bg-oswapDark-gray rounded-md px-3
-               border-2 border-gray-300 dark:border-gray-700 dark:text-oswapGreen">{{unclaimedTotal}}</p>
+               border-2 border-gray-300 dark:border-gray-700 dark:text-oswapGreen">{{parseFloat(unclaimedTotal).toFixed(8)}}</p>
             </div>
             <div class="flex">
               <p class="text-xs dark:text-gray-300 ml-2">All unclaimed rewards</p>
