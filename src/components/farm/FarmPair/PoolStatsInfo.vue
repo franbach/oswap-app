@@ -68,7 +68,7 @@
       <div class="flex items-center h-12 justify-between">
         <!-- Burn Fees Button -->
         <div class="flex items-center space-x-2 pl-3 pr-1 rounded-2xl h-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-red-400 dark:hover:bg-red-400 border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
-          <p class="text-sm text-gray-200 dark:text-gray-700">Burn Fees</p>
+          <p @click="this.burnPool(this.pool)" class="text-sm text-gray-200 dark:text-gray-700">Burn Fees</p>
           <i class="las la-burn text-2xl text-gray-200 dark:text-gray-700"></i>
         </div>
         <!-- Unstake Button -->

@@ -20,7 +20,7 @@ export default {
   		return state.WONE;
   	},
   	oSWAPMAKER: (state) => {
-		return state.openMaker;
+		return state.oSWAPMaker;
   	},
   	oSWAPCHEF: (state) => {
 		return state.oSWAPChef;

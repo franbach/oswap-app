@@ -1,5 +1,6 @@
 import MasterChef from "openswap-core/build/contracts/MasterChef.json";
 import IUniswapV2Router02 from "openswap-core/build/contracts/IUniswapV2Router02.json";
+import SushiMaker from "openswap-core/build/contracts/SushiMaker.json";
 import IERC20 from "openswap-core/build/contracts/IERC20.json";
 
 import { ethers } from "ethers";
@@ -192,6 +193,100 @@ export default {
       let allowance = contract.allowance(address, contractAddr)
       return allowance;
     },
+    burnAll: async function(){
+      var i = 0,
+        n;
+       let token0arr = []
+       let token1arr = []
+      for (n in Pools) {
+        
+        token0arr.push(Pools[n].token0address)
+        token1arr.push(Pools[n].token1address)
+        i++
+      }
+
+      const abi = SushiMaker.abi;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
+
+      
+
+      const tx = await contract.convertMultiple(token0arr, token1arr).catch(err => {
+        toastMe('error', {
+          title: 'Error :',
+          msg: err.data.message,
+          link: false
+        })
+        return
+      })
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Burn request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+      return
+        
+      
+    },
+    burnPool: async function(pool){
+  
+      const abi = SushiMaker.abi;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
+
+      
+
+      const tx = await contract.convert(pool.token0address, pool.token1address).catch(err => {
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Burn request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+      return
+
+        
+      
+    },
+    
     //----------------------------------------SDK------------------------------------------
     getPair: async function(token0, token1){
       const Token0 = await Fetcher.fetchTokenData(

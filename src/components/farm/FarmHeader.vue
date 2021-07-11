@@ -14,7 +14,7 @@
           <div class="flex flex-col space-y-1">
             <div class="flex border-2 border-gray-300 dark:border-gray-700 items-center space-x-1 bg-oswapGreen hover:bg-red-400 pl-2 h-14 pr-4 rounded-xl cursor-pointer">
               <i class="las la-burn text-3xl text-gray-50 dark:text-gray-700"></i>
-              <p class="text-gray-50 dark:text-gray-700">Burn All !</p>
+              <p @click="this.burnAll()" class="text-gray-50 dark:text-gray-700">Burn All !</p>
             </div>
             <p class="text-xs dark:text-gray-300 ml-2">Burn all Fees</p>
           </div>
