@@ -91,19 +91,14 @@ export default {
 
         for (n in Pools) {
 
-          //what does this do? 
-          // I was stupid enough to fuck up a Farm with an invalid address so it skips it.
-          if (i == 8) {
-            i++;
-          }
-
+         
           const pending = await contract
-            .pendingSushi(i, address).catch(error => {
+            .pendingSushi(parseInt(Pools[n].pid), address).catch(error => {
               console.log(error);
               this.error = 1;
               this.errormessage = "Error getting reward amount.";
             });
-        
+          
           const pendingsushi = ethers.BigNumber.from(pending);
           totalUnclaimedRewards =
             totalUnclaimedRewards.add(pendingsushi);
@@ -642,7 +637,7 @@ export default {
         title: 'Transaction Sent',
         msg: "Swap sent to network. Waiting for confirmation",
         link: false,
-        href: `${explorer}${transactionswapETHForExactTokens}`
+        href: `${explorer}${transaction}`
       })
       await tx.wait(1)
       toastMe('success', {

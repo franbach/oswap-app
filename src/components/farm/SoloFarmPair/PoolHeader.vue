@@ -8,7 +8,7 @@
       </div>
       
       <!-- Pair Title -->
-      <div class="absolute left-20 pl-2 items-center justify-center flex h-12 space-x-2">
+      <div class="absolute left-10 pl-5 items-center justify-center flex h-12 space-x-2">
         <p class="text-xs text-oswapBlue-light">{{pool.token}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
