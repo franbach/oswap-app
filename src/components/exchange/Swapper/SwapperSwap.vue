@@ -11,9 +11,9 @@
 
   <!-- Swap -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="parseAndExecuteSwap" v-if="this.getBtnState({swap: 'swap'})" class="flex w-28 relative">
+    <div @click="parseAndExecuteSwap" v-if="this.getBtnState({swap: 'swap'})" class="flex w-28">
       <div class="grab-attention-glowing"></div>
-      <div class="grab-attention">
+      <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
           <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Swap</p>
         </div>
@@ -24,11 +24,14 @@
 
   <!-- Swapping -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({swap: 'swapping'})" class="flex w-28 justify-between items-center border border-oswapGreen-dark space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-wait">
-      <div class="flex flex-1 items-center justify-center">
-        <p class="text-sm text-oswapGreen-dark">Swapping</p>
+    <div v-if="this.getBtnState({swap: 'swapping'})" class="flex w-28">
+      <div class="grab-attention-glowing"></div>
+      <div class="grab-attention cursor-wait">
+        <div class="flex flex-1 items-center justify-center">
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Swapping</p>
+        </div>
+        <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
       </div>
-      <i class="las la-sync text-xl animate-spin text-oswapGreen-dark"></i>
     </div>
   </transition>
 
