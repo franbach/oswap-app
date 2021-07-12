@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
-    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN', 'SUSHI']),
+    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -654,9 +654,9 @@ export default {
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
       return parsedunits;
     },
-    getSupplyAndMarketCap: async function() {
+    getBurnAndTotalSupply: async function() {
       
-      const sushi = this.SUSHI();
+      const oSWAPToken = this.oSWAPTOKEN();
       const burnAddress = "0xdEad000000000000000000000000000000000000";
       const lockedAddress = "0x8c4245b6096EE6e3C7266f4289233E93B24f0b2d";
 
@@ -680,7 +680,7 @@ export default {
       ];
       
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(sushi, abi, provider);
+      const contract = new ethers.Contract(oSWAPToken, abi, provider);
 
       //Get Burned Balance
       let burnBalance = await contract

@@ -43,7 +43,7 @@ import { commify } from '@ethersproject/units';
     mixins: [openswap],
     mounted: async function() {
       this.oswapPrice = await this.getOswapPrice();
-      this.balances = await this.getSupplyAndMarketCap();
+      this.balances = await this.getBurnAndTotalSupply();
       this.marketCap = commify((this.balances.totalSupply * this.oswapPrice).toFixed(2));
       this.balances.totalSupply = commify(this.balances.totalSupply);
       this.balances.burnedAmount = commify(this.balances.burnedAmount);
