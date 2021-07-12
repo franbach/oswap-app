@@ -22,11 +22,11 @@
 <script>
   import openswap from "@/shared/openswap.js";
 
-  import PoolHeader from "@/components/farm/FarmPair/PoolHeader"
-  import PoolStatsClosed from "@/components/farm/FarmPair/PoolStatsClosed"
-  import PoolStatsInfo from "@/components/farm/FarmPair/PoolStatsInfo"
-  import PoolStake from "@/components/farm/FarmPair/PoolStake"
-  import PoolUnstake from "@/components/farm/FarmPair/PoolUnstake"
+  import PoolHeader from "@/components/farm/SoloFarmPair/PoolHeader"
+  import PoolStatsClosed from "@/components/farm/SoloFarmPair/PoolStatsClosed"
+  import PoolStatsInfo from "@/components/farm/SoloFarmPair/PoolStatsInfo"
+  import PoolStake from "@/components/farm/SoloFarmPair/PoolStake"
+  import PoolUnstake from "@/components/farm/SoloFarmPair/PoolUnstake"
 
   export default {
     name: 'FarmPair',

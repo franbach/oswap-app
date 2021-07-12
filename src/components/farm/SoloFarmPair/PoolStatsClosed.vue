@@ -30,6 +30,7 @@
 
 <script>
   import openswap from "@/shared/openswap.js";
+  import { ethers } from "ethers";
   export default {
     name: 'PoolStatsClosed',
     mixins: [openswap],
@@ -44,14 +45,9 @@
       }
     },
     mounted: async function (){
-      var valueData = await this.getTokenAmounts(
-          this.pool,
-          String(this.poolData[4]['value']),
-          String(this.poolData[3]['value']),
-          String(this.poolData[1]['value'])
-        );
+      let temp = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData[1]['value'])).toFixed(2)
 
-      this.liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
+      this.liquidityValue = ethers.utils.commify(temp);
       
     }
   }
