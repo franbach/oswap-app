@@ -5,7 +5,6 @@ import addressConstants from './modules/addressConstants'
 
 export default createStore({
   modules: {
-    // State Management Exchange
     exchange,
     wallet,
     addressConstants
