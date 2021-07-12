@@ -54,10 +54,6 @@ import { ethers } from "ethers";
       } 
     },
     mounted: async function(){
-   
-   
-        
-        
         this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
     },
   }

@@ -87,12 +87,12 @@
           return;
         }
         if(token0.oneZeroxAddress == this.WONE()){
-          await this.swapETHForExactTokens(this.amount, this.amountOut, this.path, token1);
+          await this.swapETHForExactTokens(this.amount, this.amountOut, this.path, token1)
           this.setBtnState({swap: 'swapped'});
           return;
         }
         if(token1.oneZeroxAddress == this.WONE()){
-          await this.swapTokensForExactETH(this.amount, this.amountOut, this.path, token0);
+          await this.swapTokensForExactETH(this.amount, this.amountOut, this.path, token0)
           this.setBtnState({swap: 'swapped'});
           return;
         }

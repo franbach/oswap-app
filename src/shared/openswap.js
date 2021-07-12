@@ -4,7 +4,7 @@ import SushiMaker from "openswap-core/build/contracts/SushiMaker.json";
 import IERC20 from "openswap-core/build/contracts/IERC20.json";
 
 import { ethers } from "ethers";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 const { Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
 
@@ -18,6 +18,7 @@ export default {
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
+    ...mapActions('exchange/swapper', ['setBtnState']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -90,8 +91,6 @@ export default {
         const contract = new ethers.Contract(masterChef, abi, provider)
 
         for (n in Pools) {
-
-         
           const pending = await contract
             .pendingSushi(parseInt(Pools[n].pid), address).catch(error => {
               console.log(error);
@@ -383,8 +382,6 @@ export default {
       })
       return
 
-        
-      
     },
     
     //----------------------------------------SDK------------------------------------------
@@ -629,7 +626,23 @@ export default {
       const abi = IUniswapV2Router02.abi;
 
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride)
+      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        this.setBtnState({swap: 'swap'});
+        return
+      })
+
 
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
@@ -659,7 +672,23 @@ export default {
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
 
-      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline)
+      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        this.setBtnState({swap: 'swap'});
+        return
+      })
+
 
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
@@ -689,7 +718,23 @@ export default {
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
 
-      const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline)
+      const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        this.setBtnState({swap: 'swap'});
+        return
+      })
+
       
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
