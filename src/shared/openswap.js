@@ -1,5 +1,6 @@
 import MasterChef from "openswap-core/build/contracts/MasterChef.json";
 import IUniswapV2Router02 from "openswap-core/build/contracts/IUniswapV2Router02.json";
+import SushiMaker from "openswap-core/build/contracts/SushiMaker.json";
 import IERC20 from "openswap-core/build/contracts/IERC20.json";
 
 import { ethers } from "ethers";
@@ -16,7 +17,7 @@ export default {
   },
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
-    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2']),
+    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -163,11 +164,109 @@ export default {
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
-            const tx = await contract
-            .collectAll();
+            const tx = await contract.collectAll().catch(err => {
+
+              var message;
+              if(!err.data?.message){
+                message = err.message
+              }else{
+                message = err.data.message
+              }
+              toastMe('error', {
+                title: 'Error :',
+                msg: message,
+                link: false
+              })
+              return
+            })
             
             this.getAllRewards();
             return tx;
+    },
+    collectOSWAP: async function(pool){
+      
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      const tx = await contract.withdraw(pid, '0').catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
+    },
+    unstakeLP: async function(pool, amount){
+      
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+      const tx = await contract.withdraw(pid, amount).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
     },
     approveSpending: async function(token1, contractAddr){
       //biggest wei denomination
@@ -192,6 +291,107 @@ export default {
       let allowance = contract.allowance(address, contractAddr)
       return allowance;
     },
+    burnAll: async function(){
+      var i = 0,
+        n;
+       let token0arr = []
+       let token1arr = []
+      for (n in Pools) {
+        
+        token0arr.push(Pools[n].token0address)
+        token1arr.push(Pools[n].token1address)
+        i++
+      }
+
+      const abi = SushiMaker.abi;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
+      
+      
+
+      const tx = await contract.convertMultiple(token0arr, token1arr).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Burn request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+      return
+        
+      
+    },
+    burnPool: async function(pool){
+  
+      const abi = SushiMaker.abi;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
+
+      
+
+      const tx = await contract.convert(pool.token0address, pool.token1address).catch(err => {
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Burn request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+      return
+
+        
+      
+    },
+    
     //----------------------------------------SDK------------------------------------------
     getPair: async function(token0, token1){
       const Token0 = await Fetcher.fetchTokenData(
@@ -233,6 +433,34 @@ export default {
       }
 
       return reserves;
+    },
+    getLiquidityValueSolo: async function(pool, staked){
+      let token0 = {oneZeroxAddress : pool.token0address} 
+      let token1 = {oneZeroxAddress : "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"} //BUSD
+      const pair = await this.getPair(token1, token0)
+      let rate = this.getRate(pair, token0)
+      console.log(staked)
+      return rate * staked
+    },
+    getLiquidityValue: async function(pool, tt0s, tt1s){
+      let is0Stable = this.isStablecoin(pool.token0address)
+      let is1Stable = this.isStablecoin(pool.token1address)
+ 
+      if(is0Stable == true ){
+        return ethers.utils.commify(parseFloat(tt0s).toFixed(2) * 2);
+      }
+       
+      if(is1Stable == true){
+        return ethers.utils.commify(parseFloat(tt1s).toFixed(2) * 2);
+      }else{
+        var Token0 = {oneZeroxAddress: pool.token0address} 
+        let Token1 = {oneZeroxAddress: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"}
+        let wei = ethers.utils.parseUnits('1', 18)
+        var route = await this.getBestRoute(wei, Token0, Token1);
+        
+        
+        return  ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed())
+      }
     },
     getBestRoute: async function(parsedAmount, token0, token1) {
 
@@ -324,6 +552,72 @@ export default {
       );
       return trade;
     },
+    getRewardValue: async function(pool, poolWeight) {
+      //onst BN = require("bn.js");
+      const token0 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        this.oSWAPTOKEN()
+      );
+      const token1 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA" //BUSD
+      );
+      const pair = await Fetcher.fetchPairData(token0, token1);
+      const price = parseFloat(pair.token1Price.toFixed(4));
+      
+      const aWeekly = 8851;
+      const aMonthly = 35404;
+
+    
+      var weekly = ((price * aWeekly * poolWeight) / 100).toFixed(4);
+      var monthly = ((price * aMonthly * poolWeight) / 100).toFixed(4);
+
+      if (pool.pid == "0" || pool.pid == "1" || pool.pid == "13"  || pool.pid == "14" || pool.pid == "15") {
+        weekly = weekly * 3;
+        monthly = monthly * 3;
+      }
+      if (pool.pid == "12" ) {
+        weekly = weekly * 2;
+        monthly = monthly * 2;
+      }
+
+      return [parseFloat(weekly).toFixed(6), parseFloat(monthly).toFixed(6)];
+    },
+    getTokenAmounts: async function(pool, LPsupply, staked, totalStaked) {
+      
+
+      let tempToken = {decimals: 18};
+
+      const token0 = await Fetcher.fetchTokenData(ChainId.MAINNET, pool.token0address);
+      const token1 = await Fetcher.fetchTokenData(ChainId.MAINNET, pool.token1address);
+      const tokenLP = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        pool.pairaddress
+      );
+      
+      const supply = new TokenAmount(tokenLP, this.getUnits(LPsupply, tempToken));
+      const liquidity = new TokenAmount(tokenLP, this.getUnits(staked, tempToken));
+      const Tliquidity = new TokenAmount(
+        tokenLP,
+        this.getUnits(totalStaked, tempToken)
+      );
+     
+
+      const pair = await Fetcher.fetchPairData(token0, token1);
+      const value0 = await pair.getLiquidityValue(token0, supply, liquidity);
+      const token0Pstaked = ethers.utils.commify(value0.toFixed(4));
+      const value1 = await pair.getLiquidityValue(token1, supply, liquidity);
+      const token1Pstaked = ethers.utils.commify(value1.toFixed(4));
+      
+      
+      const tvalue0 = await pair.getLiquidityValue(token0, supply, Tliquidity);
+      const token0Tstaked = ethers.utils.commify(tvalue0.toFixed(4));
+      const tvalue1 = await pair.getLiquidityValue(token1, supply, Tliquidity);
+      const token1Tstaked = ethers.utils.commify(tvalue1.toFixed(4));
+
+
+      return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, tvalue0, tvalue1]
+    },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
       
@@ -348,7 +642,7 @@ export default {
         title: 'Transaction Sent',
         msg: "Swap sent to network. Waiting for confirmation",
         link: false,
-        href: `${explorer}${transaction}`
+        href: `${explorer}${transactionswapETHForExactTokens}`
       })
       await tx.wait(1)
       toastMe('success', {
@@ -424,6 +718,30 @@ export default {
       deadline = parseInt(deadline / 1000) + 480;
       return deadline;
     },
+    getStakeWeight: function(staked, totalStaked) {
+      if (staked != 0) {
+        var poolWeight = ((staked / totalStaked) * 100).toFixed(4);
+      } else {
+        var poolWeight = 0;
+      }
+      return poolWeight
+    },
+    isStablecoin: function(tokenAddress){
+      var stablecoins = [
+        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA", //bBUSD
+        "0x9A89d0e1b051640C6704Dde4dF881f73ADFEf39a", //bUSDT
+        "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa", //bUSDC
+        "0xE176EBE47d621b984a73036B9DA5d834411ef734", //eBUSD
+        "0x985458E523dB3d53125813eD68c274899e9DfAb4", //eUSDC
+        "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f" //eUSDT
+      ]
+      for(let i in stablecoins){
+        if(stablecoins[i] == tokenAddress){
+          return true;
+        }
+      }
+      return false;
+    },
     getAmountOutWithSlippage: async function(amount, bestRoute, slippageRate, token1, token2){
 
       let parsedAmount = this.getUnits(amount, token1);
@@ -448,6 +766,57 @@ export default {
     getUnits: function(amount, token){
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
       return parsedunits;
+    },
+    getBurnAndTotalSupply: async function() {
+      
+      const oSWAPToken = this.oSWAPTOKEN();
+      const burnAddress = "0xdEad000000000000000000000000000000000000";
+      const lockedAddress = "0x8c4245b6096EE6e3C7266f4289233E93B24f0b2d";
+
+      const abi = [
+         // balanceOf
+         {
+          constant: true,
+          inputs: [{ name: "_owner", type: "address" }],
+          name: "balanceOf",
+          outputs: [{ name: "balance", type: "uint256" }],
+          type: "function"
+        },
+        //Total supply
+        {
+          constant: true,
+          inputs: [],
+          name: "totalSupply",
+          outputs: [{ name: "", type: "uint256" }],
+          type: "function"
+        }
+      ];
+      
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(oSWAPToken, abi, provider);
+
+      //Get Burned Balance
+      let burnBalance = await contract
+        .balanceOf(burnAddress);
+      let burnBalanceUnformated = ethers.utils.formatUnits(burnBalance.toString()).toString();
+      let burnBalanceFormated = (burnBalanceUnformated / 1).toFixed(2);
+
+      //Get Supply Balance
+      let lockedBalance = await contract
+      .balanceOf(lockedAddress);
+
+       //Get Total Supply
+       let totalSupply = await contract.totalSupply();
+       totalSupply = totalSupply.sub(lockedBalance);
+       totalSupply = totalSupply.sub(burnBalance);
+       let totalSupplyUnFormatted = ethers.utils.formatUnits(totalSupply.toString()).toString();
+       let totalSupplyFormated = (totalSupplyUnFormatted / 1).toFixed(2);
+
+       return {
+         totalSupply: totalSupplyFormated,
+         burnedAmount: burnBalanceFormated
+       }
+
     }
   }
 };

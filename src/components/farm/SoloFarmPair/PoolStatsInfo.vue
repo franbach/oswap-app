@@ -34,18 +34,9 @@
               <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
                 <img :src="pool.imgtoken0" class="h-4" alt="">
               </div>
-              <p class="text-xs text-oswapBlue-light">{{pool.name[0]}} Staked</p>
+              <p class="text-xs text-oswapBlue-light">{{pool.token}} Staked</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{pt0s}}</p>
-          </div>
-          <div class="flex flex-col justify-between h-12">
-            <div class="flex items-center space-x-2">
-              <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
-                <img :src="pool.imgtoken1" class="h-4" alt="">
-              </div>
-              <p class="text-xs text-oswapBlue-light">{{pool.name[1]}} Staked</p>
-            </div>
-            <p class="text-xl dark:text-gray-300">{{pt1s}}</p>
+            <p class="text-xl dark:text-gray-300">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
           </div>
         </div>
       </div>
@@ -121,14 +112,7 @@ import openswap from "@/shared/openswap.js";
     },
     mounted: async function(){
      
-        var valueData = await this.getTokenAmounts(
-          this.pool,
-          String(this.poolData[4]['value']),
-          String(this.poolData[3]['value']),
-          String(this.poolData[1]['value'])
-        );
-        this.pt0s = valueData[0]
-        this.pt1s = valueData[1]
+
         this.stakeWeight = this.getStakeWeight(this.poolData[3]['value'], this.poolData[1]['value'])
         let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
     

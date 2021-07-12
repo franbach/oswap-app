@@ -3,8 +3,8 @@
     <div v-if="isOpen" class="flex flex-col justify-between h-full w-full absolute">
       <div class="flex flex-col space-y-2">
         <div class="flex items-center space-x-2 mx-2">
-          <i class="las la-hand-holding-usd text-xl text-oswapGreen"></i>
-          <p class="text-sm dark:text-gray-300">Withdraw your LP Tokens</p>
+          <i class="las la-donate text-xl text-oswapGreen"></i>
+          <p class="text-sm dark:text-gray-300">Deposit your LP Tokens</p>
         </div>
         <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
           <div class="flex flex-1 shadow-lg rounded-2xl">
@@ -16,9 +16,9 @@
             <div class="flex flex-col justify-between h-12">
               <div class="flex items-center space-x-2">
                 <i class="las la-coins text-xl text-oswapGreen"></i>
-                <p class="text-xs text-oswapBlue-light">LP Tokens Staked</p>
+                <p class="text-xs text-oswapBlue-light">LP Tokens Available</p>
               </div>
-              <p class="text-xl dark:text-gray-300">{{parseFloat(maxAmount).toFixed(6)}}</p>
+              <p class="text-xl dark:text-gray-300">2157.345</p>
             </div>
             <div class="flex items-center justify-end">
               <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
@@ -37,8 +37,8 @@
         </div>
         <!-- Continue Button -->
         <div class="flex items-center space-x-2 pl-3 pr-1 rounded-2xl h-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
-          <p @click="this.unstakeLP(this.pool, this.amount)" class="text-sm text-gray-200 dark:text-gray-700">Unstake !</p>
-          <i class="las la-sign-out-alt text-2xl text-gray-200 dark:text-gray-700"></i>
+          <p class="text-sm text-gray-200 dark:text-gray-700">Continue</p>
+          <i class="las la-sign-in-alt text-2xl text-gray-200 dark:text-gray-700"></i>
         </div>
       </div>
     </div>
@@ -47,18 +47,15 @@
 
 <script>
   import InputWithValidation from "@/components/InputWithValidation"
-  import openswap from "@/shared/openswap.js";
 
   export default {
-    name: 'PoolUnstake',
-    mixins: [openswap],
+    name: 'PoolStake',
     components: {
       InputWithValidation,
     },
     props: {
       pool: Object,
-      isOpen: Boolean,
-      maxAmount: Number
+      isOpen: Boolean
     },
     data() {
       return {
@@ -68,7 +65,6 @@
     },
     methods: {
       setMax() {
-        this.amount = String(this.maxAmount);
       },
       inputAmount() {
 
