@@ -58,6 +58,12 @@
           delete this.errors['format'];
           this.$emit("amount", value);
         }
+        if (value == '') {
+          this.errors['blank'] = 'Amount can\'t be blank';
+        } else {
+          delete this.errors['blank']
+          this.$emit("amount", value);
+        }
         if (parseFloat(value) > parseFloat(this.balance)) {
           this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
         } else {
