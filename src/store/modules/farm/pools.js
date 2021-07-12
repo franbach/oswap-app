@@ -193,7 +193,7 @@ export const SoloPools = {
     
     decimals: [18, 18],
     pid: "11",
-    rewards: "3X",
+    rewards: "1X",
     i: 0
   }
 }
