@@ -37,7 +37,6 @@ export default {
 	hRPC: (state) => {
 		return state.harmonyRPC;
 	}
-
   },
   actions: {},
   modules: {}

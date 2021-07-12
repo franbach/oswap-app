@@ -766,6 +766,57 @@ export default {
     getUnits: function(amount, token){
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
       return parsedunits;
+    },
+    getBurnAndTotalSupply: async function() {
+      
+      const oSWAPToken = this.oSWAPTOKEN();
+      const burnAddress = "0xdEad000000000000000000000000000000000000";
+      const lockedAddress = "0x8c4245b6096EE6e3C7266f4289233E93B24f0b2d";
+
+      const abi = [
+         // balanceOf
+         {
+          constant: true,
+          inputs: [{ name: "_owner", type: "address" }],
+          name: "balanceOf",
+          outputs: [{ name: "balance", type: "uint256" }],
+          type: "function"
+        },
+        //Total supply
+        {
+          constant: true,
+          inputs: [],
+          name: "totalSupply",
+          outputs: [{ name: "", type: "uint256" }],
+          type: "function"
+        }
+      ];
+      
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(oSWAPToken, abi, provider);
+
+      //Get Burned Balance
+      let burnBalance = await contract
+        .balanceOf(burnAddress);
+      let burnBalanceUnformated = ethers.utils.formatUnits(burnBalance.toString()).toString();
+      let burnBalanceFormated = (burnBalanceUnformated / 1).toFixed(2);
+
+      //Get Supply Balance
+      let lockedBalance = await contract
+      .balanceOf(lockedAddress);
+
+       //Get Total Supply
+       let totalSupply = await contract.totalSupply();
+       totalSupply = totalSupply.sub(lockedBalance);
+       totalSupply = totalSupply.sub(burnBalance);
+       let totalSupplyUnFormatted = ethers.utils.formatUnits(totalSupply.toString()).toString();
+       let totalSupplyFormated = (totalSupplyUnFormatted / 1).toFixed(2);
+
+       return {
+         totalSupply: totalSupplyFormated,
+         burnedAmount: burnBalanceFormated
+       }
+
     }
   }
 };
