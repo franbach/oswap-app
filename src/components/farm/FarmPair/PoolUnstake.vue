@@ -69,7 +69,6 @@
     methods: {
       setMax() {
         this.amount = String(this.maxAmount);
-        console.log(String(this.roundDown(this.amount, 18)))
       },
       roundDown: function(number, decimals) {
           decimals = decimals || 0;
