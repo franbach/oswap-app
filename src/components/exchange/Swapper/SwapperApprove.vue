@@ -11,11 +11,14 @@
 
   <!-- Ready to Approve -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="approve()" v-if="this.getBtnState({approve: 'approve'})" class="flex w-28 justify-between items-center group border border-oswapGreen-dark dark:hover:bg-oswapGreen hover:bg-oswapGreen space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-pointer">
-      <div class="flex flex-1 items-center justify-center">
-        <p class="text-sm text-oswapGreen-dark group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approve</p>
+    <div @click="approve()" v-if="this.getBtnState({approve: 'approve'})" class="flex w-28">
+      <div class="grab-attention-glowing"></div>
+      <div class="grab-attention">
+        <div class="flex flex-1 items-center justify-center">
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approve</p>
+        </div>
+        <i class="las la-pen-alt text-xl text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
       </div>
-      <i class="las la-pen-alt text-xl text-oswapGreen-dark group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
     </div>
   </transition>
 
