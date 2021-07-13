@@ -1,11 +1,21 @@
 <template>
   <div class="flex flex-col px-1 mt-3">
     <div class="flex items-center justify-between dark:text-gray-400 text-xs pb-2">
-      <p>Slippage Rate</p>
+      <p class="dark:text-gray-300">Slippage Rate</p>
       <div class="flex items-center space-x-2">
+        <div class="flex">
+          <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
+            <p>0.5%</p>
+          </div>
+        </div>
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
+        <div class="flex">
+          <div class="cursor-pointer hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen dark:bg-oswapGreen-dark bg-oswapGreen text-gray-50 p-1 px-2 rounded-lg">
+            <i class="las la-sliders-h text-sm"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
