@@ -1,32 +1,43 @@
 <template>
-  <div class="flex flex-col space-y-2 px-1 mt-3">
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Median Rate</p>
-      <p>{{mRate}}</p>
-    </div>
-
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Current Rate</p>
-      <p>{{cRate}}</p>
-    </div>
-
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Slippage Rate</p>
+  <div class="flex flex-col px-1 mt-2">
+    <div class="flex items-center justify-between dark:text-gray-400 text-xs pb-2">
+      <p class="dark:text-gray-300">Slippage Rate</p>
       <div class="flex items-center space-x-2">
+        <div class="flex">
+          <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
+            <p>0.5%</p>
+          </div>
+        </div>
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
+        <div class="flex">
+          <div class="cursor-pointer hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen dark:bg-oswapGreen-dark bg-oswapGreen text-gray-50 p-1 px-2 rounded-lg">
+            <i class="las la-sliders-h text-sm"></i>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="grid grid-cols-4 gap-2 py-2">
+      <div class="flex flex-col dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+        <p>Median Rate</p>
+        <p>{{mRate}}</p>
+      </div>
 
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Next Rate</p>
-      <p>{{nRate}}</p>
-    </div>
+      <div class="flex flex-col dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+        <p>Current Rate</p>
+        <p>{{cRate}}</p>
+      </div>
 
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Price Impact</p>
-      <p>{{pImpact}}%</p>
+      <div class="flex flex-col dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+        <p>Next Rate</p>
+        <p>{{nRate}}</p>
+      </div>
+
+      <div class="flex flex-col dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+        <p>Price Impact</p>
+        <p>{{pImpact}}%</p>
+      </div>
     </div>
   </div>
 </template>
