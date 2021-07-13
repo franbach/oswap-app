@@ -37,7 +37,7 @@
         </div>
         <!-- Continue Button -->
         <div class="flex items-center space-x-2 pl-3 pr-1 rounded-2xl h-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
-          <p @click="this.unstakeLP(this.pool, String(Math.floor(this.amount)))" class="text-sm text-gray-200 dark:text-gray-700">Unstake !</p>
+          <p @click="this.unstakeLP(this.pool, this.amount)" class="text-sm text-gray-200 dark:text-gray-700">Unstake !</p>
           <i class="las la-sign-out-alt text-2xl text-gray-200 dark:text-gray-700"></i>
         </div>
       </div>
@@ -69,10 +69,6 @@
     methods: {
       setMax() {
         this.amount = String(this.maxAmount);
-      },
-      roundDown: function(number, decimals) {
-          decimals = decimals || 0;
-          return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
       },
       inputAmount() {
 

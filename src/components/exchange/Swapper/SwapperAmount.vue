@@ -10,12 +10,14 @@
         <p class="text-xs">MAX</p>
       </div>
     </div>
-    <div class="flex items-center space-x-1 px-1 pt-2">
-      <p class="text-xs dark:text-gray-300">1</p>
-      <p class="text-xs text-oswapGreen">{{this.getToken()['token1'].Symbol}}</p>
-      <p class="text-xs dark:text-gray-300">=</p>
-      <p class="text-xs dark:text-gray-300">{{rate}}</p>
-      <p class="text-xs text-oswapGreen">{{this.getToken()['token2'].Symbol}}</p>
+    <div class="flex space-x-2 items-center pt-2">
+      <div class="flex items-center space-x-1 px-1">
+        <p class="text-xs dark:text-gray-300">1</p>
+        <p class="text-xs text-oswapGreen">{{this.getToken()['token1'].Symbol}}</p>
+        <p class="text-xs dark:text-gray-300">=</p>
+        <p class="text-xs dark:text-gray-300">{{rate}}</p>
+        <p class="text-xs text-oswapGreen">{{this.getToken()['token2'].Symbol}}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -56,6 +58,12 @@
           this.errors['format'] = 'Invalid format! e.g: 12345.678';
         } else {
           delete this.errors['format'];
+          this.$emit("amount", value);
+        }
+        if (value == '') {
+          this.errors['blank'] = 'Amount can\'t be blank';
+        } else {
+          delete this.errors['blank']
           this.$emit("amount", value);
         }
         if (parseFloat(value) > parseFloat(this.balance)) {

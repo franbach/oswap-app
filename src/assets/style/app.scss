@@ -40,3 +40,33 @@ html {
   scrollbar-width: thin;
   scrollbar-color: #18d5bb #cccccc;
 }
+
+.grab-attention {
+  @apply flex w-28 h-full justify-between items-center group border;
+  @apply border-oswapGreen-dark dark:border-oswapGreen dark:hover:bg-oswapGreen;
+  @apply hover:bg-oswapGreen space-x-1 p-2 pl-3 rounded-full;
+  @apply group dark:bg-gray-700 bg-gray-200 relative;
+  z-index: 2;
+}
+
+.grab-attention-glowing {
+  background: linear-gradient(45deg, #1bf2ba, #18d5bb, #13b4ba, rgba(116, 134, 133, 0.5), #13b4ba, #18d5bb);
+  position: absolute;
+  top: 0px;
+  left: -2px;
+  background-size: 400%;
+  z-index: 1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 2px);
+  animation: glowing linear 20s infinite;
+  opacity: 1;
+  transition: all .3s ease-in-out;
+  border-radius: 9999px;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}

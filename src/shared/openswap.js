@@ -4,7 +4,7 @@ import SushiMaker from "openswap-core/build/contracts/SushiMaker.json";
 import IERC20 from "openswap-core/build/contracts/IERC20.json";
 
 import { ethers } from "ethers";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 const { Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
 
@@ -18,6 +18,7 @@ export default {
   methods: {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
+    ...mapActions('exchange/swapper', ['setBtnState']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -90,20 +91,13 @@ export default {
         const contract = new ethers.Contract(masterChef, abi, provider)
 
         for (n in Pools) {
-
-          //what does this do? 
-          // I was stupid enough to fuck up a Farm with an invalid address so it skips it.
-          if (i == 8) {
-            i++;
-          }
-
           const pending = await contract
-            .pendingSushi(i, address).catch(error => {
+            .pendingSushi(parseInt(Pools[n].pid), address).catch(error => {
               console.log(error);
               this.error = 1;
               this.errormessage = "Error getting reward amount.";
             });
-        
+          
           const pendingsushi = ethers.BigNumber.from(pending);
           totalUnclaimedRewards =
             totalUnclaimedRewards.add(pendingsushi);
@@ -164,11 +158,109 @@ export default {
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
-            const tx = await contract
-            .collectAll();
+            const tx = await contract.collectAll().catch(err => {
+
+              var message;
+              if(!err.data?.message){
+                message = err.message
+              }else{
+                message = err.data.message
+              }
+              toastMe('error', {
+                title: 'Error :',
+                msg: message,
+                link: false
+              })
+              return
+            })
             
             this.getAllRewards();
             return tx;
+    },
+    collectOSWAP: async function(pool){
+      
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      const tx = await contract.withdraw(pid, '0').catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
+    },
+    unstakeLP: async function(pool, amount){
+      
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+      const tx = await contract.withdraw(pid, amount).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+
     },
     approveSpending: async function(token1, contractAddr){
       //biggest wei denomination
@@ -209,13 +301,20 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
-
+      
       
 
       const tx = await contract.convertMultiple(token0arr, token1arr).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
         toastMe('error', {
           title: 'Error :',
-          msg: err.data.message,
+          msg: message,
           link: false
         })
         return
@@ -283,8 +382,6 @@ export default {
       })
       return
 
-        
-      
     },
     
     //----------------------------------------SDK------------------------------------------
@@ -328,6 +425,14 @@ export default {
       }
 
       return reserves;
+    },
+    getLiquidityValueSolo: async function(pool, staked){
+      let token0 = {oneZeroxAddress : pool.token0address} 
+      let token1 = {oneZeroxAddress : "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"} //BUSD
+      const pair = await this.getPair(token1, token0)
+      let rate = this.getRate(pair, token0)
+      console.log(staked)
+      return rate * staked
     },
     getLiquidityValue: async function(pool, tt0s, tt1s){
       let is0Stable = this.isStablecoin(pool.token0address)
@@ -521,7 +626,23 @@ export default {
       const abi = IUniswapV2Router02.abi;
 
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride)
+      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        this.setBtnState({swap: 'swap'});
+        return
+      })
+
 
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
@@ -529,7 +650,7 @@ export default {
         title: 'Transaction Sent',
         msg: "Swap sent to network. Waiting for confirmation",
         link: false,
-        href: `${explorer}${transactionswapETHForExactTokens}`
+        href: `${explorer}${transaction}`
       })
       await tx.wait(1)
       toastMe('success', {
@@ -551,7 +672,23 @@ export default {
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
 
-      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline)
+      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        this.setBtnState({swap: 'swap'});
+        return
+      })
+
 
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
@@ -581,7 +718,23 @@ export default {
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
 
-      const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline)
+      const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        this.setBtnState({swap: 'swap'});
+        return
+      })
+
       
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash

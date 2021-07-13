@@ -17,14 +17,14 @@
       <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @setSlippageRate="setSlippageRate" @priceImpact="setPriceImpact" @path="setPath" />
       
       <div class="flex pt-3">
-        <div class="flex w-full items-center">
+        <div class="flex w-full h-10 items-center">
           <SwapperBackButton />
           <div class="flex flex-1 h-full space-x-2 justify-end">
             <div class="flex items-center w-28 h-full relative">
-              <SwapperApprove @setSwapState="setSwapState" :amount="this.amount" />
+              <SwapperApprove :amount="this.amount" />
             </div>
             <div class="flex items-center w-28 h-full relative">
-              <SwapperSwap :state="swapState" :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :path="path" />
+              <SwapperSwap   :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :path="path" />
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
   import SwapperApprove from '@/components/exchange/Swapper/SwapperApprove'
   import SwapperSwap from '@/components/exchange/Swapper/SwapperSwap'
   import Warning from '@/components/exchange/Warning'
-
+  import { mapGetters, mapActions } from 'vuex';
   export default {
     name: 'Swapper',
     components: {
@@ -63,12 +63,15 @@
         balance2: "0",
         slippageRate: '0.5',
         path: [],
-        warnings: {},
-        swapState: 'disabled'
+        warnings: {}
       }
     },
-    mounted: async function() {},
+    mounted: async function() {
+      this.setBtnState({swap: 'disabled'});
+    },
     methods: {
+       ...mapActions('exchange/swapper', ['setBtnState']),
+       ...mapGetters('exchange/swapper', ['getBtnState']),
       setAmountOut(value){
         this.amountOut = value;
       },
@@ -80,9 +83,9 @@
       },
       setAmount(value) {
         this.amount = value;
-      },
-      setSwapState(value) {
-        this.swapState = value
+        if (this.amount !== '' && this.getBtnState({approve: 'approved'})) {
+          this.setBtnState({swap: 'swap'})
+        }
       },
       setPath(value){
         this.path = value;
