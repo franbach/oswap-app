@@ -24,11 +24,14 @@
 
   <!-- Approving -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({approve: 'approving'})" class="flex w-28 justify-between items-center border border-oswapGreen-dark space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 cursor-wait">
-      <div class="flex flex-1 items-center justify-center">
-        <p class="text-sm text-oswapGreen-dark">Approving</p>
+    <div v-if="this.getBtnState({approve: 'approving'})" class="flex w-28">
+      <div class="grab-attention-glowing"></div>
+      <div class="grab-attention cursor-wait">
+        <div class="flex flex-1 items-center justify-center">
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approving</p>
+        </div>
+        <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
       </div>
-      <i class="las la-sync text-xl animate-spin text-oswapGreen-dark"></i>
     </div>
   </transition>
 
