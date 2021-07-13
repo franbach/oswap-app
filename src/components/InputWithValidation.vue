@@ -4,7 +4,7 @@
     <slot />
     <!-- display errors -->
     <transition name="invalid-input-body">
-      <div v-if="this.invalidInput" class="flex z-10 w-full pt-10 absolute py-2 my-2 top-0 left-0 bg-red-400 rounded-xl">
+      <div v-if="this.invalidInput" class="flex z-10 w-full pt-10 absolute py-2 my-2 top-0 left-0 bg-red-400 rounded-xl shadow-lg">
         <transition-group tag="div" name="invalid-input-list" class="relative flex flex-col space-y-2">
           <div v-for="(error, index) in this.errors" :key="index" class="text-xs text-gray-50 mx-3 flex">
             {{error}}

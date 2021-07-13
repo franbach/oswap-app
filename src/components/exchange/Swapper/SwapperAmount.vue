@@ -10,12 +10,25 @@
         <p class="text-xs">MAX</p>
       </div>
     </div>
-    <div class="flex items-center space-x-1 px-1 pt-2">
-      <p class="text-xs dark:text-gray-300">1</p>
-      <p class="text-xs text-oswapGreen">{{this.getToken()['token1'].Symbol}}</p>
-      <p class="text-xs dark:text-gray-300">=</p>
-      <p class="text-xs dark:text-gray-300">{{rate}}</p>
-      <p class="text-xs text-oswapGreen">{{this.getToken()['token2'].Symbol}}</p>
+    <div class="flex space-x-2 items-center pt-3 pb-1">
+      <div class="flex items-center space-x-1 px-1">
+        <p class="text-xs dark:text-gray-300">1</p>
+        <p class="text-xs text-oswapGreen">{{this.getToken()['token1'].Symbol}}</p>
+        <p class="text-xs dark:text-gray-300">=</p>
+        <p class="text-xs dark:text-gray-300">{{rate}}</p>
+        <p class="text-xs text-oswapGreen">{{this.getToken()['token2'].Symbol}}</p>
+      </div>
+      <div class="flex flex-1 dark:text-gray-300 justify-between items-center text-xs border-l-2 pl-2 border-oswapGreen">
+        <p>Slippage Rate</p>
+        <div class="flex space-x-1">
+          <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
+            <p>0.5%</p>
+          </div>
+          <div class="flex p-1 px-1 items-center group rounded-lg text-oswapGreen hover:bg-oswapGreen cursor-pointer">
+            <i class="las la-sliders-h text-lg group-hover:text-gray-50"></i>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

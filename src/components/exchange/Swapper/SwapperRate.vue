@@ -1,32 +1,12 @@
 <template>
-  <div class="flex flex-col space-y-2 px-1 mt-3">
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Median Rate</p>
-      <p>{{mRate}}</p>
-    </div>
-
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Current Rate</p>
-      <p>{{cRate}}</p>
-    </div>
-
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
+  <div class="flex flex-col px-1 mt-3">
+    <div class="flex items-center justify-between dark:text-gray-400 text-xs pb-2">
       <p>Slippage Rate</p>
       <div class="flex items-center space-x-2">
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
-    </div>
-
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Next Rate</p>
-      <p>{{nRate}}</p>
-    </div>
-
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs">
-      <p>Price Impact</p>
-      <p>{{pImpact}}%</p>
     </div>
   </div>
 </template>
