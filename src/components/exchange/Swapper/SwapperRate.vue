@@ -69,8 +69,11 @@
         selectedRate: '0.5'
       }
     },
+     mounted: async function() {
+      this.updateData();
+    },
     async created(){
-     this.updateData();
+     
 
     },
     methods: {
