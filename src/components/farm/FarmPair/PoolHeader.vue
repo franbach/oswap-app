@@ -39,8 +39,8 @@
       </div>
     </div>
     <!-- Header right side -->
-    <div class="flex items-center h-10 w-10 mr-2">
-      <p class="text-3xl font-extrabold text-gray-400 group-hover:text-oswapGreen italic">{{pool.rewards}}</p>
+    <div class="flex h-10 w-20 mr-5">
+      <p class="text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
     </div>
   </div>
 </template>
@@ -60,10 +60,12 @@ import { ethers } from "ethers";
       return {
         tt0s: '?',
         tt1s: '?',
-        tas: '?'
+        tas: '?',
+        rewards: '?'
       } 
     },
     mounted: async function(){
+
    
         var valueData = await this.getTokenAmounts(
           this.pool,
@@ -74,6 +76,20 @@ import { ethers } from "ethers";
         this.tt0s = valueData[2]
         this.tt1s = valueData[3]
         this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
+
+        console.log(valueData[4].toFixed(4))
+        console.log(valueData[5].toFixed(4))
+
+        var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
+        var rewardValue = await this.getRewardValue(this.pool, 100)
+
+         console.log(this.pool.name )
+        console.log('Liquidity value : ' + liquidityValue[1] )
+        console.log('reward value : ' + rewardValue[0])
+        console.log('reward value 1 : ' + rewardValue[1])
+        
+        this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+
     },
   }
 </script>

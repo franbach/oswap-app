@@ -15,7 +15,7 @@
           <i class="las la-tint text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Liquidity</p>
         </div>
-        <p class="text-sm font-extralight pl-1 dark:text-gray-400">$ {{liquidityValue}}</p>
+        <p class="text-sm font-extralight pl-1 dark:text-gray-400">$ {{liquidityValue[0]}}</p>
       </div>
     </div>
     <!-- Open Details Button -->
