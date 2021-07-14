@@ -439,11 +439,11 @@ export default {
       let is1Stable = this.isStablecoin(pool.token1address)
  
       if(is0Stable == true ){
-        return ethers.utils.commify(parseFloat(tt0s).toFixed(2) * 2);
+        return [ethers.utils.commify(parseFloat(tt0s).toFixed(2) * 2), parseFloat(tt0s).toFixed(2) *2];
       }
        
       if(is1Stable == true){
-        return ethers.utils.commify(parseFloat(tt1s).toFixed(2) * 2);
+        return [ethers.utils.commify(parseFloat(tt1s).toFixed(2) * 2), parseFloat(tt1s).toFixed(2) * 2];
       }else{
         var Token0 = {oneZeroxAddress: pool.token0address} 
         let Token1 = {oneZeroxAddress: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"}
@@ -451,7 +451,8 @@ export default {
         var route = await this.getBestRoute(wei, Token0, Token1);
         
         
-        return  ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed())
+        return  [ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed(4)) ,
+          parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed(4)]
       }
     },
     getBestRoute: async function(parsedAmount, token0, token1) {
@@ -544,6 +545,21 @@ export default {
       );
       return trade;
     },
+    getOswapPerBlock: async function(){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const abi = MasterChef.abi;
+      const contract = new ethers.Contract(this.oSWAPCHEF(), abi, provider);
+
+      const oswapPerBlock = await contract.sushiPerBlock();
+      const allocPoints = await contract.totalAllocPoint();
+
+      const blocksPerWeek = ethers.BigNumber.from(String(604800 / 2))
+      let rewardsPerWeek = oswapPerBlock.div(allocPoints).mul(blocksPerWeek)
+      
+      return ethers.utils.formatUnits(rewardsPerWeek.toString(), 18).toString()
+
+    },
+    
     getRewardValue: async function(pool, poolWeight) {
       //onst BN = require("bn.js");
       const token0 = await Fetcher.fetchTokenData(
@@ -554,26 +570,28 @@ export default {
         ChainId.MAINNET,
         "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA" //BUSD
       );
+
+      
       const pair = await Fetcher.fetchPairData(token0, token1);
       const price = parseFloat(pair.token1Price.toFixed(4));
       
-      const aWeekly = 8851;
-      const aMonthly = 35404;
+      const aWeekly = await this.getOswapPerBlock();
+      const aMonthly = aWeekly * 4;
 
     
-      var weekly = ((price * aWeekly * poolWeight) / 100).toFixed(4);
-      var monthly = ((price * aMonthly * poolWeight) / 100).toFixed(4);
-
+      var weekly = ((price * aWeekly * poolWeight) / 100).toFixed(2)
+      var monthly = ((price * aMonthly * poolWeight) / 100).toFixed(2)
+  
       if (pool.pid == "0" || pool.pid == "1" || pool.pid == "13"  || pool.pid == "14" || pool.pid == "15") {
-        weekly = weekly * 3;
-        monthly = monthly * 3;
+        weekly = String(weekly * 3);
+        monthly = String(monthly * 3);
       }
       if (pool.pid == "12" ) {
-        weekly = weekly * 2;
-        monthly = monthly * 2;
+        weekly = String(weekly * 2);
+        monthly = String(monthly * 2);
       }
-
-      return [parseFloat(weekly).toFixed(6), parseFloat(monthly).toFixed(6)];
+     
+      return [weekly.substring(0, 10), monthly.substring(0, 10)];
     },
     getTokenAmounts: async function(pool, LPsupply, staked, totalStaked) {
       
