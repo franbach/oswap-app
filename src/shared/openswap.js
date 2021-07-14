@@ -8,7 +8,7 @@ import { mapGetters, mapActions } from 'vuex';
 const { Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
 
-import { toastMe } from '@/components/toaster/toaster.js'
+import { toastMe } from '@/components/toaster/toaster.js';
 
 export default {
   created: function () {},
@@ -832,7 +832,7 @@ export default {
         }
       ];
       
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.getDefaultProvider('https://api.harmony.one');
       const contract = new ethers.Contract(oSWAPToken, abi, provider);
 
       //Get Burned Balance
