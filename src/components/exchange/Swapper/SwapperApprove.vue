@@ -87,7 +87,7 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
-      ...mapActions('exchange/swapper', ['setBtnState']),
+      ...mapActions('exchange/swapper', ['setBtnState', 'resetButton']),
 
       approve: async function(){
         this.token1 = this.getToken()['token1'];
