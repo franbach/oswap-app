@@ -42,7 +42,8 @@
   import SwapperApprove from '@/components/exchange/Swapper/SwapperApprove'
   import SwapperSwap from '@/components/exchange/Swapper/SwapperSwap'
   import Warning from '@/components/exchange/Warning'
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     name: 'Swapper',
     components: {
@@ -69,30 +70,38 @@
     mounted: async function() {
       this.setBtnState({swap: 'disabled'});
     },
+    computed: {
+      ...mapGetters('exchange/swapper', ['getBtnState']),
+    },
     methods: {
-       ...mapActions('exchange/swapper', ['setBtnState']),
-       ...mapGetters('exchange/swapper', ['getBtnState']),
+      ...mapActions('exchange/swapper', ['setBtnState']),
+
       setAmountOut(value){
         this.amountOut = value;
       },
+
       setPriceImpact(value){
         this.priceImpact = value;
         if (this.priceImpact > 3) { 
           this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'
         } else { delete this.warnings['impact'] }
       },
+
       setAmount(value) {
         this.amount = value;
         if (this.amount !== '' && this.getBtnState({approve: 'approved'})) {
           this.setBtnState({swap: 'swap'})
         }
       },
+
       setPath(value){
         this.path = value;
       },
+
       setSlippageRate(value){
         this.slippageRate = value;
       },
+      
       setBalance(value) {
         if (value.token == 'token1') { this.balance1 = value.balance } 
         if (value.token == 'token2') { this.balance2 = value.balance }
