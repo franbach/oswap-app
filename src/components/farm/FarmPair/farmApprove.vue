@@ -1,6 +1,6 @@
 <template>
   <!-- Approve disabled -->
-  <transition tag="div" name="approve-btn" class="inline-block">
+  <transition tag="div" name="approve-btn" class="inline-block" absolute>
     <div v-if="this.getBtnState({approve: 'disabled'})" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Approve</p>
@@ -10,7 +10,7 @@
   </transition>
 
   <!-- Ready to Approve -->
-  <transition tag="div" name="approve-btn" class="inline-block">
+  <transition tag="div" name="approve-btn" class="inline-block absolute">
     <div @click="approve()" v-if="this.getBtnState({approve: 'active'})" class="flex w-28">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
@@ -23,7 +23,7 @@
   </transition> 
 
   <!-- Approving -->
-  <transition tag="div" name="approve-btn" class="inline-block">
+  <transition tag="div" name="approve-btn" class="inline-block absolute">
     <div v-if="this.getBtnState({approve: 'executing'})" class="flex w-28">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
@@ -36,7 +36,7 @@
   </transition>
 
   <!-- Approved -->
-  <transition tag="div" name="approve-btn" class="inline-block">
+  <transition tag="div" name="approve-btn" class="inline-block absolute">
     <div v-if="this.getBtnState({approve: 'finished'})" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-oswapGreen">Approved</p>

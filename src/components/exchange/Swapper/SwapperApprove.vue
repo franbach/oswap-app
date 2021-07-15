@@ -48,8 +48,8 @@
 
 <script>
 
-  import openswap from "@/shared/openswap.js";
-  import { mapGetters, mapActions } from 'vuex';
+  import openswap from "@/shared/openswap.js"
+  import { mapGetters, mapActions } from 'vuex'
   import { toastMe } from '@/components/toaster/toaster.js'
 
   export default {
@@ -59,7 +59,7 @@
       amount: String,
     },
     computed: {
-      ...mapGetters('exchange/swapper', ['getBtnState'])
+      ...mapGetters('exchange/swapper', ['getBtnState']),
     },
     mounted: async function() {
       this.token1 = this.getToken()['token1'];
@@ -71,7 +71,7 @@
         this.setBtnState({approve: 'approving'});
         let routerAddr = this.UNIROUTERV2();
         let parsedInput = this.getUnits(this.amount, this.token1);
-        let allowance = await this.checkAllowance(this.token1, this.amount, routerAddr);
+        let allowance = await this.checkAllowance(this.token1, routerAddr);
         let isAllowanceSufficient = parsedInput.lt(allowance);
 
         if (isAllowanceSufficient) {
@@ -87,6 +87,7 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
+      
       ...mapActions('exchange/swapper', ['setBtnState']),
 
       approve: async function(){
