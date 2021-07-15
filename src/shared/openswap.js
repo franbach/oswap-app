@@ -277,7 +277,7 @@ export default {
       const tx = await contract.approve(contractAddr, wei)
       return tx;
     },
-    checkAllowance: async function(token1, amount, contractAddr){
+    checkAllowance: async function(token1, contractAddr){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const address = this.getUserAddress();
       const abi = IERC20.abi;
@@ -769,6 +769,50 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+    },
+    stakeLP: async function(pool,amount){
+  
+      const abi = MasterChef.abi
+      const masterChef = this.oSWAPCHEF();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(masterChef, abi, signer);
+      const pid = parseInt(pool.pid)
+      
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+      const tx = await contract.deposit(pid, amount).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+      
     },
     //----------------------------------------Utils------------------------------------------
     getDeadline: function(){

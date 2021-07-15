@@ -36,9 +36,12 @@
           <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
         <!-- Continue Button -->
-        <div class="flex items-center space-x-2 pl-3 pr-1 rounded-2xl h-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
-          <p class="text-sm text-gray-200 dark:text-gray-700">Continue</p>
-          <i class="las la-sign-in-alt text-2xl text-gray-200 dark:text-gray-700"></i>
+        
+        <div class="flex items-center w-28 h-full relative">
+          <farmApprove :key="amount" :amount="this.amount" :pool="pool" />
+        </div>
+        <div class="flex items-center w-28 h-full relative">
+          <farmStake :key="amount" :amount="this.amount" :pool="pool" />
         </div>
       </div>
     </div>
@@ -47,27 +50,35 @@
 
 <script>
   import InputWithValidation from "@/components/InputWithValidation"
+  import farmStake from "@/components/farm/FarmPair/farmStake"
+  import farmApprove from "@/components/farm/FarmPair/farmApprove"
+
+   
 
   export default {
     name: 'PoolStake',
     components: {
       InputWithValidation,
+      farmApprove,
+      farmStake
     },
     props: {
       pool: Object,
-      isOpen: Boolean
+      isOpen: Boolean,
+     
     },
     data() {
       return {
-        amount: '',
-        errors: {}
+        errors: {},
+        amount: '0.1'
       }
     },
     methods: {
       setMax() {
       },
-      inputAmount() {
+      inputAmount(value) {
 
+      this.amount = value;
       }
     }
   }

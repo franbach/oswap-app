@@ -43,7 +43,6 @@
     },
     mixins: [openswap],
     mounted: async function (){
-      
     },
     data() {
       return {
