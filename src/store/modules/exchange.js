@@ -168,7 +168,7 @@ export default {
           let btnState = value[btn];
 
           return state.buttons[btn][btnState];
-        },
+        }
       },
 
       actions: {
