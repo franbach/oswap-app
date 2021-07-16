@@ -5,13 +5,13 @@
       <div class="flex items-center space-x-2">
         <div class="flex">
           <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
-            <p>0.5%</p>
+            <p>{{selectedRate}}%</p>
           </div>
         </div>
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <SwapperRateCustom />
+        <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-2 py-2">
@@ -78,21 +78,19 @@
         selectedRate: '0.5'
       }
     },
-     mounted: async function() {
+    mounted: async function() {
       this.updateData();
     },
-    async created(){
-     
-
-    },
+    async created(){},
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
       
       updateSelectedRate(rate) {
-        this.selectedRate = rate
+        this.selectedRate = parseFloat(rate) < 0.1 ? '0.1' : rate
         this.updateData();
       },
+
       updateData:async function(){
         let token1 = this.getToken()['token1']
         let token2 = this.getToken()['token2']
