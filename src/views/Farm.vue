@@ -40,8 +40,13 @@
     mounted: async function () {
       this.Pools = Pools;
       this.SoloPools = SoloPools;
+      await setTimeout(async function (){
+
       this.farmData = await this.initMulticall(this.Pools)
       this.soloData = await this.initMulticall(this.SoloPools)
+
+      }.bind(this), 1000);
+
        
     
     },
@@ -102,7 +107,7 @@
 
         for (var n in pools) {
           
-          //SKIP PID 8
+          //SKIP PID 8, 11, 12
           if (i == 8 || i == 11 ||i == 12 ) {
             i++;
           }

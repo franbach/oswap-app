@@ -228,7 +228,9 @@ export default {
       const pid = parseInt(pool.pid)
       
       let tempToken = {decimals: 18};
+      console.log(amount)
       amount = this.getUnits(amount, tempToken)
+      console.log(amount)
       const tx = await contract.withdraw(pid, amount).catch(err => {
 
         var message;

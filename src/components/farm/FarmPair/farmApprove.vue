@@ -67,6 +67,7 @@
       
       
         this.setBtnState({approve: 'executing'});
+        this.setBtnState({stake: 'disabled'});
          let masterchefAddr = this.oSWAPCHEF();
          console.log(masterchefAddr)
         let parsedInput = this.getUnits(this.amount, lpToken);
@@ -91,7 +92,7 @@
       approve: async function(){
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
         let masterchefAddr = this.oSWAPCHEF();
-        this.setBtnState({approve: 'approving'})
+        this.setBtnState({approve: 'executing'})
 
         let tx = await this.approveSpending(lpToken, masterchefAddr);
         let explorer = 'https://explorer.harmony.one/#/tx/'
@@ -110,7 +111,7 @@
           link: true,
           href: `${explorer}${transaction}`
         })
-        this.setBtnState({approve: 'approved'})
+        this.setBtnState({approve: 'finished'})
         this.setBtnState({stake: 'active'});
       }
 

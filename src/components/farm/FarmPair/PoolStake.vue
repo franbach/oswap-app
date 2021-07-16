@@ -18,7 +18,7 @@
                 <i class="las la-coins text-xl text-oswapGreen"></i>
                 <p class="text-xs text-oswapBlue-light">LP Tokens Available</p>
               </div>
-              <p class="text-xl dark:text-gray-300">2157.345</p>
+              <p class="text-xl dark:text-gray-300">{{parseFloat(maxAmount).toFixed(6)}}</p>
             </div>
             <div class="flex items-center justify-end">
               <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
@@ -65,6 +65,7 @@
     props: {
       pool: Object,
       isOpen: Boolean,
+      maxAmount: Number
      
     },
     data() {
@@ -75,6 +76,7 @@
     },
     methods: {
       setMax() {
+        this.amount = String(this.maxAmount);
       },
       inputAmount(value) {
 

@@ -44,13 +44,15 @@ import { toastMe } from '@/components/toaster/toaster.js'
     name: 'FarmHeader',
     mixins: [openswap],
     mounted: async function (){
-      await this.getAllRewards();
-      await setInterval(
-        async function() {
-          await this.getAllRewards();
-        }.bind(this),
-        10000
-      );
+      await setTimeout(async function (){
+        await this.getAllRewards();
+        await setInterval(
+          async function() {
+            await this.getAllRewards();
+          }.bind(this),
+          10000
+        );
+      }.bind(this), 1500);
     },
     data() {
       return {
