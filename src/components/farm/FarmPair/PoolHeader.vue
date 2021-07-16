@@ -15,7 +15,7 @@
         <p class="text-xs text-oswapBlue-light">{{pool.pair}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content name="staked" position="top" color="rgba(24, 213, 187, 0.9)" offset="12"
+          <tooltip-me-content :options="tooltip"
             class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
@@ -58,6 +58,13 @@ import { ethers } from "ethers";
     },
     data() {
       return {
+        tooltip: {
+          name: 'staked',
+          position: 'top',
+          color: 'rgba(24, 213, 187, 0.9)',
+          offset: 16,
+          speed: 300
+        },
         tt0s: '?',
         tt1s: '?',
         tas: '?',

@@ -6,7 +6,7 @@
       <p class="text-xs dark:text-oswapGreen">${{oswapPrice}}</p>
     </div>
 
-    <tooltip-me-content name="oswapInfo" position="bottom" color="rgba(249, 250, 251, 1)" offset="12" class="flex flex-col w-72 space-y-3 p-3 rounded-lg shadow-xl">
+    <tooltip-me-content :options="tooltip" class="flex flex-col w-72 space-y-3 p-3 rounded-lg shadow-xl">
       <div class="flex space-x-2 items-center">
         <i class="las la-coins text-xl"></i>
         <p class="text-sm">Market Cap: ${{marketCap}} USD</p>
@@ -32,6 +32,13 @@ import { commify } from '@ethersproject/units';
     components: {},
     data() {
       return {
+        tooltip: {
+          name: 'oswapInfo',
+          position: 'bottom',
+          color: 'rgba(249, 250, 251, 1)',
+          offset: 12,
+          speed: 300
+        },
         oswapPrice: 0.00,
         balances: {
           totalSupply: 0.00,
