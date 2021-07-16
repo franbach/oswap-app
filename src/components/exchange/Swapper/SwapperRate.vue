@@ -5,7 +5,7 @@
       <div class="flex items-center space-x-2">
         <div class="flex">
           <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
-            <p>{{selectedRate}}%</p>
+            <p class="slashed-zero">{{selectedRate}}%</p>
           </div>
         </div>
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
@@ -87,7 +87,8 @@
       ...mapActions('exchange', ['goTo']),
       
       updateSelectedRate(rate) {
-        this.selectedRate = parseFloat(rate) < 0.1 ? '0.1' : rate
+        // Ensures a correct rate
+        this.selectedRate = Number((rate == '' || parseFloat(rate) < 0.1 ) ? '0.1' : rate).toString()
         this.updateData();
       },
 
