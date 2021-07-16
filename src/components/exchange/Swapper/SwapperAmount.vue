@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col rounded-xl mt-3">
     <div class="flex items-center space-x-3">
-      <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount">
+      <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{this.getToken()['token1'].Symbol}}</p>
       </InputWithValidation>
 
