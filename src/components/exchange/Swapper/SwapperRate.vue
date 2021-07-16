@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col px-1 mt-2">
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs pb-2">
+    <div class="flex items-center justify-between text-xs pb-2">
       <p class="dark:text-gray-300">Slippage Rate</p>
       <div class="flex items-center space-x-2">
         <div class="flex">
@@ -11,9 +11,7 @@
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <div class="flex items-center justify-center cursor-pointer w-8 h-6 relative hover:bg-gray-50 dark:hover:bg-gray-500 dark:bg-gray-600 bg-gray-100 dark:text-gray-300 rounded-lg">
-          <i class="las la-sliders-h text-lg absolute"></i>
-        </div>
+        <SwapperRateCustom />
       </div>
     </div>
     <div class="grid grid-cols-2 gap-2 py-2">
@@ -41,15 +39,19 @@
 </template>
 
 <script>
-
   import openswap from "@/shared/openswap.js";
-  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate'
+  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate';
+  import SwapperRateCustom from '@/components/exchange/Swapper/SwapperRateCustom';
   import { mapGetters, mapActions } from 'vuex';
+
+  import MoreButton from "@/components/header/MoreButton";
 
   export default {
     name: 'SwapperRate',
     components: {
-      SwapperSelectRate
+      SwapperSelectRate,
+      SwapperRateCustom,
+      MoreButton
     },
     mixins: [openswap],
     props: {
@@ -57,6 +59,15 @@
     },
     data() {
       return {
+        customRate: {
+          name: 'customRame',
+          color: 'rgba(24, 213, 187, 0.9)',
+          position: 'bottom',
+          offset: 10,
+          speed: 100,
+          shift: 85,
+          hover: true
+        },
         mRate: 0.0,
         cRate: 0.0,
         nRate: 0.0,
