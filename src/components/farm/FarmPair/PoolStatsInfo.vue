@@ -86,7 +86,7 @@
           <div class="flex items-center justify-center rounded-full h-9 w-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
             <i class="las la-undo-alt text-lg text-gray-200 dark:text-gray-700"></i>
           </div>
-          <tooltip-me-content name="poolRefresh" position="top" offset="16" color="rgba(24, 213, 187, 0.9)" class="flex p-2 px-3 rounded-lg shadow-lg text-sm">
+          <tooltip-me-content :options="tooltip" class="flex p-2 px-3 rounded-lg shadow-lg text-sm">
             <p class="text-gray-50">Refresh</p>
           </tooltip-me-content>
         </tooltip-me>
@@ -111,6 +111,13 @@ import openswap from "@/shared/openswap.js";
     },
     data() {
       return {
+        tooltip: {
+          name: 'poolRefresh',
+          position: 'top',
+          color: 'rgba(24, 213, 187, 0.9)',
+          offset: 16,
+          speed: 300
+        },
         pt0s: '?',
         pt1s: '?',
         stakeWeight: '0 ',

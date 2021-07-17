@@ -1,19 +1,17 @@
 <template>
   <div class="flex flex-col px-1 mt-2">
-    <div class="flex items-center justify-between dark:text-gray-400 text-xs pb-2">
+    <div class="flex items-center justify-between text-xs pb-2">
       <p class="dark:text-gray-300">Slippage Rate</p>
       <div class="flex items-center space-x-2">
         <div class="flex">
           <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
-            <p>0.5%</p>
+            <p>{{selectedRate}}%</p>
           </div>
         </div>
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
         <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <div class="flex items-center justify-center cursor-pointer w-8 h-6 relative hover:bg-gray-50 dark:hover:bg-gray-500 dark:bg-gray-600 bg-gray-100 dark:text-gray-300 rounded-lg">
-          <i class="las la-sliders-h text-lg absolute"></i>
-        </div>
+        <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-2 py-2">
@@ -41,15 +39,16 @@
 </template>
 
 <script>
-
   import openswap from "@/shared/openswap.js";
-  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate'
+  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate';
+  import SwapperRateCustom from '@/components/exchange/Swapper/SwapperRateCustom';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'SwapperRate',
     components: {
-      SwapperSelectRate
+      SwapperSelectRate,
+      SwapperRateCustom,
     },
     mixins: [openswap],
     props: {
@@ -67,21 +66,20 @@
         selectedRate: '0.5'
       }
     },
-     mounted: async function() {
+    mounted: async function() {
       this.updateData();
     },
-    async created(){
-     
-
-    },
+    async created(){},
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
       
       updateSelectedRate(rate) {
-        this.selectedRate = rate
+        // Ensures a correct rate
+        this.selectedRate = Number((rate == '' || parseFloat(rate) < 0.1 ) ? '0.1' : rate).toString()
         this.updateData();
       },
+
       updateData:async function(){
         let token1 = this.getToken()['token1']
         let token2 = this.getToken()['token2']

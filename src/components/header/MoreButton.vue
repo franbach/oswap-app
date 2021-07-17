@@ -80,7 +80,6 @@
       </MenuItems>
     </transition>
   </Menu>
-
 </template>
 
 <script>
