@@ -89,7 +89,6 @@
     },
     methods: {
       doCommand(e) {
-        let cmd = e.code
         if (e.code == 'Escape' && this.isOpen) {
           this.isOpen = !this.isOpen
         }

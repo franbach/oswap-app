@@ -44,6 +44,12 @@
         search: ''
       }
     },
+    created() {
+      window.addEventListener('keyup', this.doCommand);
+    },
+    unmounted() {
+      window.removeEventListener('keyup', this.doCommand);
+    },
     props: {
       whichToken: String
     },
@@ -52,6 +58,10 @@
     },
     methods: {
       ...mapActions('exchange', ['setToken', 'goTo']),
+      
+      doCommand(e) {
+        if (e.code == 'Escape') { this.goTo('swap'); }
+      },
 
       selectToken(token) {
         // Action for state.swap mutation
