@@ -5,7 +5,7 @@
       <div class="flex items-center space-x-2">
         <div class="flex">
           <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
-            <p class="slashed-zero">{{selectedRate}}%</p>
+            <p>{{selectedRate}}%</p>
           </div>
         </div>
         <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
@@ -44,14 +44,11 @@
   import SwapperRateCustom from '@/components/exchange/Swapper/SwapperRateCustom';
   import { mapGetters, mapActions } from 'vuex';
 
-  import MoreButton from "@/components/header/MoreButton";
-
   export default {
     name: 'SwapperRate',
     components: {
       SwapperSelectRate,
       SwapperRateCustom,
-      MoreButton
     },
     mixins: [openswap],
     props: {
@@ -59,15 +56,6 @@
     },
     data() {
       return {
-        customRate: {
-          name: 'customRame',
-          color: 'rgba(24, 213, 187, 0.9)',
-          position: 'bottom',
-          offset: 10,
-          speed: 100,
-          shift: 85,
-          hover: true
-        },
         mRate: 0.0,
         cRate: 0.0,
         nRate: 0.0,

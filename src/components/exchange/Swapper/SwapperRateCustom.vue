@@ -4,7 +4,7 @@
       <i class="las la-sliders-h text-lg absolute dark:text-gray-300"></i>
     </div>
     
-    <div @keydown.esc="toggleCustomRate" @click="toggleCustomRate" v-if="isOpen" class="fixed inset-0 z-50"></div>
+    <div @click="toggleCustomRate" v-if="isOpen" class="fixed inset-0 z-50"></div>
 
     <transition
       enter-active-class="transform transition duration-200 ease-out"
@@ -19,7 +19,7 @@
           <div class="flex items-center space-x-2">
             <p class="dark:text-gray-300">Custom Rate</p>
             <tooltip-me>
-              <i class="las la-exclamation-circle text-sm transform rotate-180 dark:text-gray-300 dark:hover:text-oswapGreen hover:text-oswapGreen"></i>
+              <i class="las la-exclamation-circle text-sm transform rotate-180 dark:text-gray-300 dark:hover:text-oswapGreen hover:text-oswapGreen cursor-pointer"></i>
               <tooltip-me-content :options="tooltip"
                 class="flex flex-col w-88 items-start space-x-2 p-3 rounded-lg shadow-xl"
               >
@@ -67,9 +67,16 @@
           color: '#f3f3f3',
           shift: 50,
           offset: 16,
+          travel: 50,
           speed: 300
         },
       }
+    },
+    created() {
+      window.addEventListener('keyup', this.doCommand);
+    },
+    unmounted() {
+      window.removeEventListener('keyup', this.doCommand);
     },
     computed: {
       checkCustom() {
@@ -81,6 +88,12 @@
       }
     },
     methods: {
+      doCommand(e) {
+        let cmd = e.code
+        if (e.code == 'Escape' && this.isOpen) {
+          this.isOpen = !this.isOpen
+        }
+      },
       toggleCustomRate() {
         this.isOpen = !this.isOpen
         this.errors = {}
