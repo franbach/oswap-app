@@ -72,8 +72,6 @@ import { ethers } from "ethers";
       } 
     },
     mounted: async function(){
-
-   
         var valueData = await this.getTokenAmounts(
           this.pool,
           String(this.poolData[4]['value']),
@@ -84,17 +82,8 @@ import { ethers } from "ethers";
         this.tt1s = valueData[3]
         this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
 
-        console.log(valueData[4].toFixed(4))
-        console.log(valueData[5].toFixed(4))
-
         var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
-        var rewardValue = await this.getRewardValue(this.pool, 100)
-
-         console.log(this.pool.name )
-        console.log('Liquidity value : ' + liquidityValue[1] )
-        console.log('reward value : ' + rewardValue[0])
-        console.log('reward value 1 : ' + rewardValue[1])
-        
+        var rewardValue = await this.getRewardValue(this.pool, 100)   
         this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
 
     },

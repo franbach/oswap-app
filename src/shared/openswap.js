@@ -434,6 +434,7 @@ export default {
       const pair = await this.getPair(token1, token0)
       let rate = this.getRate(pair, token0)
       console.log(staked)
+      console.log(rate)
       return rate * staked
     },
     getLiquidityValue: async function(pool, tt0s, tt1s){

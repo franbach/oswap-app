@@ -79,8 +79,7 @@
         this.amount = String(this.maxAmount);
       },
       inputAmount(value) {
-
-      this.amount = value;
+        this.amount = value;
       }
     }
   }

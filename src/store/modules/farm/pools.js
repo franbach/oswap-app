@@ -180,7 +180,7 @@ export const Pools = {
     pid: "15",
     rewards: "3X",
     i: 12
-  }
+  },
 };
 export const SoloPools = {
   oSWAPWONE: {
@@ -195,5 +195,20 @@ export const SoloPools = {
     pid: "11",
     rewards: "1X",
     i: 0
+  },
+  /*
+  oSWAPWONE: {
+    pair: "OPENSWAP/WONE",
+    pairaddress: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token0address: "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+    token1address: "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+    imgtoken0: "https://openfi.dev/tokens/default/oSWAP.png",
+    imgtoken1: "https://openfi.dev/tokens/default/ONE.png",
+    name: ["OPENSWAP", "ONE"],
+    decimals: [18, 18],
+    pid: "12",
+    rewards: "1X",
+    i: 1
   }
+  */
 }
