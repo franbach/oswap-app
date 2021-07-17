@@ -6,7 +6,7 @@
     </transition>
 
     <transition name="farm" appear>
-      <div v-if="soloData != null" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-3 w-full">
+      <div v-if="soloData" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-3 w-full">
         <SoloFarmPair  v-for="(pool, index) in SoloPools" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
       </div>
     </transition>
@@ -40,9 +40,15 @@
     mounted: async function () {
       this.Pools = Pools;
       this.SoloPools = SoloPools;
+      await setTimeout(async function (){
+
       this.farmData = await this.initMulticall(this.Pools)
       this.soloData = await this.initMulticall(this.SoloPools)
-      
+
+      }.bind(this), 1000);
+
+       
+    
     },
     data() {
       return {
@@ -54,7 +60,8 @@
     },
     methods: {
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
-      ...mapGetters('wallet', ['getUserAddress']),
+      ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
+
       initMulticall: async function(pools){
 
         
@@ -100,7 +107,7 @@
 
         for (var n in pools) {
           
-          //SKIP PID 8
+          //SKIP PID 8, 11, 12
           if (i == 8 || i == 11 ||i == 12 ) {
             i++;
           }

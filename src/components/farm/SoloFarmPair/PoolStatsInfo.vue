@@ -114,6 +114,7 @@ import openswap from "@/shared/openswap.js";
      
 
         this.stakeWeight = this.getStakeWeight(this.poolData[3]['value'], this.poolData[1]['value'])
+        console.log('% ' + this.stakeWeight)
         let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
     
         this.weeklyRewards = rewards[0];
