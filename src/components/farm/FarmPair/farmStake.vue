@@ -11,20 +11,20 @@
 
   <!-- Swap -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="this.stakeLP(this.pool, this.amount)" v-if="this.getBtnState({stake: 'active'})" class="flex w-28">
+    <div @click="this.stakeLP(this.pool, this.amount)" v-if="this.getBtnState({stake: 'active'})" class="flex w-22">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
-        <div class="flex flex-1 items-center justify-center">
-          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Stake</p>
+        <div class="flex items-center justify-center">
+          <p class="text-sm ml-5 text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Stake</p>
         </div>
-        <i class="las la-random text-xl text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
+        <i class="las la-upload text-xl pr-5 text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
       </div>
     </div>
   </transition>
 
   <!-- Swapping -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({stake: 'executing'})" class="flex w-28">
+    <div v-if="this.getBtnState({stake: 'executing'})" class="flex w-22">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">

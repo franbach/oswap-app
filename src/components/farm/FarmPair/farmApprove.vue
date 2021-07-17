@@ -15,9 +15,9 @@
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
-          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approve</p>
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen hover:text-white dark:group-hover:text-oswapDark-gray">Approve</p>
         </div>
-        <i class="las la-pen-alt text-xl text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
+        <i class="las la-pen-alt text-xl text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50  dark:group-hover:text-oswapDark-gray"></i>
       </div>
     </div>
   </transition> 
@@ -28,7 +28,7 @@
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">
-          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approving</p>
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen hover:text-white dark:group-hover:text-oswapDark-gray">Approving</p>
         </div>
         <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
       </div>
@@ -39,7 +39,7 @@
   <transition tag="div" name="approve-btn" class="inline-block absolute">
     <div v-if="this.getBtnState({approve: 'finished'})" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
       <div class="flex flex-1 items-center justify-center">
-        <p class="text-sm text-oswapGreen">Approved</p>
+        <p class="text-sm text-oswapGreen ">Approved</p>
       </div>
       <i class="las la-check-circle text-xl text-oswapGreen"></i>
     </div> 
@@ -66,7 +66,7 @@
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
       
       
-        this.setBtnState({approve: 'executing'});
+        this.setBtnState({approve: ''});
         this.setBtnState({stake: 'disabled'});
          let masterchefAddr = this.oSWAPCHEF();
          console.log(masterchefAddr)
