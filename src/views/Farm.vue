@@ -10,6 +10,11 @@
         <SoloFarmPair  v-for="(pool, index) in SoloPools" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
       </div>
     </transition>
+    <transition name="farm" appear>
+      <div v-if="soloData" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-3 w-full">
+        <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
+      </div>
+    </transition>
     <transition name="farm" appear>  
       <div v-if="farmData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
         <FarmPair  v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
@@ -22,12 +27,13 @@
   import FarmHeader from "@/components/farm/FarmHeader"
   import FarmPair from '@/components/farm/FarmPair'
   import SoloFarmPair from '@/components/farm/SoloFarmPair'
+   import CustomFarmPair from '@/components/farm/CustomFarmPair'
   import openswap from "@/shared/openswap.js";
 
   import { createWatcher } from '@makerdao/multicall';
   import { mapGetters } from 'vuex';
 
-  const { Pools, SoloPools } = require("@/store/modules/farm/pools.js")
+  const { Pools, SoloPools, CustomPools } = require("@/store/modules/farm/pools.js")
 
   export default {
     name: 'Farm',
@@ -35,13 +41,15 @@
     components: {
       FarmHeader,
       FarmPair,
-      SoloFarmPair
+      SoloFarmPair,
+      CustomFarmPair
     },
     mounted: async function () {
+      this.CustomPools = CustomPools;
       this.Pools = Pools;
       this.SoloPools = SoloPools;
       await setTimeout(async function (){
-
+      this.customData = await this.initMulticall(this.CustomPools)
       this.farmData = await this.initMulticall(this.Pools)
       this.soloData = await this.initMulticall(this.SoloPools)
 

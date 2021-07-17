@@ -454,8 +454,8 @@ export default {
         var route = await this.getBestRoute(wei, Token0, Token1);
         
         
-        return  [ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed(4)) ,
-          parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed(4)]
+        return  [ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s * 2).toFixed(4)) ,
+          parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed(4) * 2]
       }
     },
     getBestRoute: async function(parsedAmount, token0, token1) {
