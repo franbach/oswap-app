@@ -24,7 +24,7 @@
               <i class="las la-hand-holding-usd text-3xl text-gray-50 dark:text-gray-700"></i>
               <p class="text-gray-50 dark:text-gray-700">Collect All</p>
               <p class="text-xs bg-gray-200 p-2 dark:bg-oswapDark-gray rounded-md px-3
-               border-2 border-gray-300 dark:border-gray-700 dark:text-oswapGreen">{{parseFloat(unclaimedTotal).toFixed(8)}}</p>
+               border-2 border-gray-300 dark:border-gray-700 dark:text-oswapGreen">{{parseFloat(unclaimedTotal).toFixed(5)}}</p>
             </div>
             <div class="flex">
               <p class="text-xs dark:text-gray-300 ml-2">All unclaimed rewards</p>
@@ -39,27 +39,46 @@
 <script>
 import openswap from "../../shared/openswap.js";
 import { toastMe } from '@/components/toaster/toaster.js'
+import { mapState } from 'vuex';
 
   export default {
     name: 'FarmHeader',
     mixins: [openswap],
-    mounted: async function (){
-      await setTimeout(async function (){
-        await this.getAllRewards();
-        await setInterval(
-          async function() {
-            await this.getAllRewards();
-          }.bind(this),
-          10000
-        );
-      }.bind(this), 1500);
-    },
     data() {
       return {
-        unclaimedTotal: 0.0
+        unclaimedTotal: '0.0',
+        unclaimedTimer: undefined
+      }
+    },
+    computed: {
+      ...mapState('wallet', ['signedIn'])
+    },
+    watch: {
+      signedIn(newValue, oldValue) {
+        if(newValue){
+          this.getAmounts();
+        } else if (!newValue && this.unclaimedTimer){
+          clearTimeout(this.unclaimedTimer);
+        }
+      }
+    },
+    mounted: function() {
+      if(this.signedIn){
+        this.getAmounts();
       }
     },
     methods: {
+      getAmounts: async function (){
+        this.unclaimedTimer = await setTimeout(async function (){
+          this.unclaimedTotal = await this.getAllRewards();
+          await setInterval(
+            async function() {
+              this.unclaimedTotal = await this.getAllRewards();
+            }.bind(this),
+            10000
+          );
+        }.bind(this), 1500);
+      },
       collectAllButton: async function(){
         const tx = await this.collectAll()
         let explorer = 'https://explorer.harmony.one/#/tx/'

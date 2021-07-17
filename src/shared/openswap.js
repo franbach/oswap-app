@@ -88,7 +88,7 @@ export default {
 
         const abi = MasterChef.abi;
         const masterChef = this.oSWAPCHEF();
-        const contract = new ethers.Contract(masterChef, abi, provider)
+        const contract = new ethers.Contract(masterChef, abi, provider);
 
         for (n in Pools) {
           const pending = await contract
@@ -108,6 +108,9 @@ export default {
       }
 
       await this.getSingleRewards();
+      let unclaimedFormatted = ethers.utils.formatUnits(this.unclaimedTotal.toString()).toString();
+      return unclaimedFormatted;
+      
     },
     getSingleRewards: async function(){
       var totalUnclaimedRewards = ethers.BigNumber.from("0");
@@ -123,7 +126,7 @@ export default {
         this.errormessage = "Error getting reward amount.";
       });;
       const pendingsushi = ethers.BigNumber.from(pending);
-      totalUnclaimedRewards = totalUnclaimedRewards.add(pendingsushi);
+      this.unclaimedTotal = totalUnclaimedRewards.add(pendingsushi);
     },
     collectAll: async function(){
       
