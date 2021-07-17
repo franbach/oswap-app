@@ -31,8 +31,8 @@
       </div>
     </div>
     <!-- Header right side -->
-    <div class="flex items-center h-10 w-10 mr-2">
-      <p class="text-3xl font-extrabold text-gray-400 group-hover:text-oswapGreen italic">{{pool.rewards}}</p>
+    <div class="flex h-10 w-20 mr-5">
+      <p class="text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
     </div>
   </div>
 </template>
@@ -50,10 +50,15 @@ import { ethers } from "ethers";
     },
     data() {
       return {
-        tas: '?'
+        tas: '?',
+        rewards: '?'
       } 
     },
     mounted: async function(){
+        this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
+        var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
+        var rewardValue = await this.getRewardValue(this.pool, 100)
+        this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
         this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
     },
   }

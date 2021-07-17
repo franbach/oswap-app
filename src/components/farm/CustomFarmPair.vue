@@ -19,17 +19,18 @@
   </div>
 </template>
 
+
 <script>
   import openswap from "@/shared/openswap.js";
 
-  import PoolHeader from "@/components/farm/FarmPair/PoolHeader"
-  import PoolStatsClosed from "@/components/farm/FarmPair/PoolStatsClosed"
-  import PoolStatsInfo from "@/components/farm/FarmPair/PoolStatsInfo"
-  import PoolStake from "@/components/farm/FarmPair/PoolStake"
-  import PoolUnstake from "@/components/farm/FarmPair/PoolUnstake"
+  import PoolHeader from "@/components/farm/CustomFarmPair/PoolHeader"
+  import PoolStatsClosed from "@/components/farm/CustomFarmPair/PoolStatsClosed"
+  import PoolStatsInfo from "@/components/farm/CustomFarmPair/PoolStatsInfo"
+  import PoolStake from "@/components/farm/CustomFarmPair/PoolStake"
+  import PoolUnstake from "@/components/farm/CustomFarmPair/PoolUnstake"
 
   export default {
-    name: 'FarmPair',
+    name: 'CustomFarmPair',
     props: {
       pool: Object,
       poolData: Array,
@@ -43,6 +44,7 @@
     },
     mixins: [openswap],
     mounted: async function (){
+      
     },
     data() {
       return {

@@ -18,7 +18,7 @@
                 <i class="las la-coins text-xl text-oswapGreen"></i>
                 <p class="text-xs text-oswapBlue-light">LP Tokens Available</p>
               </div>
-              <p class="text-xl dark:text-gray-300">2157.345</p>
+              <p class="text-xl dark:text-gray-300">{{parseFloat(maxAmount).toFixed(6)}}</p>
             </div>
             <div class="flex items-center justify-end">
               <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
@@ -36,9 +36,12 @@
           <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
         <!-- Continue Button -->
-        <div class="flex items-center space-x-2 pl-3 pr-1 rounded-2xl h-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
-          <p class="text-sm text-gray-200 dark:text-gray-700">Continue</p>
-          <i class="las la-sign-in-alt text-2xl text-gray-200 dark:text-gray-700"></i>
+        
+        <div class="flex items-center w-28 h-full relative">
+          <farmApprove :key="amount" :amount="this.amount" :pool="pool" />
+        </div>
+        <div class="flex items-center w-28 h-full relative">
+          <farmStake :key="amount" :amount="this.amount" :pool="pool" />
         </div>
       </div>
     </div>
@@ -47,27 +50,32 @@
 
 <script>
   import InputWithValidation from "@/components/InputWithValidation"
-
+  import farmStake from "@/components/farm/FarmPair/farmStake"
+  import farmApprove from "@/components/farm/FarmPair/farmApprove"
   export default {
     name: 'PoolStake',
     components: {
       InputWithValidation,
+      farmApprove,
+      farmStake
     },
     props: {
       pool: Object,
-      isOpen: Boolean
+      isOpen: Boolean,
+      maxAmount: Number
     },
     data() {
       return {
-        amount: '',
+        amount: '0.1',
         errors: {}
       }
     },
     methods: {
       setMax() {
+        this.amount = String(this.maxAmount);
       },
-      inputAmount() {
-
+      inputAmount(value) {
+        this.amount = value;
       }
     }
   }

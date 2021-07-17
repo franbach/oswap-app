@@ -11,7 +11,7 @@
       <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData[0]" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Stake -->
-      <PoolStake :isOpen="poolStakeOn" :pool="pool" @setPool="setPool" />
+      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData[0][0]['value']" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Unstake -->
       <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData[0][3]['value']" :pool="pool" @setPool="setPool" />
