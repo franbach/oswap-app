@@ -8,7 +8,7 @@
         </div>
         <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
           <div class="flex flex-1 shadow-lg rounded-2xl">
-            <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount">
+            <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'">
               <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.pair}}</p>
             </InputWithValidation>
           </div>
