@@ -1,7 +1,7 @@
 <template>
   <!-- Approve disabled -->
-  <transition tag="div" name="approve-btn" class="inline-block" absolute>
-    <div v-if="this.getBtnState({approve: 'disabled'})" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+  <transition tag="div" name="approve-btn" class="inline-block absolute">
+    <div v-if="this.getBtnState({approve: 'disabled'})" class="flex w-28 h-9 justify-between items-center border dark:border-gray-600 border-gray-300 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Approve</p>
       </div>
@@ -15,7 +15,7 @@
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
-          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen hover:text-white dark:group-hover:text-oswapDark-gray">Approve</p>
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Approve</p>
         </div>
         <i class="las la-pen-alt text-xl text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50  dark:group-hover:text-oswapDark-gray"></i>
       </div>
@@ -65,11 +65,10 @@
     mounted: async function() {
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
       
-      
-        this.setBtnState({approve: ''});
+        this.setBtnState({approve: 'executing'});
         this.setBtnState({stake: 'disabled'});
-         let masterchefAddr = this.oSWAPCHEF();
-         console.log(masterchefAddr)
+        let masterchefAddr = this.oSWAPCHEF();
+        console.log(masterchefAddr)
         let parsedInput = this.getUnits(this.amount, lpToken);
         console.log(parsedInput)
         let allowance = await this.checkAllowance(lpToken, masterchefAddr);
@@ -78,10 +77,10 @@
           this.setBtnState({approve: 'finished'});
           this.setBtnState({stake: 'active'});
         } else {
-            // Ready to approve (Pen Icon)
-            this.setBtnState({approve: 'active'});
-            this.setBtnState({stake: 'disabled'});
-          }
+          // Ready to approve (Pen Icon)
+          this.setBtnState({approve: 'active'});
+          this.setBtnState({stake: 'disabled'});
+        }
           
     },
     methods: {
