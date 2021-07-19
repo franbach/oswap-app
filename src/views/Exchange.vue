@@ -34,7 +34,7 @@
   import SwapModal from '@/components/exchange/SwapModal'
   import Swapper from '@/components/exchange/Swapper'
 
-  import { mapActions, mapGetters } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex'
 
   export default {
     name: 'Exchange',

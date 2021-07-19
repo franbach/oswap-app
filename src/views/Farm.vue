@@ -1,5 +1,4 @@
 <template>
-
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center h-full xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
       <FarmHeader/>
@@ -15,7 +14,7 @@
         <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
       </div>
     </transition>
-    <transition name="farm" appear>  
+    <transition name="farm" appear>
       <div v-if="farmData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
         <FarmPair  v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
       </div>
@@ -27,7 +26,7 @@
   import FarmHeader from "@/components/farm/FarmHeader"
   import FarmPair from '@/components/farm/FarmPair'
   import SoloFarmPair from '@/components/farm/SoloFarmPair'
-   import CustomFarmPair from '@/components/farm/CustomFarmPair'
+  import CustomFarmPair from '@/components/farm/CustomFarmPair'
   import openswap from "@/shared/openswap.js";
 
   import { createWatcher } from '@makerdao/multicall';

@@ -24,7 +24,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'SwapTokenSelect',
+    name: 'TokenSelect',
     props: {
       whichToken: {
         type: String,

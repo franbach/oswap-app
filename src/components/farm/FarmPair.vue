@@ -7,6 +7,7 @@
       <!-- Show this when pool details is closed -->
       <PoolStatsClosed @setPool="setPool" :poolData="poolData[0]" :pool="pool"  :isOpen="poolStatsOff" />
 
+      <!-- <div v-if="isOpen" class="fixed inset-0 bg-gray-700 bg-opacity-30"></div> -->
       <!-- Show this when pool details is opened -->
       <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData[0]" :pool="pool" @setPool="setPool" />
 
