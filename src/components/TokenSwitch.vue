@@ -17,7 +17,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'SwapTokenSwitch',
+    name: 'TokenSwitch',
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['switchTokens']),
