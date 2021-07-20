@@ -60,19 +60,15 @@
       pool: Object,
     },
     computed: {
-      ...mapGetters('exchange/farm', ['getBtnState'])
+      ...mapGetters('farm', ['getBtnState'])
     },
     mounted: async function() {
-        
-      
-      
-        this.setBtnState({stake: 'executing'});
-      
+      this.setBtnState({stake: 'executing'});    
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
-      ...mapActions('exchange/farm', ['setBtnState', 'resetButton']),
+      ...mapActions('farm', ['setBtnState', 'resetButton']),
     }
   }
 </script>

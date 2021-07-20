@@ -60,7 +60,7 @@
       pool: Object,
     },
     computed: {
-      ...mapGetters('exchange/farm', ['getBtnState'])
+      ...mapGetters('farm', ['getBtnState'])
     },
     mounted: async function() {
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
@@ -86,7 +86,7 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
-      ...mapActions('exchange/farm', ['setBtnState', 'resetButton']),
+      ...mapActions('farm', ['setBtnState', 'resetButton']),
 
       approve: async function(){
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
