@@ -41,8 +41,8 @@ export default {
         },
         disconnectWallet: async function() {
             await this.setdefaultWallet();
-  
-            this.setSignedIn( true );
+            // {bugfix} I assume this should be false? setting to stop timer service in FarmHeader
+            this.setSignedIn( false );
             this.walletConnected = !this.walletConnected;
             return;
         },
