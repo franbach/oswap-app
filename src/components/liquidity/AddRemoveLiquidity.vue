@@ -12,17 +12,36 @@
         <LiquidityInfo />
       </div>
       <div class="grid grid-cols-2 pt-4">
-        <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-oswapGreen">
+        <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-oswapGreen focus:outline-none">
           <p class="text-sm">Add Liquidity</p>
           <i class="las la-level-down-alt"></i>
         </button>
-        <button @click="toggleRemove" :class="removeLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-red-400">
+        <button @click="toggleRemove" :class="removeLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-red-400 focus:outline-none">
           <p class="text-sm">Remove Liquidity</p>
           <i class="las la-level-up-alt"></i>
         </button>
       </div>
+      
       <div v-if="addLiquidity"><AddLiquidity /></div>
       <div v-if="removeLiquidity"><RemoveLiquidity /></div>
+
+      <div class="flex pt-4">
+        <div class="flex w-full h-10 items-center">
+          <LiquidityBackButton />
+            <div class="flex flex-1 h-full space-x-2 justify-end">
+              <div class="flex items-center w-28 h-full relative">
+                <LiquidityApproveButton />
+              </div>
+              <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
+                <LiquidityAddButton />
+              </div>
+              <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
+                <LiquidityRemoveButton />
+              </div>
+            </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -32,6 +51,10 @@
   import LiquidityInfo from '@/components/liquidity/LiquidityInfo';
   import AddLiquidity from '@/components/liquidity/AddLiquidity';
   import RemoveLiquidity from '@/components/liquidity/RemoveLiquidity';
+  import LiquidityBackButton from '@/components/liquidity/buttons/LiquidityBackButton';
+  import LiquidityApproveButton from '@/components/liquidity/buttons/LiquidityApproveButton';
+  import LiquidityAddButton from '@/components/liquidity/buttons/LiquidityAddButton';
+  import LiquidityRemoveButton from '@/components/liquidity/buttons/LiquidityRemoveButton';
 
   import { mapGetters, mapActions } from 'vuex'
 
@@ -41,7 +64,11 @@
       LiquidityPair,
       LiquidityInfo,
       AddLiquidity,
-      RemoveLiquidity
+      RemoveLiquidity,
+      LiquidityBackButton,
+      LiquidityApproveButton,
+      LiquidityAddButton,
+      LiquidityRemoveButton
     },
     data() {
       return {

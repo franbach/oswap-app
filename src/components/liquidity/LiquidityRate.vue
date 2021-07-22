@@ -8,9 +8,9 @@
             <p>{{selectedRate}}%</p>
           </div>
         </div>
-        <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
+        <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-slightDark bg-slightGray'" />
+        <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-slightDark bg-slightGray'" />
+        <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-slightDark bg-slightGray'" />
         <LiquidityRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>

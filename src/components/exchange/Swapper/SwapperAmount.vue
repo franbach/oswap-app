@@ -25,7 +25,7 @@
 <script>
 
   import openswap from "@/shared/openswap.js";
-  import InputWithValidation from '@/components/InputWithValidation'
+  import InputWithValidation from '@/components/InputWithValidation';
   import { mapGetters } from 'vuex';
 
   export default {

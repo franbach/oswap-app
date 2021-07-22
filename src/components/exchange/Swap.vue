@@ -11,21 +11,21 @@
     <!-- Token2 Selection Button -->
     <TokenSelect @click="selectToken('token2')" whichToken="token2" />
     <!-- Reset tokens selection or Next -->
-    <TokenButtons />
+    <SwapTokenButtons />
   </div>
 </template>
 
 <script>
   import TokenSelect  from '@/components/TokenSelect';
   import TokenSwitch  from '@/components/TokenSwitch';
-  import TokenButtons from '@/components/TokenButtons';
+  import SwapTokenButtons from '@/components/exchange/Swap/SwapTokenButtons';
 
   export default {
     name: 'Swap',
     components: {
       TokenSelect,
       TokenSwitch,
-      TokenButtons
+      SwapTokenButtons
     },
     methods: {
       selectToken(token) {
