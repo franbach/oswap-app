@@ -44,40 +44,29 @@ import { mapState } from 'vuex';
   export default {
     name: 'FarmHeader',
     mixins: [openswap],
+     props: {
+      totalRewards: Number
+    },
     data() {
       return {
         unclaimedTotal: '0.0',
-        unclaimedTimer: undefined
-      }
-    },
-    computed: {
-      ...mapState('wallet', ['signedIn'])
-    },
-    watch: {
-      signedIn(newValue, oldValue) {
-        if(newValue){
-          this.getAmounts();
-        } else if (!newValue && this.unclaimedTimer){
-          clearTimeout(this.unclaimedTimer);
-        }
+
       }
     },
     mounted: function() {
-      if(this.signedIn){
-        this.getAmounts();
-      }
+     this.getAmounts();
     },
     methods: {
       getAmounts: async function (){
-        this.unclaimedTimer = await setTimeout(async function (){
-          this.unclaimedTotal = await this.getAllRewards();
+       await setTimeout(async function (){
+         this.unclaimedTotal = this.totalRewards
           await setInterval(
             async function() {
-              this.unclaimedTotal = await this.getAllRewards();
+              this.unclaimedTotal = this.totalRewards
             }.bind(this),
             10000
           );
-        }.bind(this), 1500);
+        }.bind(this), 2500);
       },
       collectAllButton: async function(){
         const tx = await this.collectAll()
