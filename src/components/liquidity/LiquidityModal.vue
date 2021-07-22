@@ -6,7 +6,7 @@
         <i class="absolute las la-search text-2xl pl-2"></i>
         <input type="text" v-model="search" @input="this.retrieveTokens(search)" class="flex flex-1 ring-1 focus:outline-none focus:ring-1 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-2xl py-2 items-center pl-10 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
       </div>
-      <div @click="goTo('swap')" class="flex items-center rounded-full">
+      <div @click="goTo('settokens')" class="flex items-center rounded-full">
         <i class="las la-times text-2xl p-2 dark:text-gray-500 dark:hover:text-oswapGreen hover:text-oswapGreen cursor-pointer text-gray-300"></i>
       </div>
     </div>
@@ -38,7 +38,7 @@
   import { mapGetters, mapActions } from 'vuex'
 
   export default {
-    name: 'SwapModal',
+    name: 'LiquidityModal',
     data() {
       return {
         search: ''
@@ -57,10 +57,11 @@
       ...mapGetters('exchange', ['retrieveTokens']),
     },
     methods: {
-      ...mapActions('exchange', ['setToken', 'goTo']),
+      ...mapActions('exchange', ['setToken']),
+      ...mapActions('liquidity/buttons', ['goTo']),
       
       doCommand(e) {
-        if (e.code == 'Escape') { this.goTo('swap'); }
+        if (e.code == 'Escape') { this.goTo('settokens'); }
       },
 
       selectToken(token) {
@@ -72,7 +73,7 @@
         this.search = ''
 
         // closes the modal
-        this.goTo('swap');
+        this.goTo('settokens');
       },
     },
   }

@@ -37,7 +37,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'TokenButtons',
+    name: 'SwapTokenButtons',
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['resetTokens', 'goTo']),

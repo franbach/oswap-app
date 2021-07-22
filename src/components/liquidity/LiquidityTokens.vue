@@ -11,21 +11,21 @@
     <!-- Token2 Selection Button -->
     <TokenSelect @click="selectToken('token2')" whichToken="token2" />
     <!-- Reset tokens selection or Next -->
-    <TokenButtons />
+    <LiquidityTokenButtons />
   </div>
 </template>
 
 <script>
   import TokenSelect  from '@/components/TokenSelect';
   import TokenLink  from '@/components/TokenLink';
-  import TokenButtons from '@/components/TokenButtons';
+  import LiquidityTokenButtons from '@/components/liquidity/LiquidityTokenButtons';
 
   export default {
     name: 'LiquidityTokens',
     components: {
       TokenSelect,
       TokenLink,
-      TokenButtons
+      LiquidityTokenButtons
     },
     methods: {
       selectToken(token) {

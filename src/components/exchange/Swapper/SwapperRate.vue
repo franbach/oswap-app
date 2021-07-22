@@ -8,9 +8,9 @@
             <p>{{selectedRate}}%</p>
           </div>
         </div>
-        <SwapperSelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <SwapperSelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate"/>
-        <SwapperSelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate"/>
+        <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-gray-600 bg-gray-100'" />
+        <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-gray-600 bg-gray-100'" />
+        <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-gray-600 bg-gray-100'" />
         <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>
@@ -40,14 +40,14 @@
 
 <script>
   import openswap from "@/shared/openswap.js";
-  import SwapperSelectRate from '@/components/exchange/Swapper/SwapperSelectRate';
+  import SelectRate from '@/components/SelectRate';
   import SwapperRateCustom from '@/components/exchange/Swapper/SwapperRateCustom';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'SwapperRate',
     components: {
-      SwapperSelectRate,
+      SelectRate,
       SwapperRateCustom,
     },
     mixins: [openswap],
