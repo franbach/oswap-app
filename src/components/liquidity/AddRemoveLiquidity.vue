@@ -7,9 +7,9 @@
       </div>
       <div class="flex flex-col space-y-1 dark:bg-gray-600 bg-gray-100 rounded-2xl">
         <div class="flex shadow-lg flex-col space-y-3 dark:bg-oswapDark-gray p-3 rounded-2xl">
-          <LiquidityPair />
+          <LiquidityPair :available="balances.lpToken"/>
         </div>
-        <LiquidityInfo />
+        <LiquidityInfo :pairAddress="pairAddress"/>
       </div>
       <div class="grid grid-cols-2 pt-4">
         <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-oswapGreen focus:outline-none">
@@ -22,8 +22,8 @@
         </button>
       </div>
       
-      <div v-if="addLiquidity"><AddLiquidity /></div>
-      <div v-if="removeLiquidity"><RemoveLiquidity /></div>
+      <div v-if="addLiquidity" ><AddLiquidity :balances="balances" /></div>
+      <div v-if="removeLiquidity" ><RemoveLiquidity :balances="balances" /></div>
 
       <div class="flex pt-4">
         <div class="flex w-full h-10 items-center">
@@ -57,9 +57,12 @@
   import LiquidityRemoveButton from '@/components/liquidity/buttons/LiquidityRemoveButton';
 
   import { mapGetters, mapActions } from 'vuex'
+  import openswap from "@/shared/openswap.js";
+  import { createWatcher } from '@makerdao/multicall';
 
   export default {
     name: 'AddRemoveLiquidity',
+    mixins: [openswap],
     components: {
       LiquidityPair,
       LiquidityInfo,
@@ -76,13 +79,87 @@
         slippageRate: '0.5',
         warnings: {},
         addLiquidity: true,
-        removeLiquidity: false
+        removeLiquidity: false,
+        pairAddress: null,
+        balances: {
+          token0: 0,
+          token1: 0,
+          lpToken: 0
+        }
       }
     },
-    mounted: async function() {},
+    mounted: async function() {
+      this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
+      this.pairAddress = this.pair["liquidityToken"].address;
+      
+      await this.initMulticall()
+    },
     computed: {},
     methods: {
       ...mapGetters('exchange', ['getToken']),
+      ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC']),
+      parseResults: async function(results){
+        this.balances.token0 = results[1]['value']
+        this.balances.token1 = results[2]['value']
+        this.balances.lpToken = results[0]['value']
+     },
+      initMulticall: async function(){
+        const MULTICALL = this.hMULTICALL();
+        const RPC = this.hRPC();
+        const CALL = this.generateCalls();
+        var results= [];
+
+        const config = {
+          rpcUrl: RPC,
+          multicallAddress: MULTICALL
+        };
+
+        const watcher = createWatcher(
+            CALL,
+            config
+          );
+        
+        watcher.subscribe(update => { results.push(update) });
+        watcher.start();
+        await watcher.awaitInitialFetch();
+        var res = await this.parseResults(results);
+        return res;
+      },
+      generateCalls: function(){
+        let CALL = [];
+        let userAddress = this.getUserAddress();
+        let token0 = this.getToken()['token1'].oneZeroxAddress
+        let token1 = this.getToken()['token2'].oneZeroxAddress
+        
+
+          //LP Balance CALLS
+          CALL.push(
+            {
+              target: this.pairAddress,
+              call: ['balanceOf(address)(uint256)', userAddress],
+              returns: [['BALANCE_OF_LP', val => val / 10 ** 18]]
+            }
+          );
+          //Staked LP Balance Calls
+          CALL.push(
+            {
+              target: token0,
+              call: ['balanceOf(address)(uint256)', userAddress],
+              returns: [['BALANCE_OF_T0', val => val / 10 ** 18]]
+            }
+          );
+          
+          //unclaimed rewards calls
+          CALL.push(
+            {
+              target: token1,
+              call: ['balanceOf(address)(uint256)', userAddress],
+              returns: [['BALANCE_OF_T1', val => val / 10 ** 18]]
+            }
+          ); 
+        return CALL;
+      },
+    
 
       toggleAdd() {
         this.addLiquidity = !this.addLiquidity;

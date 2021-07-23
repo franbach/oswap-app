@@ -17,30 +17,39 @@
             </div>
           </div>
         </div>
-        <LiquidityAmount :tokenInfo="tokenInfo" />
+        <LiquidityAmountLP v-if="token1" :token0="token0" :token1="token1"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import LiquidityAmount from '@/components/liquidity/LiquidityAmount';
+  import LiquidityAmountLP from '@/components/liquidity/LiquidityAmountLP';
   import { mapGetters } from 'vuex';
 
   export default {
     name: 'RemoveLiquidity',
     components: {
-      LiquidityAmount
+      LiquidityAmountLP
     },
+    props: {
+    },
+
     data() {
       return {
-        tokenInfo: null
+        tokenInfo: null,
+        token0: null,
+        token1: null,
       }
     },
     mounted() {
+      this.token0 = this.getToken()['token1']
+      this.token1 = this.getToken()['token2']
       this.tokenInfo = `${this.getToken()['token1'].Symbol} / ${this.getToken()['token2'].Symbol}`
     },
+
     methods: {
+      
       ...mapGetters('exchange', ['getToken'])
     }
   }

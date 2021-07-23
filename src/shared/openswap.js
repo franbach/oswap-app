@@ -5,7 +5,7 @@ import IERC20 from "openswap-core/build/contracts/IERC20.json";
 
 import { ethers } from "ethers";
 import { mapGetters, mapActions } from 'vuex';
-const { Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
+const { Route, Price, Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
 
 import { toastMe } from '@/components/toaster/toaster.js';
@@ -633,6 +633,23 @@ export default {
 
 
       return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, tvalue0, tvalue1]
+    },
+    getAmountsLiquidity: async function(pair, token0, amount){
+      
+      const Token0 = await Fetcher.fetchTokenData(
+        ChainId.MAINNET,
+        token0.oneZeroxAddress
+      );
+      const route = new Route([pair], Token0);
+      const price = Price.fromRoute(route);
+      const amountin = ethers.BigNumber.from(this.getUnits(amount, token0))
+
+      const amountOut = price
+        .quote(new TokenAmount(Token0, amountin.toString()))
+        .toFixed(this.token1.decimals);
+        return amountOut
+
+
     },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
