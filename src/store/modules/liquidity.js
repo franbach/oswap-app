@@ -93,6 +93,52 @@ export default {
           })
         },
       }
+    },
+    amounts: {
+      namespaced: true,
+      state: {
+        token0: '0',
+        token1: '0'
+      },
+      getters: {
+        // get current step state
+        getToken0Amount: (state) => {
+          return state.token0
+        },
+        getToken1Amount: (state) => {
+          return state.token1
+        },
+
+        getBtnState: (state) => (value) => {
+          // Grabs the button name passed in as argument
+          let btn = Object.keys(value)[0];
+          // Grabs the desired button state passed in as argument
+          let btnState = value[btn];
+
+          return state[btn][btnState];
+        }
+      },
+      actions: {
+        setToken0Amount({ commit }, value) {
+          commit('_setToken0Amount', value)
+        },
+        setToken1Amount({ commit }, value) {
+          commit('_setToken1Amount', value)
+        },
+
+        resetButton({ commit }, value) {
+          commit('_resetButton', value)
+        }
+      },
+      mutations: {
+        _setToken0Amount: (state, value) => {
+          state.token0 = value
+        },
+        _setToken1Amount: (state, value) => {
+          state.token1 = value
+        }
+
+      }
     }
   }
 

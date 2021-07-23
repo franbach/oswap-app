@@ -55,6 +55,7 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('liquidity/buttons', ['setBtnState']),
+      ...mapActions('liquidity/amounts', ['setToken0Amount','setToken1Amount']),
       getToken1Amount: async function(){
 
         this.i++
@@ -73,7 +74,9 @@
         this.amount0 = value;
         this.amount1 =  await this.getToken1Amount();
         this.manageError0Input(value, this.balances.token0)   
-        this.manageError1Input(value, this.balances.token1)   
+        this.manageError1Input(value, this.balances.token1)
+        this.setToken0Amount(value);
+        this.setToken1Amount(this.amount1);
       },
       inputAmount1:async function(value){
         this.amount1 = value;
@@ -87,7 +90,7 @@
         
       },
       setMax1: async function() {
-        this.inputAmount0(String(this.balances.token1))
+        this.inputAmount1(String(this.balances.token1))
       },
       manageError0Input(value,balance){
         if (!value.match(/^\d*\.?\d*$/)) {

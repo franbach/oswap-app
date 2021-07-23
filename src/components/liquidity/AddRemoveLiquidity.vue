@@ -30,7 +30,9 @@
           <LiquidityBackButton />
             <div class="flex flex-1 h-full space-x-2 justify-end">
               <div class="flex items-center w-28 h-full relative">
-                <LiquidityApproveButton />
+                <LiquidityApproveButton v-if="!token0Approved" :amount="getToken0Amount()" :token="getToken()['token1']" @set0approved="set0approved" />
+                <LiquidityApproveButton v-if="token0Approved" :amount="getToken0Amount()" :token="getToken()['token2']" @set0approved="set0approved" />
+
               </div>
               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityAddButton />
@@ -76,6 +78,8 @@
     data() {
       return {
         amount: '1',
+        token0Approved: false,
+        token1Approved: false,
         slippageRate: '0.5',
         warnings: {},
         addLiquidity: true,
@@ -97,11 +101,28 @@
     computed: {},
     methods: {
       ...mapGetters('exchange', ['getToken']),
-      ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC']),
+      ...mapGetters('liquidity/amounts', ['getToken0Amount','getToken1Amount']),
+      ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC', 'WONE']),
+      set0approved(){
+        this.token0Approved = true
+      },
+      set1approved(){
+        this.token1Approved = true
+      },
       parseResults: async function(results){
+        let token0 = this.getToken()['token1']
+        let token1 = this.getToken()['token2'].oneZeroxAddress
+
+
         this.balances.token0 = results[1]['value']
         this.balances.token1 = results[2]['value']
         this.balances.lpToken = results[0]['value']
+        if(token0.oneZeroxAddress = this.WONE()){
+          this.balances.token0 = await this.getTokenBalance(token0);
+        }
+        if(token1.oneZeroxAddress = this.WONE()){
+          this.balances.token1 = await this.getTokenBalance(token1);
+        }
      },
       initMulticall: async function(){
         const MULTICALL = this.hMULTICALL();

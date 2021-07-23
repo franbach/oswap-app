@@ -13,11 +13,11 @@
               <p class="text-xs">{{this.getToken()['token1'].Symbol}}</p>
               <p class="text-lg text-oswapGreen">/</p>
               <p class="text-xs">{{this.getToken()['token2'].Symbol}}:</p>
-              <p class="text-xs">2000.00</p>
+              <p class="text-xs">{{balances.lpToken}}</p>
             </div>
           </div>
         </div>
-        <LiquidityAmountLP v-if="token1" :token0="token0" :token1="token1"/>
+        <LiquidityAmountLP v-if="token1" :token0="token0" :token1="token1" :balances="balances"/>
       </div>
     </div>
   </div>
@@ -33,6 +33,7 @@
       LiquidityAmountLP
     },
     props: {
+      balances: Object
     },
 
     data() {
