@@ -44,7 +44,6 @@
         pair: null,
         error0: {},
         error1: {},
-        i: 0
       }
     },
     mounted: async function() {
@@ -57,20 +56,16 @@
       ...mapActions('liquidity/buttons', ['setBtnState']),
       ...mapActions('liquidity/amounts', ['setToken0Amount','setToken1Amount']),
       getToken1Amount: async function(){
-
-        this.i++
         var amountOut = await this.getAmountsLiquidity(this.pair, this.token0, this.amount0)
         return amountOut;
       },
       getToken0Amount: async function(){
-
-        this.i++
         var amountOut = await this.getAmountsLiquidity(this.pair, this.token1, this.amount1)
         return amountOut;
       },
 
       inputAmount0: async function(value){
-        console.log(value)
+        
         this.amount0 = value;
         this.amount1 =  await this.getToken1Amount();
         this.manageError0Input(value, this.balances.token0)   
@@ -81,8 +76,11 @@
       inputAmount1:async function(value){
         this.amount1 = value;
         this.amount0 =  await this.getToken0Amount();
-        this.manageError0Input(value, this.balances.token0)   
-        this.manageError1Input(value, this.balances.token1)   
+        this.manageError1Input(value, this.balances.token1) 
+        this.manageError0Input(value, this.balances.token0)
+        this.setToken1Amount(value);
+        this.setToken0Amount(this.amount0);  
+          
       },
       setMax0: async function() {
         this.inputAmount0(String(this.balances.token0))

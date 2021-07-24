@@ -11,7 +11,7 @@
 
   <!-- Ready to Add -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({add: 'add'})" class="flex w-28">
+    <div @click="executeAddLiquidity()" v-if="this.getBtnState({add: 'add'})" class="flex w-28">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
@@ -65,7 +65,9 @@
       ...mapGetters('exchange', ['getToken']),      
       ...mapActions('liquidity/buttons', ['setBtnState']),
 
-      adding: async function() {}
+      executeAddLiquidity: async function() {
+        this.$emit('executeAddLiquidity')
+      }
     }
   }
 </script>

@@ -18,7 +18,7 @@
           </div>
         </div>
         <LiquidityAmount v-if="token1" :token0="token0" :token1="token1" :balances="balances"/>
-        <LiquidityRate />
+        <LiquidityRate @setSlippageRate="setSlippage"/>
         <div class="flex flex-wrap space-x-1 text-xs px-1">
           <p>You will need 1</p>
           <p class="text-oswapGreen">
@@ -59,7 +59,10 @@
       this.token1 = this.getToken()['token2']
     },
     methods: {
-      ...mapGetters('exchange', ['getToken'])
+      ...mapGetters('exchange', ['getToken']),
+      setSlippage(value){
+        this.$emit("setSlippageRate", value)
+      }
     }
   }
 </script>

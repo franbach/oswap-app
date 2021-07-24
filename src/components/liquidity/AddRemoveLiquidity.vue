@@ -22,7 +22,7 @@
         </button>
       </div>
       
-      <div v-if="addLiquidity" ><AddLiquidity :balances="balances" /></div>
+      <div v-if="addLiquidity" ><AddLiquidity :balances="balances" @setSlippageRate="setSlippage" /></div>
       <div v-if="removeLiquidity" ><RemoveLiquidity :balances="balances" /></div>
 
       <div class="flex pt-4">
@@ -31,11 +31,11 @@
             <div class="flex flex-1 h-full space-x-2 justify-end">
               <div class="flex items-center w-28 h-full relative">
                 <LiquidityApproveButton v-if="!token0Approved" :amount="getToken0Amount()" :token="getToken()['token1']" @set0approved="set0approved" />
-                <LiquidityApproveButton v-if="token0Approved" :amount="getToken0Amount()" :token="getToken()['token2']" @set0approved="set0approved" />
+                <LiquidityApproveButton v-if="token0Approved" :amount="getToken1Amount()" :token="getToken()['token2']" @set0approved="set0approved" />
 
               </div>
               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
-                <LiquidityAddButton />
+                <LiquidityAddButton @executeAddLiquidity="executeAddLiquidity"/>
               </div>
               <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityRemoveButton />
@@ -103,6 +103,17 @@
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('liquidity/amounts', ['getToken0Amount','getToken1Amount']),
       ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC', 'WONE']),
+
+      executeAddLiquidity: async function(){
+        let token0 = this.getToken()['token1']
+        let token1 = this.getToken()['token2']
+        let amount0 = this.getToken0Amount()
+        let amount1 = this.getToken1Amount()
+        await this.addLiquidityParse(token0, token1, amount0, amount1, this.slippageRate)
+      },
+      setSlippage(value){
+        this.slippageRate = value;
+      },
       set0approved(){
         this.token0Approved = true
       },
@@ -111,16 +122,16 @@
       },
       parseResults: async function(results){
         let token0 = this.getToken()['token1']
-        let token1 = this.getToken()['token2'].oneZeroxAddress
+        let token1 = this.getToken()['token2']
 
 
         this.balances.token0 = results[1]['value']
         this.balances.token1 = results[2]['value']
         this.balances.lpToken = results[0]['value']
-        if(token0.oneZeroxAddress = this.WONE()){
+        if(token0.oneZeroxAddress == this.WONE()){
           this.balances.token0 = await this.getTokenBalance(token0);
         }
-        if(token1.oneZeroxAddress = this.WONE()){
+        if(token1.oneZeroxAddress == this.WONE()){
           this.balances.token1 = await this.getTokenBalance(token1);
         }
      },

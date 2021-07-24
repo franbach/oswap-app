@@ -837,6 +837,149 @@ export default {
       })
       
     },
+    //----------------------------------------Liquidity--------------------------------------
+
+    addLiquidityParse: async function(token0, token1, amount0, amount1, slippage){
+      if(token0.Symbol == 'ONE'){
+        this.addLiquidityETH(token0, token1, amount0, amount1, slippage)
+      }
+      if(token1.Symbol == 'ONE'){
+        this.addLiquidityETH(token1, token0, amount1,  amount0, slippage)
+      }else{
+        this.addLiquidityToken(token0, token1, amount0, amount1, slippage);
+      }
+    },
+    addLiquidityETH: async function(token0, token1, amount0, amount1, slippage){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      
+      console.log(slippage)
+      console.log(slippage)
+      console.log(slippage)
+      
+      let amountA = this.getUnits(amount0, token0)
+      let valueOveride = {value: amountA}
+      console.log(valueOveride.value.toString())
+      let amountB = this.getUnits(amount1, token1)
+      let amountAmin = await this.calculateSlippage(amountA, '90');
+      let amountBmin = await this.calculateSlippage(amountB, '90')
+      let deadline = this.getDeadline();
+      console.log(amountA.toString())
+      console.log(amountB.toString())
+      console.log(amountAmin.toString())
+      console.log(amountBmin.toString())
+      console.log(slippage)
+
+
+      const tx = await contract
+          .addLiquidityETH(
+            token1.oneZeroxAddress,
+            amountB,
+            amountAmin,
+            amountBmin,
+            address,
+            deadline,
+            valueOveride
+          ).catch(err => {
+
+            var message;
+            if(!err.data?.message){
+              message = err.message
+            }else{
+              message = err.data.message
+            }
+            toastMe('error', {
+              title: 'Error :',
+              msg: message,
+              link: false
+            })
+            return
+          })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+    },
+    addLiquidityToken: async function(token0, token1, amount0, amount1, slippage){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      let amountA = this.getUnits(amount0, token0)
+      let amountB = this.getUnits(amount1, token1)
+      let amountAmin = await this.calculateSlippage(amountA, slippage);
+      let amountBmin = await this.calculateSlippage(amountB, slippage);
+      let deadline = this.getDeadline();
+
+      const tx = await contract
+        .addLiquidity(
+          token0.oneZeroxAddress,
+          token1.oneZeroxAddress,
+          amountA,
+          amountB,
+          amountAmin,
+          amountBmin,
+          address,
+          deadline
+        ).catch(err => {
+
+          var message;
+          if(!err.data?.message){
+            message = err.message
+          }else{
+            message = err.data.message
+          }
+          toastMe('error', {
+            title: 'Error :',
+            msg: message,
+            link: false
+          })
+          return
+        })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Collect request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+    
+    },
+    calculateSlippage: async function(amount, slippage) {
+      slippage = ethers.BigNumber.from(String(parseFloat(slippage) * 10));
+      const divider = ethers.BigNumber.from("1000");
+
+      const value = amount.div(divider).mul(slippage);
+      const value2 = amount.sub(value);
+      return value2;
+    },
+
     //----------------------------------------Utils------------------------------------------
     getDeadline: function(){
       var deadline = new Date();
