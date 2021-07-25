@@ -3,7 +3,7 @@
     <!-- Header left side -->
     <div class="relative flex h-12 items-center">
       <!-- Icon token0 -->
-      <div class="absolute items-center justify-center flex w-12 h-12 overflow-hidden rounded-full bg-gray-50 border-4 border-gray-200 dark:border-gray-700 group-hover:border-slightGray dark:group-hover:border-slightDark">
+      <div class="absolute items-center justify-center flex w-12 h-12 overflow-hidden rounded-full bg-gray-50 border-4 border-slightGray dark:border-slightDark">
         <img :src="pool.imgtoken0" class="h-8 w-8">
       </div>
       
@@ -31,15 +31,15 @@
       </div>
     </div>
     <!-- Header right side -->
-    <div class="flex h-10 w-20 mr-5">
+    <div class="flex h-10 w-20 mr-2">
       <p class="text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
     </div>
   </div>
 </template>
 
 <script>
-import openswap from "@/shared/openswap.js";
-import { ethers } from "ethers";
+  import openswap from "@/shared/openswap.js";
+  import { ethers } from "ethers";
 
   export default {
     name: 'PoolHeader',
@@ -55,11 +55,11 @@ import { ethers } from "ethers";
       } 
     },
     mounted: async function(){
-        this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
-        var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
-        var rewardValue = await this.getRewardValue(this.pool, 100)
-        this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
-        this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
+      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
+      var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
+      var rewardValue = await this.getRewardValue(this.pool, 100)
+      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
     },
   }
 </script>

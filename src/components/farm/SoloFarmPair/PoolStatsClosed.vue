@@ -20,7 +20,7 @@
     </div>
     <!-- Open Details Button -->
     <div class="flex h-12 items-end">
-      <div @click="this.$emit('setPool', 'open')" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pl-3 cursor-pointer">
+      <div @click="setPool()" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pl-3 cursor-pointer">
         <p class="text-sm text-gray-500 dark:text-oswapBlue-light">details</p>
         <i class="las la-arrow-down text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
       </div>
@@ -46,9 +46,12 @@
     },
     mounted: async function (){
       let temp = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData[1]['value'])).toFixed(2)
-
       this.liquidityValue = ethers.utils.commify(temp);
-      
+    },
+    methods: {
+      setPool() {
+        this.$emit('setPool', 'open')
+      }
     }
   }
 </script>

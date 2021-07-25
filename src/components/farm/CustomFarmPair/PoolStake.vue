@@ -8,7 +8,7 @@
         </div>
         <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
           <div class="flex flex-1 shadow-lg rounded-2xl">
-            <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount">
+            <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'">
               <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.pair}}</p>
             </InputWithValidation>
           </div>
@@ -29,19 +29,20 @@
           </div>
         </div>
       </div>
-      <div class="flex items-end h-12 justify-between">
+      <div class="flex justify-between items-center mb-0.5 h-9">
         <!-- back to Stats -->
         <div @click="this.$emit('setPool', 'stats')" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 cursor-pointer">
           <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
           <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
-        <!-- Continue Button -->
         
-        <div class="flex items-center w-28 h-full relative">
-          <farmApprove :key="amount" :amount="this.amount" :pool="pool" />
-        </div>
-        <div class="flex items-center w-28 h-full relative">
-          <farmStake :key="amount" :amount="this.amount" :pool="pool" />
+        <div class="flex items-center space-x-2">
+          <div class="flex items-center w-28 h-full relative">
+            <farmApprove :key="amount" :amount="this.amount" :pool="pool" @tellStake="setStakeState" />
+          </div>
+          <div class="flex items-center w-28 h-full relative">
+            <farmStake :key="amount" :amount="this.amount" :pool="pool" :btnState="btnStake" />
+          </div>
         </div>
       </div>
     </div>
@@ -52,8 +53,6 @@
   import InputWithValidation from "@/components/InputWithValidation"
   import farmStake from "@/components/farm/FarmPair/farmStake"
   import farmApprove from "@/components/farm/FarmPair/farmApprove"
-
-   
 
   export default {
     name: 'PoolStake',
@@ -66,12 +65,12 @@
       pool: Object,
       isOpen: Boolean,
       maxAmount: Number
-     
     },
     data() {
       return {
         errors: {},
-        amount: '0.1'
+        amount: '0.1',
+        btnStake: 'disabled'
       }
     },
     methods: {
@@ -80,6 +79,9 @@
       },
       inputAmount(value) {
         this.amount = value;
+      },
+      setStakeState(value) {
+        this.btnStake = value
       }
     }
   }
