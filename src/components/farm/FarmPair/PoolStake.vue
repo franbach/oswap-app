@@ -38,10 +38,10 @@
         
         <div class="flex items-center space-x-2">
           <div class="flex items-center w-28 h-full relative">
-            <farmApprove :key="amount" :amount="this.amount" :pool="pool" />
+            <farmApprove :key="amount" :amount="this.amount" :pool="pool" @tellStake="setStakeState" />
           </div>
           <div class="flex items-center w-28 h-full relative">
-            <farmStake :key="amount" :amount="this.amount" :pool="pool" />
+            <farmStake :key="amount" :amount="this.amount" :pool="pool" :btnState="btnStake" />
           </div>
         </div>
       </div>
@@ -50,9 +50,9 @@
 </template>
 
 <script>
-  import InputWithValidation from "@/components/InputWithValidation"
-  import farmStake from "@/components/farm/FarmPair/farmStake"
-  import farmApprove from "@/components/farm/FarmPair/farmApprove"
+  import InputWithValidation from "@/components/InputWithValidation";
+  import farmStake from "@/components/farm/FarmPair/farmStake";
+  import farmApprove from "@/components/farm/FarmPair/farmApprove";
 
   export default {
     name: 'PoolStake',
@@ -69,7 +69,8 @@
     data() {
       return {
         errors: {},
-        amount: '0.1'
+        amount: '0.1',
+        btnStake: 'disabled'
       }
     },
     methods: {
@@ -78,6 +79,9 @@
       },
       inputAmount(value) {
         this.amount = value;
+      },
+      setStakeState(value) {
+        this.btnStake = value
       }
     }
   }

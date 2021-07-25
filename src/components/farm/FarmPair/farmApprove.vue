@@ -1,7 +1,7 @@
 <template>
   <!-- Approve disabled -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({approve: 'disabled'})" class="flex w-28 h-9 justify-between items-center border dark:border-gray-600 border-gray-300 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+    <div v-if="this.btnApprove == 'disabled'" class="flex w-28 h-9 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Approve</p>
       </div>
@@ -11,7 +11,7 @@
 
   <!-- Ready to Approve -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="approve()" v-if="this.getBtnState({approve: 'active'})" class="flex w-28">
+    <div @click="approve()" v-if="this.btnApprove == 'approve'" class="flex w-28">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
@@ -24,7 +24,7 @@
 
   <!-- Approving -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({approve: 'executing'})" class="flex w-28">
+    <div v-if="this.btnApprove == 'approving'" class="flex w-28">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">
@@ -37,7 +37,7 @@
 
   <!-- Approved -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({approve: 'finished'})" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
+    <div v-if="this.btnApprove == 'approved'" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-oswapGreen ">Approved</p>
       </div>
@@ -49,49 +49,51 @@
 <script>
 
   import openswap from "@/shared/openswap.js";
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters } from 'vuex';
   import { toastMe } from '@/components/toaster/toaster.js'
 
   export default {
     name: 'farmApprove',
     mixins: [openswap],
+    emits: ['tellStake'],
     props: {
       amount: String,
       pool: Object,
     },
-    computed: {
-      ...mapGetters('farm', ['getBtnState'])
+    data() {
+      return {
+        btnApprove: 'disabled'
+      }
     },
     mounted: async function() {
-        var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
+      var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
+    
+      this.btnApprove = 'approving';
+      this.$emit('tellStake', 'executing');
       
-        this.setBtnState({approve: 'executing'});
-        this.setBtnState({stake: 'disabled'});
-        let masterchefAddr = this.oSWAPCHEF();
-        console.log(masterchefAddr)
-        let parsedInput = this.getUnits(this.amount, lpToken);
-        console.log(parsedInput)
-        let allowance = await this.checkAllowance(lpToken, masterchefAddr);
-        let isAllowanceSufficient = parsedInput.lt(allowance);
-        if (isAllowanceSufficient) {
-          this.setBtnState({approve: 'finished'});
-          this.setBtnState({stake: 'active'});
-        } else {
-          // Ready to approve (Pen Icon)
-          this.setBtnState({approve: 'active'});
-          this.setBtnState({stake: 'disabled'});
-        }
-          
+      let masterchefAddr = this.oSWAPCHEF();
+      console.log(masterchefAddr)
+      let parsedInput = this.getUnits(this.amount, lpToken);
+      console.log(parsedInput)
+      let allowance = await this.checkAllowance(lpToken, masterchefAddr);
+      let isAllowanceSufficient = parsedInput.lt(allowance);
+      if (isAllowanceSufficient) {
+        this.btnApprove = 'approved';
+        this.$emit('tellStake', 'active');
+      } else {
+        // Ready to approve (Pen Icon)
+        this.btnApprove = 'approve';
+        this.$emit('tellStake', 'disabled');
+      }
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
-      ...mapActions('farm', ['setBtnState', 'resetButton']),
 
       approve: async function(){
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
         let masterchefAddr = this.oSWAPCHEF();
-        this.setBtnState({approve: 'executing'})
+        this.btnApprove = 'approving';
 
         let tx = await this.approveSpending(lpToken, masterchefAddr);
         let explorer = 'https://explorer.harmony.one/#/tx/'
@@ -110,10 +112,9 @@
           link: true,
           href: `${explorer}${transaction}`
         })
-        this.setBtnState({approve: 'finished'})
-        this.setBtnState({stake: 'active'});
+        this.btnApprove = 'approved';
+        this.$emit('tellStake', 'active');
       }
-
     }
   }
 </script>
