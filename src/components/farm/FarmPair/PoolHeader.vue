@@ -78,6 +78,8 @@ import { ethers } from "ethers";
           String(this.poolData[3]['value']),
           String(this.poolData[1]['value'])
         );
+        
+
         this.tt0s = valueData[2]
         this.tt1s = valueData[3]
         this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
