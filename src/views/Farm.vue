@@ -1,22 +1,16 @@
 <template>
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center h-full xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
-      <FarmHeader/>
+      <FarmHeader :totalRewards="rewardsPending"/>
     </transition>
-
+    
     <transition name="farm" appear>
-      <div v-if="soloData" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-3 w-full">
+      <div v-if="soloData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
         <SoloFarmPair  v-for="(pool, index) in SoloPools" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
-      </div>
-    </transition>
-    <transition name="farm" appear>
-      <div v-if="soloData" :key="soloData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pb-3 w-full">
+        <FarmPair  v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
         <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
-      </div>
-    </transition>
-    <transition name="farm" appear>
-      <div v-if="farmData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        <FarmPair v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
+
+
       </div>
     </transition>
   </div>
@@ -51,20 +45,44 @@
         this.customData = await this.initMulticall(this.CustomPools)
         this.farmData = await this.initMulticall(this.Pools)
         this.soloData = await this.initMulticall(this.SoloPools)
+        this.getTotalPending();
+
+        console.log(farmData.length)
       }.bind(this), 1000);
+
+      
+      
+       
+    
     },
     data() {
       return {
         Pools,
         SoloPools,
         farmData: null,
-        soloData: null
+        soloData: null,
+        rewardsPending: 0
       }
     },
     methods: {
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
+      getTotalPending: async function(){
+        //console.log(this.farmData[n][2]['value'])
+        console.log(this.farmData)
+        
+        for (var n in this.farmData) {
+          this.rewardsPending = this.rewardsPending + this.farmData[n][0][2]['value']
+        }
 
+        for (var n in this.soloData) {
+          this.rewardsPending = this.rewardsPending + this.soloData[n][0][2]['value']   
+        }
+
+        for (var n in this.customData) {
+          this.rewardsPending = this.rewardsPending + this.customData[n][0][2]['value']  
+        }
+      },
       initMulticall: async function(pools){
 
         

@@ -49,23 +49,77 @@
 <script>
 
   import { mapGetters, mapActions } from 'vuex'
-
+  import openswap from "@/shared/openswap.js"
   export default {
     name: 'LiquidityApproveButton',
+    mixins: [openswap],
     props: {
       amount: String,
+      token: Object
     },
-    mounted: async function() {},
+    mounted: async function() {
+      if (this.token.oneZeroxAddress == this.WONE()) {
+        this.setBtnState({approve: 'approved'});
+        this.$emit("set0approved", true);
+        
+      } else {
+        this.setBtnState({approve: 'approving'});
+        let routerAddr = this.UNIROUTERV2();
+        let parsedInput = this.getUnits(this.amount, this.token);
+        let allowance = await this.checkAllowance(this.token, routerAddr);
+        console.log(allowance)
+        let isAllowanceSufficient = parsedInput.lt(allowance);
+
+        if (isAllowanceSufficient) {
+          if(this.getToken0Amount()){
+            this.setBtnState({add: 'add'})
+            
+          }
+          this.setBtnState({approve: 'approved'});
+          this.$emit("set0approved", true);
+        } else {
+          // Ready to approve (Pen Icon)
+          this.$emit("set0approved", true);
+          this.setBtnState({add: 'disabled'});
+          this.setBtnState({approve: 'approve'});
+        }
+      }
+    },
     
     computed: {
       ...mapGetters('liquidity/buttons', ['getBtnState']),
     },
     
-    methods: {
-      ...mapGetters('exchange', ['getToken']),      
+    methods: {     
       ...mapActions('liquidity/buttons', ['setBtnState']),
+       ...mapGetters('liquidity/amounts', ['getToken0Amount','getToken1Amount']),
+      ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
+      approve: async function(){
+        let routerAddr = this.UNIROUTERV2();
+        this.setBtnState({approve: 'approving'})
 
-      approve: async function() {}
+        let tx = await this.approveSpending(this.token, routerAddr);
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = tx.hash
+
+        toastMe('info', {
+          title: 'Transaction Sent',
+          msg: "Approval Sent to network. Waiting for confirmation",
+          link: false,
+          href: `${explorer}${transaction}`
+        })
+        await tx.wait(1)
+        toastMe('success', {
+          title: 'Tx Successful',
+          msg: "Explore : " + transaction,
+          link: true,
+          href: `${explorer}${transaction}`
+        })
+        this.setBtnState({approve: 'approved'})
+        
+        this.$emit("set0approved", true);
+
+      }
     }
   }
 </script>

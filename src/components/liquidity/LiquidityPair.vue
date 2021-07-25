@@ -17,7 +17,7 @@
       </div>
       <div class="flex flex-1 space-x-2 dark:text-gray-300">
         <p class="text-xs">Available:</p>
-        <p class="text-xs">2000.00</p>
+        <p class="text-xs">{{parseFloat(available).toFixed(2)}}</p>
       </div>
     </div>
   </div>
@@ -31,6 +31,9 @@
     name: 'LiquidityPair',
     methods: {
       ...mapGetters('exchange', ['getToken']),
-    }
+    },
+    props: {
+     available: Number
+    },
   }
 </script>

@@ -8,17 +8,17 @@
             <div class="flex items-center space-x-1">
               <img :src="this.getToken()['token1'].imgSrc" class="h-4 w-4 rounded-full flex items-center justify-center" alt="">
               <p class="text-xs">{{this.getToken()['token1'].Symbol}}:</p>
-              <p class="text-xs">1300.75</p>
+              <p v-if="balances" class="text-xs">{{parseFloat(balances.token0).toFixed(2)}}</p>
             </div>
             <div class="flex items-center space-x-1">
               <img :src="this.getToken()['token2'].imgSrc" class="h-4 w-4 rounded-full flex items-center justify-center" alt="">
               <p class="text-xs">{{this.getToken()['token2'].Symbol}}:</p>
-              <p class="text-xs">517.89</p>
+              <p v-if="balances" class="text-xs">{{parseFloat(balances.token1).toFixed(2)}}</p>
             </div>
           </div>
         </div>
-        <LiquidityAmount :tokenInfo="tokenInfo" />
-        <LiquidityRate />
+        <LiquidityAmount v-if="token1" :token0="token0" :token1="token1" :balances="balances"/>
+        <LiquidityRate @setSlippageRate="setSlippage"/>
         <div class="flex flex-wrap space-x-1 text-xs px-1">
           <p>You will need 1</p>
           <p class="text-oswapGreen">
@@ -45,16 +45,24 @@
       LiquidityAmount,
       LiquidityRate
     },
+    props: {
+      balances: Object
+    },
     data() {
       return {
-        tokenInfo: null
+        token0: null,
+        token1: null,
       }
     },
     mounted() {
-      this.tokenInfo = this.getToken()['token1'].Symbol
+      this.token0 = this.getToken()['token1']
+      this.token1 = this.getToken()['token2']
     },
     methods: {
-      ...mapGetters('exchange', ['getToken'])
+      ...mapGetters('exchange', ['getToken']),
+      setSlippage(value){
+        this.$emit("setSlippageRate", value)
+      }
     }
   }
 </script>
