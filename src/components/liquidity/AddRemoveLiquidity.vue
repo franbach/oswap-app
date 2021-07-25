@@ -21,7 +21,7 @@
           <i class="las la-level-up-alt"></i>
         </button>
       </div>
-      
+
       <div v-if="addLiquidity"><AddLiquidity /></div>
       <div v-if="removeLiquidity"><RemoveLiquidity /></div>
 

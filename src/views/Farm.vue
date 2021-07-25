@@ -16,7 +16,7 @@
     </transition>
     <transition name="farm" appear>
       <div v-if="farmData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        <FarmPair  v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
+        <FarmPair v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
       </div>
     </transition>
   </div>
@@ -48,14 +48,10 @@
       this.Pools = Pools;
       this.SoloPools = SoloPools;
       await setTimeout(async function (){
-      this.customData = await this.initMulticall(this.CustomPools)
-      this.farmData = await this.initMulticall(this.Pools)
-      this.soloData = await this.initMulticall(this.SoloPools)
-
+        this.customData = await this.initMulticall(this.CustomPools)
+        this.farmData = await this.initMulticall(this.Pools)
+        this.soloData = await this.initMulticall(this.SoloPools)
       }.bind(this), 1000);
-
-       
-    
     },
     data() {
       return {

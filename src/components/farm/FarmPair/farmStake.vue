@@ -1,7 +1,6 @@
  <template>
-
- <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({stake: 'disabled'})" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+  <transition tag="div" name="swap-btn" class="inline-block absolute">
+    <div v-if="buttonState == 'disabled'" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Stake</p>
       </div>
@@ -9,9 +8,9 @@
     </div>
   </transition>
 
-  <!-- Swap -->
+  <!-- Stake -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="this.stakeLP(this.pool, this.amount)" v-if="this.getBtnState({stake: 'active'})" class="flex w-22">
+    <div @click="stake()" v-if="buttonState == 'active'" class="flex w-22">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex items-center justify-center">
@@ -22,9 +21,9 @@
     </div>
   </transition>
 
-  <!-- Swapping -->
+  <!-- Staking -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({stake: 'executing'})" class="flex w-22">
+    <div v-if="buttonState == 'executing'" class="flex w-22">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">
@@ -35,9 +34,9 @@
     </div>
   </transition>
 
-  <!-- Swapped -->
+  <!-- Staked -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({stake: 'finished'})" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
+    <div v-if="buttonState == 'finished'" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-oswapGreen">Staked</p>
       </div>
@@ -49,8 +48,7 @@
 <script>
 
   import openswap from "@/shared/openswap.js";
-  import { mapGetters, mapActions } from 'vuex';
-  import { toastMe } from '@/components/toaster/toaster.js'
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'farmStake',
@@ -58,17 +56,27 @@
     props: {
       amount: String,
       pool: Object,
+      btnState: String
     },
-    computed: {
-      ...mapGetters('farm', ['getBtnState'])
+    data() {
+      return {
+        buttonState: 'disabled'
+      }
     },
-    mounted: async function() {
-      this.setBtnState({stake: 'executing'});    
+    watch: {
+      btnState() {
+        this.buttonState = this.btnState;
+      }
     },
+    mounted: async function() {},
+
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
-      ...mapActions('farm', ['setBtnState', 'resetButton']),
+
+      stake() {
+        this.stakeLP(this.pool, this.amount);
+      }
     }
   }
 </script>
