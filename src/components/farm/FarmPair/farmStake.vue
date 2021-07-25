@@ -1,6 +1,6 @@
  <template>
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="buttonState == 'disabled'" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+    <div v-if="buttonState == 'disabled'" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group-scope dark:bg-gray-700 bg-gray-200 select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Stake</p>
       </div>
@@ -10,26 +10,26 @@
 
   <!-- Stake -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="stake()" v-if="buttonState == 'active'" class="flex w-22">
+    <div @click="stake()" v-if="buttonState == 'active'" class="flex w-22 group-scope">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex items-center justify-center">
-          <p class="text-sm ml-5 text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Stake</p>
+          <p class="text-sm ml-5 text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray">Stake</p>
         </div>
-        <i class="las la-upload text-xl pr-5 text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
+        <i class="las la-upload text-xl pr-5 text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
       </div>
     </div>
   </transition>
 
   <!-- Staking -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="buttonState == 'executing'" class="flex w-22">
+    <div v-if="buttonState == 'executing'" class="flex w-22 group-scope">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">
-          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray">Staking</p>
+          <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray">Staking</p>
         </div>
-        <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-hover:text-gray-50 dark:group-hover:text-oswapDark-gray"></i>
+        <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
       </div>
     </div>
   </transition>

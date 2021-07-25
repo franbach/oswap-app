@@ -28,6 +28,12 @@ module.exports = {
         none: "none"
       }
     },
+    groupLevel: 10,
+    // will result in as many direct child selectors as defined here
+    groupScope: "scope",
+    // will result in group-scope being available in addition to the base group
+    groupVariants: ["hover", "focus"],
+    // will result in group-scope:hover and group-scope:focus variants
     container: {
       center: true
     },
@@ -958,5 +964,6 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-glow")(),
+    require("tailwindcss-nested-groups"),
   ],
 }

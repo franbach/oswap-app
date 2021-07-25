@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-3 bg-slightGray dark:bg-slightDark rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-oswapDark-gray hover:border-oswapGreen dark:hover:border-oswapGreen ">
+  <div class="flex flex-col p-3 bg-gray-200 hover:bg-slightGray group dark:hover:bg-slightDark dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <!-- Header -->
     <PoolHeader :pool="pool" :poolData="poolData[0]"/>
     <!-- Body -->
