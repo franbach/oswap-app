@@ -35,10 +35,10 @@
           <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
           <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
-        <!-- Continue Button -->
-        <div class="flex items-center space-x-2 pl-3 pr-1 rounded-2xl h-9 bg-oswapGreen-dark dark:bg-oswapGreen hover:bg-oswapGreen dark:hover:bg-oswapGreen-light border-2 border-gray-200 dark:border-gray-700 cursor-pointer">
-          <p @click="unstakeLP(this.pool, String(roundDown(this.amount, 14)))" class="text-sm text-gray-200 dark:text-gray-700">Unstake !</p>
-          <i class="las la-sign-out-alt text-2xl text-gray-200 dark:text-gray-700"></i>
+        <!-- Unstake Button -->
+        <div class="flex items-center space-x-2 pl-3 pr-1 rounded-full h-9 bg-gray-200 group-scope dark:bg-gray-600 hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
+          <p @click="unstakeLP(this.pool, String(roundDown(this.amount, 14)))" class="text-sm text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Unstake !</p>
+          <i class="las la-sign-out-alt text-2xl text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
         </div>
       </div>
     </div>
