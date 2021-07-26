@@ -53,11 +53,6 @@
 
         console.log(farmData.length)
       }.bind(this), 1000);
-
-      
-      
-       
-    
     },
     data() {
       return {

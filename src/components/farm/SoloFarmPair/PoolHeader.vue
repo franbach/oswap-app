@@ -71,7 +71,6 @@
       var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
       var rewardValue = await this.getRewardValue(this.pool, 100)
       this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
-      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
     },
   }
 </script>

@@ -116,7 +116,7 @@ html {
   left: -2px;
   background-size: 400%;
   filter: blur(5px);
-  width: 244.05px;
+  width: calc(100% + 4px);
   height: 60px;
   animation: glowing linear 20s infinite;
   opacity: 1;
