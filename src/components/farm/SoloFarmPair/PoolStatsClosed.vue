@@ -1,21 +1,27 @@
 <template>
   <div v-if="isOpen" class="flex ml-2 justify-between">
-    <div class="flex h-12 space-x-2">
+    <div class="flex h-12 space-x-3">
       <!-- Earned Info -->
-      <div class="flex flex-col justify-between">
+      <div class="flex flex-col h-full justify-between">
         <div class="flex space-x-2 items-center">
           <i class="las la-hand-holding-usd text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Earned</p>
         </div>
-        <p class="text-xl font-extralight dark:text-gray-400">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
+        <p class="text-sm font-bold dark:text-gray-300">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
       </div>
       <!-- Liquidity Info -->
-      <div class="flex flex-col justify-between">
+      <div class="flex flex-col h-full justify-between">
         <div class="flex space-x-2 items-center">
           <i class="las la-tint text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Liquidity</p>
         </div>
-        <p class="text-sm font-extralight pl-1 dark:text-gray-400">$ {{liquidityValue}}</p>
+        <div v-if="!this.liquidityValue" class="flex items-center pb-1 h-4">
+          <svg class="animate-spin h-4 w-4 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <p v-else class="text-sm font-extralight pl-1 dark:text-gray-300">$ {{liquidityValue}}</p>
       </div>
     </div>
     <!-- Open Details Button -->
@@ -41,7 +47,7 @@
     },
     data() {
       return {
-        liquidityValue: '?'
+        liquidityValue: ''
       }
     },
     mounted: async function (){

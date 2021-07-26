@@ -39,8 +39,14 @@
       </div>
     </div>
     <!-- Header right side -->
-    <div class="flex h-10 w-20 mr-5">
-      <p class="text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
+    <div class="flex h-10 w-20 items-center mr-2">
+      <div v-if="!this.rewards" class="flex flex-1 items-center justify-end">
+        <svg class="animate-spin h-7 w-7 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      <p v-else class="text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
     </div>
   </div>
 </template>
@@ -68,24 +74,23 @@ import { ethers } from "ethers";
         tt0s: '?',
         tt1s: '?',
         tas: '?',
-        rewards: '?'
+        rewards: null
       } 
     },
     mounted: async function(){
-        var valueData = await this.getTokenAmounts(
-          this.pool,
-          String(this.poolData[4]['value']),
-          String(this.poolData[3]['value']),
-          String(this.poolData[1]['value'])
-        );
-        this.tt0s = valueData[2]
-        this.tt1s = valueData[3]
-        this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
+      var valueData = await this.getTokenAmounts(
+        this.pool,
+        String(this.poolData[4]['value']),
+        String(this.poolData[3]['value']),
+        String(this.poolData[1]['value'])
+      );
+      this.tt0s = valueData[2]
+      this.tt1s = valueData[3]
+      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
 
-        var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
-        var rewardValue = await this.getRewardValue(this.pool, 100)   
-        this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
-
+      var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
+      var rewardValue = await this.getRewardValue(this.pool, 100)   
+      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
     },
   }
 </script>
