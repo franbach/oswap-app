@@ -23,37 +23,45 @@
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3 pt-3 pb-3 px-3">
-          <div class="flex flex-col justify-between h-12">
-            <div class="flex items-center space-x-2">
+          <div class="flex h-12 space-x-2">
+            <div class="flex items-start h-full">
               <i class="las la-balance-scale-left text-xl text-oswapGreen"></i>
+            </div>
+            <div class="flex flex-col h-full justify-between">
               <p class="text-xs text-oswapBlue-light">Stake Weight</p>
+              <p class="text-lg dark:text-gray-400">{{stakeWeight}} %</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{stakeWeight}} %</p>
           </div>
-          <div class="flex flex-col justify-between h-12">
-            <div class="flex items-center space-x-2">
+          <div class="flex h-12 space-x-2">
+            <div class="flex items-start h-full">
               <i class="las la-coins text-xl text-oswapGreen"></i>
-              <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
+            <div class="flex flex-col h-full justify-between">
+              <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
+              <p class="text-lg dark:text-gray-400">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
+            </div>
           </div>
-          <div class="flex flex-col justify-between h-12">
-            <div class="flex items-center space-x-2">
+          <div class="flex h-12 space-x-2">
+            <div class="flex items-start h-full">
               <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
                 <img :src="pool.imgtoken0" class="h-4" alt="">
               </div>
-              <p class="text-xs text-oswapBlue-light">{{pool.name[0]}} Staked</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{pt0s}}</p>
+            <div class="flex flex-col h-full justify-between pt-0.5">
+              <p class="text-xs text-oswapBlue-light">{{pool.name[0]}} Staked</p>
+              <p class="text-lg dark:text-gray-400">{{pt0s}}</p>
+            </div>
           </div>
-          <div class="flex flex-col justify-between h-12">
-            <div class="flex items-center space-x-2">
+          <div class="flex h-12 space-x-2">
+            <div class="flex items-start h-full">
               <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
                 <img :src="pool.imgtoken1" class="h-4" alt="">
               </div>
-              <p class="text-xs text-oswapBlue-light">{{pool.name[1]}} Staked</p>
             </div>
-            <p class="text-xl dark:text-gray-300">{{pt1s}}</p>
+            <div class="flex flex-col h-full justify-between pt-0.5">
+              <p class="text-xs text-oswapBlue-light">{{pool.name[1]}} Staked</p>
+              <p class="text-lg dark:text-gray-400">{{pt1s}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -61,15 +69,15 @@
       <div class="flex flex-col ml-2 mt-2 mb-1 h-full justify-between">
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar-day dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">Expected Weekly Rewards: $ {{weeklyRewards}}</p>
+          <p class="text-sm font-thin dark:text-gray-400">Expected Weekly Rewards: $ {{weeklyRewards}}</p>
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">Expected Monthly Rewards: $ {{monthlyRewards}}</p>
+          <p class="text-sm font-thin dark:text-gray-400">Expected Monthly Rewards: $ {{monthlyRewards}}</p>
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-coins dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-300">LP Tokens Available: {{parseFloat(poolData[0]['value']).toFixed(5)}}</p>
+          <p class="text-sm font-thin dark:text-gray-400">LP Tokens Available: {{parseFloat(poolData[0]['value']).toFixed(5)}}</p>
         </div>
       </div>
 
