@@ -8,9 +8,15 @@
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
               <p class="text-2xl dark:text-gray-300">{{parseFloat(poolData[2]['value']).toFixed(6)}}</p>
             </div>
+
             <div v-if="parseFloat(poolData[2]['value']).toFixed(6) > 0" class="glow-collect -right-1 z-20"></div>
 
-            <div class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
+             <div v-if="parseFloat(poolData[2]['value']).toFixed(6) == 0" class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray border border-gray-300 dark:border-gray-500 select-none">
+              <i class="las la-hand-holding-usd text-3xl text-gray-300 dark:text-gray-500"></i>
+              <p class="text-lg text-gray-300 dark:text-gray-500">Collect !</p>
+            </div>
+
+            <div v-else class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
               <i class="las la-hand-holding-usd text-3xl text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
               <p @click="this.collectOSWAP(this.pool)" class="text-lg text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Collect !</p>
             </div>
