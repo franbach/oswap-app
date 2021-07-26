@@ -16,10 +16,10 @@
             class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
-              <i class="las la-coins text-3xl text-gray-50"></i>
+              <i class="las la-coins text-3xl text-gray-500 dark:text-oswapDark-gray"></i>
             </div>
 
-            <div class="flex flex-1 flex-col space-y-2 text-gray-50">
+            <div class="flex flex-1 flex-col space-y-2 text-gray-500 dark:text-oswapDark-gray">
               <p class="text-sm mt-1">Total Staked</p>
               <div class="flex items-center text-xs">
                 <p>{{pool.token}} Staked: {{tas}}</p>

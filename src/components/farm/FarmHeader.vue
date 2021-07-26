@@ -9,22 +9,21 @@
           <p class="text-3xl font-bold dark:text-gray-300">Stake LP Tokens</p>
           <p class="text-lg text-oswapBlue-light">Earn rewards holding crypto</p>
         </div>
-        <div class="flex space-x-2 items-center">
+        <div class="flex space-x-3 items-center">
           <!-- Burn All Button -->
           <div class="flex flex-col space-y-1">
-            <div class="flex border-2 border-gray-300 dark:border-gray-700 items-center space-x-1 bg-oswapGreen hover:bg-red-400 pl-2 h-14 pr-4 rounded-xl cursor-pointer">
-              <i class="las la-burn text-3xl text-gray-50 dark:text-gray-700"></i>
-              <p @click="this.burnAll()" class="text-gray-50 dark:text-gray-700">Burn All !</p>
+            <div class="flex items-center space-x-1 pl-2 h-14 pr-4 rounded-full bg-gray-200 dark:bg-oswapDark-gray border border-oswapGreen-dark dark:border-oswapGreen group-scope hover:bg-red-400 dark:hover:bg-red-400 hover:border-red-400 dark:hover:border-red-400 cursor-pointer">
+              <i class="las la-burn text-3xl text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
+              <p @click="this.burnAll()" class="text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Burn All !</p>
             </div>
             <p class="text-xs dark:text-gray-300 ml-2">Burn all Fees</p>
           </div>
           <!-- Collect All Button -->
           <div class="flex flex-col space-y-1">
-            <div @click="collectAllButton" class="flex border-2 border-gray-300 dark:border-gray-700 items-center space-x-2 bg-oswapGreen hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen-light h-14 pl-3 pr-2 rounded-xl cursor-pointer">
-              <i class="las la-hand-holding-usd text-3xl text-gray-50 dark:text-gray-700"></i>
-              <p class="text-gray-50 dark:text-gray-700">Collect All</p>
-              <p class="text-xs bg-gray-200 p-2 dark:bg-oswapDark-gray rounded-md px-3
-               border-2 border-gray-300 dark:border-gray-700 dark:text-oswapGreen">{{parseFloat(unclaimedTotal).toFixed(5)}}</p>
+            <div @click="collectAllButton" class="flex items-center rounded-full space-x-2 h-14 pl-3 pr-3 bg-gray-200 group-scope dark:bg-oswapDark-gray hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
+              <i class="las la-hand-holding-usd text-3xl text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
+              <p class="text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Collect All</p>
+              <p class="text-xs bg-gray-200 p-2 dark:bg-oswapDark-gray rounded-full px-3 text-oswapGreen-dark dark:text-oswapGreen">{{parseFloat(unclaimedTotal).toFixed(5)}}</p>
             </div>
             <div class="flex">
               <p class="text-xs dark:text-gray-300 ml-2">All unclaimed rewards</p>

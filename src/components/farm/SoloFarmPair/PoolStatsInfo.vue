@@ -81,7 +81,7 @@
             <i class="las la-undo-alt text-lg text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
           </div>
           <tooltip-me-content :options="tooltip" class="flex p-2 px-3 rounded-lg shadow-lg text-sm">
-            <p class="text-gray-50">Refresh</p>
+            <p class="text-gray-500 dark:text-oswapDark-gray">Refresh</p>
           </tooltip-me-content>
         </tooltip-me>
         <!-- Close Button -->
