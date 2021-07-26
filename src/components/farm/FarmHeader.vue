@@ -19,8 +19,11 @@
             <p class="text-xs dark:text-gray-300 ml-2">Burn all Fees</p>
           </div>
           <!-- Collect All Button -->
-          <div class="flex flex-col space-y-1">
-            <div @click="collectAllButton" class="flex items-center rounded-full space-x-2 h-14 pl-3 pr-3 bg-gray-200 group-scope dark:bg-oswapDark-gray hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
+          <div class="flex flex-col space-y-1 relative">
+
+            <div v-if="parseFloat(unclaimedTotal).toFixed(5) > 0" class="flex glow-collect-all z-20"></div>
+
+            <div @click="collectAllButton" class="flex z-30 items-center rounded-full space-x-2 h-14 pl-3 pr-3 bg-gray-200 group-scope dark:bg-oswapDark-gray hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
               <i class="las la-hand-holding-usd text-3xl text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
               <p class="text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Collect All</p>
               <p class="text-xs bg-gray-200 p-2 dark:bg-oswapDark-gray rounded-full px-3 text-oswapGreen-dark dark:text-oswapGreen">{{parseFloat(unclaimedTotal).toFixed(5)}}</p>
