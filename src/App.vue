@@ -2,7 +2,7 @@
   <div id="root" :class="darkmode ? 'dark' : ''" class="antialiased pt-18">
     <div
       id="header"
-      class="w-full fixed inset-x-0 top-0 dark:bg-oswapDark-gray bg-gray-200 z-30"
+      class="w-full fixed inset-x-0 top-0 dark:bg-oswapDark-gray bg-gray-200 z-50"
     >
       <Header />
     </div>
