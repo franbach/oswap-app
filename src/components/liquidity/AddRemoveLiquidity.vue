@@ -34,11 +34,17 @@
                 <LiquidityApproveButton v-if="token0Approved" :amount="getToken1Amount()" :token="getToken()['token2']" @set0approved="set0approved" />
 
               </div>
-              <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
+              <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
+              <LiquidityApproveButton :amount="getToken0Amount()" :token="pairToken" @set0approved="set0approved" />
+             
+              </div>
+
+               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityAddButton @executeAddLiquidity="executeAddLiquidity"/>
               </div>
               <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
-                <LiquidityRemoveButton />
+                
+                <LiquidityRemoveButton @executeRemoveLiquidity="executeRemoveLiquidity"/>
               </div>
             </div>
         </div>
@@ -85,6 +91,7 @@
         addLiquidity: true,
         removeLiquidity: false,
         pairAddress: null,
+        pairToken: null,
         balances: {
           token0: 0,
           token1: 0,
@@ -95,6 +102,7 @@
     mounted: async function() {
       this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
       this.pairAddress = this.pair["liquidityToken"].address;
+      this.pairToken = await this.getPairAsToken(this.getToken()['token1'],this.getToken()['token2'])
       
       await this.initMulticall()
     },
@@ -103,13 +111,24 @@
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('liquidity/amounts', ['getToken0Amount','getToken1Amount']),
       ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC', 'WONE']),
+      ...mapActions('liquidity/buttons', ['setBtnState']),
+      executeRemoveLiquidity:async function(){
+        this.setBtnState({remove: 'removing'})
+        let token0 = this.getToken()['token1']
+        let token1 = this.getToken()['token2']
+        let amount0 = this.getToken0Amount()
 
+        await this.removeLiquidityParse(token0, token1, amount0, this.slippageRate)
+        this.setBtnState({remove: 'removed'})
+      },
       executeAddLiquidity: async function(){
+        this.setBtnState({add: 'adding'})
         let token0 = this.getToken()['token1']
         let token1 = this.getToken()['token2']
         let amount0 = this.getToken0Amount()
         let amount1 = this.getToken1Amount()
         await this.addLiquidityParse(token0, token1, amount0, amount1, this.slippageRate)
+        this.setBtnState({add: 'added'})
       },
       setSlippage(value){
         this.slippageRate = value;

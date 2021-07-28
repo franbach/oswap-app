@@ -43,9 +43,12 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('liquidity/buttons', ['setBtnState']),
+      ...mapActions('liquidity/amounts', ['setToken0Amount']),
       inputAmount: async function(value){
         this.amount = value;
         var balance = this.balances.lpToken
+
+        this.setToken0Amount(value);
 
         if (!value.match(/^\d*\.?\d*$/)) {
           this.errors['format'] = 'Invalid format! e.g: 12345.678';

@@ -19,6 +19,7 @@ export default {
     ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     ...mapActions('exchange/swapper', ['setBtnState']),
+    ...mapActions('liquidity/buttons', ['setBtnState']),
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -403,6 +404,24 @@ export default {
       console.log(error);  
     });
     return pair;
+    },
+    getPairAsToken: async function(token0, token1){
+      const Token0 = await Fetcher.fetchTokenData(
+      ChainId.MAINNET,
+      token0.oneZeroxAddress
+    );
+    const Token1 = await Fetcher.fetchTokenData(
+      ChainId.MAINNET,
+      token1.oneZeroxAddress
+    );
+    const pair = await Fetcher.fetchPairData(Token0, Token1).catch(error => {
+      console.log(error);  
+    });
+
+    let token = {}
+    token.oneZeroxAddress = pair["liquidityToken"].address
+    token.decimals = 18
+    return token;
     },
     getRate: function(pair, token1) {
       let rate = [];
@@ -824,7 +843,7 @@ export default {
 
       toastMe('info', {
         title: 'Transaction Sent',
-        msg: "Collect request sent to network. Waiting for confirmation",
+        msg: "Stake request sent to network. Waiting for confirmation",
         link: false,
         href: `${explorer}${transaction}`
       })
@@ -838,17 +857,139 @@ export default {
       
     },
     //----------------------------------------Liquidity--------------------------------------
+    removeLiquidityParse: async function(token0, token1, amount0, slippage){
+      if(token0.Symbol == 'ONE'){
+        await this.removeLiquidityETH(token1, amount0)
+      }
+      if(token1.Symbol == 'ONE'){
+        await this.removeLiquidityETH(token0, amount0)
+      }
+      if(token1.Symbol != 'ONE' && token0.Symbol != 'ONE'){
+        await this.removeLiquidityToken(token0, token1, amount0);
+      }
+    },
+    removeLiquidityETH: async function(token0, amount){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      let tempToken = {decimals: 18};
+      let deadline = this.getDeadline();
+      amount = this.getUnits(amount, tempToken)
+
+      let tx = await contract.removeLiquidityETH(
+        token0.oneZeroxAddress,
+        amount,
+        '10',
+        '10', 
+        address,
+        deadline
+      ).catch(err => {
+
+        var message;
+        if(!err.data?.message){
+          message = err.message
+        }else{
+          message = err.data.message
+        }
+        toastMe('error', {
+          title: 'Error :',
+          msg: message,
+          link: false
+        })
+        return
+      })
+      let explorer = 'https://explorer.harmony.one/#/tx/'
+      let transaction = tx.hash
+
+      toastMe('info', {
+        title: 'Transaction Sent',
+        msg: "Remove Liquidity request sent to network. Waiting for confirmation",
+        link: false,
+        href: `${explorer}${transaction}`
+      })
+
+      await tx.wait(1)
+      toastMe('success', {
+        title: 'Tx Successful',
+        msg: "Explore : " + transaction,
+        link: true,
+        href: `${explorer}${transaction}`
+      })
+      
+
+
+
+
+    },
+    removeLiquidityToken: async function(token0, token1, amount){
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+      let deadline = this.getDeadline();
+
+      let tx = await contract
+      .removeLiquidity(
+        token0.oneZeroxAddress,
+        token1.oneZeroxAddress,
+        amount,
+        '10',
+        '10',
+        address,
+        deadline).catch(err => {
+
+          var message;
+          if(!err.data?.message){
+            message = err.message
+          }else{
+            message = err.data.message
+          }
+          toastMe('error', {
+            title: 'Error :',
+            msg: message,
+            link: false
+          })
+          return
+        })
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = tx.hash
+  
+        toastMe('info', {
+          title: 'Transaction Sent',
+          msg: "Remove liquidity request sent to network. Waiting for confirmation",
+          link: false,
+          href: `${explorer}${transaction}`
+        })
+        await tx.wait(1)
+        toastMe('success', {
+          title: 'Tx Successful',
+          msg: "Explore : " + transaction,
+          link: true,
+          href: `${explorer}${transaction}`
+        })
+    },
 
     addLiquidityParse: async function(token0, token1, amount0, amount1, slippage){
       if(token0.Symbol == 'ONE'){
-        this.addLiquidityETH(token0, token1, amount0, amount1, slippage)
+       await this.addLiquidityETH(token0, token1, amount0, amount1, slippage)
       }
       if(token1.Symbol == 'ONE'){
-        this.addLiquidityETH(token1, token0, amount1,  amount0, slippage)
-      }else{
-        this.addLiquidityToken(token0, token1, amount0, amount1, slippage);
+        await this.addLiquidityETH(token1, token0, amount1,  amount0, slippage)
+      }
+      if(token1.Symbol != 'ONE' && token0.Symbol != 'ONE'){
+        await this.addLiquidityToken(token0, token1, amount0, amount1, slippage);
       }
     },
+
+
     addLiquidityETH: async function(token0, token1, amount0, amount1, slippage){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -856,23 +997,13 @@ export default {
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
       
-      console.log(slippage)
-      console.log(slippage)
-      console.log(slippage)
-      
       let amountA = this.getUnits(amount0, token0)
       let valueOveride = {value: amountA}
       console.log(valueOveride.value.toString())
       let amountB = this.getUnits(amount1, token1)
-      let amountAmin = await this.calculateSlippage(amountA, '90');
-      let amountBmin = await this.calculateSlippage(amountB, '90')
+      let amountAmin = await this.calculateSlippage(amountA, slippage);
+      let amountBmin = await this.calculateSlippage(amountB, slippage)
       let deadline = this.getDeadline();
-      console.log(amountA.toString())
-      console.log(amountB.toString())
-      console.log(amountAmin.toString())
-      console.log(amountBmin.toString())
-      console.log(slippage)
-
 
       const tx = await contract
           .addLiquidityETH(
@@ -923,13 +1054,13 @@ export default {
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-/*
+
       let amountA = this.getUnits(amount0, token0)
       let amountB = this.getUnits(amount1, token1)
       let amountAmin = await this.calculateSlippage(amountA, slippage);
       let amountBmin = await this.calculateSlippage(amountB, slippage);
       let deadline = this.getDeadline();
-*/
+
       const tx = await contract
         .addLiquidity(
           token0.oneZeroxAddress,
@@ -1005,7 +1136,7 @@ export default {
         "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa", //bUSDC
         "0xE176EBE47d621b984a73036B9DA5d834411ef734", //eBUSD
         "0x985458E523dB3d53125813eD68c274899e9DfAb4", //eUSDC
-        "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f" //eUSDT
+        "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f", //eUSDT
       ]
       for(let i in stablecoins){
         if(stablecoins[i] == tokenAddress){
