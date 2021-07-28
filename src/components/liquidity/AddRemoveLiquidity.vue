@@ -29,7 +29,7 @@
         <div class="flex w-full h-10 items-center">
           <LiquidityBackButton />
             <div class="flex flex-1 h-full space-x-2 justify-end">
-              <div class="flex items-center w-28 h-full relative">
+              <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityApproveButton v-if="!token0Approved" :amount="getToken0Amount()" :token="getToken()['token1']" @set0approved="set0approved" />
                 <LiquidityApproveButton v-if="token0Approved" :amount="getToken1Amount()" :token="getToken()['token2']" @set0approved="set0approved" />
 

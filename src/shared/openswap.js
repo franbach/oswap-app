@@ -898,6 +898,7 @@ export default {
             })
             return
           })
+      if(tx !== undefined){
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
 
@@ -914,6 +915,7 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+    }
     },
     addLiquidityToken: async function(token0, token1, amount0, amount1, slippage){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -921,13 +923,13 @@ export default {
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-
+/*
       let amountA = this.getUnits(amount0, token0)
       let amountB = this.getUnits(amount1, token1)
       let amountAmin = await this.calculateSlippage(amountA, slippage);
       let amountBmin = await this.calculateSlippage(amountB, slippage);
       let deadline = this.getDeadline();
-
+*/
       const tx = await contract
         .addLiquidity(
           token0.oneZeroxAddress,
@@ -953,6 +955,7 @@ export default {
           })
           return
         })
+      if(tx !== undefined){
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
 
@@ -969,6 +972,7 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+    }
     
     },
     calculateSlippage: async function(amount, slippage) {
