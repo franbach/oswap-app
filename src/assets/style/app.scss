@@ -111,9 +111,6 @@ html {
 
 .glow-collect-all {
   background: linear-gradient(45deg, #1bf2ba, #18d5bb, #13b4ba, rgba(116, 134, 133, 0.5), #13b4ba, #18d5bb);
-  position: absolute;
-  top: 2px;
-  left: -2px;
   background-size: 400%;
   filter: blur(5px);
   width: calc(100% + 4px);
