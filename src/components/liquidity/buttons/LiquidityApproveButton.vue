@@ -50,6 +50,7 @@
 
   import { mapGetters, mapActions } from 'vuex'
   import openswap from "@/shared/openswap.js"
+  import { toastMe } from '@/components/toaster/toaster.js';
   export default {
     name: 'LiquidityApproveButton',
     mixins: [openswap],

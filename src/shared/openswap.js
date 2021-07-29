@@ -887,6 +887,7 @@ export default {
         address,
         deadline
       ).catch(err => {
+        this.setBtnState({remove: 'remove'})
 
         var message;
         if(!err.data?.message){
@@ -899,8 +900,10 @@ export default {
           msg: message,
           link: false
         })
+        
         return
       })
+      if(tx !== undefined){
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
 
@@ -918,8 +921,9 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      this.setBtnState({remove: 'removed'})
       
-
+    }
 
 
 
@@ -957,8 +961,10 @@ export default {
             msg: message,
             link: false
           })
+          this.setBtnState({remove: 'remove'})
           return
         })
+        if(tx !== undefined){
         let explorer = 'https://explorer.harmony.one/#/tx/'
         let transaction = tx.hash
   
@@ -975,6 +981,8 @@ export default {
           link: true,
           href: `${explorer}${transaction}`
         })
+        this.setBtnState({remove: 'removed'})
+      }
     },
 
     addLiquidityParse: async function(token0, token1, amount0, amount1, slippage){
@@ -1001,8 +1009,8 @@ export default {
       let valueOveride = {value: amountA}
       console.log(valueOveride.value.toString())
       let amountB = this.getUnits(amount1, token1)
-      let amountAmin = await this.calculateSlippage(amountA, slippage);
-      let amountBmin = await this.calculateSlippage(amountB, slippage)
+      let amountAmin = await this.calculateSlippage(amountA, '90');
+      let amountBmin = await this.calculateSlippage(amountB, '90')
       let deadline = this.getDeadline();
 
       const tx = await contract
@@ -1027,6 +1035,7 @@ export default {
               msg: message,
               link: false
             })
+            this.setBtnState({add: 'add'})
             return
           })
       if(tx !== undefined){
@@ -1046,6 +1055,7 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      this.setBtnState({add: 'added'})
     }
     },
     addLiquidityToken: async function(token0, token1, amount0, amount1, slippage){
@@ -1057,8 +1067,8 @@ export default {
 
       let amountA = this.getUnits(amount0, token0)
       let amountB = this.getUnits(amount1, token1)
-      let amountAmin = await this.calculateSlippage(amountA, slippage);
-      let amountBmin = await this.calculateSlippage(amountB, slippage);
+      let amountAmin = await this.calculateSlippage(amountA, '90');
+      let amountBmin = await this.calculateSlippage(amountB, '90');
       let deadline = this.getDeadline();
 
       const tx = await contract

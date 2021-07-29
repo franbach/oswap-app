@@ -119,7 +119,7 @@
         let amount0 = this.getToken0Amount()
 
         await this.removeLiquidityParse(token0, token1, amount0, this.slippageRate)
-        this.setBtnState({remove: 'removed'})
+        //this.setBtnState({remove: 'removed'})
       },
       executeAddLiquidity: async function(){
         this.setBtnState({add: 'adding'})
@@ -128,7 +128,7 @@
         let amount0 = this.getToken0Amount()
         let amount1 = this.getToken1Amount()
         await this.addLiquidityParse(token0, token1, amount0, amount1, this.slippageRate)
-        this.setBtnState({add: 'added'})
+        
       },
       setSlippage(value){
         this.slippageRate = value;
