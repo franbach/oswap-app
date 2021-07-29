@@ -72,10 +72,15 @@
 
       <div class="flex items-center h-12 pt-2 justify-between">
         <!-- Burn Fees Button -->
-        <div class="flex items-center space-x-2 pl-3 pr-1 rounded-full h-9 bg-gray-200 dark:bg-gray-600 border border-oswapGreen-dark dark:border-oswapGreen group-scope hover:bg-red-400 dark:hover:bg-red-400 hover:border-red-400 dark:hover:border-red-400 cursor-pointer">
-          <p @click="this.burnPool(this.pool)" class="text-sm text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Burn Fees</p>
-          <i class="las la-burn text-2xl text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
-        </div>
+        <tooltip-me>
+          <div @click="this.burnPool(this.pool)" class="flex items-center justify-center space-x-2 pl-3 pr-1 md:pl-0 md:pr-0 md:space-x-0 lg:space-x-0 lg:pl-0 lg:pr-0  xl:space-x-2 xl:pl-3 xl:pr-1 rounded-full h-9 sm:w-full md:w-9 lg:w-9 xl:w-full bg-gray-200 dark:bg-gray-600 border border-oswapGreen-dark dark:border-oswapGreen group-scope hover:bg-red-400 dark:hover:bg-red-400 hover:border-red-400 dark:hover:border-red-400 cursor-pointer">
+            <p class="block md:hidden xl:block text-sm text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Burn Fees</p>
+            <i class="las la-burn text-2xl text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
+          </div>  
+          <tooltip-me-content :options="tooltip" class="flex w-24 p-2 px-3 rounded-lg shadow-lg text-sm">
+            <p class="text-gray-500 dark:text-oswapDark-gray">Burn Fees</p>
+          </tooltip-me-content>
+        </tooltip-me>
         <!-- Unstake Button -->
         <div @click="this.$emit('setPool', 'unstake')" class="flex items-center space-x-2 pl-3 pr-1 rounded-full h-9 bg-gray-200 group-scope dark:bg-gray-600 hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
           <p class="text-sm text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Unstake</p>
