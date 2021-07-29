@@ -13,12 +13,14 @@
             </InputWithValidation>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-3 pb-3 px-3">
-            <div class="flex flex-col justify-between h-12">
-              <div class="flex items-center space-x-2">
+            <div class="flex h-12 space-x-2">
+              <div class="flex items-start h-full">
                 <i class="las la-coins text-xl text-oswapGreen"></i>
-                <p class="text-xs text-oswapBlue-light">LP Tokens Staked</p>
               </div>
-              <p class="text-xl dark:text-gray-300">{{parseFloat(maxAmount).toFixed(6)}}</p>
+              <div class="flex flex-col h-full justify-between">
+                <p class="text-xs text-oswapBlue-light">LP Tokens Staked</p>
+                <p class="text-lg dark:text-gray-400">{{parseFloat(maxAmount).toFixed(6)}}</p>
+              </div>
             </div>
             <div class="flex items-center justify-end">
               <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
