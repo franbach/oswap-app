@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col flex-1 space-y-3">
     <div class="flex flex-1 space-x-3">
-      <InputWithValidation :key="amount0" :input="amount0" :errors="error0" @catchInput="inputAmount0" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+      <InputWithValidation @click="setInputClicked('1')" :input="amount0" :errors="error0" @catchInput="inputAmount0" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token0.Symbol}}</p>
       </InputWithValidation>
       <div v-if="pair" @click="setMax0()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="flex flex-1 space-x-3">
-      <InputWithValidation :key="amount1" :input="amount1" :errors="error1" @catchInput="inputAmount1" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+      <InputWithValidation @click="setInputClicked('2')" :input="amount1" :errors="error1" @catchInput="inputAmount1" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token1.Symbol}}</p>
       </InputWithValidation>
       <div v-if="pair" @click="setMax1()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
@@ -41,6 +41,7 @@
       return {
         amount0: '1.0',
         amount1: '0.0',
+        clickedInput: null,
         pair: null,
         error0: {},
         error1: {},
@@ -65,29 +66,38 @@
       },
 
       inputAmount0: async function(value){
-        
+        if(this.clickedInput == '1'){
         this.amount0 = value;
         this.amount1 =  await this.getToken1Amount();
         this.manageError0Input(value, this.balances.token0)   
         this.manageError1Input(value, this.balances.token1)
         this.setToken0Amount(value);
         this.setToken1Amount(this.amount1);
+        }
       },
       inputAmount1:async function(value){
+        if(this.clickedInput == '2'){
         this.amount1 = value;
         this.amount0 =  await this.getToken0Amount();
         this.manageError1Input(value, this.balances.token1) 
         this.manageError0Input(value, this.balances.token0)
         this.setToken1Amount(value);
-        this.setToken0Amount(this.amount0);  
+        this.setToken0Amount(this.amount0);
+        }
+          
           
       },
+      setInputClicked: function(value){
+        this.clickedInput = value
+      },
       setMax0: async function() {
+        this.clickedInput = '1'
         this.inputAmount0(String(this.balances.token0))
         
         
       },
       setMax1: async function() {
+        this.clickedInput = '2'
         this.inputAmount1(String(this.balances.token1))
       },
       manageError0Input(value,balance){

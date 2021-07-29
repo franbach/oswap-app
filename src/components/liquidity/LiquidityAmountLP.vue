@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col flex-1 space-y-3">
     <div class="flex flex-1 space-x-3">
-      <InputWithValidation :key="amount" :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+      <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token0.Symbol}}/{{token1.Symbol}}</p>
       </InputWithValidation>
       <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
@@ -43,9 +43,12 @@
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('liquidity/buttons', ['setBtnState']),
+      ...mapActions('liquidity/amounts', ['setToken0Amount']),
       inputAmount: async function(value){
         this.amount = value;
         var balance = this.balances.lpToken
+
+        this.setToken0Amount(value);
 
         if (!value.match(/^\d*\.?\d*$/)) {
           this.errors['format'] = 'Invalid format! e.g: 12345.678';
