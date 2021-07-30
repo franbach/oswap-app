@@ -280,7 +280,9 @@ export default {
 
       const contract = new ethers.Contract(token1.oneZeroxAddress, abi, signer);
 
-      const tx = await contract.approve(contractAddr, wei)
+      const tx = await contract.approve(contractAddr, wei).catch( error => {
+        throw error
+      })
       return tx;
     },
     checkAllowance: async function(token1, contractAddr){
@@ -920,7 +922,7 @@ export default {
         msg: "Explore : " + transaction,
         link: true,
         href: `${explorer}${transaction}`
-      })
+      }) 
       this.setBtnState({remove: 'removed'})
       
     }
@@ -964,7 +966,8 @@ export default {
           this.setBtnState({remove: 'remove'})
           return
         })
-        if(tx !== undefined){
+        console.log(tx)
+        if(tx != undefined){
         let explorer = 'https://explorer.harmony.one/#/tx/'
         let transaction = tx.hash
   
@@ -1038,7 +1041,7 @@ export default {
             this.setBtnState({add: 'add'})
             return
           })
-      if(tx !== undefined){
+      if(tx != undefined){
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
 
@@ -1094,6 +1097,7 @@ export default {
             msg: message,
             link: false
           })
+          this.setBtnState({add: 'add'})
           return
         })
       if(tx !== undefined){
@@ -1113,6 +1117,7 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      this.setBtnState({add: 'added'})
     }
     
     },

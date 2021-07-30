@@ -31,7 +31,7 @@
             <div class="flex flex-1 h-full space-x-2 justify-end">
               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityApproveButton v-if="!token0Approved" :amount="getToken0Amount()" :token="getToken()['token1']" @set0approved="set0approved" />
-                <LiquidityApproveButton v-if="token0Approved" :amount="getToken1Amount()" :token="getToken()['token2']" @set0approved="set0approved" />
+                <LiquidityApproveButton v-if="token0Approved" :amount="getToken1Amount()" :token="getToken()['token2']" @set0approved="set0approved" :token0Approved="token0Approved" />
 
               </div>
               <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
@@ -119,7 +119,7 @@
         let amount0 = this.getToken0Amount()
 
         await this.removeLiquidityParse(token0, token1, amount0, this.slippageRate)
-        //this.setBtnState({remove: 'removed'})
+        
       },
       executeAddLiquidity: async function(){
         this.setBtnState({add: 'adding'})
