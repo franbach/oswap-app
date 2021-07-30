@@ -67,8 +67,7 @@
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
       getTotalPending: async function(){
-        //console.log(this.farmData[n][2]['value'])
-        console.log(this.farmData)
+
         
         for (var n in this.farmData) {
           this.rewardsPending = this.rewardsPending + this.farmData[n][0][2]['value']

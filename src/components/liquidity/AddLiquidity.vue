@@ -20,14 +20,6 @@
         <LiquidityAmount v-if="token1" :token0="token0" :token1="token1" :balances="balances"/>
         <LiquidityRate @setSlippageRate="setSlippage"/>
         <div class="flex flex-wrap space-x-1 text-xs px-1">
-          <p>You will need 1</p>
-          <p class="text-oswapGreen">
-            {{this.getToken()['token1'].Symbol}}
-          </p>
-          <p>and 6.388241105327963516</p>
-          <p class="text-oswapGreen">
-            {{this.getToken()['token2'].Symbol}}
-          </p>
         </div>
       </div>
     </div>

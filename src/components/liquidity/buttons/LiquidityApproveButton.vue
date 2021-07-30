@@ -62,11 +62,13 @@
     mounted: async function() {
       if (this.token.oneZeroxAddress == this.WONE()) {
         this.setBtnState({approve: 'approved'});
+        this.setBtnState({remove: 'remove'});
         this.$emit("set0approved", true);
         
       } else {
         this.setBtnState({approve: 'approving'});
         this.setBtnState({add: 'disabled'});
+        this.setBtnState({remove: 'disabled'});
         let routerAddr = this.UNIROUTERV2();
         let parsedInput = this.getUnits(this.amount, this.token);
         let allowance = await this.checkAllowance(this.token, routerAddr);
@@ -75,12 +77,14 @@
         if (isAllowanceSufficient) {
           
           this.setBtnState({approve: 'approved'});
+          this.setBtnState({remove: 'remove'});
           
           this.$emit("set0approved", true);
 
         } else {
           // Ready to approve (Pen Icon)
           this.setBtnState({add: 'disabled'});
+          this.setBtnState({remove: 'disabled'});
           this.setBtnState({approve: 'approve'});
         }
 
@@ -88,10 +92,12 @@
 
       }
       if(this.token0Approved || this.getBtnState({approve: 'approved'})){   
-            this.setBtnState({add: 'add'})    
+            this.setBtnState({add: 'add'})
+            this.setBtnState({remove: 'remove'});  
       }
       if(this.getBtnState({approve: 'approve'})){
           this.setBtnState({add: 'disabled'})
+          this.setBtnState({remove: 'disabled'});
       }
     },
     
@@ -129,7 +135,8 @@
         })
         this.setBtnState({approve: 'approved'})
         if(this.token0Approved || this.getBtnState({approve: 'approved'})){   
-            this.setBtnState({add: 'add'})    
+            this.setBtnState({add: 'add'})   
+            this.setBtnState({remove: 'remove'}); 
       }
         this.$emit("set0approved", true);
 
