@@ -127,10 +127,7 @@
 
         for (var n in pools) {
           
-          //SKIP PID 8, 11, 12
-          if (i == 8 || i == 11 ||i == 12 ) {
-            i++;
-          }
+
           //LP Balance CALLS
           CALL.push(
             {

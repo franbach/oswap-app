@@ -20,6 +20,16 @@ export default {
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     ...mapActions('exchange/swapper', ['setBtnState']),
     ...mapActions('liquidity/buttons', ['setBtnState']),
+    getProvider: function(){
+      if(this.getUserSignedIn()){
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        return provider
+      }
+      else{
+        const provider =  new ethers.providers.JsonRpcProvider("https://api.harmony.one", {chainId: 1666600000, name: "Harmony"})
+        return provider
+      }
+    },
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -58,7 +68,7 @@ export default {
           type: "function"
         }
       ];
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const userAddress = this.getUserAddress();
 
       if (token.oneZeroxAddress == this.WONE()) {
@@ -81,7 +91,7 @@ export default {
 
     },
     getAllRewards: async function () {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const address = this.getUserAddress();
       if (address != "0x0000000000000000000000000000000000000003") {
         var i = 0, n;
@@ -115,7 +125,7 @@ export default {
     },
     getSingleRewards: async function(){
       var totalUnclaimedRewards = ethers.BigNumber.from("0");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const address = this.getUserAddress();
       const abi = MasterChef.abi;
       const masterChef = this.oSWAPCHEF();
@@ -158,7 +168,7 @@ export default {
 
 
 
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const provider = this.getProvider()
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
@@ -185,7 +195,7 @@ export default {
       
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
       const pid = parseInt(pool.pid)
@@ -226,7 +236,7 @@ export default {
       
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
       const pid = parseInt(pool.pid)
@@ -286,7 +296,7 @@ export default {
       return tx;
     },
     checkAllowance: async function(token1, contractAddr){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const address = this.getUserAddress();
       const abi = IERC20.abi;
       const contract = new ethers.Contract(token1.oneZeroxAddress, abi, provider);
@@ -573,7 +583,7 @@ export default {
       return trade;
     },
     getOswapPerBlock: async function(){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const abi = MasterChef.abi;
       const contract = new ethers.Contract(this.oSWAPCHEF(), abi, provider);
 
@@ -1133,7 +1143,7 @@ export default {
     //----------------------------------------Utils------------------------------------------
     getDeadline: function(){
       var deadline = new Date();
-      deadline = parseInt(deadline / 1000) + 480;calculateSlippage
+      deadline = parseInt(deadline / 1000) + 480;
       return deadline;
     },
     getStakeWeight: function(staked, totalStaked) {
