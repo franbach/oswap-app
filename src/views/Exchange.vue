@@ -21,7 +21,7 @@
     <!-- Swapper -->
     <transition name="horizontal" appear>
       <div v-if="this.getStepState('swapper')" class="absolute">
-        <Swapper />
+        <Swapper :key="forceR" @reload="reload"/>
       </div>
     </transition>
 
@@ -45,7 +45,8 @@
     },
     data() {
       return {
-        whichToken: ''
+        whichToken: '',
+        forceR: 0 
       }
     },
     computed: {
@@ -53,7 +54,9 @@
     },
     methods: {
       ...mapActions('exchange', ['goTo']),
-
+      reload(value){
+       this.forceR++
+      },
       // Open the modal for token selection.
       // It sends info to the modal of which token is being
       // selected(token1 or token2) through :whichToken binding.

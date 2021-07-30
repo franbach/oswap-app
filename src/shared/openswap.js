@@ -20,6 +20,16 @@ export default {
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     ...mapActions('exchange/swapper', ['setBtnState']),
     ...mapActions('liquidity/buttons', ['setBtnState']),
+    getProvider: function(){
+      if(this.getUserSignedIn()){
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        return provider
+      }
+      else{
+        const provider =  new ethers.providers.JsonRpcProvider("https://api.harmony.one", {chainId: 1666600000, name: "Harmony"})
+        return provider
+      }
+    },
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = await Fetcher.fetchTokenData(
@@ -58,14 +68,14 @@ export default {
           type: "function"
         }
       ];
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const userAddress = this.getUserAddress();
 
       if (token.oneZeroxAddress == this.WONE()) {
         const balance = await provider.getBalance(userAddress);
 
         let unformatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
-        let formatedbalance = (unformatedbalance / 1).toFixed(5)
+        let formatedbalance = (unformatedbalance / 1).toFixed(8)
 
         return formatedbalance;
       } else {
@@ -73,7 +83,7 @@ export default {
         const balance = await contract
             .balanceOf(userAddress)
         let unformatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
-        let formatedbalance = (unformatedbalance / 1).toFixed(5)
+        let formatedbalance = (unformatedbalance / 1).toFixed(8)
 
         return formatedbalance;
       }
@@ -81,7 +91,7 @@ export default {
 
     },
     getAllRewards: async function () {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const address = this.getUserAddress();
       if (address != "0x0000000000000000000000000000000000000003") {
         var i = 0, n;
@@ -115,7 +125,7 @@ export default {
     },
     getSingleRewards: async function(){
       var totalUnclaimedRewards = ethers.BigNumber.from("0");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const address = this.getUserAddress();
       const abi = MasterChef.abi;
       const masterChef = this.oSWAPCHEF();
@@ -158,7 +168,7 @@ export default {
 
 
 
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const provider = this.getProvider()
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
             const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
@@ -185,7 +195,7 @@ export default {
       
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
       const pid = parseInt(pool.pid)
@@ -226,7 +236,7 @@ export default {
       
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
       const pid = parseInt(pool.pid)
@@ -280,11 +290,13 @@ export default {
 
       const contract = new ethers.Contract(token1.oneZeroxAddress, abi, signer);
 
-      const tx = await contract.approve(contractAddr, wei)
+      const tx = await contract.approve(contractAddr, wei).catch( error => {
+        throw error
+      })
       return tx;
     },
     checkAllowance: async function(token1, contractAddr){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const address = this.getUserAddress();
       const abi = IERC20.abi;
       const contract = new ethers.Contract(token1.oneZeroxAddress, abi, provider);
@@ -428,9 +440,9 @@ export default {
       if (
         pair["tokenAmounts"][0].currency.address != token1.oneZeroxAddress
       ) {
-        rate = pair.token1Price.toFixed(5);
+        rate = pair.token1Price.toFixed(8);
       } else {
-        rate = pair.token0Price.toFixed(5);
+        rate = pair.token0Price.toFixed(8);
       }
 
       return rate;
@@ -440,12 +452,12 @@ export default {
       if (
         pair["tokenAmounts"][0].currency.address != token1.oneZeroxAddress
       ) {
-        reserves[1] = ethers.utils.commify(pair.reserve0.toFixed(2));
-        reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(2));
+        reserves[1] = ethers.utils.commify(pair.reserve0.toFixed(8));
+        reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(8));
       } else {
-        reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(2));
+        reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(8));
 
-        reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(2));
+        reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(8));
       }
 
       return reserves;
@@ -571,7 +583,7 @@ export default {
       return trade;
     },
     getOswapPerBlock: async function(){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = this.getProvider()
       const abi = MasterChef.abi;
       const contract = new ethers.Contract(this.oSWAPCHEF(), abi, provider);
 
@@ -920,7 +932,7 @@ export default {
         msg: "Explore : " + transaction,
         link: true,
         href: `${explorer}${transaction}`
-      })
+      }) 
       this.setBtnState({remove: 'removed'})
       
     }
@@ -964,7 +976,8 @@ export default {
           this.setBtnState({remove: 'remove'})
           return
         })
-        if(tx !== undefined){
+        console.log(tx)
+        if(tx != undefined){
         let explorer = 'https://explorer.harmony.one/#/tx/'
         let transaction = tx.hash
   
@@ -1038,7 +1051,7 @@ export default {
             this.setBtnState({add: 'add'})
             return
           })
-      if(tx !== undefined){
+      if(tx != undefined){
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
 
@@ -1094,6 +1107,7 @@ export default {
             msg: message,
             link: false
           })
+          this.setBtnState({add: 'add'})
           return
         })
       if(tx !== undefined){
@@ -1113,6 +1127,7 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      this.setBtnState({add: 'added'})
     }
     
     },
@@ -1171,7 +1186,7 @@ export default {
       let slippageTolerence = new Percent(String(parseFloat(slippageRate)*10), "1000");
       let amountOut = trade
                       .minimumAmountOut(slippageTolerence)
-                      .toSignificant(token2.decimals);
+                      .toSignificant(8);
       
       return amountOut;
 

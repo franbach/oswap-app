@@ -71,10 +71,10 @@
     mounted: async function() {},
 
     methods: {
+      
       ...mapGetters('exchange', ['getToken']),
-      ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
-
       stake() {
+
         this.stakeLP(this.pool, this.amount);
       }
     }
