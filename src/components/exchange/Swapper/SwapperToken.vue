@@ -10,8 +10,8 @@
         <p class="text-xs dark:text-oswapGreen-dark">Balance</p>
         <p class=" text-gray-600 dark:text-gray-300">{{balance}}</p>
         <div class="flex h-3">
-          <p v-if="whichToken == 'token1'" class="text-xs text-oswapBlue-light"> - {{balanceOut}}</p>
-          <p v-if="whichToken == 'token2'" class="text-xs text-oswapGreen"> {{balanceIn}}</p>
+          <p v-if="whichToken == 'token1'" class="text-300 text-oswapBlue-light"> - {{balanceOut}}</p>
+          <p v-if="whichToken == 'token2'" class="text-300 text-oswapGreen"> {{balanceIn}}</p>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
         let amount = parseFloat(value)
 
         if (this.whichToken == 'token1') {
-          amount < balance ? this.balanceOut = (amount).toFixed(5) : this.balanceOut = '-'
+          amount < balance ? this.balanceOut = (amount).toFixed(8) : this.balanceOut = '-'
         }
         
         if (this.whichToken == 'token2') {

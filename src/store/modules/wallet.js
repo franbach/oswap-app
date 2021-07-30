@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 
 export default {
   namespaced: true,
@@ -6,7 +7,7 @@ export default {
     signedIn: false,
     signedOut: false,
     address: "0x0000000000000000000000000000000000000003",
-    wallet: [],
+    wallet: null,
     explorer: "https://explorer.harmony.one/#/tx/"
   },
   mutations: {
@@ -31,12 +32,7 @@ export default {
   		return state.signedOut;
   	},
   	getUserAddress: (state) => {
-  		if(state.signedIn == true){
-  			return state.address;
-  		}else{
-  			return;
-  		}
-  		
+  		return state.address
   	},
   	getWallet: (state) => {
   		return state.wallet;

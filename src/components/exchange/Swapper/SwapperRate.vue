@@ -86,11 +86,11 @@
         let units = this.getUnits(this.amount, token1)
         let bestRoute = await this.getBestRoute(units, token1, token2)
         
-        this.mRate = bestRoute.route.midPrice.toFixed(4);
-        this.cRate = bestRoute.executionPrice.toFixed(4);
-        this.nRate = bestRoute.nextMidPrice.toFixed(4);
+        this.mRate = bestRoute.route.midPrice.toFixed(8);
+        this.cRate = bestRoute.executionPrice.toFixed(8);
+        this.nRate = bestRoute.nextMidPrice.toFixed(8);
         this.pImpact = bestRoute.priceImpact.toFixed(2);
-        this.inputAmount = await bestRoute.inputAmount.toFixed(5)
+        this.inputAmount = await bestRoute.inputAmount.toFixed(8)
         this.outputAmount = await this.getAmountOutWithSlippage(this.amount, bestRoute, this.selectedRate, token1, token2)
         let path = this.getPath(bestRoute);
 
