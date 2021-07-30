@@ -65,7 +65,7 @@ export default {
         const balance = await provider.getBalance(userAddress);
 
         let unformatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
-        let formatedbalance = (unformatedbalance / 1).toFixed(5)
+        let formatedbalance = (unformatedbalance / 1).toFixed(8)
 
         return formatedbalance;
       } else {
@@ -73,7 +73,7 @@ export default {
         const balance = await contract
             .balanceOf(userAddress)
         let unformatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
-        let formatedbalance = (unformatedbalance / 1).toFixed(5)
+        let formatedbalance = (unformatedbalance / 1).toFixed(8)
 
         return formatedbalance;
       }
@@ -430,9 +430,9 @@ export default {
       if (
         pair["tokenAmounts"][0].currency.address != token1.oneZeroxAddress
       ) {
-        rate = pair.token1Price.toFixed(5);
+        rate = pair.token1Price.toFixed(8);
       } else {
-        rate = pair.token0Price.toFixed(5);
+        rate = pair.token0Price.toFixed(8);
       }
 
       return rate;
@@ -442,12 +442,12 @@ export default {
       if (
         pair["tokenAmounts"][0].currency.address != token1.oneZeroxAddress
       ) {
-        reserves[1] = ethers.utils.commify(pair.reserve0.toFixed(2));
-        reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(2));
+        reserves[1] = ethers.utils.commify(pair.reserve0.toFixed(8));
+        reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(8));
       } else {
-        reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(2));
+        reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(8));
 
-        reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(2));
+        reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(8));
       }
 
       return reserves;
@@ -1133,7 +1133,7 @@ export default {
     //----------------------------------------Utils------------------------------------------
     getDeadline: function(){
       var deadline = new Date();
-      deadline = parseInt(deadline / 1000) + 480;
+      deadline = parseInt(deadline / 1000) + 480;calculateSlippage
       return deadline;
     },
     getStakeWeight: function(staked, totalStaked) {
@@ -1176,7 +1176,7 @@ export default {
       let slippageTolerence = new Percent(String(parseFloat(slippageRate)*10), "1000");
       let amountOut = trade
                       .minimumAmountOut(slippageTolerence)
-                      .toSignificant(token2.decimals);
+                      .toSignificant(8);
       
       return amountOut;
 
