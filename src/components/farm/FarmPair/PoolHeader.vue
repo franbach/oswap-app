@@ -15,7 +15,7 @@
         <p class="text-xs text-oswapBlue-light">{{pool.pair}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content :options="tooltip"
+          <tooltip-me-content :options="setTooltip"
             class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
@@ -65,19 +65,56 @@ import { ethers } from "ethers";
     data() {
       return {
         tooltip: {
-          name: 'staked',
+          name: new Date().getTime(),
           position: 'top',
           color: 'rgba(24, 213, 187, 0.9)',
           offset: 16,
-          speed: 300
+          speed: 300,
+          shift: 50
         },
+        ttpObj: null,
+        ttpRec: null,
         tt0s: '?',
         tt1s: '?',
         tas: '?',
         rewards: null
       } 
     },
-    mounted: async function(){
+    mounted: async function() {
+      this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
+      this.ttpRec = this.ttpObj.getBoundingClientRect();
+
+      window.addEventListener('resize', () => {
+        let width = this.getWindowSize().width;
+        let xMiddle = width / 2;
+
+        // for tooltips at the middle left
+        if ((this.ttpRec.width / 2) + this.ttpRec.left < xMiddle) {
+          console.log('its on the left!')
+          // we need to confirm that the tooltip is overflowing
+          // the window, otherwise just ignore.
+          if (this.ttpRec.left > 0 && this.ttpRec.right < width) {
+            this.tooltip.shift = 50;
+          } else {
+            if (this.ttpRec.left < 0) {
+              this.tooltip.shift = 25;
+            }
+          }
+        }
+        // for tooltips at the middle right
+        if ((this.ttpRec.width / 2) + this.ttpRec.left > xMiddle) {
+          // we need to confirm that the tooltip is overflowing
+          // the window, otherwise just ignore.
+          if (this.ttpRec.right < width && this.ttpRec.left > 0) {
+            this.tooltip.shift = 50;
+          } else {
+            if (this.ttpRec.right > width) {
+              this.tooltip.shift = 75;
+            }
+          }
+        }
+      });
+
       var valueData = await this.getTokenAmounts(
         this.pool,
         String(this.poolData[4]['value']),
@@ -93,5 +130,18 @@ import { ethers } from "ethers";
       var rewardValue = await this.getRewardValue(this.pool, 100)   
       this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
     },
+    methods: {
+      getWindowSize() {
+        return {
+          height: window.innerHeight,
+          width: window.innerWidth
+        }
+      }
+    },
+    computed: {
+      setTooltip() {
+        return this.tooltip;
+      }
+    }
   }
 </script>
