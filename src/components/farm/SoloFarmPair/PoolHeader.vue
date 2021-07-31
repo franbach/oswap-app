@@ -12,7 +12,7 @@
         <p class="text-xs text-oswapBlue-light">{{pool.token}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content :options="tooltip" 
+          <tooltip-me-content :options="this.tooltip" 
             class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
@@ -56,21 +56,71 @@
     data() {
       return {
         tooltip: {
-          name: 'staked',
+          name: new Date().getTime(),
           position: 'top',
           color: 'rgba(24, 213, 187, 0.9)',
           offset: 16,
-          speed: 300
+          speed: 300,
+          shift: 50
         },
+        ttpObj: null,
+        ttpRec: null,
         tas: '?',
         rewards: null
       } 
     },
-    mounted: async function(){
+    mounted: async function() {
+      // Grabs the tooltip element
+      this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
+      // Format the tooltip the first time
+      this.adjustTooltip();
+      // Format the tooltip when the user resizes the browser
+      window.addEventListener('resize', () => {
+        this.adjustTooltip();
+      });
+
       this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
       var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
       var rewardValue = await this.getRewardValue(this.pool, 100)
       this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
     },
+    methods: {
+      getWindowSize() {
+        return {
+          height: window.innerHeight,
+          width: window.innerWidth
+        }
+      },
+      adjustTooltip() {
+        // gets the tooltip location bounduary
+        this.ttpRec = this.ttpObj.getBoundingClientRect();
+        // find the middle of the window
+        let width = this.getWindowSize().width;
+        let xMiddle = width / 2;
+
+        // screen size from 0 - 1020
+        if (width > 0 && width < 800) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 50
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else if (width > 800 && width < 1200) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 30
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else {
+          this.tooltip.shift = 50
+        }
+      }
+    }
   }
 </script>

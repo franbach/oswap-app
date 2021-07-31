@@ -15,7 +15,7 @@
         <p class="text-xs text-oswapBlue-light">{{pool.pair}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content :options="setTooltip"
+          <tooltip-me-content :options="this.tooltip"
             class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
@@ -81,38 +81,13 @@ import { ethers } from "ethers";
       } 
     },
     mounted: async function() {
+      // Grabs the tooltip element
       this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
-      this.ttpRec = this.ttpObj.getBoundingClientRect();
-
+      // Format the tooltip the first time
+      this.adjustTooltip();
+      // Format the tooltip when the user resizes the browser
       window.addEventListener('resize', () => {
-        let width = this.getWindowSize().width;
-        let xMiddle = width / 2;
-
-        // for tooltips at the middle left
-        if ((this.ttpRec.width / 2) + this.ttpRec.left < xMiddle) {
-          console.log('its on the left!')
-          // we need to confirm that the tooltip is overflowing
-          // the window, otherwise just ignore.
-          if (this.ttpRec.left > 0 && this.ttpRec.right < width) {
-            this.tooltip.shift = 50;
-          } else {
-            if (this.ttpRec.left < 0) {
-              this.tooltip.shift = 25;
-            }
-          }
-        }
-        // for tooltips at the middle right
-        if ((this.ttpRec.width / 2) + this.ttpRec.left > xMiddle) {
-          // we need to confirm that the tooltip is overflowing
-          // the window, otherwise just ignore.
-          if (this.ttpRec.right < width && this.ttpRec.left > 0) {
-            this.tooltip.shift = 50;
-          } else {
-            if (this.ttpRec.right > width) {
-              this.tooltip.shift = 75;
-            }
-          }
-        }
+        this.adjustTooltip();
       });
 
       var valueData = await this.getTokenAmounts(
@@ -136,12 +111,37 @@ import { ethers } from "ethers";
           height: window.innerHeight,
           width: window.innerWidth
         }
-      }
-    },
-    computed: {
-      setTooltip() {
-        return this.tooltip;
-      }
+      },
+      adjustTooltip() {
+        // gets the tooltip location bounduary
+        this.ttpRec = this.ttpObj.getBoundingClientRect();
+        // find the middle of the window
+        let width = this.getWindowSize().width;
+        let xMiddle = width / 2;
+
+        // screen size from 0 - 1020
+        if (width > 0 && width < 800) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 50
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else if (width > 800 && width < 1200) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 30
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else {
+          this.tooltip.shift = 50
+        }
+      } 
     }
   }
 </script>
