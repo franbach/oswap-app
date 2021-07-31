@@ -98,7 +98,7 @@
         let width = this.getWindowSize().width;
         let xMiddle = width / 2;
 
-        // screen size from 0 - 1020
+        // screen size from 0 - 800
         if (width > 0 && width < 800) {
           // for tooltips at the middle left
           if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
