@@ -60,7 +60,8 @@
     },
     methods: {
       setPool() {
-        this.$emit('setPool', 'open')
+        this.$emit('setPool', 'open');
+        this.oswapEmit.emit("recalc-tooltips");
       }
     }
   }

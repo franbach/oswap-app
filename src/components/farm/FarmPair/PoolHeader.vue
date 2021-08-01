@@ -89,6 +89,11 @@ import { ethers } from "ethers";
       window.addEventListener('resize', () => {
         this.adjustTooltip();
       });
+      // When the user clicks top open the farm pair details
+      // we must recalc tooltips again
+      this.oswapEmit.on('recalc-tooltips', () => {
+        this.adjustTooltip();
+      });
 
       var valueData = await this.getTokenAmounts(
         this.pool,

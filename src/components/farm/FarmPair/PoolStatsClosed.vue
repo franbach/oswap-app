@@ -63,15 +63,8 @@
     methods: {
       setPool() {
         this.$emit('setPool', 'open');
+        this.oswapEmit.emit("recalc-tooltips");
       }
     }
   }
 </script>
-
-<style>
-  .text-el {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-</style>

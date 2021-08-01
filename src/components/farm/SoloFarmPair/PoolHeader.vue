@@ -78,6 +78,11 @@
       window.addEventListener('resize', () => {
         this.adjustTooltip();
       });
+      // When the user clicks top open the farm pair details
+      // we must recalc tooltips again
+      this.oswapEmit.on('recalc-tooltips', () => {
+        this.adjustTooltip();
+      });
 
       this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
       var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))

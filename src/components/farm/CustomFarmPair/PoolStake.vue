@@ -12,8 +12,8 @@
               <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.pair}}</p>
             </InputWithValidation>
           </div>
-          <div class="grid grid-cols-2 gap-3 pt-3 pb-3 px-3">
-            <div class="flex h-12 space-x-2">
+          <div class="grid grid-cols-3 gap-3 pt-3 pb-3 px-3">
+            <div class="flex col-span-2 h-12 space-x-2">
               <div class="flex items-start h-full">
                 <i class="las la-coins text-xl text-oswapGreen"></i>
               </div>

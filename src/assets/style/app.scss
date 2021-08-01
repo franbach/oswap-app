@@ -9,6 +9,12 @@ $la-font-path: "~line-awesome/dist/line-awesome/fonts" !default;
 @import './toast.scss';
 @import './animations.scss';
 
+.text-el {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .center-component {
   position: absolute;
   top: 50%;
