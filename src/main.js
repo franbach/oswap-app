@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import TooltipMe from 'tooltip-me'
+import mitt from 'mitt'
 
 import Toast from "vue-toastification";
 const options = {
@@ -10,6 +11,7 @@ const options = {
   maxToasts: 20,
   newestOnTop: true
 };
+
 
 import PerfectScrollbar from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
@@ -20,6 +22,8 @@ import "@fontsource/alata"
 import 'animate.css';
 
 const app = createApp(App)
+const emitter = mitt();
+app.config.globalProperties.oswapEmit = emitter;
 
 app.use(router);
 app.use(store);
