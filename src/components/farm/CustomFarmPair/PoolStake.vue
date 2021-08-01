@@ -33,7 +33,7 @@
       </div>
       <div class="flex justify-between items-center mb-0.5 h-9">
         <!-- back to Stats -->
-        <div @click="this.$emit('setPool', 'stats')" class="flex h-9 items-center space-x-2 md:space-x-0 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 md:pr-0 cursor-pointer">
+        <div @click="this.$emit('setPool', 'stats')" class="flex h-9 items-center space-x-2 md:space-x-0 xl:space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 md:pr-0 xl:pr-3 cursor-pointer">
           <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
           <p class="block md:hidden xl:block text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
