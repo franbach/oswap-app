@@ -31,58 +31,63 @@
           </div>
         </div>
       </div>
-      <div class="flex items-end h-12 justify-between">
-
-
-       
-
-      
-     
-            <!-- back to Stats -->
-            <div @click="this.$emit('setPool', 'stats')" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 cursor-pointer">
-              <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
-              <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
-            </div>
-            <!-- Unstake Button -->
-             <!-- Stake -->
-              <transition tag="div" name="approve-btn" class="inline-block absolute">
-                <div @click="unstake()" v-if="buttonState == 'active'" class="flex w-22 group-scope">
-                  <div class="grab-attention-glowing"></div>
-                  <div class="grab-attention cursor-pointer">
-                    <div class="flex items-center justify-right">
-                      <p class="text-sm ml-5 text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray">Unstake</p>
-                    </div>
-                    <i class="las la-upload text-xl pr-5 text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
-                  </div>
-                </div>
-              </transition>
-
-              <!-- Staking -->
-              <transition tag="div" name="swap-btn" class="inline-block absolute">
-                <div v-if="buttonState == 'executing'" class="flex w-22 group-scope">
-                  <div class="grab-attention-glowing"></div>
-                  <div class="grab-attention cursor-wait">
-                    <div class="flex flex-1 items-center justify-right">
-                      <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray">Staking</p>
-                    </div>
-                    <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
-                  </div>
-                </div>
-              </transition>
-
-               <!-- Staked -->
-      <transition tag="div" name="approve-btn" class="inline-block absolute">
-        <div v-if="buttonState == 'finished'" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
-          <div class="flex flex-1 items-center justify-right">
-            <p class="text-sm text-oswapGreen">Staked</p>
-          </div>
-          <i class="las la-check-circle text-xl text-oswapGreen"></i>
-        </div> 
-      </transition>
-
-          </div>
+      <div class="flex justify-between items-center mb-0.5 h-9">
+        <!-- back to Stats -->
+        <div @click="this.$emit('setPool', 'stats')" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 cursor-pointer">
+          <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
+          <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
-      </transition>
+        
+        <div class="flex items-center w-28 h-full relative">
+          <!-- Unstake Disabled -->
+          <transition tag="div" name="approve-btn" class="inline-block absolute">
+            <div v-if="buttonState == 'disabled'" class="flex w-28 h-9 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group-scope dark:bg-gray-700 bg-gray-200 select-none">
+              <div class="flex flex-1 items-center justify-center">
+                <p class="text-sm text-gray-300 dark:text-gray-600">Unstake</p>
+              </div>
+              <i class="las la-times-circle text-xl text-gray-300 dark:text-gray-600"></i>
+            </div>
+          </transition>
+
+          <!-- Unstake -->
+          <transition tag="div" name="approve-btn" class="inline-block absolute">
+            <div @click="unstake()" v-if="buttonState == 'active'" class="flex w-28 group-scope">
+              <div class="grab-attention-glowing"></div>
+              <div class="grab-attention cursor-pointer">
+                <div class="flex flex-1 items-center justify-center">
+                  <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray">Unstake</p>
+                </div>
+                <i class="las las la-download text-xl text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
+              </div>
+            </div>
+          </transition> 
+
+          <!-- Unstaking -->
+          <transition tag="div" name="swap-btn" class="inline-block absolute">
+            <div v-if="buttonState == 'executing'" class="flex w-28 group-scope">
+              <div class="grab-attention-glowing"></div>
+              <div class="grab-attention cursor-wait">
+                <div class="flex flex-1 items-center justify-right">
+                  <p class="text-sm text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray">Unstaking</p>
+                </div>
+                <i class="las la-sync text-xl animate-spin text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
+              </div>
+            </div>
+          </transition>
+
+          <!-- Unstaked -->
+          <transition tag="div" name="approve-btn" class="inline-block absolute">
+            <div v-if="buttonState == 'finished'" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
+              <div class="flex flex-1 items-center justify-right">
+                <p class="text-sm text-oswapGreen">Staked</p>
+              </div>
+              <i class="las la-check-circle text-xl text-oswapGreen"></i>
+            </div> 
+          </transition>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -104,22 +109,30 @@
       return {
         amount: '',
         errors: {},
-        buttonState: 'active',
+        buttonState: 'disabled',
+      }
+    },
+    mounted() {
+      this.buttonState = 'executing'
+
+      if ( this.maxAmount > 0 ) {
+        this.buttonState = 'active'
+      } else { 
+        this.buttonState = 'disabled'
       }
     },
     methods: {
       unstake: async function() {
-        this.buttonState = 'executing'
-        await this.unstakeLP(this.pool, String(this.roundDown(this.amount, 14)))
-        this.buttonState = 'finished'
-        
+        this.buttonState = 'executing';
+        await this.unstakeLP(this.pool, String(this.roundDown(this.amount, 14)));
+        this.buttonState = 'finished';
       },
       setMax() {
         this.amount = String(this.maxAmount);
       },
       roundDown: function(number, decimals) {
-          decimals = decimals || 0;
-          return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
+        decimals = decimals || 0;
+        return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
       },
       inputAmount(value){
         // Checking if the input is in the right format.

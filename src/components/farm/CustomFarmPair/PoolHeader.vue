@@ -15,7 +15,7 @@
         <p class="text-xs text-oswapBlue-light">{{pool.pair}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content :options="tooltip"
+          <tooltip-me-content :options="this.tooltip"
             class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
@@ -33,7 +33,20 @@
         </tooltip-me>
       </div>
     </div>
+<<<<<<< HEAD
 
+=======
+    <!-- Header right side -->
+    <div class="flex h-10 w-20 items-center justify-end pr-2">
+      <div v-if="!this.rewards" class="flex flex-1 items-center justify-end">
+        <svg class="animate-spin h-7 w-7 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      <p v-else class="text-xl lg:text-lg lgg:text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
+    </div>
+>>>>>>> 2c4b32e726d04e8f85f6c7a274b63d6210959f6b
   </div>
 </template>
 
@@ -51,25 +64,92 @@ import { ethers } from "ethers";
     data() {
       return {
         tooltip: {
-          name: 'staked',
+          name: new Date().getTime(),
           position: 'top',
           color: 'rgba(24, 213, 187, 0.9)',
           offset: 16,
-          speed: 300
+          speed: 300,
+          shift: 50
         },
+        ttpObj: null,
+        ttpRec: null,
         tt0s: '?',
         tt1s: '?',
         tas: '?',
         rewards: null
       } 
     },
+<<<<<<< HEAD
     mounted: async function(){
       
+=======
+    mounted: async function() {
+      // Grabs the tooltip element
+      this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
+      // Format the tooltip the first time
+      this.adjustTooltip();
+      // Format the tooltip when the user resizes the browser
+      window.addEventListener('resize', () => {
+        this.adjustTooltip();
+      });
+      // When the user clicks top open the farm pair details
+      // we must recalc tooltips again
+      this.oswapEmit.on('recalc-tooltips', () => {
+        this.adjustTooltip();
+      });
+            
+      var valueData = await this.getTokenAmounts(
+        this.pool,
+        String(this.poolData[4]['value']),
+        String(this.poolData[3]['value']),
+        String(this.poolData[1]['value'])
+      );
+      this.tt0s = valueData[2]
+      this.tt1s = valueData[3]
+>>>>>>> 2c4b32e726d04e8f85f6c7a274b63d6210959f6b
       this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
 /*
       var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
       var rewardValue = await this.getRewardValue(this.pool, 100)   
       this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)*/
     },
+    methods: {
+      getWindowSize() {
+        return {
+          height: window.innerHeight,
+          width: window.innerWidth
+        }
+      },
+      adjustTooltip() {
+        // gets the tooltip location bounduary
+        this.ttpRec = this.ttpObj.getBoundingClientRect();
+        // find the middle of the window
+        let width = this.getWindowSize().width;
+        let xMiddle = width / 2;
+
+        // screen size from 0 - 800
+        if (width > 0 && width < 800) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 50
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else if (width > 800 && width < 1200) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 30
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else {
+          this.tooltip.shift = 50
+        }
+      }
+    }
   }
 </script>

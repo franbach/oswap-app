@@ -1,16 +1,16 @@
 <template>
   <div v-if="isOpen" class="flex ml-2 justify-between">
-    <div class="flex h-12 space-x-3">
+    <div class="flex min-w-0 w-full h-12 space-x-3">
       <!-- Earned Info -->
-      <div class="flex flex-col h-full justify-between">
+      <div class="flex w-20 flex-col h-full justify-between">
         <div class="flex space-x-2 items-center">
           <i class="las la-hand-holding-usd text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Earned</p>
         </div>
-        <p class="text-sm font-bold dark:text-gray-300">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
+        <p class="text-sm font-bold dark:text-gray-300 text-el">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
       </div>
       <!-- Liquidity Info -->
-      <div class="flex flex-col h-full justify-between">
+      <div class="flex min-w-0 w-full flex-col h-full justify-between">
         <div class="flex space-x-2 items-center">
           <i class="las la-tint text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Liquidity</p>
@@ -21,7 +21,7 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        <p v-else class="text-sm font-extralight pl-1 dark:text-gray-300">$ {{liquidityValue[0]}}</p>
+        <p v-else class="text-sm font-extralight pl-1 dark:text-gray-300 text-el">$ {{liquidityValue[0]}}</p>
       </div>
     </div>
     <!-- Open Details Button -->
@@ -63,6 +63,7 @@
     methods: {
       setPool() {
         this.$emit('setPool', 'open');
+        this.oswapEmit.emit("recalc-tooltips");
       }
     }
   }

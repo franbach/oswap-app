@@ -90,7 +90,7 @@
           </tooltip-me-content>
         </tooltip-me>
         <!-- Close Button -->
-        <div @click="this.$emit('setPool', 'close')" class="flex items-center justify-center rounded-full h-9 w-9 bg-gray-200 group-scope dark:bg-gray-600 hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
+        <div @click="closeStats()" class="flex items-center justify-center rounded-full h-9 w-9 bg-gray-200 group-scope dark:bg-gray-600 hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
           <i class="las la-times text-xl text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
         </div>
       </div>
@@ -133,6 +133,12 @@ import openswap from "@/shared/openswap.js";
   
       this.weeklyRewards = rewards[0];
       this.monthlyRewards = rewards[1];
+    },
+    methods: {
+      closeStats() {
+        this.$emit('setPool', 'close')
+        this.oswapEmit.emit("recalc-tooltips");
+      }
     }
   }
 </script>
