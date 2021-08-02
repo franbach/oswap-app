@@ -23,7 +23,7 @@
 
   <!-- Staking -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="buttonState == 'c'" class="flex w-22 group-scope">
+    <div v-if="buttonState == 'executing'" class="flex w-22 group-scope">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">
@@ -71,6 +71,7 @@
     mounted: async function() {},
     methods: {
       ...mapGetters('exchange', ['getToken']),
+      
       stake:async function() {
         this.buttonState = 'executing'
         await this.stakeLP(this.pool, this.amount);
