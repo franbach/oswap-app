@@ -41,32 +41,10 @@
               <p class="text-lg dark:text-gray-400">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
             </div>
           </div>
-          <div class="flex h-12 space-x-2">
-            <div class="flex items-start h-full">
-              <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
-                <img :src="pool.imgtoken0" class="h-4" alt="">
-              </div>
-            </div>
-            <div class="flex flex-col h-full justify-between pt-0.5">
-              <p class="text-xs text-oswapBlue-light">{{pool.name[0]}} Staked</p>
-              <p class="text-lg dark:text-gray-400">{{pt0s}}</p>
-            </div>
-          </div>
-          <div class="flex h-12 space-x-2">
-            <div class="flex items-start h-full">
-              <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
-                <img :src="pool.imgtoken1" class="h-4" alt="">
-              </div>
-            </div>
-            <div class="flex flex-col h-full justify-between pt-0.5">
-              <p class="text-xs text-oswapBlue-light">{{pool.name[1]}} Staked</p>
-              <p class="text-lg dark:text-gray-400">{{pt1s}}</p>
-            </div>
-          </div>
         </div>
       </div>
 
-      <div class="flex flex-col ml-2 mt-2 mb-1 h-full justify-between">
+      <div class="flex flex-col ml-2 mt-2 mb-1 h-full">
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar-day dark:text-oswapGreen"></i>
           <p class="text-sm font-thin dark:text-gray-400">Expected Weekly Rewards: $ {{weeklyRewards}}</p>
@@ -148,14 +126,8 @@ import openswap from "@/shared/openswap.js";
       } 
     },
     mounted: async function(){
-      var valueData = await this.getTokenAmounts(
-        this.pool,
-        String(this.poolData[4]['value']),
-        String(this.poolData[3]['value']),
-        String(this.poolData[1]['value'])
-      );
-      this.pt0s = valueData[0]
-      this.pt1s = valueData[1]
+     
+      
       this.stakeWeight = this.getStakeWeight(this.poolData[3]['value'], this.poolData[1]['value'])
       let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
   

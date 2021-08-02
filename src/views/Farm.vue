@@ -50,8 +50,6 @@
         this.farmData = await this.initMulticall(this.Pools)
         this.soloData = await this.initMulticall(this.SoloPools)
         this.getTotalPending();
-
-        console.log(farmData.length)
       }.bind(this), 1000);
     },
     data() {
