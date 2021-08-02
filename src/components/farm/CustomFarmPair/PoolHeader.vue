@@ -27,12 +27,7 @@
               <div class="flex items-center text-xs">
                 <p>{{pool.pair}} Staked: {{tas}}</p>
               </div>
-              <div class="flex items-center text-xs">
-                <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
-              </div>
-              <div class="flex items-center text-xs">
-                <p>{{pool.name[1]}} Staked: {{tt1s}}</p>
-              </div>
+              
             </div>
           </tooltip-me-content>
         </tooltip-me>
@@ -104,10 +99,10 @@ import { ethers } from "ethers";
       this.tt0s = valueData[2]
       this.tt1s = valueData[3]
       this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
-
+/*
       var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
       var rewardValue = await this.getRewardValue(this.pool, 100)   
-      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)*/
     },
     methods: {
       getWindowSize() {

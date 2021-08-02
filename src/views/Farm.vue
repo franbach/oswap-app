@@ -50,8 +50,6 @@
         this.farmData = await this.initMulticall(this.Pools)
         this.soloData = await this.initMulticall(this.SoloPools)
         this.getTotalPending();
-
-        console.log(farmData.length)
       }.bind(this), 1000);
     },
     data() {
@@ -68,18 +66,21 @@
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
       getTotalPending: async function(){
 
-        
+        let temp = 0;
         for (var n in this.farmData) {
-          this.rewardsPending = this.rewardsPending + this.farmData[n][0][2]['value']
+          temp = temp + this.farmData[n][0][2]['value']
         }
 
         for (var n in this.soloData) {
-          this.rewardsPending = this.rewardsPending + this.soloData[n][0][2]['value']   
+          temp = temp + this.soloData[n][0][2]['value']   
         }
 
         for (var n in this.customData) {
-          this.rewardsPending = this.rewardsPending + this.customData[n][0][2]['value']  
+          temp = temp + this.customData[n][0][2]['value']  
         }
+
+          this.rewardsPending = temp
+
       },
       initMulticall: async function(pools){
 
