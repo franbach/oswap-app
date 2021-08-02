@@ -8,7 +8,7 @@
         </div>
         <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
           <div class="flex flex-1 shadow-lg rounded-2xl">
-            <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'">
+            <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :errorTop="'pt-10'">
               <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.token}}</p>
             </InputWithValidation>
           </div>
@@ -33,7 +33,7 @@
       </div>
       <div class="flex justify-between items-center mb-0.5 h-9">
         <!-- back to Stats -->
-        <div @click="this.$emit('setPool', 'stats')" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 cursor-pointer">
+        <div @click="setPool()" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 cursor-pointer">
           <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
           <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
@@ -130,32 +130,43 @@
       setMax() {
         this.amount = String(this.maxAmount);
       },
+      setPool() {
+        // reset Input
+        this.amount = ''
+        // reset errors
+        this.errors = {}
+        this.$emit('setPool', 'stats')
+      },
       roundDown: function(number, decimals) {
         decimals = decimals || 0;
         return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
       },
-      inputAmount(value){
+      inputAmount(value) {
+        this.amount = value;
         // Checking if the input is in the right format.
         // parseFloat seems to behave like this regex rule.
-        if (!value.match(/^\d*\.?\d*$/)) {
-          this.errors['format'] = 'Invalid format! e.g: 12345.678';
+        if (parseFloat(this.maxAmount) == 0) {
+          this.errors['zeroStaked'] = 'Your don\'t have anything staked!';
         } else {
-          delete this.errors['format'];
-          this.amount = value
+          delete this.errors['zeroStaked'];
+
+          if (!value.match(/^\d*\.?\d*$/)) {
+            this.errors['format'] = 'Invalid format! e.g: 12345.678';
+          } else {
+            delete this.errors['format'];
+          }
+          if (value == '') {
+            this.errors['blank'] = 'Amount can\'t be blank';
+          } else {
+            delete this.errors['blank'];
+          }
+          if (parseFloat(value) > parseFloat(this.maxAmount)) {
+            this.errors['exceed'] = 'Your input exceeds the amount you have staked!';
+          } else {
+            delete this.errors['exceed'];
+          }
         }
-        if (value == '') {
-          this.errors['blank'] = 'Amount can\'t be blank';
-        } else {
-          delete this.errors['blank']
-          this.amount = value
-        }
-        if (parseFloat(value) > parseFloat(this.balance)) {
-          this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
-        } else {
-          delete this.errors['exceed'];
-          this.amount = value
-        }
-      },
+      }
     }
   }
 </script>

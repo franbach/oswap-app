@@ -69,12 +69,10 @@
       }
     },
     mounted: async function() {},
-
     methods: {
-      
       ...mapGetters('exchange', ['getToken']),
+      
       stake() {
-
         this.stakeLP(this.pool, this.amount);
       }
     }
