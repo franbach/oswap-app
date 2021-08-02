@@ -49,15 +49,7 @@
         liquidityValue: ''
       }
     },
-    mounted: async function (){
-      var valueData = await this.getTokenAmounts(
-        this.pool,
-        String(this.poolData[4]['value']),
-        String(this.poolData[3]['value']),
-        String(this.poolData[1]['value'])
-      );
-      this.liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
-    },
+    mounted: async function (){},
     methods: {
       setPool() {
         this.$emit('setPool', 'open');
