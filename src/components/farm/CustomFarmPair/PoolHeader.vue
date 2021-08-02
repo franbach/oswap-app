@@ -33,9 +33,6 @@
         </tooltip-me>
       </div>
     </div>
-<<<<<<< HEAD
-
-=======
     <!-- Header right side -->
     <div class="flex h-10 w-20 items-center justify-end pr-2">
       <div v-if="!this.rewards" class="flex flex-1 items-center justify-end">
@@ -46,7 +43,6 @@
       </div>
       <p v-else class="text-xl lg:text-lg lgg:text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
     </div>
->>>>>>> 2c4b32e726d04e8f85f6c7a274b63d6210959f6b
   </div>
 </template>
 
@@ -79,10 +75,6 @@ import { ethers } from "ethers";
         rewards: null
       } 
     },
-<<<<<<< HEAD
-    mounted: async function(){
-      
-=======
     mounted: async function() {
       // Grabs the tooltip element
       this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
@@ -106,7 +98,6 @@ import { ethers } from "ethers";
       );
       this.tt0s = valueData[2]
       this.tt1s = valueData[3]
->>>>>>> 2c4b32e726d04e8f85f6c7a274b63d6210959f6b
       this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
 /*
       var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))

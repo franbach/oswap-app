@@ -79,7 +79,7 @@
           <transition tag="div" name="approve-btn" class="inline-block absolute">
             <div v-if="buttonState == 'finished'" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
               <div class="flex flex-1 items-center justify-right">
-                <p class="text-sm text-oswapGreen">Staked</p>
+                <p class="text-sm text-oswapGreen">Unstaked</p>
               </div>
               <i class="las la-check-circle text-xl text-oswapGreen"></i>
             </div> 
