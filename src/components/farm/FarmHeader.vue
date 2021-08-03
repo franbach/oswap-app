@@ -1,15 +1,15 @@
 <template>
-  <div class="flex w-full flex-col py-10">
+  <div class="flex w-full flex-col ss:pt-0 ss:pb-6 xs:pt-10 xs:pb-10">
     <div class="flex md:space-x-6 items-center">
       <div class="md:flex hidden items-center justify-center h-56 w-80 overflow-hidden">
         <img src="@/assets/farm_picture2.png" alt="" class="h-56 object-cover">
       </div>
-      <div class="flex flex-col space-y-8">
+      <div class="flex flex-col ss:space-y-6 xs:space-y-8">
         <div class="flex flex-col ml-3">
-          <p class="text-3xl font-bold dark:text-gray-300">Stake LP Tokens</p>
-          <p class="text-lg text-oswapBlue-light">Earn rewards holding crypto</p>
+          <p class="ss:text-xl xs:text-3xl font-bold dark:text-gray-300">Stake LP Tokens</p>
+          <p class="ss:text-xs xs:text-lg text-oswapBlue-light">Earn rewards holding crypto</p>
         </div>
-        <div class="flex flex-1 space-x-3 items-center h-24">
+        <div class="flex flex-1 ss:flex-col xs:flex-row ss:space-y-6 xs:space-y-0 ss:space-x-0 xs:space-x-3 ss:items-start xs:items-center h-24">
           <!-- Burn All button container absolute -->
           <div class="flex flex-col space-y-2">
             <div class="flex items-center space-x-1 pl-2 h-14 pr-4 rounded-full bg-gray-200 dark:bg-oswapDark-gray border border-oswapGreen-dark dark:border-oswapGreen group-scope hover:bg-red-400 dark:hover:bg-red-400 hover:border-red-400 dark:hover:border-red-400 cursor-pointer">
