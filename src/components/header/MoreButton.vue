@@ -14,7 +14,7 @@
       leave-to-class="translate-x-4 opacity-0"
     >
       <MenuItems class="absolute z-50">
-        <div class="absolute z-10 w-72 mt-3 -left-36 md:-left-28 lg:left-0">
+        <div class="absolute z-10 w-72 mt-3 ss:-left-44 md:-left-28 lg:left-0">
           <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
             <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 md:grid-cols-1">
               <MenuItem>
