@@ -15,10 +15,7 @@
     </div>
 
     <div id="footer" class="w-full dark:bg-oswapDark-gray bg-gray-200 z-30">
-      <Footer
-        @dark-mode="changeColor()"
-        :colorMode="darkmode ? 'Dark Mode' : 'Light Mode'"
-      />
+      <Footer @dark-mode="changeColor()" :colorMode="this.darkmode" />
     </div>
   </div>
 </template>
