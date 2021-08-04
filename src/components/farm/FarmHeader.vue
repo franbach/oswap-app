@@ -5,7 +5,7 @@
         <img src="@/assets/farm_picture2.png" alt="" class="h-56 object-cover">
       </div>
       <div class="flex flex-col ss:space-y-6 xs:space-y-8">
-        <div class="flex flex-col ml-3">
+        <div class="flex flex-col ss:ml-1 xs:ml-3">
           <p class="ss:text-xl xs:text-3xl font-bold dark:text-gray-300">Stake LP Tokens</p>
           <p class="ss:text-xs xs:text-lg text-oswapBlue-light">Earn rewards holding crypto</p>
         </div>

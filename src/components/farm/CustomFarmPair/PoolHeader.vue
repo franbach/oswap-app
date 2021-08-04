@@ -41,7 +41,7 @@
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
       </div>
-      <p v-else class="text-xl lg:text-lg lgg:text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
+      <p v-else class="ss:text-sm xs:text-xl xl:text-xl lg:text-lg lgg:text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
     </div>
   </div>
 </template>
@@ -62,7 +62,7 @@ import { ethers } from "ethers";
         tooltip: {
           name: new Date().getTime(),
           position: 'top',
-          color: 'rgba(24, 213, 187, 1)',
+          color: 'rgba(249, 250, 251, 1)',
           offset: 16,
           speed: 300,
           shift: 50
@@ -76,18 +76,29 @@ import { ethers } from "ethers";
       } 
     },
     mounted: async function() {
-      // Grabs the tooltip element
       this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
+      // Mobile
+      // Adjust Tooltips for mobile
+      if (this.getWindowSize().width < 768) {
+        this.adjustTooltipforMobile();
+      }
+      // Desktop
       // Format the tooltip the first time
-      this.adjustTooltip();
+      if (this.getWindowSize().width >= 768) {
+        this.adjustTooltip();
+      }
+      // Desktop
       // Format the tooltip when the user resizes the browser
       window.addEventListener('resize', () => {
         this.adjustTooltip();
       });
+      // Desktop
       // When the user clicks top open the farm pair details
       // we must recalc tooltips again
       this.oswapEmit.on('recalc-tooltips', () => {
-        this.adjustTooltip();
+        if (this.getWindowSize().width >= 768) {
+          this.adjustTooltip();
+        }
       });
             
       var valueData = await this.getTokenAmounts(
@@ -107,11 +118,31 @@ import { ethers } from "ethers";
     methods: {
       getWindowSize() {
         return {
-          height: window.innerHeight,
-          width: window.innerWidth
+          height: document.documentElement.getBoundingClientRect().height,
+          width: document.documentElement.getBoundingClientRect().width
         }
       },
       adjustTooltip() {
+        // gets the tooltip location bounduary
+        this.ttpRec = this.ttpObj.getBoundingClientRect();
+        // find the middle of the window
+        let width = this.getWindowSize().width;
+        let xMiddle = width / 2;
+
+        if (width > 540 && width < 1200) {
+          // for tooltips at the middle left
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
+            this.tooltip.shift = 30
+          }
+          // for tooltips at the middle right
+          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
+            this.tooltip.shift = 70
+          }
+        } else if (width > 1200) {
+          this.tooltip.shift = 50
+        }
+      },
+      adjustTooltipforMobile() {
         // gets the tooltip location bounduary
         this.ttpRec = this.ttpObj.getBoundingClientRect();
         // find the middle of the window
@@ -148,19 +179,8 @@ import { ethers } from "ethers";
               this.tooltip.shift = 55 + outsideR
             }
           }
-        } else if (width > 540 && width < 1200) {
-          // for tooltips at the middle left
-          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
-            this.tooltip.shift = 30
-          }
-          // for tooltips at the middle right
-          if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
-            this.tooltip.shift = 70
-          }
-        } else {
-          this.tooltip.shift = 50
         }
-      }
+      },
     }
   }
 </script>
