@@ -13,7 +13,7 @@
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
           <tooltip-me-content :options="this.tooltip" 
-            class="flex w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
+            class="flex ss:w-64 xs:w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
               <i class="las la-coins text-3xl text-gray-500 dark:text-oswapDark-gray"></i>
@@ -58,7 +58,7 @@
         tooltip: {
           name: new Date().getTime(),
           position: 'top',
-          color: 'rgba(24, 213, 187, 0.9)',
+          color: 'rgba(24, 213, 187, 1)',
           offset: 16,
           speed: 300,
           shift: 50
@@ -103,17 +103,37 @@
         let width = this.getWindowSize().width;
         let xMiddle = width / 2;
 
-        // screen size from 0 - 800
-        if (width > 0 && width < 800) {
+        // screen size from 0 - 540
+        if (width > 0 && width <= 540) {
           // for tooltips at the middle left
           if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
-            this.tooltip.shift = 50
+            
+            let fromMiddle = xMiddle - (this.ttpRec.width / 2 + this.ttpRec.left);
+            let shiftSub = (fromMiddle * 100) / this.ttpRec.width;
+            let roomLeftL = xMiddle - fromMiddle;
+
+            if ((this.ttpRec.width / 2) < roomLeftL) {
+              this.tooltip.shift = 50 - shiftSub
+            } else {
+              let outsideL = (this.ttpRec.width / 2) - roomLeftL
+              this.tooltip.shift = 45 - outsideL
+            }
           }
           // for tooltips at the middle right
           if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
-            this.tooltip.shift = 70
+
+            let fromMiddle = (this.ttpRec.width / 2 + this.ttpRec.left) - xMiddle;
+            let shiftAdd = (fromMiddle * 100) / this.ttpRec.width;
+            let roomLeftR = width - (xMiddle + fromMiddle);
+
+            if ((this.ttpRec.width / 2) < roomLeftR) {
+              this.tooltip.shift = 50 + shiftAdd
+            } else {
+              let outsideR = (this.ttpRec.width / 2) - roomLeftR
+              this.tooltip.shift = 55 + outsideR
+            }
           }
-        } else if (width > 800 && width < 1200) {
+        } else if (width > 540 && width < 1200) {
           // for tooltips at the middle left
           if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
             this.tooltip.shift = 30

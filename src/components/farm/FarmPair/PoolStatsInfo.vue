@@ -166,7 +166,9 @@ import openswap from "@/shared/openswap.js";
     methods: {
       closeStats() {
         this.$emit('setPool', 'close')
-        this.oswapEmit.emit("recalc-tooltips");
+        if (window.innerWidth >= 768) {
+          this.oswapEmit.emit("recalc-tooltips");
+        }
       }
     }
   }

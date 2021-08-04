@@ -57,7 +57,9 @@
     methods: {
       setPool() {
         this.$emit('setPool', 'open');
-        this.oswapEmit.emit("recalc-tooltips");
+        if (window.innerWidth >= 768) {
+          this.oswapEmit.emit("recalc-tooltips");
+        }
       }
     }
   }

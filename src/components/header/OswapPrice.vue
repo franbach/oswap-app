@@ -89,19 +89,11 @@
 
         // screen size from 0 - 540
         if (width > 0 && width < 540) {
-          // for tooltips at the middle left
-          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
-            this.tooltip.shift = 50
-          }
           // for tooltips at the middle right
           if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
             this.tooltip.shift = 78
           }
         } else if (width >= 540 && width < 1024) {
-           // for tooltips at the middle left
-          if ((this.ttpRec.width / 2 + this.ttpRec.left) < xMiddle) {
-            this.tooltip.shift = 50
-          }
           // for tooltips at the middle right
           if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
             this.tooltip.shift = 68
