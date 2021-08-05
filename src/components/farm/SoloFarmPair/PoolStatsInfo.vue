@@ -1,8 +1,8 @@
 <template>
   <transition name="horizontal">
-    <div v-if="isOpen" class="flex flex-col w-full h-full justify-between absolute">
+    <div v-if="isOpen" class="flex flex-col h-full w-full justify-between absolute">
       <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
-        <div class="flex flex-1 shadow-lg dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
+        <div class="flex shadow-lg dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
           <div class="flex flex-1 items-center justify-between relative">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col ml-2 mt-2 mb-1 h-full justify-between">
+      <div class="flex flex-col ml-2 mt-2 mb-1 space-y-2 justify-between">
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar-day dark:text-oswapGreen"></i>
           <p class="text-sm font-thin dark:text-gray-400">Expected Weekly Rewards: $ {{weeklyRewards}}</p>
@@ -73,12 +73,12 @@
       <div class="flex items-center h-12 pt-2 justify-between">
         <!-- Burn Fees Button -->
         <tooltip-me>
-          <div @click="this.burnPool(this.pool)" class="flex items-center justify-center space-x-2 pl-3 pr-1 md:pl-0 md:pr-0 md:space-x-0 lg:space-x-0 lg:pl-0 lg:pr-0  xl:space-x-2 xl:pl-3 xl:pr-1 rounded-full h-9 sm:w-full md:w-9 lg:w-9 xl:w-full bg-gray-200 dark:bg-gray-600 border border-oswapGreen-dark dark:border-oswapGreen group-scope hover:bg-red-400 dark:hover:bg-red-400 hover:border-red-400 dark:hover:border-red-400 cursor-pointer">
-            <p class="block md:hidden xl:block text-sm text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Burn Fees</p>
+          <div @click="this.burnPool(this.pool)" class="flex items-center justify-center ss:space-x-0 ss:pl-0 ss:pr-0 ss:w-9 xs:space-x-2 xs:pl-3 xs:pr-1 xs:w-full md:space-x-0 md:pl-0 md:pr-0 md:w-9 xl:space-x-2 xl:pl-3 xl:pr-1 xl:w-full rounded-full h-9 bg-gray-200 dark:bg-gray-600 border border-oswapGreen-dark dark:border-oswapGreen group-scope hover:bg-red-400 dark:hover:bg-red-400 hover:border-red-400 dark:hover:border-red-400 cursor-pointer">
+            <p class="ss:hidden xs:block md:hidden xl:block text-sm text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray">Burn Fees</p>
             <i class="las la-burn text-2xl text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
           </div>  
           <tooltip-me-content :options="tooltip" class="flex w-24 p-2 px-3 rounded-lg shadow-lg text-sm">
-            <p class="text-gray-500 dark:text-oswapDark-gray">Burn Fees</p>
+            <p class="text-gray-50 dark:text-oswapDark-gray">Burn Fees</p>
           </tooltip-me-content>
         </tooltip-me>
         <!-- Unstake Button -->
@@ -97,7 +97,7 @@
             <i class="las la-undo-alt text-lg text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
           </div>
           <tooltip-me-content :options="tooltip" class="flex p-2 px-3 rounded-lg shadow-lg text-sm">
-            <p class="text-gray-500 dark:text-oswapDark-gray">Refresh</p>
+            <p class="text-gray-50 dark:text-oswapDark-gray">Refresh</p>
           </tooltip-me-content>
         </tooltip-me>
         <!-- Close Button -->
@@ -147,7 +147,9 @@ import openswap from "@/shared/openswap.js";
     methods: {
       closeStats() {
         this.$emit('setPool', 'close')
-        this.oswapEmit.emit("recalc-tooltips");
+        if (window.innerWidth >= 768) {
+          this.oswapEmit.emit("recalc-tooltips");
+        }
       }
     }
   }
