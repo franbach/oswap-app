@@ -1,8 +1,8 @@
 <template>
   <transition name="horizontal">
-    <div v-if="isOpen" class="flex flex-col w-full h-full justify-between absolute">
+    <div v-if="isOpen" class="flex flex-col h-full w-full justify-between absolute">
       <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
-        <div class="flex flex-1 shadow-lg dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
+        <div class="flex shadow-lg dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
           <div class="flex flex-1 items-center justify-between relative">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col ml-2 mt-2 mb-1 h-full justify-between">
+      <div class="flex flex-col ml-2 mt-2 mb-1 space-y-2 justify-between">
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-calendar-day dark:text-oswapGreen"></i>
           <p class="text-sm font-thin dark:text-gray-400">Expected Weekly Rewards: $ {{weeklyRewards}}</p>
