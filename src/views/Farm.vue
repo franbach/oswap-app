@@ -45,12 +45,21 @@
       this.CustomPools = CustomPools;
       this.Pools = Pools;
       this.SoloPools = SoloPools;
+
+      
+      let timeout
+      if(this.getUserSignedIn()){
+        timeout = 1
+      }
+      else{
+        timeout = 1000
+      }
       await setTimeout(async function (){
         this.customData = await this.initMulticall(this.CustomPools)
         this.farmData = await this.initMulticall(this.Pools)
         this.soloData = await this.initMulticall(this.SoloPools)
         this.getTotalPending();
-      }.bind(this), 1000);
+      }.bind(this), timeout);
     },
     data() {
       return {
@@ -79,7 +88,7 @@
           temp = temp + this.customData[n][0][2]['value']  
         }
 
-          this.rewardsPending = temp
+        this.rewardsPending = temp
 
       },
       initMulticall: async function(pools){
@@ -105,6 +114,7 @@
         watcher.start();
         await watcher.awaitInitialFetch();
         var res = await this.parseResults(results);
+        watcher.stop();
         return res;
       },
       parseResults: async function(results){

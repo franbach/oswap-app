@@ -17,7 +17,8 @@
             </div>
           </div>
         </div>
-        <LiquidityAmount v-if="token1" :token0="token0" :token1="token1" :balances="balances"/>
+        <Warning :key="createNewPair" :warnings="warnings" />
+        <LiquidityAmount v-if="token1" :createNewPair="createNewPair" :token0="token0" :token1="token1" :balances="balances"/>
         <LiquidityRate @setSlippageRate="setSlippage"/>
         <div class="flex flex-wrap space-x-1 text-xs px-1">
         </div>
@@ -29,26 +30,34 @@
 <script>
   import LiquidityAmount from '@/components/liquidity/LiquidityAmount';
   import LiquidityRate from '@/components/liquidity/LiquidityRate';
+  import Warning from '@/components/liquidity/Warning'
   import { mapGetters } from 'vuex';
 
   export default {
     name: 'AddLiquidity',
     components: {
       LiquidityAmount,
-      LiquidityRate
+      LiquidityRate,
+      Warning
     },
     props: {
-      balances: Object
+      balances: Object,
+      createNewPair: Boolean
     },
     data() {
       return {
         token0: null,
         token1: null,
+        warnings: {}
       }
     },
     mounted() {
       this.token0 = this.getToken()['token1']
       this.token1 = this.getToken()['token2']
+      
+      if (this.createNewPair == true) { 
+          this.warnings['newPair'] = 'You are creating a new pool. Set price accordingly. Procede with caution.'
+        } else { delete this.warnings['newPair'] }
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),

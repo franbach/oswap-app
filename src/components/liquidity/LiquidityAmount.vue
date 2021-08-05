@@ -35,7 +35,8 @@
     props: {
       token0: Object,
       token1: Object,
-      balances: Object 
+      balances: Object,
+      createNewPair: Boolean
       },
     data() {
       return {
@@ -48,9 +49,10 @@
       }
     },
     mounted: async function() {
-      this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
-      this.amount1 =  await this.getToken1Amount();
-      
+      if(!this.createNewPair){
+          this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
+          this.amount1 =  await this.getToken1Amount();
+      }      
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
@@ -67,22 +69,34 @@
 
       inputAmount0: async function(value){
         if(this.clickedInput == '1'){
-        this.amount0 = value;
-        this.amount1 =  await this.getToken1Amount();
-        this.manageError0Input(value, this.balances.token0)   
-        this.manageError1Input(value, this.balances.token1)
-        this.setToken0Amount(value);
-        this.setToken1Amount(this.amount1);
+          if(!this.createNewPair){
+            this.amount0 = value;
+            this.amount1 =  await this.getToken1Amount();
+            this.manageError0Input(value, this.balances.token0)   
+            this.manageError1Input(value, this.balances.token1)
+            this.setToken0Amount(value);
+            this.setToken1Amount(this.amount1);
+          }else{
+            this.amount0 = value;
+            this.setToken0Amount(value)
+          }
+        
         }
       },
       inputAmount1:async function(value){
         if(this.clickedInput == '2'){
-        this.amount1 = value;
-        this.amount0 =  await this.getToken0Amount();
-        this.manageError1Input(value, this.balances.token1) 
-        this.manageError0Input(value, this.balances.token0)
-        this.setToken1Amount(value);
-        this.setToken0Amount(this.amount0);
+          if(!this.createNewPair){
+            this.amount1 = value;
+            this.amount0 =  await this.getToken0Amount();
+            this.manageError1Input(value, this.balances.token1) 
+            this.manageError0Input(value, this.balances.token0)
+            this.setToken1Amount(value);
+            this.setToken0Amount(this.amount0);
+          }else{
+              this.amount1 = value;
+              this.setToken1Amount(value);
+          }
+        
         }
           
           

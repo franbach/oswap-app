@@ -49,6 +49,19 @@
         forceR: 0 
       }
     },
+    metaInfo: {
+       title: 'Foo Bar',
+    
+      charset: 'utf-8' ,
+       name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+        title: 'Openswap Exchange',
+        description: 'Openswap Decentralized Exchange on Harmony Blockchain. Harmony DEX',
+        keywords: 'Dex, Decentralised Exchange, dex, blockchain, harmony, openswap, Uniswap Fork',
+        robots: 'index, follow'
+         
+    
+    },
     computed: {
       ...mapGetters('exchange', ['getStepState'])
     },

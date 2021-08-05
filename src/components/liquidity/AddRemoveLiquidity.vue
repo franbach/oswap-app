@@ -22,7 +22,7 @@
         </button>
       </div>
       
-      <div v-if="addLiquidity" ><AddLiquidity :balances="balances" @setSlippageRate="setSlippage" /></div>
+      <div v-if="addLiquidity" ><AddLiquidity :key="createNewPair" :createNewPair="createNewPair" :balances="balances" @setSlippageRate="setSlippage" /></div>
       <div v-if="removeLiquidity" ><RemoveLiquidity :balances="balances" /></div>
 
       <div class="flex pt-4">
@@ -90,6 +90,7 @@
         warnings: {},
         addLiquidity: true,
         removeLiquidity: false,
+        createNewPair: false,
         pairAddress: null,
         pairToken: null,
         balances: {
@@ -100,11 +101,20 @@
       }
     },
     mounted: async function() {
+     
       this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
-      this.pairAddress = this.pair["liquidityToken"].address;
-      this.pairToken = await this.getPairAsToken(this.getToken()['token1'],this.getToken()['token2'])
+      .catch(() => {
+        this.createNewPair = true
+      })
+      if(!this.createNewPair){
+        this.pairAddress = this.pair["liquidityToken"].address;
+        this.pairToken = await this.getPairAsToken(this.getToken()['token1'],this.getToken()['token2'])
+        await this.initMulticall()
+      }
       
-      await this.initMulticall()
+      
+      
+      
     },
     computed: {},
     methods: {

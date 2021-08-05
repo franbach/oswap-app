@@ -21,7 +21,7 @@ export default {
     ...mapActions('exchange/swapper', ['setBtnState']),
     ...mapActions('liquidity/buttons', ['setBtnState']),
     getProvider: function(){
-      if(this.getUserSignedIn()){
+      if(this.getUserSignedIn() == true){
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         return provider
       }
@@ -413,7 +413,8 @@ export default {
       token1.oneZeroxAddress
     );
     const pair = await Fetcher.fetchPairData(Token0, Token1).catch(error => {
-      console.log(error);  
+      console.log(error); 
+      throw error 
     });
     return pair;
     },
