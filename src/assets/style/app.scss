@@ -22,6 +22,19 @@ $la-font-path: "~line-awesome/dist/line-awesome/fonts" !default;
   transform: translate(-50%, -50%);
 }
 
+.oswap-layout {
+  /* viewport height - header - footer */
+  min-height: calc(100vh - 72px - 64px);
+}
+
+.bg-wave {
+  background-image: url('../wave.svg');
+}
+
+.bg-wave-dark {
+  background-image: url('../wave-dark.svg');
+}
+
 /* ScrollBar */
 
 html {
