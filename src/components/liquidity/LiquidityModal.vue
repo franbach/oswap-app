@@ -1,6 +1,6 @@
 <template>
   <!-- Modal -->
-  <div style="height: 600px;" class="flex center-component flex-col p-2 z-50 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+  <div style="height: 600px;" class="flex center-component flex-col p-2 z-60 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <div class="relative flex items-center mb-2 dark:text-gray-600 text-gray-200 focus-within:text-oswapGreen dark:focus-within:text-oswapGreen">
       <div class="flex flex-1 items-center">
         <i class="absolute las la-search text-2xl pl-2"></i>

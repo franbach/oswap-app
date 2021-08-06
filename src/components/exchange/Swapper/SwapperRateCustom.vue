@@ -21,7 +21,7 @@
             <tooltip-me>
               <i class="las la-exclamation-circle text-sm transform rotate-180 dark:text-gray-300 dark:hover:text-oswapGreen hover:text-oswapGreen cursor-pointer"></i>
               <tooltip-me-content :options="tooltip"
-                class="flex flex-col w-88 items-start space-x-2 p-3 rounded-lg shadow-xl"
+                class="flex flex-col ss:w-80 xs:w-88 items-start space-x-2 p-3 rounded-lg shadow-xl"
               >
                 <div class="flex flex-col space-y-1">
                   <p class="text-lg">Too High:</p>
@@ -62,13 +62,12 @@
         errors: {},
         isOpen: false,
         tooltip: {
-          name: 'slippage',
+          name: new Date().getTime(),
           position: 'top',
           color: '#f3f3f3',
-          shift: 50,
           offset: 16,
-          travel: 50,
-          speed: 300
+          speed: 300,
+          shift: 50
         },
       }
     },
@@ -77,6 +76,16 @@
     },
     unmounted() {
       window.removeEventListener('keyup', this.doCommand);
+    },
+    mounted() {
+      this.$nextTick(function() {
+        // Format the tooltip the first time
+        this.adjustTooltip();
+        // Format the tooltip when the user resizes the browser
+        window.addEventListener('resize', () => {
+          this.adjustTooltip();
+        })
+      })
     },
     computed: {
       checkCustom() {
@@ -123,6 +132,20 @@
         } else {
           delete this.errors['high'];
           this.$emit('selectRate', value)
+        }
+      },
+      getWindowSize() {
+        return {
+          height: window.innerHeight,
+          width: window.innerWidth
+        }
+      },
+      adjustTooltip() {
+        let width = this.getWindowSize().width;
+        if (width > 0 && width < 540) {
+           this.tooltip.shift = 65
+        } else if (width >= 540) {
+          this.tooltip.shift = 50
         }
       }
     }
