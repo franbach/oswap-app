@@ -468,13 +468,12 @@ export default {
       let token1 = {oneZeroxAddress : "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"} //BUSD
       const pair = await this.getPair(token1, token0)
       let rate = this.getRate(pair, token0)
-      console.log(staked)
-      console.log(rate)
-      return rate * staked
+      return parseFloat(rate * this.getEthUnits(staked.toString())).toFixed(5)
     },
     getLiquidityValue: async function(pool, tt0s, tt1s){
       let is0Stable = this.isStablecoin(pool.token0address)
       let is1Stable = this.isStablecoin(pool.token1address)
+      
  
       if(is0Stable == true ){
         return [ethers.utils.commify(parseFloat(tt0s).toFixed(2) * 2), parseFloat(tt0s).toFixed(2) *2];
@@ -633,21 +632,23 @@ export default {
     },
     getTokenAmounts: async function(pool, LPsupply, staked, totalStaked) {
       
+      const [
+        token0,
+        token1,
+        tokenLP,
+       ] = await Promise.all([
+         Fetcher.fetchTokenData(ChainId.MAINNET, pool.token0address),
+         Fetcher.fetchTokenData(ChainId.MAINNET, pool.token1address),
+         Fetcher.fetchTokenData(ChainId.MAINNET, pool.pairaddress)
+       ]);
 
-      let tempToken = {decimals: 18};
-
-      const token0 = await Fetcher.fetchTokenData(ChainId.MAINNET, pool.token0address);
-      const token1 = await Fetcher.fetchTokenData(ChainId.MAINNET, pool.token1address);
-      const tokenLP = await Fetcher.fetchTokenData(
-        ChainId.MAINNET,
-        pool.pairaddress
-      );
       
-      const supply = new TokenAmount(tokenLP, this.getUnits(LPsupply, tempToken));
-      const liquidity = new TokenAmount(tokenLP, this.getUnits(staked, tempToken));
+
+      const supply = new TokenAmount(tokenLP, LPsupply);
+      const liquidity = new TokenAmount(tokenLP, staked);
       const Tliquidity = new TokenAmount(
         tokenLP,
-        this.getUnits(totalStaked, tempToken)
+        totalStaked
       );
      
 
@@ -664,7 +665,7 @@ export default {
       const token1Tstaked = ethers.utils.commify(tvalue1.toFixed(4));
 
 
-      return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, tvalue0, tvalue1]
+      return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, value0, value1, tvalue0, tvalue1]
     },
     getAmountsLiquidity: async function(pair, token0, amount){
       
@@ -1194,6 +1195,10 @@ export default {
     },
     getUnits: function(amount, token){
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
+      return parsedunits;
+    },
+    getEthUnits: function(amount){
+      let parsedunits = ethers.utils.formatEther(amount);
       return parsedunits;
     },
     getBurnAndTotalSupply: async function() {

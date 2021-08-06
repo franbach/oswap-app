@@ -54,13 +54,15 @@
 <script>
 import openswap from "@/shared/openswap.js";
 import { ethers } from "ethers";
+  import { mapGetters, mapActions } from 'vuex';
+
 
   export default {
     name: 'PoolHeader',
     mixins: [openswap],
     props: {
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {
@@ -105,23 +107,31 @@ import { ethers } from "ethers";
           this.adjustTooltip();
         }
       });
-
-      var valueData = await this.getTokenAmounts(
-        this.pool,
-        String(this.poolData[4]['value']),
-        String(this.poolData[3]['value']),
-        String(this.poolData[1]['value'])
-      );
+      var rewardValue = await this.getRewardValue(this.pool, 100)
+      setInterval( function (){
+        var poolData = this.updatePoolState(this.pool);
+        this.tt0s = poolData.token0Tstaked;
+        this.tt1s = poolData.token1Tstaked;
+        this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(poolData.lpStakedTotal)).toFixed(5));
+        var liquidityValue = poolData.totalLiquidityValue;
+        if(liquidityValue !== undefined){
+          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+        }
+         
+      }.bind(this), 1000);
       
-      this.tt0s = valueData[2]
-      this.tt1s = valueData[3]
-      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
 
-      var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
-      var rewardValue = await this.getRewardValue(this.pool, 100)   
-      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+    
+     
     },
     methods: {
+      ...mapGetters('farm/farmData', ['getFarmData']),
+      updatePoolState: function(pool){
+      var farmData = this.getFarmData()
+      var poolData = farmData[pool.i]
+     return poolData;
+     
+      },
       getWindowSize() {
         return {
           height: document.documentElement.getBoundingClientRect().height,

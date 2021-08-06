@@ -1,21 +1,21 @@
 <template>
   <div class="flex flex-col p-3 bg-gray-200 hover:bg-slightGray group dark:hover:bg-slightDark dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <!-- Header -->
-    <PoolHeader :pool="pool" :poolData="poolData[0]"/>
+    <PoolHeader :pool="pool" :poolData="poolData"/>
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
-      <PoolStatsClosed @setPool="setPool" :poolData="poolData[0]" :pool="pool"  :isOpen="poolStatsOff" />
+      <PoolStatsClosed @setPool="setPool" :poolData="poolData" :pool="pool"  :isOpen="poolStatsOff" />
 
       <!-- <div v-if="isOpen" class="fixed inset-0 bg-gray-700 bg-opacity-30"></div> -->
       <!-- Show this when pool details is opened -->
-      <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData[0]" :pool="pool" @setPool="setPool" />
+      <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Stake -->
-      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData[0][0]['value']" :pool="pool" @setPool="setPool" />
+      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData.lpBalance" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Unstake -->
-      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData[0][3]['value']" :pool="pool" @setPool="setPool" />
+      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData.lpBalanceStaked" :pool="pool" @setPool="setPool" />
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@
     name: 'FarmPair',
     props: {
       pool: Object,
-      poolData: Array,
+      poolData: Object,
     },
     components: {
       PoolHeader,

@@ -9,7 +9,7 @@
         <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
           <div class="flex flex-1 shadow-lg rounded-2xl">
             <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :errorTop="'pt-10'">
-              <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.token}}</p>
+              <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.pair}}</p>
             </InputWithValidation>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-3 pb-3 px-3">
@@ -19,7 +19,7 @@
               </div>
               <div class="flex flex-col h-full justify-between">
                 <p class="text-xs text-oswapBlue-light">LP Tokens Staked</p>
-                <p class="text-lg dark:text-gray-400">{{parseFloat(maxAmount).toFixed(6)}}</p>
+                <p class="text-lg dark:text-gray-400">{{parseFloat(this.getEthUnits(this.maxAmount)).toFixed(5)}}</p>
               </div>
             </div>
             <div class="flex items-center justify-end">
@@ -79,7 +79,7 @@
           <transition tag="div" name="approve-btn" class="inline-block absolute">
             <div v-if="buttonState == 'finished'" class="flex w-28 justify-between items-center border border-oswapGreen glow-oswapGreen-light-md space-x-1 p-2 pl-3 rounded-full dark:bg-oswapDark-gray bg-gray-100 cursor-default">
               <div class="flex flex-1 items-center justify-right">
-                <p class="text-sm text-oswapGreen">Staked</p>
+                <p class="text-sm text-oswapGreen">Unstaked</p>
               </div>
               <i class="las la-check-circle text-xl text-oswapGreen"></i>
             </div> 
@@ -103,7 +103,7 @@
     props: {
       pool: Object,
       isOpen: Boolean,
-      maxAmount: Number
+      maxAmount: Object
     },
     data() {
       return {
@@ -128,7 +128,7 @@
         this.buttonState = 'finished';
       },
       setMax() {
-        this.amount = String(this.maxAmount);
+        this.amount = this.getEthUnits(this.maxAmount);
       },
       setPool() {
         // reset Input
@@ -160,7 +160,7 @@
           } else {
             delete this.errors['blank'];
           }
-          if (parseFloat(value) > parseFloat(this.maxAmount)) {
+          if (parseFloat(value) > parseFloat(this.getEthUnits(this.maxAmount))) {
             this.errors['exceed'] = 'Your input exceeds the amount you have staked!';
           } else {
             delete this.errors['exceed'];

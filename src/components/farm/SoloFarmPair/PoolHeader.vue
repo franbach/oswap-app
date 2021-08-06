@@ -44,14 +44,16 @@
 
 <script>
   import openswap from "@/shared/openswap.js";
-  import { ethers } from "ethers";
+  import { ethers } from 'ethers'
+  import { mapGetters } from 'vuex';
+
 
   export default {
     name: 'PoolHeader',
     mixins: [openswap],
     props: {
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {
@@ -95,12 +97,25 @@
         }
       });
 
-      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
-      var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
-      var rewardValue = await this.getRewardValue(this.pool, 100)
-      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+     var rewardValue = await this.getRewardValue(this.pool, 100)
+      setInterval(async function (){
+        var poolData = this.updatePoolState(this.pool);
+        this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(this.poolData.lpStakedTotal)).toFixed(5));
+        var liquidityValue = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal))
+        if(liquidityValue !== undefined){
+          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+        }
+         
+      }.bind(this), 1000);
     },
     methods: {
+           ...mapGetters('farm/farmData', ['getSoloData']),
+      updatePoolState: function(pool){
+      var farmData = this.getSoloData()
+      var poolData = farmData[pool.i]
+     return poolData;
+     
+      },
       getWindowSize() {
         return {
           height: document.documentElement.getBoundingClientRect().height,
