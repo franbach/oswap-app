@@ -8,7 +8,7 @@
     </transition>
     <!-- Token Selection Modal -->
     <!-- Modal backdrop must be outside of transition tag otherwise it appears only when modal animation ends -->
-    <div v-if="this.getStepState('selectmodal')" @click="goTo('settokens')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-30"></div>
+    <div v-if="this.getStepState('selectmodal')" @click="goTo('settokens')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-50"></div>
     <transition name="modal-fall" appear>
       <div v-if="this.getStepState('selectmodal')">
         <LiquidityModal :whichToken="whichToken" />

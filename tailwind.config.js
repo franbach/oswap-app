@@ -122,7 +122,7 @@ module.exports = {
       72: '18rem',
       80: '20rem',
       88: '22rem',
-      96: '24rem',
+      96: '24rem'
     },
     animation: {
       none: 'none',
@@ -424,6 +424,9 @@ module.exports = {
       '5/6': '83.333333%',
       full: '100%',
       screen: '100vh',
+      ss: '450px',
+      xs: '500px',
+      sm: '600px'
     }),
     inset: (theme, { negative }) => ({
       auto: 'auto',
@@ -548,6 +551,8 @@ module.exports = {
       full: '100%',
       min: 'min-content',
       max: 'max-content',
+      ss: '320px',
+      xs: '340px'
     },
     objectPosition: {
       bottom: 'bottom',
@@ -817,6 +822,16 @@ module.exports = {
       30: '30',
       40: '40',
       50: '50',
+      60: '60',
+      70: '70',
+      80: '80',
+      90: '90',
+      100: '100',
+      110: '110',
+      120: '120',
+      130: '130',
+      140: '140',
+      150: '150'
     },
   },
   variantOrder: [

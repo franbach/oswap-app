@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-col ss:pt-0 ss:pb-6 xs:pt-6 xs:pb-6">
+  <div class="flex w-full flex-col ss:pt-0 ss:pb-6 xs:pt-6 xs:pb-6 sm:pb-12">
     <div class="flex md:space-x-6 items-center">
       <div class="md:flex hidden items-center justify-center h-56 w-80 overflow-hidden">
         <img src="@/assets/farm_picture2.png" alt="" class="h-56 object-cover">

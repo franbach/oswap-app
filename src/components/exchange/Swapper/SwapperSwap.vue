@@ -11,7 +11,7 @@
 
   <!-- Swap -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="parseAndExecuteSwap" v-if="this.getBtnState({swap: 'swap'})" class="flex w-28">
+    <div @click="parseAndExecuteSwap" v-if="this.getBtnState({swap: 'swap'})" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
@@ -24,7 +24,7 @@
 
   <!-- Swapping -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({swap: 'swapping'})" class="flex w-28">
+    <div v-if="this.getBtnState({swap: 'swapping'})" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">
@@ -84,17 +84,14 @@
         if(token0.oneZeroxAddress != this.WONE() && token1.oneZeroxAddress != this.WONE()){
           await this.swapExactTokensForTokens(this.amount, this.amountOut, this.path, token0, token1)
           this.setBtnState({swap: 'swapped'});
-          
         }
         if(token0.oneZeroxAddress == this.WONE()){
           await this.swapETHForExactTokens(this.amount, this.amountOut, this.path, token1)
           this.setBtnState({swap: 'swapped'});
-        
         }
         if(token1.oneZeroxAddress == this.WONE()){
           await this.swapTokensForExactETH(this.amount, this.amountOut, this.path, token0)
           this.setBtnState({swap: 'swapped'});
-          
         }
         this.$emit('reload', true)
       }
