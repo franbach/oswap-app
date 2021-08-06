@@ -1,20 +1,14 @@
 <template>
   <div id="root" :class="darkmode ? 'dark bg-wave-dark' : 'bg-wave'" class="antialiased pt-18 bg-no-repeat bg-bottom">
-    <div
-      id="header"
-      class="flex flex-1 fixed inset-x-0 top-0 dark:bg-oswapDark-gray bg-gray-200 z-50"
-    >
+    <div id="header" class="flex flex-1 fixed inset-x-0 top-0 dark:bg-oswapDark-gray bg-gray-200 z-50">
       <Header />
     </div>
 
-    <div
-      id="body"
-      class="flex w-full oswap-layout z-20"
-    >
+    <div id="body" class="flex w-full oswap-layout z-20">
       <router-view />
     </div>
 
-    <div id="footer" class="w-full z-50">
+    <div id="footer" class="w-full h-full z-40">
       <Footer @dark-mode="changeColor()" :colorMode="this.darkmode" />
     </div>
   </div>

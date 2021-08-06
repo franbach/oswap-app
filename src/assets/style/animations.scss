@@ -1,6 +1,6 @@
 // Left and Right Transitions
 .horizontal-enter-active {
-  @apply transform transition-all duration-200 ease-out
+  @apply transform transition-all duration-200 ease-out z-60 absolute
 }
 .horizontal-enter-from {
   @apply translate-x-4 opacity-0
@@ -9,7 +9,7 @@
   @apply translate-x-0 opacity-100
 }
 .horizontal-leave-active {
-  @apply transform transition-all duration-150 ease-out
+  @apply transform transition-all duration-150 ease-out z-60
 }
 .horizontal-leave-from {
   @apply translate-x-0 opacity-100
@@ -40,7 +40,7 @@
 
 // Modal Fall Transition
 .modal-fall-enter-active {
-  @apply transform transition-all duration-200 ease-out z-60
+  @apply transform transition-all duration-200 ease-out z-60 absolute
 }
 .modal-fall-enter-from {
   @apply -translate-y-4 opacity-0

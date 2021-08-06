@@ -1,10 +1,10 @@
 <template>
-  <div id="exchange" class="relative max-w-screen-xl mx-auto flex flex-1 items-center justify-center xl:px-0 px-3 text-gray-500">
+  <div id="exchange" class="relative max-w-screen-xl mx-auto items-center flex flex-1 justify-center xl:px-0 px-3 text-gray-500">
     <!-- Steps between Components -->
 
     <!-- Swap -->
     <transition name="horizontal" appear>
-      <div v-if="this.getStepState('swap')" class="absolute">
+      <div v-if="this.getStepState('swap')">
         <Swap @triggerModal="triggerModal" />
       </div>
     </transition>
@@ -19,8 +19,9 @@
     </transition>
 
     <!-- Swapper -->
+    <!-- Modal backdrop must be outside of transition tag otherwise it appears only when modal animation ends -->
     <transition name="horizontal" appear>
-      <div v-if="this.getStepState('swapper')" class="absolute">
+      <div v-if="this.getStepState('swapper')">
         <Swapper :key="forceR" @reload="reload"/>
       </div>
     </transition>

@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col px-1 mt-2">
-    <div class="flex items-center justify-between text-xs pb-2">
-      <p class="dark:text-gray-300">Slippage Rate</p>
-      <div class="flex items-center space-x-2">
+    <div class="flex items-center justify-between text-xs pb-2 min-w-0">
+      <p class="dark:text-gray-300 text-el">Slippage Rate &nbsp;</p>
+      <div class="flex items-center ss:space-x-1 xs:space-x-2">
         <div class="flex">
           <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
             <p>{{selectedRate}}%</p>
@@ -14,25 +14,25 @@
         <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-2 py-2">
-      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+    <div class="grid grid-cols-2 gap-2 py-2 min-w-0">
+      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Median Rate</p>
-        <p>{{mRate}}</p>
+        <p class="text-el">{{mRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Current Rate</p>
-        <p>{{cRate}}</p>
+        <p class="text-el">{{cRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Next Rate</p>
-        <p>{{nRate}}</p>
+        <p class="text-el">{{nRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 overflow-hidden bg-gray-100 p-1 rounded-lg items-start justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Price Impact</p>
-        <p>{{pImpact}}%</p>
+        <p class="text-el">{{pImpact}}%</p>
       </div>
     </div>
   </div>
