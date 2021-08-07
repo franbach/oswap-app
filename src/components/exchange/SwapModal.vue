@@ -34,7 +34,8 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex';
+  import { toastMe } from '@/components/toaster/toaster.js';
 
   export default {
     name: 'SwapModal',
@@ -57,21 +58,43 @@
     },
     methods: {
       ...mapActions('exchange', ['setToken', 'goTo']),
+      ...mapGetters('exchange', ['getToken']),
       
       doCommand(e) {
         if (e.code == 'Escape') { this.goTo('swap'); }
       },
 
       selectToken(token) {
-        // Action for state.swap mutation
-        // 'this.setToken' is a function in the 'exchange.js' state management.
-        this.setToken({ tokenRef: this.whichToken, token: token });
-        
-        // Resets search field
-        this.search = ''
-
-        // closes the modal
-        this.goTo('swap');
+        if (this.whichToken == 'token1') {
+          if (this.getToken()['token2'] && this.getToken()['token2'].Symbol == token.Symbol) {
+            toastMe('warning', {
+              title: 'Selection Error',
+              msg: "You can't select the same token twice!",
+              link: false,
+            })
+          } else {
+            this.setToken({ tokenRef: this.whichToken, token: token });
+            // Resets search field
+            this.search = ''
+            // closes the modal
+            this.goTo('swap');
+          }
+        }
+        if (this.whichToken == 'token2') {
+          if (this.getToken()['token1'] && this.getToken()['token1'].Symbol == token.Symbol) {
+            toastMe('warning', {
+              title: 'Selection Error',
+              msg: "You can't select the same token twice!",
+              link: false,
+            })
+          } else {
+            this.setToken({ tokenRef: this.whichToken, token: token });
+            // Resets search field
+            this.search = ''
+            // closes the modal
+            this.goTo('swap');
+          }
+        }
       },
     },
   }
