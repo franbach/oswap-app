@@ -66,6 +66,7 @@
 
   import { mapGetters, mapActions } from 'vuex'
   import openswap from "@/shared/openswap.js";
+  import { ethers } from 'ethers'
   import { createWatcher } from '@makerdao/multicall';
 
   export default {
@@ -150,18 +151,19 @@
         this.token1Approved = true
       },
       parseResults: async function(results){
-        let token0 = this.getToken()['token1']
-        let token1 = this.getToken()['token2']
+        const token0 = this.getToken()['token1']
+        const token1 = this.getToken()['token2']
 
 
-        this.balances.token0 = results[1]['value']
-        this.balances.token1 = results[2]['value']
-        this.balances.lpToken = results[0]['value']
+        this.balances.token0 = this.getFormatedUnits(results[1]['value'].toString(), token0)
+        this.balances.token1 = this.getFormatedUnits(results[2]['value'].toString(), token1)
+        this.balances.lpToken = this.getEthUnits(results[0]['value'])
+        
         if(token0.oneZeroxAddress == this.WONE()){
-          this.balances.token0 = await this.getTokenBalance(token0);
+          this.balances.token0 = this.getEthUnits(await this.getOneBalance())
         }
         if(token1.oneZeroxAddress == this.WONE()){
-          this.balances.token1 = await this.getTokenBalance(token1);
+          this.balances.token1 = this.getEthUnits(await this.getOneBalance())
         }
      },
       initMulticall: async function(){
@@ -198,7 +200,7 @@
             {
               target: this.pairAddress,
               call: ['balanceOf(address)(uint256)', userAddress],
-              returns: [['BALANCE_OF_LP', val => val / 10 ** 18]]
+              returns: [['BALANCE_OF_LP', val => val]]
             }
           );
           //Staked LP Balance Calls
@@ -206,7 +208,7 @@
             {
               target: token0,
               call: ['balanceOf(address)(uint256)', userAddress],
-              returns: [['BALANCE_OF_T0', val => val / 10 ** 18]]
+              returns: [['BALANCE_OF_T0', val => val]]
             }
           );
           
@@ -215,7 +217,7 @@
             {
               target: token1,
               call: ['balanceOf(address)(uint256)', userAddress],
-              returns: [['BALANCE_OF_T1', val => val / 10 ** 18]]
+              returns: [['BALANCE_OF_T1', val => val]]
             }
           ); 
         return CALL;

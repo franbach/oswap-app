@@ -88,10 +88,10 @@
         }
 
         for (var n in this.soloData) {
-          temp = temp + parseFloat(this.getEthUnits(this.farmData[n].pendingReward))
+          temp = temp + parseFloat(this.getEthUnits(this.soloData[n].pendingReward))
         }
         for (var n in this.customData) {
-          temp = temp + parseFloat(this.getEthUnits(this.farmData[n].pendingReward))
+          temp = temp + parseFloat(this.getEthUnits(this.customData[n].pendingReward))
         }
 
         this.rewardsPending = temp

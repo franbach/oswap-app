@@ -10,11 +10,15 @@ const routes = [
       metaTags: [
         {
           name: 'description',
-          content: 'Openswap Decentralized Exchange on Harmony Blockchain. Harmony DEX. Buy Sell Crypto'
+          content: 'Openswap Decentralized Exchange on Harmony Blockchain. Harmony DEX. Buy, Sell, and Stake Crypto Assets. Earn Interest.'
         },
         {
           property: 'og:description',
-          content: 'The home page of our example app.'
+          content: 'Openswap Decentralized Exchange on Harmony Blockchain. Harmony DEX. Buy, Sell, and Stake Crypto Assets. Earn Interest.'
+        },
+        {
+          property: 'og:image',
+          content: 'https://mainnet.app.openswap.one/img/oswap_logo.5eef90b2.png'
         },
         {
           name: 'robots',

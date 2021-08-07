@@ -49,6 +49,12 @@ export default {
         return pair.token1Price.toSignificant(2);
 
     },
+    getOneBalance: async function(){
+        const provider = this.getProvider()
+        const userAddress = this.getUserAddress();
+        const balance = await provider.getBalance(userAddress);
+        return balance
+    },
     getTokenBalance: async function(token){
       const abi = [
         // balanceOf
@@ -74,16 +80,16 @@ export default {
       if (token.oneZeroxAddress == this.WONE()) {
         const balance = await provider.getBalance(userAddress);
 
-        let unformatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
-        let formatedbalance = (unformatedbalance / 1).toFixed(8)
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
 
         return formatedbalance;
       } else {
         const contract = new ethers.Contract(token.oneZeroxAddress, abi, provider)
         const balance = await contract
             .balanceOf(userAddress)
-        let unformatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
-        let formatedbalance = (unformatedbalance / 1).toFixed(8)
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
 
         return formatedbalance;
       }
@@ -1188,13 +1194,21 @@ export default {
       let slippageTolerence = new Percent(String(parseFloat(slippageRate)*10), "1000");
       let amountOut = trade
                       .minimumAmountOut(slippageTolerence)
-                      .toSignificant(8);
+                      .toFixed(token2.Decimals);
       
       return amountOut;
 
     },
     getUnits: function(amount, token){
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
+      return parsedunits;
+    },
+    getFormatedUnits: function(amount, token){
+      let parsedunits = ethers.utils.formatUnits(amount, token.decimals);
+      return parsedunits;
+    },
+    getFormatedUnitsDecimals: function(amount, decimals){
+      let parsedunits = ethers.utils.formatUnits(amount, decimals);
       return parsedunits;
     },
     getEthUnits: function(amount){

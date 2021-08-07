@@ -35,11 +35,17 @@
     },
     data() {
       return {
-        liquidityValue: ''
+        liquidityValue: '',
+        pendingReward: '',
       }
     },
     mounted: async function (){
-      this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
+      setInterval(
+        function(){
+          this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
+        }.bind(this), 1000
+      )
+      
 
     },
     methods: {

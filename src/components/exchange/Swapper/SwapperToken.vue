@@ -8,7 +8,7 @@
       </div>
       <div class="flex flex-col w-1/2 min-w-0">
         <p class="text-xs text-right dark:text-oswapGreen-dark">Balance</p>
-        <p class="text-sm text-right text-el text-gray-600 dark:text-gray-300">{{balance}}</p>
+        <p class="text-sm text-right text-el text-gray-600 dark:text-gray-300">{{parseFloat(balance).toFixed(8)}}</p>
 
         <p v-if="whichToken == 'token1'" class="text-xs text-right text-el text-oswapBlue-light"> - {{balanceOut}}</p>
         <p v-if="whichToken == 'token2'" class="text-xs text-right text-el text-oswapGreen"> {{balanceIn}}</p>

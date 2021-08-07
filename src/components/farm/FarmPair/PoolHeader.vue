@@ -46,7 +46,14 @@
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
       </div>
-      <p v-else class="ss:text-sm xs:text-xl xl:text-xl lg:text-lg lgg:text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
+      <div v-else>
+      <p class="ss:text-xs xs:text-sm xl:text-xs lg:text-xs lgg:text-xs font-bold text-oswapGreen-dark group-hover:text-oswapGreen italic">APR: </p>
+      <p class="ss:text-xs xs:text-sm xl:text-sm lg:text-sm lgg:text-sm font-bold text-oswapGreen-dark group-hover:text-oswapGreen italic"> {{this.rewards}} %</p>
+      </div>
+      
+      
+      
+      
     </div>
   </div>
 </template>
@@ -79,7 +86,7 @@ import { ethers } from "ethers";
         tt0s: '?',
         tt1s: '?',
         tas: '?',
-        rewards: null
+        rewards: '0'
       } 
     },
     mounted: async function() {

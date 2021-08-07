@@ -124,11 +124,12 @@
     methods: {
       unstake: async function() {
         this.buttonState = 'executing';
-        await this.unstakeLP(this.pool, String(this.roundDown(this.amount, 14)));
+        await this.unstakeLP(this.pool, this.getFormatedUnitsDecimals(this.maxAmount, 18));
         this.buttonState = 'finished';
       },
       setMax() {
-        this.amount = this.getEthUnits(this.maxAmount);
+        console.log(this.maxAmount)
+        this.amount = this.getEthUnits(this.maxAmount.toString());
       },
       setPool() {
         // reset Input
@@ -145,7 +146,7 @@
         this.amount = value;
         // Checking if the input is in the right format.
         // parseFloat seems to behave like this regex rule.
-        if (parseFloat(this.maxAmount) == 0) {
+        if (parseFloat(this.getEthUnits(this.maxAmount)) == 0) {
           this.errors['zeroStaked'] = 'Your don\'t have anything staked!';
         } else {
           delete this.errors['zeroStaked'];
