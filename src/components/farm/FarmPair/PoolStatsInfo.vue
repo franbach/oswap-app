@@ -6,12 +6,12 @@
           <div class="flex flex-1 items-center justify-between relative">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
-              <p class="text-2xl dark:text-gray-300">{{parseFloat(poolData[2]['value']).toFixed(6)}}</p>
+              <p class="text-2xl dark:text-gray-300">{{parseFloat(this.getEthUnits(this.poolData.pendingReward)).toFixed(6)}}</p>
             </div>
 
-            <div v-if="parseFloat(poolData[2]['value']).toFixed(6) > 0" class="glow-collect -right-1 z-20"></div>
+            <div v-if="parseFloat(this.getEthUnits(this.poolData.pendingReward)).toFixed(6) > 0" class="glow-collect -right-1 z-20"></div>
             
-            <div v-if="parseFloat(poolData[2]['value']).toFixed(6) == 0" class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray border border-gray-300 dark:border-gray-500 select-none">
+            <div v-if="parseFloat(this.getEthUnits(this.poolData.pendingReward)).toFixed(6) == 0" class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray border border-gray-300 dark:border-gray-500 select-none">
               <i class="las la-hand-holding-usd text-3xl text-gray-300 dark:text-gray-500"></i>
               <p class="text-lg text-gray-300 dark:text-gray-500">Collect !</p>
             </div>
@@ -38,7 +38,7 @@
             </div>
             <div class="flex flex-col h-full justify-between">
               <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
-              <p class="text-lg dark:text-gray-400">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
+              <p class="text-lg dark:text-gray-400">{{parseFloat(this.getEthUnits(this.poolData.lpBalanceStaked)).toFixed(5)}}</p>
             </div>
           </div>
           <div class="flex h-12 space-x-2">
@@ -77,7 +77,7 @@
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-coins dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-400">LP Tokens Available: {{parseFloat(poolData[0]['value']).toFixed(5)}}</p>
+          <p class="text-sm font-thin dark:text-gray-400">LP Tokens Available: {{parseFloat(this.getEthUnits(this.poolData.lpBalance)).toFixed(5)}}</p>
         </div>
       </div>
 
@@ -123,13 +123,15 @@
 
 <script>
 import openswap from "@/shared/openswap.js";
+  import { mapGetters, mapActions } from 'vuex';
+
   export default {
     name: 'PoolStatsInfo',
     mixins: [openswap],
     props: {
       isOpen: Boolean,
       pool: Object,
-      poolData: Array,
+      poolData: Object,
     },
     data() {
       return {
@@ -145,30 +147,37 @@ import openswap from "@/shared/openswap.js";
         stakeWeight: '0 ',
         stakeWeight: '0 ',
         weeklyRewards: '0.00',
-        monthlyRewards: '0.00'
+        monthlyRewards: '0.00',
+        poolState: {}
       } 
     },
     mounted: async function(){
-      var valueData = await this.getTokenAmounts(
-        this.pool,
-        String(this.poolData[4]['value']),
-        String(this.poolData[3]['value']),
-        String(this.poolData[1]['value'])
-      );
-      this.pt0s = valueData[0]
-      this.pt1s = valueData[1]
-      this.stakeWeight = this.getStakeWeight(this.poolData[3]['value'], this.poolData[1]['value'])
+    
+      this.stakeWeight = this.getStakeWeight(this.poolData.lpBalanceStaked, this.poolData.lpStakedTotal)
       let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
   
       this.weeklyRewards = rewards[0];
       this.monthlyRewards = rewards[1];
+
+      await setInterval( function (){
+        var poolData = this.updatePoolState(this.pool);
+        this.pt0s = poolData.token0Pstaked
+        this.pt1s = poolData.token1Pstaked
+      }.bind(this), 1000);
     },
     methods: {
+      ...mapGetters('farm/farmData', ['getFarmData']),
       closeStats() {
         this.$emit('setPool', 'close')
         if (window.innerWidth >= 768) {
           this.oswapEmit.emit("recalc-tooltips");
         }
+      },
+      updatePoolState: function(pool){
+      var farmData = this.getFarmData()
+      var poolData = farmData[pool.i]
+     return poolData;
+     
       }
     }
   }

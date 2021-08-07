@@ -7,7 +7,7 @@
           <i class="las la-hand-holding-usd text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Earned</p>
         </div>
-        <p class="text-sm font-bold dark:text-gray-300 text-el">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
+        <p class="text-sm font-bold dark:text-gray-300 text-el">{{pendingReward}}</p>
       </div>
       <!-- Liquidity Info -->
       <div class="flex min-w-0 w-full flex-col h-full justify-between">
@@ -43,7 +43,7 @@
     props: {
       isOpen: Boolean,
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {
@@ -51,7 +51,11 @@
       }
     },
     mounted: async function (){
-      let temp = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData[1]['value'])).toFixed(2)
+      this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
+
+
+
+      let temp = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal)).toFixed(2)
       this.liquidityValue = ethers.utils.commify(temp);
     },
     methods: {

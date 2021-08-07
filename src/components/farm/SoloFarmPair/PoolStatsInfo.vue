@@ -6,12 +6,12 @@
           <div class="flex flex-1 items-center justify-between relative">
             <div class="flex h-full flex-col justify-between">
               <p class="text-xs text-oswapGreen-dark">Your Unclaimed Rewards</p>
-              <p class="text-2xl dark:text-gray-300">{{parseFloat(poolData[2]['value']).toFixed(6)}}</p>
+              <p class="text-2xl dark:text-gray-300">{{parseFloat(this.getEthUnits(this.poolData.pendingReward)).toFixed(6)}}</p>
             </div>
             
-            <div v-if="parseFloat(poolData[2]['value']).toFixed(6) > 0" class="glow-collect -right-1 z-20"></div>
+            <div v-if="parseFloat(this.getEthUnits(this.poolData.pendingReward)).toFixed(6) > 0" class="glow-collect -right-1 z-20"></div>
             
-            <div v-if="parseFloat(poolData[2]['value']).toFixed(6) == 0" class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray border border-gray-300 dark:border-gray-500 select-none">
+            <div v-if="parseFloat(this.getEthUnits(this.poolData.pendingReward)).toFixed(6) == 0" class="absolute -right-1 z-30 flex space-x-2 px-3 py-3 items-center rounded-lg bg-gray-100 group-scope dark:bg-oswapDark-gray border border-gray-300 dark:border-gray-500 select-none">
               <i class="las la-hand-holding-usd text-3xl text-gray-300 dark:text-gray-500"></i>
               <p class="text-lg text-gray-300 dark:text-gray-500">Collect !</p>
             </div>
@@ -37,19 +37,8 @@
               <i class="las la-coins text-xl text-oswapGreen"></i>
             </div>
             <div class="flex flex-col h-full justify-between">
-              <p class="text-xs text-oswapBlue-light">Staked LP Tokens</p>
-              <p class="text-lg dark:text-gray-400">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
-            </div>
-          </div>
-          <div class="flex h-12 space-x-2">
-            <div class="flex items-start h-full">
-              <div class="flex items-center justify-center rounded-full bg-gray-50 h-5 w-5 overflow-hidden">
-                <img :src="pool.imgtoken0" class="h-4" alt="">
-              </div>
-            </div>
-            <div class="flex flex-col h-full justify-between pt-0.5">
-              <p class="text-xs text-oswapBlue-light">{{pool.token}} Staked</p>
-              <p class="text-lg dark:text-gray-400">{{parseFloat(poolData[3]['value']).toFixed(5)}}</p>
+              <p class="text-xs text-oswapBlue-light">Staked {{pool.token}} Tokens</p>
+              <p class="text-lg dark:text-gray-400">{{parseFloat(this.getEthUnits(this.poolData.lpBalanceStaked)).toFixed(5)}}</p>
             </div>
           </div>
         </div>
@@ -66,7 +55,7 @@
         </div>
         <div class="flex space-x-2 h-5 items-center">
           <i class="las la-coins dark:text-oswapGreen"></i>
-          <p class="text-sm font-thin dark:text-gray-400">LP Tokens Available: {{parseFloat(poolData[0]['value']).toFixed(5)}}</p>
+          <p class="text-sm font-thin dark:text-gray-400">LP Tokens Available: {{parseFloat(this.getEthUnits(this.poolData.lpBalance)).toFixed(5)}}</p>
         </div>
       </div>
 
@@ -117,7 +106,7 @@ import openswap from "@/shared/openswap.js";
     props: {
       isOpen: Boolean,
       pool: Object,
-      poolData: Array,
+      poolData: Object,
     },
     data() {
       return {
@@ -128,8 +117,7 @@ import openswap from "@/shared/openswap.js";
           offset: 16,
           speed: 300
         },
-        pt0s: '?',
-        pt1s: '?',
+
         stakeWeight: '0 ',
         stakeWeight: '0 ',
         weeklyRewards: '0.00',
@@ -137,8 +125,7 @@ import openswap from "@/shared/openswap.js";
       } 
     },
     mounted: async function() {
-      this.stakeWeight = this.getStakeWeight(this.poolData[3]['value'], this.poolData[1]['value'])
-      console.log('% ' + this.stakeWeight)
+      this.stakeWeight = this.getStakeWeight(this.poolData.lpBalanceStaked, this.poolData.lpStakedTotal)
       let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
 
       this.weeklyRewards = rewards[0];

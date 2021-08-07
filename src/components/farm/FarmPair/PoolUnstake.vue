@@ -19,7 +19,7 @@
               </div>
               <div class="flex flex-col h-full justify-between">
                 <p class="text-xs text-oswapBlue-light">LP Tokens Staked</p>
-                <p class="text-lg dark:text-gray-400">{{parseFloat(maxAmount).toFixed(6)}}</p>
+                <p class="text-lg dark:text-gray-400">{{parseFloat(this.getEthUnits(this.maxAmount)).toFixed(5)}}</p>
               </div>
             </div>
             <div class="flex items-center justify-end">
@@ -103,7 +103,7 @@
     props: {
       pool: Object,
       isOpen: Boolean,
-      maxAmount: Number
+      maxAmount: Object
     },
     data() {
       return {
@@ -124,11 +124,12 @@
     methods: {
       unstake: async function() {
         this.buttonState = 'executing';
-        await this.unstakeLP(this.pool, String(this.roundDown(this.amount, 14)));
+        await this.unstakeLP(this.pool, this.getFormatedUnitsDecimals(this.maxAmount, 18));
         this.buttonState = 'finished';
       },
       setMax() {
-        this.amount = String(this.maxAmount);
+        console.log(this.maxAmount)
+        this.amount = this.getEthUnits(this.maxAmount.toString());
       },
       setPool() {
         // reset Input
@@ -145,7 +146,7 @@
         this.amount = value;
         // Checking if the input is in the right format.
         // parseFloat seems to behave like this regex rule.
-        if (parseFloat(this.maxAmount) == 0) {
+        if (parseFloat(this.getEthUnits(this.maxAmount)) == 0) {
           this.errors['zeroStaked'] = 'Your don\'t have anything staked!';
         } else {
           delete this.errors['zeroStaked'];
@@ -160,7 +161,7 @@
           } else {
             delete this.errors['blank'];
           }
-          if (parseFloat(value) > parseFloat(this.maxAmount)) {
+          if (parseFloat(value) > parseFloat(this.getEthUnits(this.maxAmount))) {
             this.errors['exceed'] = 'Your input exceeds the amount you have staked!';
           } else {
             delete this.errors['exceed'];

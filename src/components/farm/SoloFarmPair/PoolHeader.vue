@@ -37,21 +37,26 @@
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
       </div>
-      <p v-else class="ss:text-sm xs:text-xl xl:text-xl lg:text-lg lgg:text-xl font-bold text-pink-400 group-hover:text-oswapGreen italic">{{this.rewards}}%</p>
+           <div v-else>
+      <p class="ss:text-xs xs:text-sm xl:text-xs lg:text-xs lgg:text-xs font-bold text-oswapGreen-dark group-hover:text-oswapGreen italic">APR: </p>
+      <p class="ss:text-xs xs:text-sm xl:text-sm lg:text-sm lgg:text-sm font-bold text-oswapGreen-dark group-hover:text-oswapGreen italic"> {{this.rewards}} %</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import openswap from "@/shared/openswap.js";
-  import { ethers } from "ethers";
+  import { ethers } from 'ethers'
+  import { mapGetters } from 'vuex';
+
 
   export default {
     name: 'PoolHeader',
     mixins: [openswap],
     props: {
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {
@@ -95,12 +100,25 @@
         }
       });
 
-      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
-      var liquidityValue = await this.getLiquidityValueSolo(this.pool, parseFloat(this.poolData[1]['value']).toFixed(4))
-      var rewardValue = await this.getRewardValue(this.pool, 100)
-      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+     var rewardValue = await this.getRewardValue(this.pool, 100)
+      setInterval(async function (){
+        var poolData = this.updatePoolState(this.pool);
+        this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(this.poolData.lpStakedTotal)).toFixed(5));
+        var liquidityValue = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal))
+        if(liquidityValue !== undefined){
+          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+        }
+         
+      }.bind(this), 1000);
     },
     methods: {
+           ...mapGetters('farm/farmData', ['getSoloData']),
+      updatePoolState: function(pool){
+      var farmData = this.getSoloData()
+      var poolData = farmData[pool.i]
+     return poolData;
+     
+      },
       getWindowSize() {
         return {
           height: document.documentElement.getBoundingClientRect().height,

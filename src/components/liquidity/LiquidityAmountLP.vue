@@ -68,7 +68,7 @@
         
       },
       setMax() {
-        this.inputAmount(String(this.balances.lpToken))
+        this.inputAmount(this.balances.lpToken)
       }
     }
   }

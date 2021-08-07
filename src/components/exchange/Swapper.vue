@@ -13,7 +13,7 @@
         <SwapperReserves />
       </div>
       <Warning :warnings="warnings" />
-      <SwapperAmount :key="amountOut" @amount="setAmount" :balance="balance1" />
+      <SwapperAmount @amount="setAmount" :balance="balance1" />
       <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @setSlippageRate="setSlippageRate" @priceImpact="setPriceImpact" @path="setPath" />
       
       <div class="flex pt-3">
@@ -77,7 +77,6 @@
       ...mapActions('exchange/swapper', ['setBtnState']),
       reload(value){
        this.$emit('reload', true)
-       console.log(value)
       },
       setAmountOut(value){
         this.amountOut = value;

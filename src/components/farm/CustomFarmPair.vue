@@ -1,20 +1,20 @@
 <template>
   <div class="flex flex-col p-3 group bg-gray-200 hover:bg-slightGray dark:hover:bg-slightDark dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <!-- Header -->
-    <PoolHeader  :pool="pool" :poolData="poolData[0]"/>
+    <PoolHeader  :pool="pool" :poolData="poolData"/>
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
-      <PoolStatsClosed @setPool="setPool" :poolData="poolData[0]" :pool="pool"  :isOpen="poolStatsOff" />
+      <PoolStatsClosed @setPool="setPool" :poolData="poolData" :pool="pool"  :isOpen="poolStatsOff" />
 
       <!-- Show this when pool details is opened -->
-      <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData[0]" :pool="pool" @setPool="setPool" />
+      <PoolStatsInfo :isOpen="poolStatsOn" :poolData="poolData" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Stake -->
-      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData[0][0]['value']" :pool="pool" @setPool="setPool" />
+      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData.lpBalance" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Unstake -->
-      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData[0][3]['value']" :pool="pool" @setPool="setPool" />
+      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData.lpBalanceStaked" :pool="pool" @setPool="setPool" />
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@
     name: 'CustomFarmPair',
     props: {
       pool: Object,
-      poolData: Array,
+      poolData: Object,
     },
     components: {
       PoolHeader,
@@ -53,35 +53,6 @@
         poolStatsOn: false,
         poolStakeOn: false,
         poolUnstakeOn: false,
-        token0: null,
-        token1: null,
-        lpBalance: 0,
-        sushiBalance: 0,
-        pendingSushi: 0,
-        selectedPool: null,
-        //e1: 1,
-        amount: "0",
-        lpToken: {},
-        //addLiquidity: false,
-        staked: 0,
-        poolWeight: 0,
-        totalStaked: 0,
-        txHash: "",
-        tradeExecuted: false,
-        tradeSuccesful: false,
-        txLink: null,
-        loading: false,
-        totalLpSupply: 0,
-        token0PStaked: 0,
-        token1PStaked: 0,
-        token0TStaked: 0,
-        token1TStaked: 0,
-        unclaimedTotal: 0,
-        transactionExecuted: false,
-        totalStakedUI: null,
-        monthly: 0,
-        weekly: 0,
-       // pool: 0
       }
     },
     methods: {
