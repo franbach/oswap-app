@@ -4,7 +4,7 @@ import Exchange from '../views/Exchange.vue'
 const routes = [
   {
     path: '/',
-    name: 'Exchange',
+    name: 'OpenSwap Exchange',
     meta: {
       title: 'OpenSwap Exchange - Exchange ERC20 / BEP20 tokens',
       metaTags: [
@@ -30,7 +30,7 @@ const routes = [
   },
   {
     path: '/liquidity',
-    name: 'Liquidity',
+    name: 'OpenSwap Liquidity',
     meta: {
       title: 'OpenSwap Liquidity - Provide Liquidity ERC20 / BEP20 tokens',
       metaTags: [
@@ -60,7 +60,7 @@ const routes = [
   },
   {
     path: '/farm',
-    name: 'Farm',
+    name: 'OpenSwap Farms',
     meta: {
       title: 'OpenSwap Farms - Yield Farm ERC20 / BEP20 tokens',
       metaTags: [

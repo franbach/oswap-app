@@ -10,12 +10,13 @@
       <div class="absolute left-8 items-center justify-center flex w-12 h-12 overflow-hidden rounded-full bg-gray-50 border-4 border-slightGray dark:border-slightDark">
         <img :src="pool.imgtoken1" class="h-8 w-8">
       </div>
+      
       <!-- Pair Title -->
-      <div class="absolute left-20 pl-2 items-center justify-center flex h-12 space-x-2">
-        <p class="text-xs text-oswapBlue-light">{{pool.pair}}</p>
+      <div class="absolute left-10 pl-5 items-center justify-center flex h-12 space-x-2">
+        <p class="text-xs text-oswapBlue-light pl-5">{{pool.pair}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content :options="this.tooltip"
+          <tooltip-me-content :options="this.tooltip" 
             class="flex ss:w-64 xs:w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
           >
             <div class="flex space-x-2 items-center">
@@ -25,9 +26,8 @@
             <div class="flex flex-1 flex-col space-y-2 text-gray-500 dark:text-oswapDark-gray">
               <p class="text-sm mt-1">Total Staked</p>
               <div class="flex items-center text-xs">
-                <p>{{pool.pair}} Staked: {{tas}}</p>
+                <p>{{pool.token}} Staked: {{tas}}</p>
               </div>
-              
             </div>
           </tooltip-me-content>
         </tooltip-me>
@@ -47,15 +47,17 @@
 </template>
 
 <script>
-import openswap from "@/shared/openswap.js";
-import { ethers } from "ethers";
+  import openswap from "@/shared/openswap.js";
+  import { ethers } from 'ethers'
+  import { mapGetters } from 'vuex';
+
 
   export default {
     name: 'PoolHeader',
     mixins: [openswap],
     props: {
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {
@@ -69,8 +71,6 @@ import { ethers } from "ethers";
         },
         ttpObj: null,
         ttpRec: null,
-        tt0s: '?',
-        tt1s: '?',
         tas: '?',
         rewards: null
       } 
@@ -100,22 +100,26 @@ import { ethers } from "ethers";
           this.adjustTooltip();
         }
       });
-            
-      var valueData = await this.getTokenAmounts(
-        this.pool,
-        String(this.poolData[4]['value']),
-        String(this.poolData[3]['value']),
-        String(this.poolData[1]['value'])
-      );
-      this.tt0s = valueData[2]
-      this.tt1s = valueData[3]
-      this.tas = ethers.utils.commify(parseFloat(this.poolData[1]['value']).toFixed(4));
-/*
-      var liquidityValue = await this.getLiquidityValue(this.pool, valueData[4].toFixed(4), valueData[5].toFixed(4))
-      var rewardValue = await this.getRewardValue(this.pool, 100)   
-      this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)*/
+
+     var rewardValue = await this.getRewardValue(this.pool, 100)
+      setInterval(async function (){
+        var poolData = this.updatePoolState(this.pool);
+        this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(this.poolData.lpStakedTotal)).toFixed(5));
+        var liquidityValue = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal))
+        if(liquidityValue !== undefined){
+          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+        }
+         
+      }.bind(this), 1000);
     },
     methods: {
+           ...mapGetters('farm/farmData', ['getSoloData']),
+      updatePoolState: function(pool){
+      var farmData = this.getSoloData()
+      var poolData = farmData[pool.i]
+     return poolData;
+     
+      },
       getWindowSize() {
         return {
           height: document.documentElement.getBoundingClientRect().height,

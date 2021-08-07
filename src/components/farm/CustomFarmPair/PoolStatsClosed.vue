@@ -7,22 +7,10 @@
           <i class="las la-hand-holding-usd text-oswapGreen"></i>
           <p class="text-xs font-extralight text-oswapBlue-light">Earned</p>
         </div>
-        <p class="text-sm font-bold dark:text-gray-300 text-el">{{parseFloat(poolData[2]['value']).toFixed(5)}}</p>
+        <p class="text-sm font-bold dark:text-gray-300 text-el">{{pendingReward}}</p>
       </div>
       <!-- Liquidity Info -->
-      <div class="flex min-w-0 w-full flex-col h-full justify-between">
-        <div class="flex space-x-2 items-center">
-          <i class="las la-tint text-oswapGreen"></i>
-          <p class="text-xs font-extralight text-oswapBlue-light">Liquidity</p>
-        </div>
-        <div v-if="!this.liquidityValue" class="flex items-center pb-2 h-4">
-          <svg class="animate-spin h-4 w-4 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        </div>
-        <p v-else class="text-sm font-extralight pl-1 dark:text-gray-300 text-el">$ {{liquidityValue[0]}}</p>
-      </div>
+
     </div>
     <!-- Open Details Button -->
     <div class="flex h-12 items-end">
@@ -36,20 +24,24 @@
 
 <script>
   import openswap from "@/shared/openswap.js";
+  import { ethers } from "ethers";
   export default {
     name: 'PoolStatsClosed',
     mixins: [openswap],
     props: {
       isOpen: Boolean,
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {
         liquidityValue: ''
       }
     },
-    mounted: async function (){},
+    mounted: async function (){
+      this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
+
+    },
     methods: {
       setPool() {
         this.$emit('setPool', 'open');

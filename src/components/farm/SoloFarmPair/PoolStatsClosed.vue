@@ -43,7 +43,7 @@
     props: {
       isOpen: Boolean,
       pool: Object,
-      poolData: Array
+      poolData: Object
     },
     data() {
       return {

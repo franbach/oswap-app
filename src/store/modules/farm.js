@@ -28,6 +28,9 @@ export default {
         setSoloDataState({ commit }, value) {
           commit('_setSoloDataState', value)
         },
+        setCustomDataState({ commit }, value) {
+          commit('_setCustomDataState', value)
+        },
         setPoolDataState({ commit }, value) {
           commit('_setPoolDataState', value)
         },
@@ -41,6 +44,9 @@ export default {
         },
         _setSoloDataState: (state, value) => {
           state.soloData = value
+        },
+        _setCustomDataState: (state, value) => {
+          state.customData = value
         },
         _setPoolDataState: (state, value) => {
           state.farmData[value.i] = value.data

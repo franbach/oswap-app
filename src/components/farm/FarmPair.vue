@@ -5,11 +5,7 @@
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
-<<<<<<< HEAD
       <PoolStatsClosed @setPool="setPool" :poolData="poolData" :pool="pool"  :isOpen="poolStatsOff" />
-=======
-      <PoolStatsClosed @setPool="setPool" :poolData="poolData[0]" :pool="pool" :isOpen="poolStatsOff" />
->>>>>>> 59544d7f2632d0e4fda4eed2379d6edfb7b58837
 
       <!-- <div v-if="isOpen" class="fixed inset-0 bg-gray-700 bg-opacity-30"></div> -->
       <!-- Show this when pool details is opened -->

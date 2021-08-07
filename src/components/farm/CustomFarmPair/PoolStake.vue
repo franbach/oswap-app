@@ -19,7 +19,7 @@
               </div>
               <div class="flex flex-col h-full justify-between">
                 <p class="text-xs text-oswapBlue-light">LP Tokens Available</p>
-                <p class="text-lg dark:text-gray-400">{{parseFloat(maxAmount).toFixed(6)}}</p>
+                <p class="text-lg dark:text-gray-400">{{parseFloat(this.getEthUnits(this.maxAmount)).toFixed(5)}}</p>
               </div>
             </div>
             <div class="flex items-center justify-end">
@@ -52,9 +52,11 @@
 </template>
 
 <script>
-  import InputWithValidation from "@/components/InputWithValidation"
-  import farmStake from "@/components/farm/FarmPair/farmStake"
-  import farmApprove from "@/components/farm/FarmPair/farmApprove"
+  import openswap from "@/shared/openswap.js";
+
+  import InputWithValidation from "@/components/InputWithValidation";
+  import farmStake from "@/components/farm/FarmPair/farmStake";
+  import farmApprove from "@/components/farm/FarmPair/farmApprove";
 
   export default {
     name: 'PoolStake',
@@ -63,10 +65,11 @@
       farmApprove,
       farmStake
     },
+    mixins: [openswap],
     props: {
       pool: Object,
       isOpen: Boolean,
-      maxAmount: Number
+      maxAmount: Object
     },
     data() {
       return {
@@ -77,7 +80,7 @@
     },
     methods: {
       setMax() {
-        this.amount = String(this.maxAmount);
+        this.amount = this.getEthUnits(this.maxAmount);
       },
       setPool() {
         // reset Input
@@ -100,14 +103,19 @@
         } else {
           delete this.errors['blank'];
         }
-        if (parseFloat(value) > parseFloat(this.maxAmount)) {
+        if (parseFloat(value) > parseFloat(this.getEthUnits(this.maxAmount))) {
           this.errors['exceed'] = 'Your input exceeds the amount you have available!';
         } else {
           delete this.errors['exceed'];
         }
       },
       setStakeState(value) {
-        this.btnStake = value
+        // check if it has amount
+        if (this.maxAmount > 0) {
+          this.btnStake = value
+        } else {
+          this.btnStake = 'disabled'
+        }
       }
     }
   }
