@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-1 flex-col ss:w-80 xs:w-96">
+  <div class="flex flex-1 flex-col ss:w-80 xs:w-96 pb-5 pt-2.5">
     <div class="flex flex-1 flex-col p-4 bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
       <div class="flex items-center space-x-2 mb-3">
         <i class="las la-tint text-xl dark:text-gray-400"></i>
