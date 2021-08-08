@@ -1,8 +1,8 @@
 <template>
   <!-- Modal -->
-  <div style="height: 600px;" class="flex center-component flex-col p-2 z-60 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
-    <div class="relative flex items-center mb-2 dark:text-gray-600 text-gray-200 focus-within:text-oswapGreen dark:focus-within:text-oswapGreen">
-      <div class="flex flex-1 items-center">
+  <div class="flex ss:h-ss xs:h-sm center-component ss:w-80 xs:w-96 flex-col p-2 z-60 bg-white dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+    <div class="relative flex mb-2 dark:text-gray-600 text-gray-200 focus-within:text-oswapGreen dark:focus-within:text-oswapGreen">
+      <div class="flex h-10 flex-1 items-center">
         <i class="absolute las la-search text-2xl pl-2"></i>
         <input type="text" v-model="search" @input="this.retrieveTokens(search)" class="flex flex-1 ring-1 focus:outline-none focus:ring-1 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-2xl py-2 items-center pl-10 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
       </div>
@@ -12,16 +12,15 @@
     </div>
     <div id="modalTokenList" class="flex rounded-2xl overflow-x-hidden">
       <perfect-scrollbar class="flex flex-1 flex-col space-y-2 overflow-hidden">
-        <div class="flex flex-col bg-gray-50 dark:bg-oswapDark-gray rounded-2xl" v-for="(network, index) in this.retrieveTokens(search)" :key="index" >
-          <!-- network name -->
-          <div class="flex p-2 rounded-2xl items-center space-x-2">
-            <img :src="network.icon" class="h-4" alt="">
-            <p class="flex text-sm items-center dark:text-gray-300">{{network.name}}</p>
-          </div>
-          <!-- icons table -->
-          <div class="flex flex-wrap w-full mt-2 px-2">
-            <!-- icons -->
-            <div @click="selectToken(token)" v-for="(token, idx) in network.tokens" :key="idx" class="flex flex-col space-y-2 w-1/5 h-16 rounded-xl items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer mb-2">
+        <div class="flex bg-gray-50 dark:bg-oswapDark-gray rounded-2xl" v-for="(network, index) in this.retrieveTokens(search)" :key="index" >
+          <div class="w-full grid grid-cols-5 gap-2 p-2">
+            <!-- network name -->
+            <div class="flex col-span-5 p-2 rounded-2xl items-center space-x-2">
+              <img :src="network.icon" class="h-4" alt="">
+              <p class="flex text-sm items-center dark:text-gray-300">{{network.name}}</p>
+            </div>
+            <!-- icons table -->
+            <div @click="selectToken(token)" v-for="(token, idx) in network.tokens" :key="idx" class="flex flex-col space-y-2 h-16 rounded-xl items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
               <img :src="token.imgSrc" alt="" class="h-8 w-8 rounded-full flex items-center justify-center">
               <p class="text-xs dark:text-gray-300">
                 {{token.Symbol}}
@@ -35,7 +34,8 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex';
+  import { toastMe } from '@/components/toaster/toaster.js';
 
   export default {
     name: 'LiquidityModal',
@@ -59,21 +59,43 @@
     methods: {
       ...mapActions('exchange', ['setToken']),
       ...mapActions('liquidity/buttons', ['goTo']),
+      ...mapGetters('exchange', ['getToken']),
       
       doCommand(e) {
         if (e.code == 'Escape') { this.goTo('settokens'); }
       },
 
       selectToken(token) {
-        // Action for state.swap mutation
-        // 'this.setToken' is a function in the 'exchange.js' state management.
-        this.setToken({ tokenRef: this.whichToken, token: token });
-        
-        // Resets search field
-        this.search = ''
-
-        // closes the modal
-        this.goTo('settokens');
+        if (this.whichToken == 'token1') {
+          if (this.getToken()['token2'] && this.getToken()['token2'].Symbol == token.Symbol) {
+            toastMe('warning', {
+              title: 'Token Selection',
+              msg: `You already picked ${token.Symbol} ! Choose another token.`,
+              link: false,
+            })
+          } else {
+            this.setToken({ tokenRef: this.whichToken, token: token });
+            // Resets search field
+            this.search = ''
+            // closes the modal
+            this.goTo('settokens');
+          }
+        }
+        if (this.whichToken == 'token2') {
+          if (this.getToken()['token1'] && this.getToken()['token1'].Symbol == token.Symbol) {
+            toastMe('warning', {
+              title: 'Token Selection',
+              msg: `You already picked ${token.Symbol} ! Choose another token.`,
+              link: false,
+            })
+          } else {
+            this.setToken({ tokenRef: this.whichToken, token: token });
+            // Resets search field
+            this.search = ''
+            // closes the modal
+            this.goTo('settokens');
+          }
+        }
       },
     },
   }

@@ -11,7 +11,7 @@
 
   <!-- Ready to Remove -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="executeRemoveLiquidity" v-if="this.getBtnState({remove: 'remove'})" class="flex w-28">
+    <div @click="executeRemoveLiquidity" v-if="this.getBtnState({remove: 'remove'})" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
@@ -24,7 +24,7 @@
 
   <!-- Removing -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({remove: 'removing'})" class="flex w-28">
+    <div v-if="this.getBtnState({remove: 'removing'})" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait">
         <div class="flex flex-1 items-center justify-center">

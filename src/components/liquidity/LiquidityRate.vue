@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col mt-3 pl-1">
     <div class="flex items-center justify-between text-xs">
-      <p class="dark:text-gray-300">Slippage Rate</p>
-      <div class="flex items-center space-x-1">
+      <p class="dark:text-gray-300 text-el">Slippage Rate &nbsp;</p>
+      <div class="flex items-center ss:space-x-1 xs:space-x-2">
         <div class="flex">
           <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
             <p>{{selectedRate}}%</p>

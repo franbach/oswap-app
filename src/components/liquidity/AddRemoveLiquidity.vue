@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col">
-    <div class="flex flex-col p-4 bg-gray-200 dark:bg-gray-700 w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
+  <div class="flex flex-1 flex-col ss:w-80 xs:w-96">
+    <div class="flex flex-1 flex-col p-4 bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
       <div class="flex items-center space-x-2 mb-3">
         <i class="las la-tint text-xl dark:text-gray-400"></i>
         <p class="text-sm dark:text-gray-400">Liquidity</p>
@@ -11,7 +11,7 @@
         </div>
         <LiquidityInfo :pairAddress="pairAddress"/>
       </div>
-      <div class="grid grid-cols-2 pt-4">
+      <div class="flex flex-1 pt-4">
         <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-oswapGreen focus:outline-none">
           <p class="text-sm">Add Liquidity</p>
           <i class="las la-level-down-alt"></i>
@@ -225,12 +225,12 @@
     
 
       toggleAdd() {
-        this.addLiquidity = !this.addLiquidity;
+        this.addLiquidity = true;
         this.removeLiquidity = false;
       },
 
       toggleRemove() {
-        this.removeLiquidity = !this.removeLiquidity;
+        this.removeLiquidity = true;
         this.addLiquidity = false;
       },
 

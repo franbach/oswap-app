@@ -2,7 +2,7 @@
   <div id="liquidity" class="relative max-w-screen-xl mx-auto flex flex-1 items-center justify-center xl:px-0 px-3 text-gray-500">
     <!-- Select Tokens -->
     <transition name="horizontal" appear>
-      <div v-if="this.getStepState('settokens')" class="absolute">
+      <div v-if="this.getStepState('settokens')">
         <LiquidityTokens @triggerModal="triggerModal" />
       </div>
     </transition>
@@ -16,7 +16,7 @@
     </transition>
     <!-- Add/Remove Liquidity -->
     <transition name="horizontal" appear>
-      <div v-if="this.getStepState('addremoveliquidity')" class="absolute">
+      <div v-if="this.getStepState('addremoveliquidity')">
         <AddRemoveLiquidity />
       </div>
     </transition>
