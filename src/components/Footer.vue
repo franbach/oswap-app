@@ -1,7 +1,7 @@
 <template>
-  <footer class="relative max-w-screen-xl space-y-1 mx-auto text-gray-500 justify-center items-end md:items-center flex flex-col h-14 p-3 py-8 xl:px-0 px-3">
+  <footer class="relative max-w-screen-xl space-y-2 mx-auto text-gray-500 justify-center items-end md:items-center flex flex-col h-24 p-3 py-8 xl:px-0 px-3">
     <ColorMode @dark-mode="setColorMode()" :value="colorMode" />    
-    <h1 class="text-sm dark:text-oswapGreen">{{ $route.name }}</h1>
+    <h1 class="text-sm dark:text-oswapGreen ss:pt-3 xs:pt-0">{{ $route.name }}</h1>
     <div class="flex items-center space-x-3">
       <a href="https://twitter.com/open_fi">
         <i class="lab la-twitter text-xl hover:text-oswapGreen-dark dark:text-oswapGreen dark:hover:text-oswapGreen-light"></i>

@@ -89,7 +89,7 @@
             <i class="las la-burn text-2xl text-oswapGreen-dark dark:text-oswapGreen group-scope-hover:text-gray-50 dark:group-scope-hover:text-oswapDark-gray"></i>
           </div>  
           <tooltip-me-content :options="tooltip" class="flex w-24 p-2 px-3 rounded-lg shadow-lg text-sm">
-            <p class="text-gray-50 dark:text-oswapDark-gray">Burn Fees</p>
+            <p>Burn Fees</p>
           </tooltip-me-content>
         </tooltip-me>
 
@@ -109,7 +109,7 @@
             <i class="las la-undo-alt text-lg text-oswapGreen-dark group-scope-hover:text-gray-50 dark:text-oswapGreen dark:group-scope-hover:text-oswapDark-gray"></i>
           </div>
           <tooltip-me-content :options="tooltip" class="flex p-2 px-3 rounded-lg shadow-lg text-sm">
-            <p class="text-gray-50 dark:text-oswapDark-gray">Refresh</p>
+            <p>Refresh</p>
           </tooltip-me-content>
         </tooltip-me>
         <!-- Close Button -->
@@ -138,7 +138,7 @@ import openswap from "@/shared/openswap.js";
         tooltip: {
           name: 'poolRefresh',
           position: 'top',
-          color: 'rgba(24, 213, 187, 0.9)',
+          color: '#f3f3f3',
           offset: 16,
           speed: 300
         },

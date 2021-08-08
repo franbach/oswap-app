@@ -68,8 +68,8 @@
         if (this.whichToken == 'token1') {
           if (this.getToken()['token2'] && this.getToken()['token2'].Symbol == token.Symbol) {
             toastMe('warning', {
-              title: 'Selection Error',
-              msg: "You can't select the same token twice!",
+              title: 'Token Selection',
+              msg: `You already picked ${token.Symbol} ! Choose another token.`,
               link: false,
             })
           } else {
@@ -83,8 +83,8 @@
         if (this.whichToken == 'token2') {
           if (this.getToken()['token1'] && this.getToken()['token1'].Symbol == token.Symbol) {
             toastMe('warning', {
-              title: 'Selection Error',
-              msg: "You can't select the same token twice!",
+              title: 'Token Selection',
+              msg: `You already picked ${token.Symbol} ! Choose another token.`,
               link: false,
             })
           } else {
