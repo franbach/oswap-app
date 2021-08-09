@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-1 flex-col space-y-3">
-    <div class="flex flex-1 items-center space-x-3">
+  <div class="flex flex-1 flex-col">
+    <div class="flex flex-1 items-center space-x-3 mb-3">
       <InputWithValidation @click="setInputClicked('1')" :input="amount0" :errors="error0" @catchInput="inputAmount0" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token0.Symbol}}</p>
       </InputWithValidation>
@@ -9,7 +9,7 @@
         <p class="text-xs">MAX</p>
       </div>
     </div>
-    <div class="flex items-center space-x-3">
+    <div class="flex flex-1 items-center space-x-3">
       <InputWithValidation @click="setInputClicked('2')" :input="amount1" :errors="error1" @catchInput="inputAmount1" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token1.Symbol}}</p>
       </InputWithValidation>

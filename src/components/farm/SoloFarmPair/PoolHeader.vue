@@ -113,11 +113,10 @@
     },
     methods: {
       ...mapGetters('farm/farmData', ['getSoloData']),
-      updatePoolState: function(pool){
-      var farmData = this.getSoloData()
-      var poolData = farmData[pool.i]
-     return poolData;
-     
+      updatePoolState: function(pool) {
+        var farmData = this.getSoloData()
+        var poolData = farmData[pool.i]
+        return poolData;
       },
       getWindowSize() {
         return {
