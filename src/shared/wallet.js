@@ -1,8 +1,10 @@
 import { mapGetters, mapActions } from 'vuex';
 import { ethers } from "ethers";
-
+import { toastMe } from '@/components/toaster/toaster.js';
+//import WalletConnectProvider from "@walletconnect/web3-provider"; See below
 export default {
-    created: function () { 
+    mounted: function () {
+      
     },
     computed: {
         ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
@@ -12,36 +14,95 @@ export default {
   
         connectWallet: async function() {
           console.log("connecting wallet")
-          if(this.getUserSignedIn == true){
-            this.disconnectWallet();
-            return;
-          }
-          if (typeof window.ethereum !== undefined) {
+
+          if (window.ethereum){
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
             const signer = await provider.getSigner();
             const network = await provider.getNetwork();
             const chainID = await network.chainId;
-            
-            const accounts = await signer.getAddress();
-            console.log(accounts)
-            this.setUserAddress(accounts);
             if (chainID != 1666600000) {
-              this.wrongChain = true; //this need to pop up a modal that changes chain if in metamask if chainID set incorrectly
+              toastMe('warning', {
+                title: 'Wrong Network',
+                msg: `Please Use Harmony Network`,
+                link: false,
+              })
+              await this.disconnectWallet();
+              throw 'wrong chain'
+            }else{
+              const accounts = await signer.getAddress();
+              console.log(accounts)
+              this.setUserAddress(accounts);
+              
+              this.setSignedIn( true );
+              this.setUserWallet( provider );
+              toastMe('success', {
+                title: 'Wallet :',
+                msg: `Succesfully connected to : ` + accounts,
+                link: false,
+              })
+              this.walletConnected = true;
               return;
+              }
             }
-            this.setSignedIn( true );
-            this.setUserWallet( provider );
-            if (this.getUserSignedIn == true) {
-              this.walletConnected = !this.walletConnected;
-            }
-            return;
-          }
+
+            //Wallet Connect needs implementation later
+            /*
+            else {
+              const provider = new WalletConnectProvider({
+                rpc: {
+                  1666600000: "https://api.harmony.one"
+                },
+                qrcode: false,
+                qrcodeModalOptions: {
+                  mobileLinks: [
+                    "math",
+                    "metamask",
+                    "argent",
+                    "trust",
+                    "imtoken",
+                    "pillar",
+                  ],
+                }
+              });  
+              await provider.enable();
+              //const provider = new ethers.providers.Web3Provider(preprovider);
+              const signer = await provider.getSigner();
+              const chainID = await web3.eth.getChainId();
+              
+              if (chainID != 1666600000) {
+                  toastMe('warning', {
+                    title: 'Wrong Network',
+                    msg: `Please Use Harmony Network`,
+                    link: false,
+                  })
+                  await this.disconnectWallet();
+                  throw 'wrong chain'
+              }else{
+              const accounts = await signer.getAddress();
+              console.log(accounts)
+              this.setUserAddress(accounts);
+              
+              this.setSignedIn( true );
+              this.setUserWallet( provider );
+              toastMe('success', {
+                title: 'Wallet :',
+                msg: `Succesfully connected to : ` + accounts,
+                link: false,
+              })
+              this.walletConnected = true;
+              return;
+              }
+              
+            }*/
+            
+            
+           
           
         },
         disconnectWallet: async function() {
             this.setSignedIn( false );
-            this.walletConnected = !this.walletConnected;
+            this.walletConnected = false;
             return;
         },
         setdefaultWallet: async function(){
