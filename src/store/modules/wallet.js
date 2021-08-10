@@ -1,11 +1,9 @@
-import { ethers } from "ethers";
-
 export default {
   namespaced: true,
 
   state: {
     signedIn: false,
-    signedOut: false,
+    signedOut: true,
     address: "0x0000000000000000000000000000000000000003",
     wallet: null,
     explorer: "https://explorer.harmony.one/#/tx/"
