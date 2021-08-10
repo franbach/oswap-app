@@ -1,6 +1,6 @@
 
 <template >
-  <div id="walletState" class="pl-1 lg:pl-3" @click="connectWallet()">
+  <div id="walletState" class="pl-1 lg:pl-3" @click="Wallet()">
     <!-- Wallet disconnected state styling -->
     <div v-show="walletConnected === false" class="flex lg:w-44 items-center text-gray-500 space-x-1 lg:pr-2 p-1 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-100 cursor-pointer ring-1 ring-black ring-opacity-5">
       <div class="flex items-center p-1 bg-gray-200 dark:bg-oswapDark-gray rounded-md">
@@ -12,7 +12,7 @@
     </div>
 
     <!-- Wallet connected state styling -->
-    <div v-show="walletConnected" class="flex lg:w-44 items-center space-x-1 lg:pr-2 p-1 rounded-lg bg-opacity-20 hover:bg-opacity-50 cursor-pointer border-oswapGreen-dark border glow-oswapGreen-light-md">
+    <div v-show="walletConnected" @click="disconnectWallet()" class="flex lg:w-44 items-center space-x-1 lg:pr-2 p-1 rounded-lg bg-opacity-20 hover:bg-opacity-50 cursor-pointer border-oswapGreen-dark border glow-oswapGreen-light-md">
       <div class="flex items-center p-1 bg-oswapGreen rounded-md">
         <i class="las la-wallet text-xl text-white dark:text-oswapDark-gray"></i>
       </div>
@@ -26,16 +26,33 @@
 <script>
 
 import wallet from '@/shared/wallet.js'
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Wallet',
   mixins: [wallet],
   mounted(){
-    this.connectWallet();
+    this.Wallet()
+    window.ethereum.on('accountsChanged', function (accounts) {
+        this.connectWallet()
+      }.bind(this))
   },
   data() {
     return {
       walletConnected: false
+    }
+  },
+  computed: {
+        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
+    },
+  methods: {
+    Wallet: async function(){
+      if(this.getUserSignedIn == true){
+            this.disconnectWallet();
+            return;
+      }else{
+        this.connectWallet()
+      }
     }
   }
 }

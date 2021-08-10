@@ -36,6 +36,15 @@ export const hmytokens = {
     decimals: 18,
     imgSrc: "https://miro.medium.com/fit/c/56/56/1*6X4n2JzQweFbOjpneSWiOw.png"
   },
+  VINCI: {
+    Symbol: "VINCI",
+    name: "DaVinci Token",
+    oneAddress: "one1hrsyjuqcexg7scc3ke80m82hkp4wmwawwuv9ft",
+    oneZeroxAddress: "0xb8e0497018c991e86311b64efd9d57b06aedbbae",
+    decimals: 18,
+    imgSrc:
+      "https://d1xrz6ki9z98vb.cloudfront.net/venomswap/tokens/VINCI.png"
+  },
   HMOCHI: {
     Symbol: "hMOCHI",
     name: "MochiSwap Token Harmony",
@@ -52,6 +61,14 @@ export const hmytokens = {
     oneZeroxAddress: "0x7d0546dBb1Dca8108d99Aa389A8e9Ce0C40B2370",
     decimals: 18,
     imgSrc: "https://swoop-exchange.s3-us-west-1.amazonaws.com/tokens/LMA.png"
+  },
+  XYA: {
+    Symbol: "XYA",
+    name: "Freyala",
+    oneAddress: "one1nd5t7jlcnsg4cus3qh40d023vjhuc50yhu7n08",
+    oneZeroxAddress: "0x9b68BF4bF89c115c721105eaf6BD5164aFcc51E4",
+    decimals: 18,
+    imgSrc: "https://freyala.com/images/logo.png"
   },
   SEED: {
     Symbol: "SEED",

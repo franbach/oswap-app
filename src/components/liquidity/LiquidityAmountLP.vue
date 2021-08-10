@@ -60,7 +60,7 @@
         } else {
           delete this.errors['blank']
         }
-        if (parseFloat(value) > parseFloat(balance)) {
+        if (parseFloat(value) > parseFloat(this.getFormatedUnitsDecimals(balance, 18))) {
           this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
         } else {
           delete this.errors['exceed'];
