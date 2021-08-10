@@ -66,7 +66,7 @@
           delete this.errors['blank']
           this.$emit("amount", value);
         }
-        if (parseFloat(value) > parseFloat(this.getFormatedUnits(this.balance, this.getToken()['token2']))) {
+        if (parseFloat(value) > parseFloat(this.balance)) {
           this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
         } else {
           delete this.errors['exceed'];

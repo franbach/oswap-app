@@ -126,6 +126,7 @@
         this.buttonState = 'executing';
         await this.unstakeLP(this.pool, this.getFormatedUnitsDecimals(this.maxAmount, 18));
         this.buttonState = 'finished';
+        this.$emit("updateData")
       },
       setMax() {
         console.log(this.maxAmount)

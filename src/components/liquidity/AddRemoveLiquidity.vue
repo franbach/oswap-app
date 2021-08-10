@@ -130,6 +130,7 @@
         let amount0 = this.getToken0Amount()
 
         await this.removeLiquidityParse(token0, token1, amount0, this.slippageRate)
+        await this.initMulticall()
         
       },
       executeAddLiquidity: async function(){
@@ -139,6 +140,7 @@
         let amount0 = this.getToken0Amount()
         let amount1 = this.getToken1Amount()
         await this.addLiquidityParse(token0, token1, amount0, amount1, this.slippageRate)
+        await this.initMulticall()
         
       },
       setSlippage(value){

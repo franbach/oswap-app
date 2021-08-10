@@ -43,7 +43,7 @@
             <farmApprove :key="amount" :amount="this.amount" :pool="pool" @tellStake="setStakeState" />
           </div>
           <div class="flex items-center w-28 h-full relative">
-            <farmStake :key="amount" :amount="this.amount" :pool="pool" :btnState="btnStake" />
+            <farmStake :key="amount" :amount="this.amount" :pool="pool" :btnState="btnStake" @updateData="updateData"/>
           </div>
         </div>
       </div>
@@ -81,6 +81,9 @@
     methods: {
       setMax() {
         this.amount = this.getEthUnits(this.maxAmount);
+      },
+      updateData(){
+        this.$emit("updateData")
       },
       setPool() {
         // reset Input

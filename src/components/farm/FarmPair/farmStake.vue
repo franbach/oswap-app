@@ -76,6 +76,7 @@
         this.buttonState = 'executing'
         await this.stakeLP(this.pool, this.amount);
         this.buttonState = 'finished'
+        this.$emit('updateData')
       }
     }
   }
