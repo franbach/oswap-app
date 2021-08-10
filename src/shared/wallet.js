@@ -1,7 +1,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { ethers } from "ethers";
 import { toastMe } from '@/components/toaster/toaster.js';
-//import WalletConnectProvider from "@walletconnect/web3-provider"; See below
+//import WalletConnectProvider from "@walletconnect/web3-provider";
 export default {
     mounted: function () {
       

@@ -12,6 +12,14 @@
 // * useless block comment ty
 
 export const hmytokens = {
+  ONE: {
+    Symbol: "ONE",
+    name: "Harmony One",
+    oneAddress: "one1eanyppa9hvpr0g966e6zs5hvdjxkngn6jtulua",
+    oneZeroxAddress: "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+    imgSrc: "https://openfi.dev/tokens/default/ONE.png",
+    decimals: 18
+  },
   oSWAP: {
     Symbol: "oSWAP",
     name: "OpenSwap",

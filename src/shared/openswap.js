@@ -685,7 +685,7 @@ export default {
 
       const amountOut = price
         .quote(new TokenAmount(Token0, amountin.toString()))
-        .toFixed(this.token1.decimals);
+        .toFixed(this.token0.decimals);
         return amountOut
 
 
