@@ -83,10 +83,10 @@
           if (!this.createNewPair) {
             this.amount0 = value;
             this.formatError0Input(value);
-            this.input1().then(() => {
+            await this.input1()
               this.balanceError0Input(this.balances.token0)
               this.balanceError1Input(this.balances.token1)
-            })
+            
             this.setToken0Amount(value);
             this.setToken1Amount(this.amount1);
           } else {
@@ -124,10 +124,10 @@
           if (!this.createNewPair) {
             this.amount1 = value;
             this.formatError1Input(value);
-            this.input0().then(() => {
+            await this.input0()
               this.balanceError1Input(this.balances.token1) 
               this.balanceError0Input(this.balances.token0)
-            })
+         
             this.setToken1Amount(value);
             this.setToken0Amount(this.amount0);
           } else {

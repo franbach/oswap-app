@@ -9,7 +9,7 @@
       
       <!-- Pair Title -->
       <div class="absolute left-10 pl-5 items-center justify-center flex h-12 space-x-2">
-        <p class="text-xs text-oswapBlue-light">{{pool.token}}</p>
+        <p class="text-xs text-oswapBlue-light">{{pool.name[0]}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
           <tooltip-me-content :options="this.tooltip" 
@@ -22,7 +22,7 @@
             <div class="flex flex-1 flex-col space-y-2 text-gray-500 dark:text-oswapDark-gray">
               <p class="text-sm mt-1">Total Staked</p>
               <div class="flex items-center text-xs">
-                <p>{{pool.token}} Staked: {{tas}}</p>
+                <p>{{pool.name[0]}} Staked: {{tas}}</p>
               </div>
             </div>
           </tooltip-me-content>

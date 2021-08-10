@@ -7,7 +7,7 @@
     <transition name="farm" appear>
       <div v-if="soloData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
        <SoloFarmPair  v-for="(pool, index) in SoloPools" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
-        <FarmPair v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" />
+        <FarmPair v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
       <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
       </div>
       <div v-else class="flex h-full items-center mt-16">
@@ -60,11 +60,13 @@
         this.farmData = await this.initMulticall(Pools)
         this.setFarmDataState(this.farmData);
 
-        console.log(this.farmData)
+
         this.soloData = await this.initMulticall(SoloPools)
         this.setSoloDataState(this.soloData);
         this.getTotalPending();
       }.bind(this), timeout);
+
+
     },
     data() {
       return {
@@ -79,6 +81,15 @@
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
       ...mapActions('farm/farmData', ['setFarmDataState', 'setSoloDataState', 'setCustomDataState']),
+      updateData: async function(){
+        this.customData = await this.initMulticall(CustomPools)
+        this.setCustomDataState(this.customData);
+        this.farmData = await this.initMulticall(Pools)
+        this.setFarmDataState(this.farmData);
+
+        this.soloData = await this.initMulticall(SoloPools)
+        this.setSoloDataState(this.soloData);
+      },
       getTotalPending: async function(){
 
         let temp = 0;
