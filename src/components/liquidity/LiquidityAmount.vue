@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-1 flex-col">
-    <div class="flex flex-1 items-center space-x-3 mb-3">
+    <div class="flex flex-1 items-center space-x-3 mb-3 z-30">
       <InputWithValidation @click="setInputClicked('1')" :input="amount0" :errors="error0" @catchInput="inputAmount0" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token0.Symbol}}</p>
       </InputWithValidation>
@@ -9,7 +9,7 @@
         <p class="text-xs">MAX</p>
       </div>
     </div>
-    <div class="flex flex-1 items-center space-x-3">
+    <div class="flex flex-1 items-center space-x-3 z-20">
       <InputWithValidation @click="setInputClicked('2')" :input="amount1" :errors="error1" @catchInput="inputAmount1" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
         <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{token1.Symbol}}</p>
       </InputWithValidation>
@@ -49,15 +49,16 @@
       }
     },
     mounted: async function() {
-      if(!this.createNewPair){
-          this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
-          this.amount1 =  await this.getToken1Amount();
+      if (!this.createNewPair) {
+        this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
+        this.amount1 = await this.getToken1Amount();
       }      
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('liquidity/buttons', ['setBtnState']),
       ...mapActions('liquidity/amounts', ['setToken0Amount','setToken1Amount']),
+
       getToken1Amount: async function(){
         var amountOut = await this.getAmountsLiquidity(this.pair, this.token0, this.amount0)
         return amountOut;
@@ -66,57 +67,49 @@
         var amountOut = await this.getAmountsLiquidity(this.pair, this.token1, this.amount1)
         return amountOut;
       },
-
-      inputAmount0: async function(value){
-        if(this.clickedInput == '1'){
-          if(!this.createNewPair){
-            this.amount0 = value;
-            this.amount1 =  await this.getToken1Amount();
-            this.manageError0Input(value, this.balances.token0)   
-            this.manageError1Input(value, this.balances.token1)
-            this.setToken0Amount(value);
-            this.setToken1Amount(this.amount1);
-          }else{
-            this.amount0 = value;
-            this.setToken0Amount(value)
-          }
-        
-        }
-      },
-      inputAmount1:async function(value){
-        if(this.clickedInput == '2'){
-          if(!this.createNewPair){
-            this.amount1 = value;
-            this.amount0 =  await this.getToken0Amount();
-            this.manageError1Input(value, this.balances.token1) 
-            this.manageError0Input(value, this.balances.token0)
-            this.setToken1Amount(value);
-            this.setToken0Amount(this.amount0);
-          }else{
-              this.amount1 = value;
-              this.setToken1Amount(value);
-          }
-        
-        }
-          
-          
-      },
       setInputClicked: function(value){
         this.clickedInput = value
       },
       setMax0: async function() {
         this.clickedInput = '1'
         this.inputAmount0(String(this.balances.token0))
-        
-        
       },
       setMax1: async function() {
         this.clickedInput = '2'
         this.inputAmount1(String(this.balances.token1))
       },
-      manageError0Input(value,balance){
+      inputAmount0: async function(value) {
+        if (this.clickedInput == '1') {
+          if (!this.createNewPair) {
+            this.amount0 = value;
+            this.formatError0Input(value);
+            this.input1().then(() => {
+              this.balanceError0Input(this.balances.token0)
+              this.balanceError1Input(this.balances.token1)
+            })
+            this.setToken0Amount(value);
+            this.setToken1Amount(this.amount1);
+          } else {
+            this.amount0 = value;
+            this.setToken0Amount(value)
+          }
+        }
+      },
+      input0: async function() {
+        let input = await Promise.resolve(this.getToken0Amount());
+        this.amount0 = input
+        return input;
+      },
+      balanceError0Input(balance) {
+        if (parseFloat(this.amount0) > parseFloat(balance)) {
+          this.error0['exceed'] = 'Your input exceeds the amount available in your balance !';
+        } else {
+          delete this.error0['exceed'];
+        }
+      },
+      formatError0Input(value) {
         if (!value.match(/^\d*\.?\d*$/)) {
-          this.error0['format'] = 'Invalid format! e.g: 12345.678';
+          this.error0['format'] = 'Invalid format ! e.g: 12345.678';
         } else {
           delete this.error0['format'];
         }
@@ -125,15 +118,39 @@
         } else {
           delete this.error0['blank']
         }
-        if (parseFloat(value) > parseFloat(balance)) {
-          this.error0['exceed'] = 'Your input exceeds the amount available in your balance!';
-        } else {
-          delete this.error0['exceed'];
+      },
+      inputAmount1: async function(value) {
+        if (this.clickedInput == '2') {
+          if (!this.createNewPair) {
+            this.amount1 = value;
+            this.formatError1Input(value);
+            this.input0().then(() => {
+              this.balanceError1Input(this.balances.token1) 
+              this.balanceError0Input(this.balances.token0)
+            })
+            this.setToken1Amount(value);
+            this.setToken0Amount(this.amount0);
+          } else {
+            this.amount1 = value;
+            this.setToken1Amount(value);
+          }
         }
       },
-      manageError1Input(value,balance){
+      input1: async function() {
+        let input = await Promise.resolve(this.getToken1Amount());
+        this.amount1 = input
+        return input;
+      },
+      balanceError1Input(balance) {
+        if (parseFloat(this.amount1) > parseFloat(balance)) {
+          this.error1['exceed'] = 'Your input exceeds the amount available in your balance !';
+        } else {
+          delete this.error1['exceed'];
+        }
+      },
+      formatError1Input(value) {
         if (!value.match(/^\d*\.?\d*$/)) {
-          this.error1['format'] = 'Invalid format! e.g: 12345.678';
+          this.error1['format'] = 'Invalid format ! e.g: 12345.678';
         } else {
           delete this.error1['format'];
         }
@@ -142,12 +159,7 @@
         } else {
           delete this.error1['blank']
         }
-        if (parseFloat(value) > parseFloat(balance)) {
-          this.error1['exceed'] = 'Your input exceeds the amount available in your balance!';
-        } else {
-          delete this.error1['exceed'];
-        }
-      }
+      },
     }
   }
 </script>
