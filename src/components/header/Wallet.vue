@@ -1,4 +1,3 @@
-
 <template >
   <div id="walletState" class="pl-1 lg:pl-3" @click="Wallet()">
     <!-- Wallet disconnected state styling -->
@@ -25,17 +24,28 @@
 
 <script>
 
-import wallet from '@/shared/wallet.js'
-import { mapGetters, mapActions } from 'vuex';
+import wallet from '@/shared/wallet.js';
+import { toastMe } from '@/components/toaster/toaster.js';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Wallet',
   mixins: [wallet],
-  mounted(){
-    this.Wallet()
-    window.ethereum.on('accountsChanged', function (accounts) {
-        this.connectWallet()
-      }.bind(this))
+  mounted() {
+    this.Wallet();
+    this.$nextTick(() => {
+      if (!window.ethereum) {
+        toastMe('warning', {
+          title: 'Wallet :',
+          msg: "It seems you don't have Metamask installed or proper configured !",
+          link: false,
+        })
+      } else {
+        window.ethereum.on('accountsChanged', function(accounts) {
+          this.connectWallet()
+        }.bind(this))
+      }
+    })
   },
   data() {
     return {
@@ -43,16 +53,11 @@ export default {
     }
   },
   computed: {
-        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
-    },
+    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
+  },
   methods: {
-    Wallet: async function(){
-      if(this.getUserSignedIn == true){
-            this.disconnectWallet();
-            return;
-      }else{
-        this.connectWallet()
-      }
+    Wallet() {
+      this.getUserSignedIn == true ? this.disconnectWallet() : this.connectWallet()
     }
   }
 }
