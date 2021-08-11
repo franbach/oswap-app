@@ -1,7 +1,7 @@
 <template>
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center oswap-layout xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
-      <FarmHeader :totalRewards="rewardsPending"/>
+      <FarmHeader :totalRewards="rewardsPending"  @updateData="updateData"/>
     </transition>
     
     <transition name="farm" appear>
@@ -89,6 +89,7 @@
 
         this.soloData = await this.initMulticall(SoloPools)
         this.setSoloDataState(this.soloData);
+        this.getTotalPending()
       },
       getTotalPending: async function(){
 

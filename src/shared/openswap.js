@@ -673,7 +673,7 @@ export default {
 
       return [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, value0, value1, tvalue0, tvalue1]
     },
-    getAmountsLiquidity: async function(pair, token0, amount){
+    getAmountsLiquidity: async function(pair, token0, token1, amount){
       
       const Token0 = await Fetcher.fetchTokenData(
         ChainId.MAINNET,
@@ -685,7 +685,7 @@ export default {
 
       const amountOut = price
         .quote(new TokenAmount(Token0, amountin.toString()))
-        .toFixed(this.token0.decimals);
+        .toFixed(token1.decimals);
         return amountOut
 
 

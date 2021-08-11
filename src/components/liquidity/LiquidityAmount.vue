@@ -60,11 +60,11 @@
       ...mapActions('liquidity/amounts', ['setToken0Amount','setToken1Amount']),
 
       getToken1Amount: async function(){
-        var amountOut = await this.getAmountsLiquidity(this.pair, this.token0, this.amount0)
+        var amountOut = await this.getAmountsLiquidity(this.pair, this.token0, this.token1, this.amount0)
         return amountOut;
       },
       getToken0Amount: async function(){
-        var amountOut = await this.getAmountsLiquidity(this.pair, this.token1, this.amount1)
+        var amountOut = await this.getAmountsLiquidity(this.pair, this.token1, this.token0, this.amount1)
         return amountOut;
       },
       setInputClicked: function(value){
