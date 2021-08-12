@@ -1,6 +1,6 @@
 $vt-namespace: 'Vue-Toastification' !default;
 $vt-toast-min-width: 150px !default;
-$vt-toast-max-width: 400px !default;
+$vt-toast-max-width: 500px !default;
 $vt-toast-background: #ffffff !default;
 
 $vt-toast-min-height: 0px !default;
@@ -19,8 +19,8 @@ $vt-text-color-error: rgba(243, 244, 246, 1) !default;
 
 $vt-color-progress-default: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55) !default;
 
-$vt-mobile: "only screen and (max-width : 600px)" !default;
-$vt-not-mobile: "only screen and (min-width : 600px)" !default;
+$vt-mobile: "only screen and (max-width : 500px)" !default;
+$vt-not-mobile: "only screen and (min-width : 500px)" !default;
 $vt-font-family: "Alata" !default;
 $vt-z-index: 9999 !default;
 
@@ -47,10 +47,20 @@ $vt-z-index: 9999 !default;
 
 @media screen and (max-width: 1280px) {
   .Vue-Toastification__container.top-right {
-    width: 100vh;
+    width: 100vw;
     margin-right: -5px !important;
     padding-right: 0px !important;
     @apply overflow-hidden pt-14;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .Vue-Toastification__container.top-right {
+    @apply overflow-hidden pt-0;
+  }
+  .Vue-Toastification__toast {
+    width: 100vw !important;
+    @apply p-3 flex
   }
 }
 
