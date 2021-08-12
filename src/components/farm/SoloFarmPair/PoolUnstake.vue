@@ -124,7 +124,7 @@
     methods: {
       unstake: async function() {
         this.buttonState = 'executing';
-        await this.unstakeLP(this.pool, String(this.roundDown(this.amount, 14)));
+        await this.unstakeLP(this.pool, this.amount);
         this.buttonState = 'finished';
       },
       setMax() {

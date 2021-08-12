@@ -1,7 +1,7 @@
 <template >
-  <div id="walletState" class="pl-1 lg:pl-3" @click="Wallet()">
+  <div id="walletState" class="pl-1 lg:pl-3">
     <!-- Wallet disconnected state styling -->
-    <div v-show="walletConnected === false" class="flex lg:w-44 items-center text-gray-500 space-x-1 lg:pr-2 p-1 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-100 cursor-pointer ring-1 ring-black ring-opacity-5">
+    <div v-if="walletConnected === false"  @click="connect()" class="flex lg:w-44 items-center text-gray-500 space-x-1 lg:pr-2 p-1 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-100 cursor-pointer ring-1 ring-black ring-opacity-5">
       <div class="flex items-center p-1 bg-gray-200 dark:bg-oswapDark-gray rounded-md">
         <i class="las la-wallet text-xl"></i>
       </div>
@@ -11,7 +11,7 @@
     </div>
 
     <!-- Wallet connected state styling -->
-    <div v-show="walletConnected" @click="disconnectWallet()" class="flex lg:w-44 items-center space-x-1 lg:pr-2 p-1 rounded-lg bg-opacity-20 hover:bg-opacity-50 cursor-pointer border-oswapGreen-dark border glow-oswapGreen-light-md">
+    <div v-if="walletConnected" @click="disconnect()" class="flex lg:w-44 items-center space-x-1 lg:pr-2 p-1 rounded-lg bg-opacity-20 hover:bg-opacity-50 cursor-pointer border-oswapGreen-dark border glow-oswapGreen-light-md">
       <div class="flex items-center p-1 bg-oswapGreen rounded-md">
         <i class="las la-wallet text-xl text-white dark:text-oswapDark-gray"></i>
       </div>
@@ -25,27 +25,13 @@
 <script>
 
 import wallet from '@/shared/wallet.js';
-import { toastMe } from '@/components/toaster/toaster.js';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Wallet',
   mixins: [wallet],
   mounted() {
-    this.Wallet();
-    this.$nextTick(() => {
-      if (!window.ethereum) {
-        toastMe('warning', {
-          title: 'Wallet :',
-          msg: "It seems you don't have Metamask installed or proper configured !",
-          link: false,
-        })
-      } else {
-        window.ethereum.on('accountsChanged', function(accounts) {
-          this.connectWallet()
-        }.bind(this))
-      }
-    })
+    this.connectWallet()
   },
   data() {
     return {
@@ -53,12 +39,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
+  
   },
   methods: {
-    Wallet() {
-      this.getUserSignedIn == true ? this.disconnectWallet() : this.connectWallet()
+    connect(){
+      this.walletConnected = this.connectWallet()
+    },
+    disconnect(){
+      this.walletConnected = this.disconnectWallet()
+      console.log('hlelelel')
     }
+    
+
+    
   }
 }
 </script>

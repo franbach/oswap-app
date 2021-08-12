@@ -29,9 +29,22 @@ export default {
       darkmode: false,
     };
   },
+  mounted() {
+    const theme = localStorage.getItem("dark\_theme");
+    if (theme) {
+        if (theme == "true") {
+            document.body.classList.remove('bg-gray-200');
+            document.body.classList.add('bg-oswapDark-gray');
+            this.darkmode = true;
+        } else {
+            this.darkmode = false;
+        }
+    }
+  },
   methods: {
     changeColor() {
       this.darkmode = !this.darkmode;
+      localStorage.setItem("dark\_theme", this.darkmode.toString());
       if (this.darkmode) {
         document.body.classList.remove('bg-gray-200');
         document.body.classList.add('bg-oswapDark-gray');
