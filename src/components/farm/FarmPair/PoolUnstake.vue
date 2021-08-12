@@ -124,7 +124,7 @@
     methods: {
       unstake: async function() {
         this.buttonState = 'executing';
-        await this.unstakeLP(this.pool, this.getFormatedUnitsDecimals(this.maxAmount, 18));
+        await this.unstakeLP(this.pool, this.amount);
         this.buttonState = 'finished';
         this.$emit("updateData")
       },

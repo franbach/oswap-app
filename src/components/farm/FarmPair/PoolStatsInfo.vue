@@ -159,7 +159,7 @@ import openswap from "@/shared/openswap.js";
       this.weeklyRewards = rewards[0];
       this.monthlyRewards = rewards[1];
 
-      await setInterval( function (){
+      await setTimeout( function (){
         var poolData = this.updatePoolState(this.pool);
         this.pt0s = poolData.token0Pstaked
         this.pt1s = poolData.token1Pstaked

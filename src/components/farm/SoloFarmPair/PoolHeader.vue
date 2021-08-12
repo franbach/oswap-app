@@ -101,7 +101,7 @@
       });
 
      var rewardValue = await this.getRewardValue(this.pool, 100)
-      setInterval(async function (){
+      setTimeout(async function (){
         var poolData = this.updatePoolState(this.pool);
         this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(this.poolData.lpStakedTotal)).toFixed(5));
         var liquidityValue = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal))
