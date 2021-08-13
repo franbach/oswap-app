@@ -22,6 +22,12 @@ $la-font-path: "~line-awesome/dist/line-awesome/fonts" !default;
   transform: translate(-50%, -50%);
 }
 
+.center-y-component {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
 .oswap-layout {
   /* viewport height - header - footer */
   min-height: calc(100vh - 72px - 96px);
@@ -133,11 +139,11 @@ html {
   background-size: 400%;
   filter: blur(5px);
   width: calc(100% + 4px);
-  height: 60px;
+  height: 40px;
   animation: glowing linear 20s infinite;
   opacity: 1;
   transition: all .3s ease-in-out;
-  border-radius: 9999px;
+  border-radius: 8px;
 }
 
 @keyframes glowing {
