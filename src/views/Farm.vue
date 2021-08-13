@@ -52,7 +52,7 @@
         timeout = 1
       }
       else{
-        timeout = 500
+        timeout = 1000
       }
       await setTimeout(async function (){
         this.customData = await this.initMulticall(CustomPools)
@@ -153,7 +153,7 @@
 
         
      
-        this.rewardsPending = String(temp)
+        this.rewardsPending = temp
 
       },
       initMulticall: async function(pools){
