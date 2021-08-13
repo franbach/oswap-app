@@ -55,8 +55,6 @@
     methods: {
       updateData(){
         this.$emit("updateData")
-
-        
       },
       setPool(value) {
         if (value == 'open') {

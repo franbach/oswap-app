@@ -1,7 +1,7 @@
 <template>
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center oswap-layout xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
-      <FarmHeader :totalRewards="rewardsPending"/>
+      <FarmHeader :totalRewards="rewardsPending"  @updateData="getTotalPending"/>
     </transition>
     
     <transition name="farm" appear>
@@ -52,7 +52,7 @@
         timeout = 1
       }
       else{
-        timeout = 1000
+        timeout = 500
       }
       await setTimeout(async function (){
         this.customData = await this.initMulticall(CustomPools)
@@ -94,18 +94,66 @@
 
         let temp = 0;
 
-        for (var n in this.farmData) {
-          temp = temp + parseFloat(this.getEthUnits(this.farmData[n].pendingReward))
+        let userAddress = this.getUserAddress();
+        const MASTERCHEF = this.oSWAPCHEF();
+        var i = 0;
+        var poolByIndex = []
+        var CALL = []
+        for (var n in SoloPools) {
+          //LP Balance CALLS
+          CALL.push({
+            target: MASTERCHEF,
+            call: ['pendingSushi(uint256,address)(uint256)', parseInt(SoloPools[n].pid), userAddress],
+            returns: [['PENDING_OF_' + n , val => val]]
+          })
+        }
+        for (var n in Pools) {
+          
+          //LP Balance CALLS
+          CALL.push({
+            target: MASTERCHEF,
+            call: ['pendingSushi(uint256,address)(uint256)', parseInt(Pools[n].pid), userAddress],
+            returns: [['PENDING_OF_' + n , val => val]]
+          })
+        }
+        for (var n in CustomPools) {
+          
+          //LP Balance CALLS
+          CALL.push({
+            target: MASTERCHEF,
+            call: ['pendingSushi(uint256,address)(uint256)', parseInt(CustomPools[n].pid), userAddress],
+            returns: [['PENDING_OF_' + n , val => val]]
+          })
         }
 
-        for (var n in this.soloData) {
-          temp = temp + parseFloat(this.getEthUnits(this.soloData[n].pendingReward))
-        }
-        for (var n in this.customData) {
-          temp = temp + parseFloat(this.getEthUnits(this.customData[n].pendingReward))
+        const MULTICALL = this.hMULTICALL();
+        const RPC = this.hRPC();
+        
+        var results= [];
+
+        const config = {
+          rpcUrl: RPC,
+          multicallAddress: MULTICALL
+        };
+
+        const watcher = createWatcher(
+            CALL,
+            config
+          );
+        
+        watcher.subscribe(update => { results.push(update) });
+        watcher.start();
+        await watcher.awaitInitialFetch();
+        console.log(results)
+        watcher.stop();
+
+        for (var n in results) {
+          temp = temp + parseFloat(this.getEthUnits(results[n].value.toString()))
         }
 
-        this.rewardsPending = temp
+        
+     
+        this.rewardsPending = String(temp)
 
       },
       initMulticall: async function(pools){

@@ -42,7 +42,7 @@
     name: 'RewardsDetails',
     mixins: [openswap],
     props: {
-      details: String
+      details: Number
     },
     methods: {
       collectAllButton: async function(){
