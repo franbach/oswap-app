@@ -1,6 +1,6 @@
 <template>
   <div id="root" :class="darkmode ? 'dark bg-wave-dark' : 'bg-wave'" class="antialiased pt-18 bg-no-repeat bg-bottom">
-    <div id="header" class="flex flex-1 fixed inset-x-0 top-0 dark:bg-oswapDark-gray bg-gray-200 z-50 border-b border-gray-300 dark:border-gray-700 shadow-sm">
+    <div id="header" class="flex flex-1 fixed inset-x-0 top-0 dark:bg-oswapDark-gray bg-gray-200 z-50">
       <Header />
     </div>
 
