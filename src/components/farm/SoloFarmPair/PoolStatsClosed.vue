@@ -55,8 +55,17 @@
 
 
 
-      let temp = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal)).toFixed(2)
-      this.liquidityValue = ethers.utils.commify(temp);
+      let TSV = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal)).toFixed(2)
+      let PSV = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpBalanceStaked)).toFixed(2)
+      this.liquidityValue = ethers.utils.commify(String(TSV));
+      console.log(this.pool)
+      let TVLData = {
+        pvl: [],
+        tvl: []
+      }
+      TVLData.pvl = PSV / 1
+      TVLData.tvl = TSV / 1
+      this.$emit("updateTVL", TVLData)
     },
     methods: {
       setPool() {

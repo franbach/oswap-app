@@ -1,8 +1,8 @@
 <template>
-  <div class="grid grid-cols-3 gap-3 w-full ss:pt-0 xs:pt-6 pb-12">
-    <FarmDetails :details="farmDetails" />
+  <div class="grid grid-cols-3 gap-3 w-full ss:pt-0 xs:pt-6 pb-6">
+    <FarmDetails :TVL="TVL" :details="farmDetails" />
 
-    <OtherDetails :details="otherDetails" />
+    <OtherDetails :PVL="PVL" :details="otherDetails" />
 
     <RewardsDetails :details="totalRewards" />
   </div>
@@ -21,7 +21,9 @@
       RewardsDetails
     },
     props: {
-      totalRewards: Number
+      totalRewards: Number,
+      PVL: Number,
+      TVL: Number
     },
     mounted: function() {
       setInterval(

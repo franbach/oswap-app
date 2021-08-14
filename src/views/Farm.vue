@@ -1,13 +1,13 @@
 <template>
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center oswap-layout xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
-      <FarmHeader :totalRewards="rewardsPending"  @updateData="getTotalPending"/>
+      <FarmHeader :totalRewards="rewardsPending" :PVL="PVL" :TVL="TVL"  @updateData="getTotalPending"/>
     </transition>
     
     <transition name="farm" appear>
       <div v-if="soloData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-       <SoloFarmPair  v-for="(pool, index) in SoloPools" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
-        <FarmPair v-for="(pool, index) in Pools" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
+       <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
+        <FarmPair  v-for="(pool, index) in Pools"  @updateTVL="updateTVL" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
       <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
       </div>
       <div v-else class="flex h-full items-center mt-16">
@@ -74,13 +74,20 @@
         SoloPools,
         farmData: null,
         soloData: null,
-        rewardsPending: 0
+        rewardsPending: 0,
+        TVL: 0,
+        PVL: 0,
       }
     },
     methods: {
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
       ...mapActions('farm/farmData', ['setFarmDataState', 'setSoloDataState', 'setCustomDataState']),
+      updateTVL: function(TVLData){
+        console.log(TVLData)
+        this.TVL = this.TVL + TVLData.tvl
+        this.PVL = this.PVL + TVLData.pvl
+      },
       updateData: async function(){
         this.customData = await this.initMulticall(CustomPools)
         this.setCustomDataState(this.customData);

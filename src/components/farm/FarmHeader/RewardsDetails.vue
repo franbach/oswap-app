@@ -7,6 +7,7 @@
       <p class="text-xs text-gray-400">Total Rewards</p>
     </div>
     <div class="flex ss:flex-row ss:space-x-6 ss:space-y-0 md:flex-col md:space-y-3 md:space-x-0 lg:flex-row lg:space-x-6 lg:space-y-0 w-full">
+      <!--
       <div class="flex space-x-2 items-start">
         <div class="flex flex-none w-10 h-10 bg-gray-200 dark:bg-oswapDark-gray items-center justify-center text-oswapGreen rounded-lg">
           <i class="las la-dollar-sign text-3xl"></i>
@@ -16,6 +17,7 @@
           <p class="text-xs text-gray-400">Total in USD</p>
         </div>
       </div>
+      -->
       <div class="flex space-x-2 items-start">
         <div class="relative flex">
           <div @click="collectAllButton" class="flex z-30 items-center pl-2 pr-3 rounded-lg space-x-2 h-10 bg-gray-100 group-scope dark:bg-oswapDark-gray hover:bg-oswapGreen dark:hover:bg-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer">
