@@ -31,7 +31,7 @@
                 <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
               </div>
               <div class="flex items-center text-xs">
-                <p>{{pool.name[1]}} Staked: {{tt1s}}</p>
+                <p>{{pool.name[1]}} Staked: {{tt1s}} </p>
               </div>
             </div>
           </tooltip-me-content>
