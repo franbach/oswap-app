@@ -20,8 +20,8 @@
       </router-link>
 
       <!-- Menu 'More' (dropdown) -->
-      <MoreButton />
-      
+     <!-- <MoreButton />
+      -->
       <!-- display oswap price -->
       <Oswap />
       

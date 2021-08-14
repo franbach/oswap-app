@@ -56,6 +56,7 @@
       }
     },
     mounted: async function (){
+
       this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
       var [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, pvalue0, pvalue1, tvalue0, tvalue1] = await this.getTokenAmounts(
           this.poolData.pool,
@@ -65,6 +66,10 @@
         );
       this.totalLiquidityValue = await this.getLiquidityValue(this.pool, tvalue0.toFixed(4), tvalue1.toFixed(4))
       this.personalLiquidityValue = await this.getLiquidityValue(this.pool, pvalue0.toFixed(4), pvalue1.toFixed(4))
+      let TVLData = {}
+      TVLData.pvl = this.personalLiquidityValue[1]
+      TVLData.tvl = this.totalLiquidityValue[1]
+      this.$emit("updateTVL", TVLData)
       let value = {}
       
       let farmData = {}
