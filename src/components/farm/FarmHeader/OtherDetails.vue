@@ -1,9 +1,9 @@
 <template>
-<div class="relative flex ss:col-span-3 md:col-span-1 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-2xl p-4"> 
+<div class="relative flex ss:col-span-3 md:col-span-1 p-4"> 
   <div class="flex flex-col space-y-6">
     <p class="text-sm uppercase text-oswapGreen-dark dark:text-oswapBlue-light">OTHER DETAILS</p>
     <div class="flex flex-col">
-      <p class="ss:text-2xl md:text-lg lg:text-2xl font-bold text-gray-600 dark:text-gray-50">$2,128,022.00</p>
+      <p class="ss:text-xl xs:text-2xl md:text-lg lg:text-2xl font-bold text-gray-600 dark:text-gray-50">$2,128,022.00</p>
       <p class="text-xs text-gray-400">Total Staked Value</p>
     </div>
     <div class="flex ss:flex-row ss:space-x-3 ss:space-y-0 md:flex-col md:space-y-3 md:space-x-0 lg:flex-row lg:space-x-3 lg:space-y-0 w-full">
@@ -27,8 +27,8 @@
       </div>
     </div>
   </div>
-  <div class="absolute top-4 right-4 flex flex-none items-start justify-center h-full overflow-hidden">
-    <img src="@/assets/farm_picture4.png" alt="" class="h-20 object-cover">
+  <div class="absolute right-4 flex flex-none items-start justify-center h-full overflow-hidden">
+    <img src="@/assets/pic_3.png" alt="" class="ss:h-28 xs:h-32 object-cover">
   </div>
 </div>
 </template>
