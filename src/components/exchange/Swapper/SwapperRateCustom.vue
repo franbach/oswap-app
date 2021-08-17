@@ -21,9 +21,9 @@
             <tooltip-me>
               <i class="las la-exclamation-circle text-sm transform rotate-180 dark:text-gray-300 dark:hover:text-oswapGreen hover:text-oswapGreen cursor-pointer"></i>
               <tooltip-me-content :options="tooltip"
-                class="flex flex-col ss:w-80 xs:w-88 items-start space-x-2 p-3 rounded-lg shadow-xl"
+                class="flex flex-col ss:w-80 xs:w-88 items-start space-x-2 rounded-lg shadow-xl p-0.5"
               >
-                <div class="flex flex-col space-y-1">
+                <div class="flex flex-col space-y-1 bg-gray-100 dark:bg-slightDark text-gray-500 dark:text-gray-300 rounded-md p-3">
                   <p class="text-lg">Too High:</p>
                   <p>
                     When the slippage rate is set really high, it allows the transaction to still complete despite large price swings. This can open the door to front-running and sandwich attacks. A sandwich attack is a variation of front-running, where an attacker sees a pending transaction, then places a significantly larger transaction (with the same tokens) directly before and after the victim’s transaction. This drives the price of the victim’s transaction up, effectively allowing the front runner to extract the difference in value. Since the victim's slippage rate is so high, the attacker can extract that much value from the attack. This could easily be prevented by setting a lower slippage.
@@ -64,7 +64,7 @@
         tooltip: {
           name: new Date().getTime(),
           position: 'top',
-          color: '#f3f3f3',
+          color: 'rgba(24, 213, 187, 1)',
           offset: 16,
           speed: 300,
           shift: 50

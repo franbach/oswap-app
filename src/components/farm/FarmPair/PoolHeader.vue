@@ -15,23 +15,25 @@
         <p class="text-xs text-oswapBlue-light">{{pool.pair}}</p>
         <tooltip-me>
           <i class="las la-exclamation-circle text-xl transform rotate-180 hover:text-oswapGreen"></i>
-          <tooltip-me-content :options="this.tooltip"
-            class="flex ss:w-64 xs:w-80 items-start space-x-2 p-3 rounded-lg shadow-xl"
+          <tooltip-me-content :options="tooltip"
+            class="flex ss:w-64 xs:w-80 rounded-lg shadow-xl p-0.5"
           >
-            <div class="flex space-x-2 items-center">
-              <i class="las la-coins text-3xl text-gray-500 dark:text-oswapDark-gray"></i>
-            </div>
+            <div class="flex w-full space-x-2 items-start bg-gray-100 dark:bg-slightDark text-gray-500 dark:text-gray-300 rounded-md p-3">
+              <div class="flex space-x-2 items-center">
+                <i class="las la-coins text-3xl"></i>
+              </div>
 
-            <div class="flex flex-1 flex-col space-y-2 text-gray-500 dark:text-oswapDark-gray">
-              <p class="text-sm mt-1">Total Staked</p>
-              <div class="flex items-center text-xs">
-                <p>{{pool.pair}} Staked: {{tas}}</p>
-              </div>
-              <div class="flex items-center text-xs">
-                <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
-              </div>
-              <div class="flex items-center text-xs">
-                <p>{{pool.name[1]}} Staked: {{tt1s}} </p>
+              <div class="flex flex-1 flex-col space-y-2">
+                <p class="text-sm mt-1">Total Staked</p>
+                <div class="flex items-center text-xs">
+                  <p>{{pool.pair}} Staked: {{tas}}</p>
+                </div>
+                <div class="flex items-center text-xs">
+                  <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
+                </div>
+                <div class="flex items-center text-xs">
+                  <p>{{pool.name[1]}} Staked: {{tt1s}} </p>
+                </div>
               </div>
             </div>
           </tooltip-me-content>
@@ -72,7 +74,7 @@ import { ethers } from "ethers";
         tooltip: {
           name: new Date().getTime(),
           position: 'top',
-          color: 'rgba(249, 250, 251, 1)',
+          color: 'rgba(24, 213, 187, 1)',
           offset: 16,
           speed: 300,
           shift: 50
