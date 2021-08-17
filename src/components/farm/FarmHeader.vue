@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 ss:divide-y ss:divide-x-0 md:divide-y-0 md:divide-x divide-gray-300 dark:divide-oswapDark-gray w-full ss:mt-6 ss:mb-6 xs:mt-12 xs:mb-12 rounded-3xl shadow-2xl bg-gray-100 dark:bg-slightDark">
+  <div class="grid grid-cols-3 st5 st5-all ss:divide-y ss:divide-x-0 md:divide-y-0 md:divide-x divide-gray-300 dark:divide-oswapDark-gray w-full ss:mt-6 ss:mb-6 xs:mt-12 xs:mb-12 rounded-3xl shadow-2xl bg-gray-100 dark:bg-slightDark">
     <FarmDetails :details="farmDetails" />
     <OtherDetails :details="otherDetails" />
     <RewardsDetails :details="totalRewards" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex pt-3">
+  <div class="flex pt-3 st5-all">
     <!-- Active buttons if tokens selected -->
     <div v-if="token('token1', 'token2')" class="flex flex-1 items-center justify-between">
       <!-- Reset Tokens Button -->

@@ -1,8 +1,8 @@
 <template>
   <Menu as="div" class="relative">
-    <MenuButton class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group cursor-pointer focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-      <i class="las la-icons text-xl group-hover:text-oswapGreen dark:text-oswapGreen"></i>
-      <p class="text-sm hidden md:block group-hover:text-oswapBlue-light dark:text-oswapGreen">More</p>
+    <MenuButton class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group cursor-pointer dark:text-oswapGreen focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
+      <i class="las la-icons text-xl group-hover:text-oswapGreen"></i>
+      <p class="text-sm hidden md:block group-hover:text-oswapBlue-light">More</p>
     </MenuButton>
 
     <transition
@@ -13,7 +13,7 @@
       leave-from-class="translate-x-0 opacity-100"
       leave-to-class="translate-x-4 opacity-0"
     >
-      <MenuItems class="absolute z-50 focus:outline-none">
+      <MenuItems class="absolute z-50 focus:outline-none st5-all">
         <div class="absolute z-10 w-72 mt-3 ss:-left-44 md:-left-28 lg:left-0">
           <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
             <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 md:grid-cols-1">
