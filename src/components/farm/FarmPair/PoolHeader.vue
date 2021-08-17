@@ -31,7 +31,7 @@
                 <p>{{pool.name[0]}} Staked: {{tt0s}}</p>
               </div>
               <div class="flex items-center text-xs">
-                <p>{{pool.name[1]}} Staked: {{tt1s}}</p>
+                <p>{{pool.name[1]}} Staked: {{tt1s}} </p>
               </div>
             </div>
           </tooltip-me-content>
@@ -111,7 +111,7 @@ import { ethers } from "ethers";
         }
       });
       var rewardValue = await this.getRewardValue(this.pool, 100)
-      setInterval( function (){
+      var iid =  await setInterval( async function (){
         var poolData = this.updatePoolState(this.pool);
         this.tt0s = poolData.token0Tstaked;
         this.tt1s = poolData.token1Tstaked;
@@ -119,6 +119,16 @@ import { ethers } from "ethers";
         var liquidityValue = poolData.totalLiquidityValue;
         if(liquidityValue !== undefined){
           this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+          if(this.rewards != '0'){
+            var APRData = {}
+          APRData.pAPR = this.rewards,
+          APRData.tAPR = this.rewards,
+          APRData.staked = poolData.lpBalanceStaked
+        
+          this.$emit("updateAPR", APRData)
+          clearInterval( iid );
+          }
+           
         }
          
       }.bind(this), 1000);

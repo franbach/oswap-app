@@ -181,6 +181,19 @@ export const Pools = {
     rewards: "3X",
     i: 12
   },
+  ONEeETH: {
+    pair: "ONE/eETH",
+    pairaddress: "0x951220DbF4386e330bBC3Cb61DED74316719161C",
+    token0address: "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+    token1address: "0x6983D1E6DEf3690C4d616b13597A09e6193EA013",
+    imgtoken0: "https://openfi.dev/tokens/default/ONE.png",
+    imgtoken1: "https://openfi.dev/tokens/default/ETH.png",
+    name: ["ONE", "eETH"],
+    decimals: [18, 18],
+    pid: "16",
+    rewards: "1X",
+    i: 13
+  },
 };
 export const SoloPools = {
   oSWAPWONE: {
