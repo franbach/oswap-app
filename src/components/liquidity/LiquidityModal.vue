@@ -15,7 +15,7 @@
         <div class="flex bg-gray-50 dark:bg-oswapDark-gray rounded-2xl" v-for="(network, index) in this.retrieveTokens(search)" :key="index" >
           <div class="w-full grid grid-cols-5 gap-2 p-2">
             <!-- network name -->
-            <div class="flex h-4 col-span-5 p-2 rounded-2xl items-center space-x-2">
+            <div class="flex h-4 col-span-5 px-2 py-4 rounded-2xl items-center space-x-2">
               <img :src="network.icon" class="h-4" alt="">
               <p class="flex text-sm items-center dark:text-gray-300">{{network.name}}</p>
             </div>

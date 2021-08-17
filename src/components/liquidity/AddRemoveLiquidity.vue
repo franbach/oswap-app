@@ -1,22 +1,22 @@
 <template>
   <div class="flex flex-1 flex-col ss:w-80 xs:w-96 pb-5 pt-2.5">
-    <div class="flex flex-1 flex-col p-4 bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
+    <div class="flex flex-1 flex-col p-4 st5 bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 h-auto">
       <div class="flex items-center space-x-2 mb-3">
         <i class="las la-tint text-xl dark:text-gray-400"></i>
         <p class="text-sm dark:text-gray-400">Liquidity</p>
       </div>
-      <div class="flex flex-col space-y-1 dark:bg-gray-600 bg-gray-100 rounded-2xl">
-        <div class="flex shadow-lg flex-col space-y-3 dark:bg-oswapDark-gray p-3 rounded-2xl">
+      <div class="flex flex-col space-y-1 st5 dark:bg-gray-600 bg-gray-100 rounded-2xl">
+        <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray p-3 rounded-2xl">
           <LiquidityPair :available="balances.lpToken"/>
         </div>
         <LiquidityInfo :pairAddress="pairAddress"/>
       </div>
       <div class="flex flex-1 pt-4">
-        <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-oswapGreen focus:outline-none">
+        <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl st5 text-oswapGreen focus:outline-none">
           <p class="text-sm">Add Liquidity</p>
           <i class="las la-level-down-alt"></i>
         </button>
-        <button @click="toggleRemove" :class="removeLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl text-red-400 focus:outline-none">
+        <button @click="toggleRemove" :class="removeLiquidity ? 'bg-gray-100 dark:bg-gray-600 shadow-lg z-30' : 'bg-slightGray dark:bg-slightDark dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl st5 text-red-400 focus:outline-none">
           <p class="text-sm">Remove Liquidity</p>
           <i class="las la-level-up-alt"></i>
         </button>
@@ -32,18 +32,17 @@
               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityApproveButton v-if="!token0Approved" :amount="getToken0Amount()" :token="getToken()['token1']" @set0approved="set0approved" />
                 <LiquidityApproveButton v-if="token0Approved" :amount="getToken1Amount()" :token="getToken()['token2']" @set0approved="set0approved" :token0Approved="token0Approved" />
-
               </div>
+
               <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
-              <LiquidityApproveButton :amount="getToken0Amount()" :token="pairToken" @set0approved="set0approved" />
-             
+                <LiquidityApproveButton :amount="getToken0Amount()" :token="pairToken" @set0approved="set0approved" />
               </div>
 
-               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
+              <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">
                 <LiquidityAddButton @executeAddLiquidity="executeAddLiquidity"/>
               </div>
+
               <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
-                
                 <LiquidityRemoveButton @executeRemoveLiquidity="executeRemoveLiquidity"/>
               </div>
             </div>

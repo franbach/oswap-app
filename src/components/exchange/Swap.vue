@@ -1,8 +1,8 @@
 <template>  
-  <div class="flex flex-col p-4 bg-gray-200 dark:bg-gray-700 ss:w-80 xs:w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+  <div class="flex flex-col st5 p-4 bg-gray-200 dark:bg-gray-700 dark:text-gray-400 ss:w-80 xs:w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <div class="flex items-center space-x-2 mb-3">
-      <i class="las la-random text-xl dark:text-gray-400"></i>
-      <p class="text-sm dark:text-gray-400">Swap</p>
+      <i class="las la-random text-xl"></i>
+      <p class="text-sm">Swap</p>
     </div>
     <!-- Token1 Selection Button -->
     <TokenSelect @click="selectToken('token1')" whichToken="token1" />

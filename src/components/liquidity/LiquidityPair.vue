@@ -1,7 +1,7 @@
 <template>
 <div class="flex flex-col space-y-2 min-w-0">
   <div class="flex items-center space-x-2">
-    <ul class="flex flex-none -space-x-4">
+    <ul class="flex flex-none -space-x-4 st5-all">
       <li>
         <img :src="this.getToken()['token1'].imgSrc" class="ss:h-12 ss:w-12 xs:h-20 xs:w-20 object-cover rounded-full p-1 border-8 border-gray-100 dark:border-oswapDark-gray bg-slightGray" alt="">
       </li>

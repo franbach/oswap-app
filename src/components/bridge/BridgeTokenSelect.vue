@@ -1,5 +1,5 @@
 <template>
-  <div :class="token(whichToken) ? 'border dark:border-oswapBlue-light border-oswapGreen' : ''" class="flex h-24 z-10 px-2 rounded-xl ring-1 ring-black dark:ring-gray-600 ring-opacity-5 hover:bg-gray-100 dark:hover:bg-oswapDark-gray bg-opacity-100 st5 hover:bg-opacity-30 cursor-pointer overflow-hidden">
+  <div :class="token(whichToken) ? 'border dark:border-oswapBlue-light border-oswapGreen' : ''" class="flex h-24 z-10 px-2 rounded-xl ring-1 ring-black dark:ring-gray-600 ring-opacity-5 hover:bg-gray-100 dark:hover:bg-oswapDark-gray bg-opacity-100 hover:bg-opacity-30 cursor-pointer overflow-hidden">
     <!-- if nothing is selected yet -->
     <div v-if="!token(whichToken)" class="flex flex-1 items-center space-x-2 justify-center h-full">
       <p class="dark:text-gray-400">Select Token</p>

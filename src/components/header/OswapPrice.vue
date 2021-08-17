@@ -6,7 +6,7 @@
       <p class="ss:hidden xs:block text-xs dark:text-oswapGreen">${{oswapPrice}}</p>
     </div>
 
-    <tooltip-me-content :options="tooltip" class="flex flex-col w-72 p-3 rounded-lg shadow-xl">
+    <tooltip-me-content :options="tooltip" class="flex flex-col text-gray-600 w-72 p-3 rounded-lg shadow-xl">
       <div class="ss:flex ss:mb-3 xs:hidden ss:space-x-2 ss:items-center">
         <img alt="oSwap" src="@/assets/oswap_asset.png" class="h-5">
         <p class="text-sm">oSWAP Price: ${{oswapPrice}}</p>
