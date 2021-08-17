@@ -1,18 +1,18 @@
 <template>
   <div class="flex flex-col p-3 st5 st5-all bg-gray-200 hover:bg-slightGray group dark:hover:bg-slightDark dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
     <!-- Header -->
-    <PoolHeader  :pool="pool" :poolData="poolData"/>
+    <PoolHeader  :pool="pool" @updateAPR="updateAPR" :poolData="poolData"/>
     <!-- Body -->
     <div class="flex flex-col h-full mt-3 relative">
       <!-- Show this when pool details is closed -->
-      <PoolStatsClosed @setPool="setPool" :poolData="poolData" :pool="pool"  :isOpen="poolStatsOff" />
+      <PoolStatsClosed @setPool="setPool" @updateTVL="updateTVL"  :poolData="poolData" :pool="pool"  :isOpen="poolStatsOff" />
 
       <!-- <div v-if="isOpen" class="fixed inset-0 bg-gray-700 bg-opacity-30"></div> -->
       <!-- Show this when pool details is opened -->
       <PoolStatsInfo  :isOpen="poolStatsOn" :poolData="poolData" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Stake -->
-      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData.lpBalance" :pool="pool" @setPool="setPool" @updateData="updateData" />
+      <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData.lpBalance" :pool="pool" @setPool="setPool"  @updateData="updateData" />
 
       <!-- Show this when the pool is opened and clicked on Unstake -->
       <PoolUnstake   :isOpen="poolUnstakeOn" :maxAmount="poolData.lpBalanceStaked" :pool="pool" @setPool="setPool"  @updateData="updateData" />
@@ -55,6 +55,12 @@
     methods: {
       updateData(){
         this.$emit("updateData")
+      },
+      updateTVL(value){
+        this.$emit("updateTVL", value)
+      },
+      updateAPR(value){
+        this.$emit("updateAPR", value)
       },
       setPool(value) {
         if (value == 'open') {

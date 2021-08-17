@@ -495,7 +495,7 @@ export default {
         
         
         return  [ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s * 2).toFixed(4)) ,
-          parseFloat(route.route.midPrice.toFixed(4)  * tt0s).toFixed(4) * 2]
+          parseFloat(route.route.midPrice.toFixed(8)  * tt0s).toFixed(8) * 2]
       }
     },
     getBestRoute: async function(parsedAmount, token0, token1) {

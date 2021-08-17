@@ -12,7 +12,7 @@
           <i class="las la-dollar-sign text-3xl"></i>
         </div>
         <div class="flex w-24 min-w-0 flex-col h-full space-y-1 justify-center overflow-hidden">
-          <p class="text-xs font-bold text-gray-600 dark:text-gray-50 text-el">$1,050.01</p>
+          <p class="text-xs font-bold text-gray-600 dark:text-gray-50 text-el">$ {{pendingValue}}</p>
           <p class="text-xs text-gray-400">Total in USD</p>
         </div>
       </div>
@@ -37,14 +37,26 @@
 <script>
   import openswap from "@/shared/openswap.js";
   import { toastMe } from '@/components/toaster/toaster.js'
-
+  import { ethers } from 'ethers' 
   export default {
     name: 'RewardsDetails',
     mixins: [openswap],
     props: {
       details: Number
     },
+    data() {
+      return{
+        oswapPrice: 0,
+        usdValue: 0.00,
+      }
+    },
+    mounted: async function(){
+      this.oswapPrice = await this.getOswapPrice();
+    },
     methods: {
+      prettify: function(number){
+        return  ethers.utils.commify(number)
+      },
       collectAllButton: async function(){
         const tx = await this.collectAll()
         let explorer = 'https://explorer.harmony.one/#/tx/'
@@ -63,6 +75,11 @@
           link: true,
           href: `${explorer}${transaction}`
         })
+      }
+    },
+    computed: {
+      pendingValue: function(){
+        return this.prettify(String(parseFloat(this.details * this.oswapPrice).toFixed(2)))
       }
     }
   }
