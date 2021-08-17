@@ -6,36 +6,36 @@
       <p class="ss:hidden xs:block text-xs dark:text-oswapGreen">${{oswapPrice}}</p>
     </div>
 
-    <tooltip-me-content :options="tooltip" class="flex flex-col text-gray-600 w-72 p-3 rounded-lg shadow-xl">
-      <div class="ss:flex ss:mb-3 xs:hidden ss:space-x-2 ss:items-center">
-        <img alt="oSwap" src="@/assets/oswap_asset.png" class="h-5">
-        <p class="text-sm">oSWAP Price: ${{oswapPrice}}</p>
+    <tooltip-me-content :options="tooltip" class="flex text-xs flex-col divide-y-2 divide-oswapGreen w-72 p-0.5 rounded-lg shadow-xl">
+      <div class="flex flex-col p-3 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-500 dark:text-gray-300">
+        <div class="ss:flex ss:mb-3 xs:hidden ss:space-x-2 ss:items-center">
+          <img alt="oSwap" src="@/assets/oswap_asset.png" class="h-5">
+          <p>oSWAP Price: ${{oswapPrice}}</p>
+        </div>
+        <div class="flex space-x-2 mb-3 items-center">
+          <i class="las la-coins text-xl"></i>
+          <p>Circ. Market Cap: ${{marketCap}} USD</p>
+        </div>
+        <div class="flex space-x-2 items-center">
+          <i class="las la-fire-alt text-xl"></i>
+          <p>Tokens Burnt: {{balances.burnedAmount}} oSWAP</p>
+        </div>
       </div>
-      <div class="flex space-x-2 mb-3 items-center">
-        <i class="las la-coins text-xl"></i>
-        <p class="text-sm">Circ. Market Cap: ${{marketCap}} USD</p>
+      <div class="flex flex-col p-3 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-500 dark:text-gray-300">
+        <p class="text-sm mb-3">Token Supply</p>
+        <div class="flex space-x-2 mb-3 items-center">
+          <i class="las la-hand-holding-usd text-xl"></i>
+          <p>Circ. : {{balances.circSupply}} oSWAP</p>
+        </div>
+        <div class="flex space-x-2 mb-3 items-center">
+          <i class="lab la-dev text-xl"></i>
+          <p>Locked: {{balances.devLocked}} oSWAP</p>
+        </div>
+        <div class="flex space-x-2 items-center">
+          <i class="las la-globe-europe text-xl"></i>
+          <p>Total: {{balances.totalSupply}} oSWAP</p>
+        </div>
       </div>
-      <div class="flex space-x-2 items-center">
-        <i class="las la-fire-alt text-xl"></i>
-        <p class="text-sm">Tokens Burnt: {{balances.burnedAmount}} oSWAP</p>
-      </div>
-      <div class="flex space-x-2 mb-3 pt-3 pl-5 items-center">
-        <br/>
-      Token Supply
-      </div>
-      <div class="flex space-x-2 mb-3 items-center">
-        <i class="las la-hand-holding-usd text-xl"></i>
-        <p class="text-sm">Circ. : {{balances.circSupply}} oSWAP</p>
-      </div>
-      <div class="flex space-x-2 mb-3 items-center">
-        <i class="lab la-dev text-xl"></i>
-        <p class="text-sm">Locked: {{balances.devLocked}} oSWAP</p>
-      </div>
-      <div class="flex space-x-2 mb-3 items-center">
-        <i class="las la-globe-europe text-xl"></i>
-        <p class="text-sm">Total: {{balances.totalSupply}} oSWAP</p>
-      </div>
-      
     </tooltip-me-content>
   </tooltip-me> 
 </template> 
@@ -52,7 +52,7 @@
         tooltip: {
           name: new Date().getTime(),
           position: 'bottom',
-          color: 'rgba(249, 250, 251, 1)',
+          color: 'rgba(24, 213, 187, 1)',
           offset: 12,
           speed: 300,
           shift: 50
