@@ -1,13 +1,13 @@
 <template>
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center oswap-layout xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
-      <FarmHeader :totalRewards="rewardsPending" :PVL="PVL" :TVL="TVL"  @updateData="getTotalPending"/>
+      <FarmHeader :totalRewards="rewardsPending" :PVL="PVL" :TVL="TVL" :APRs='APRs' @updateData="getTotalPending"/>
     </transition>
     
     <transition name="farm" appear>
       <div v-if="soloData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
        <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
-        <FarmPair  v-for="(pool, index) in Pools"  @updateTVL="updateTVL" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
+        <FarmPair  v-for="(pool, index) in Pools"  @updateTVL="updateTVL" @updateAPR="updateAPR" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
       <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
       </div>
       <div v-else class="flex h-full items-center mt-16">
@@ -77,6 +77,10 @@
         rewardsPending: 0,
         TVL: 0,
         PVL: 0,
+        APRs: {
+          pAPR: 0,
+          tAPR: 0
+        }
       }
     },
     methods: {
@@ -87,6 +91,27 @@
         console.log(TVLData)
         this.TVL = this.TVL + TVLData.tvl
         this.PVL = this.PVL + TVLData.pvl
+      },
+      updateAPR: function(APRData){
+        console.log(APRData.staked)
+        console.log(APRData)
+        if(APRData.staked > 0){
+          if(this.APRs.pAPR == 0){
+            this.APRs.pAPR = this.APRs.pAPR + parseFloat(APRData.pAPR)
+          }
+          else{
+            this.APRs.pAPR =  parseFloat((parseFloat(this.APRs.pAPR) + parseFloat(APRData.pAPR)) / 2).toFixed(1)
+          } 
+        }
+          else if(this.APRs.tAPR == 0){
+            this.APRs.tAPR = this.APRs.tAPR + parseFloat(APRData.tAPR)
+          }
+          else{
+            this.APRs.tAPR =  parseFloat((parseFloat(this.APRs.tAPR) + parseFloat(APRData.pAPR)) / 2).toFixed(1)
+          }
+
+          
+
       },
       updateData: async function(){
         this.customData = await this.initMulticall(CustomPools)
