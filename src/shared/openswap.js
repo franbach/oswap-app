@@ -1255,13 +1255,21 @@ export default {
 
        //Get Total Supply
        let totalSupply = await contract.totalSupply();
-       totalSupply = totalSupply.sub(lockedBalance);
-       totalSupply = totalSupply.sub(burnBalance);
-       let totalSupplyUnFormatted = ethers.utils.formatUnits(totalSupply.toString()).toString();
-       let totalSupplyFormated = (totalSupplyUnFormatted / 1).toFixed(2);
+
+       let circSupply = totalSupply
+       circSupply = circSupply.sub(lockedBalance).sub(burnBalance);
+     
+       circSupply = ethers.utils.formatUnits(circSupply.toString()).toString();
+       let circSupplyFormated = (circSupply / 1).toFixed(2);
+
+       totalSupply = ethers.utils.formatUnits(totalSupply.toString()).toString();
+       totalSupply = (totalSupply / 1).toFixed(2);
+       let devLock = parseFloat(ethers.utils.formatUnits(lockedBalance.toString()).toString()).toFixed(2);
 
        return {
-         totalSupply: totalSupplyFormated,
+         circSupply: circSupplyFormated,
+         totalSupply: totalSupply,
+         devLocked: devLock,
          burnedAmount: burnBalanceFormated
        }
 

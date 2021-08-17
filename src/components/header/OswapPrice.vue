@@ -13,16 +13,29 @@
       </div>
       <div class="flex space-x-2 mb-3 items-center">
         <i class="las la-coins text-xl"></i>
-        <p class="text-sm">Market Cap: ${{marketCap}} USD</p>
-      </div>
-      <div class="flex space-x-2 mb-3 items-center">
-        <i class="las la-hand-holding-usd text-xl"></i>
-        <p class="text-sm">Total Supply: {{balances.totalSupply}} oSWAP</p>
+        <p class="text-sm">Circ. Market Cap: ${{marketCap}} USD</p>
       </div>
       <div class="flex space-x-2 items-center">
         <i class="las la-fire-alt text-xl"></i>
         <p class="text-sm">Tokens Burnt: {{balances.burnedAmount}} oSWAP</p>
       </div>
+      <div class="flex space-x-2 mb-3 pt-3 pl-5 items-center">
+        <br/>
+      Token Supply
+      </div>
+      <div class="flex space-x-2 mb-3 items-center">
+        <i class="las la-hand-holding-usd text-xl"></i>
+        <p class="text-sm">Circ. : {{balances.circSupply}} oSWAP</p>
+      </div>
+      <div class="flex space-x-2 mb-3 items-center">
+        <i class="lab la-dev text-xl"></i>
+        <p class="text-sm">Locked: {{balances.devLocked}} oSWAP</p>
+      </div>
+      <div class="flex space-x-2 mb-3 items-center">
+        <i class="las la-globe-europe text-xl"></i>
+        <p class="text-sm">Total: {{balances.totalSupply}} oSWAP</p>
+      </div>
+      
     </tooltip-me-content>
   </tooltip-me> 
 </template> 
@@ -49,9 +62,12 @@
         oswapPrice: 0.00,
         balances: {
           totalSupply: 0.00,
-          burnedAmount: 0.00
+          circSupply: 0.00,
+          burnedAmount: 0.00,
+          devLocked: 0.00
         },
-        marketCap: 0.00
+        marketCap: 0.00,
+
       }
     },
     mixins: [openswap],
@@ -69,7 +85,9 @@
 
       this.oswapPrice = await this.getOswapPrice();
       this.balances = await this.getBurnAndTotalSupply();
-      this.marketCap = commify((this.balances.totalSupply * this.oswapPrice).toFixed(2));
+      this.marketCap = commify((this.balances.circSupply * this.oswapPrice).toFixed(2));
+      this.balances.devLocked = commify(this.balances.devLocked);
+      this.balances.circSupply = commify(this.balances.circSupply);
       this.balances.totalSupply = commify(this.balances.totalSupply);
       this.balances.burnedAmount = commify(this.balances.burnedAmount);
     },
