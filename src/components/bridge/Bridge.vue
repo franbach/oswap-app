@@ -28,7 +28,7 @@
             <p class="text-sm text-gray-500 dark:text-oswapBlue-light">reset</p>
           </div>
           <div class="flex h-full w-28 relative">
-            <BridgeButton />
+            <BridgeButton :token="this.getToken()['token1']" />
           </div>
         </div>
 
@@ -56,7 +56,7 @@
   import BridgeTokenSelect from '@/components/bridge/BridgeTokenSelect';
   import BridgeButton from '@/components/bridge/BridgeButton';
   import InputWithValidation from '@/components/InputWithValidation';
-
+  import { mapGetters } from 'vuex';
   export default {
     name: 'Bridge',
     components: {
@@ -71,6 +71,7 @@
       }
     },
     methods: {
+      ...mapGetters('migrate', ['getToken']),
       selectToken(token) {
         this.$emit('triggerModal', token)
       }

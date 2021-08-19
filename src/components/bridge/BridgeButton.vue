@@ -11,7 +11,7 @@
 
   <!-- Swap -->
   <transition tag="div" name="approve-btn" class="inline-block center-y-component right-0">
-    <div @click="parseAndExecuteSwap" v-if="true" class="flex w-28 group">
+    <div @click="bridge" v-if="true" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer">
         <div class="flex flex-1 items-center justify-center">
@@ -47,7 +47,38 @@
 </template>
 
 <script>
+//const { BridgeSDK, TOKEN, NETWORK_TYPE, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+//const configs = require('bridge-sdk/lib/configs');
+
   export default {
-    name: 'BridgeButton'
+    name: 'BridgeButton',
+     props: {
+      token: Object
+    },
+    mounted(){
+
+    },
+    methods: {/*
+      bridge: async function() {
+        this.getTokenOrigin()
+        const bridgeSDK = new BridgeSDK({ logLevel: 2 })
+        await bridgeSDK.init(configs.mainnet);
+        bridgeSDK.setUseMetamask(true);
+        
+        console.log(TOKEN)
+        console.log(this.token)
+        console.log('BRIDGE MATE')
+      },
+      getTokenOrigin(){
+        if(this.token.bscAddress != undefined){
+          console.log("bsc token")
+          return NETWORK_TYPE.BINANCE
+        }
+        if(this.token.ethAddress != undefined){
+          console.log("eth token")
+          return NETWORK_TYPE.ETHEREUM
+        }
+      }*/
+    }
   }
 </script>

@@ -8,12 +8,21 @@
       </div>
     </transition>
      -->
-   <transition name="horizontal" appear>
-      <Bridge @triggerModal="triggerModal"/>
+
+         <transition name="horizontal" appear>
+      <div v-if="this.getStepState('swap')">
+        <Bridge @triggerModal="triggerModal" />
+      </div>
     </transition>
-    <div v-if="this.getStepState('swapmodal')">
+
+
+    <div v-if="this.getStepState('swapmodal')" @click="goTo('swap')" style="backdrop-filter: blur(3px);" class="fixed w-screen h-screen inset-0 z-50"></div>
+    <transition name="modal-fall" appear>
+      <div v-if="this.getStepState('swapmodal')">
         <BridgeModal :whichToken="whichToken" />
       </div>
+    </transition>
+
    
   </div>
 </template>
@@ -28,11 +37,16 @@ import { mapActions, mapGetters } from 'vuex'
       Bridge,
       BridgeModal
     },
+    data() {
+      return {
+        whichToken: ''
+      }
+    },
     computed: {
-      ...mapGetters('exchange', ['getStepState'])
+      ...mapGetters('migrate', ['getStepState'])
     },
     methods: {
-      ...mapActions('exchange', ['goTo']),
+      ...mapActions('migrate', ['goTo']),
       triggerModal(token) {
         this.whichToken = token
         this.goTo('swapmodal')
