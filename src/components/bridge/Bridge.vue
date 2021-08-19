@@ -69,6 +69,11 @@
         amount: '0.0',
         errors: {}
       }
+    },
+    methods: {
+      selectToken(token) {
+        this.$emit('triggerModal', token)
+      }
     }
   }
 </script>
