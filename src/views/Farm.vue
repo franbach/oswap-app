@@ -1,14 +1,14 @@
 <template>
   <div id="farm" class="max-w-screen-xl mx-auto flex flex-1 flex-col items-center justify-center oswap-layout xl:px-0 px-3 text-gray-500 pb-16">
     <transition name="fall" appear>
-      <FarmHeader :totalRewards="rewardsPending" :PVL="PVL" :TVL="TVL" :APRs='APRs' @updateData="getTotalPending"/>
+      <FarmHeader :data="farmHeaderData" @updateData="getTotalPending"/>
     </transition>
     
     <transition name="farm" appear>
       <div v-if="soloData != null" :key="farmData" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-       <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
-        <FarmPair  v-for="(pool, index) in Pools"  @updateTVL="updateTVL" @updateAPR="updateAPR" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
-      <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
+        <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
+        <FarmPair v-for="(pool, index) in Pools" @updateTVL="updateTVL" @updateAPR="updateAPR" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
+        <CustomFarmPair  v-for="(pool, index) in CustomPools" :key="index" :poolData="customData[pool.i]" :pool="pool" />
       </div>
       <div v-else class="flex h-full items-center mt-16">
         <svg class="animate-spin h-8 w-8 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -45,28 +45,23 @@
       this.CustomPools = CustomPools;
       this.Pools = Pools;
       this.SoloPools = SoloPools;
-
-      
       let timeout
+
       if(this.getUserSignedIn()){
         timeout = 1
-      }
-      else{
+      } else {
         timeout = 1000
       }
+
       await setTimeout(async function (){
         this.customData = await this.initMulticall(CustomPools)
         this.setCustomDataState(this.customData);
         this.farmData = await this.initMulticall(Pools)
         this.setFarmDataState(this.farmData);
-
-
         this.soloData = await this.initMulticall(SoloPools)
         this.setSoloDataState(this.soloData);
         this.getTotalPending();
       }.bind(this), timeout);
-
-
     },
     data() {
       return {
@@ -74,45 +69,53 @@
         SoloPools,
         farmData: null,
         soloData: null,
-        rewardsPending: 0,
-        TVL: 0,
-        PVL: 0,
-        APRs: {
-          pAPR: 0,
-          tAPR: 0
-        }
+        farmHeaderData: {
+          rewardsPending: 0,
+          TVL: 0,
+          PVL: 0,
+          APRs: {
+            pAPR: 0,
+            tAPR: 0
+          },
+          chartData: {
+            name: '',
+            liquidity: 0
+          }
+        },
       }
     },
     methods: {
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
       ...mapActions('farm/farmData', ['setFarmDataState', 'setSoloDataState', 'setCustomDataState']),
+
       updateTVL: function(TVLData){
         console.log(TVLData)
-        this.TVL = this.TVL + TVLData.tvl
-        this.PVL = this.PVL + TVLData.pvl
+        this.farmHeaderData.TVL = this.farmHeaderData.TVL + TVLData.pool.TVL
+        
+        // sends info to chart
+        this.farmHeaderData.chartData.name = TVLData.pool.name;
+        this.farmHeaderData.chartData.liquidity = TVLData.pool.TVL;
+
+        this.farmHeaderData.PVL = this.farmHeaderData.PVL + TVLData.pvl
       },
+
       updateAPR: function(APRData){
         console.log(APRData.staked)
         console.log(APRData)
-        if(APRData.staked > 0){
-          if(this.APRs.pAPR == 0){
-            this.APRs.pAPR = this.APRs.pAPR + parseFloat(APRData.pAPR)
-          }
-          else{
-            this.APRs.pAPR =  parseFloat((parseFloat(this.APRs.pAPR) + parseFloat(APRData.pAPR)) / 2).toFixed(1)
+        if (APRData.staked > 0) {
+          if (this.farmHeaderData.APRs.pAPR == 0) {
+            this.farmHeaderData.APRs.pAPR = this.farmHeaderData.APRs.pAPR + parseFloat(APRData.pAPR)
+          } else {
+            this.farmHeaderData.APRs.pAPR = parseFloat((parseFloat(this.farmHeaderData.APRs.pAPR) + parseFloat(APRData.pAPR)) / 2).toFixed(1)
           } 
+        } else if (this.farmHeaderData.APRs.tAPR == 0) {
+          this.farmHeaderData.APRs.tAPR = this.farmHeaderData.APRs.tAPR + parseFloat(APRData.tAPR)
+        } else {
+          this.farmHeaderData.APRs.tAPR =  parseFloat((parseFloat(this.farmHeaderData.APRs.tAPR) + parseFloat(APRData.pAPR)) / 2).toFixed(1)
         }
-          else if(this.APRs.tAPR == 0){
-            this.APRs.tAPR = this.APRs.tAPR + parseFloat(APRData.tAPR)
-          }
-          else{
-            this.APRs.tAPR =  parseFloat((parseFloat(this.APRs.tAPR) + parseFloat(APRData.pAPR)) / 2).toFixed(1)
-          }
-
-          
-
       },
+
       updateData: async function(){
         this.customData = await this.initMulticall(CustomPools)
         this.setCustomDataState(this.customData);
@@ -122,8 +125,8 @@
         this.soloData = await this.initMulticall(SoloPools)
         this.setSoloDataState(this.soloData);
       },
-      getTotalPending: async function(){
 
+      getTotalPending: async function(){
         let temp = 0;
 
         let userAddress = this.getUserAddress();
@@ -183,14 +186,9 @@
           temp = temp + parseFloat(this.getEthUnits(results[n].value.toString()))
         }
 
-        
-     
-        this.rewardsPending = temp
-
+        this.farmHeaderData.rewardsPending = temp
       },
-      initMulticall: async function(pools){
-
-        
+      initMulticall: async function(pools) {
         //const OPENMAKER = this.oSWAPMAKER();
         const MULTICALL = this.hMULTICALL();
         const RPC = this.hRPC();

@@ -53,8 +53,6 @@
     mounted: async function (){
       this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
 
-
-
       let TSV = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal)).toFixed(2)
       let PSV = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpBalanceStaked)).toFixed(2)
       this.liquidityValue = ethers.utils.commify(String(TSV));
@@ -64,7 +62,12 @@
         tvl: []
       }
       TVLData.pvl = PSV / 1
-      TVLData.tvl = TSV / 1
+
+      TVLData.pool = {
+        name: this.pool.name[0],
+        TVL: TSV / 1
+      }
+
       this.$emit("updateTVL", TVLData)
     },
     methods: {

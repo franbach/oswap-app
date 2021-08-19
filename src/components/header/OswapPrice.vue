@@ -7,7 +7,7 @@
     </div>
 
     <tooltip-me-content :options="tooltip" class="flex text-xs flex-col divide-y-2 divide-oswapGreen w-72 p-0.5 rounded-lg shadow-xl">
-      <div class="flex flex-col p-3 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-500 dark:text-gray-300">
+      <div class="flex flex-col p-3 bg-gray-100 dark:bg-slightDark rounded-md text-gray-500 dark:text-gray-300">
         <div class="ss:flex ss:mb-3 xs:hidden ss:space-x-2 ss:items-center">
           <img alt="oSwap" src="@/assets/oswap_asset.png" class="h-5">
           <p>oSWAP Price: ${{oswapPrice}}</p>
@@ -21,7 +21,7 @@
           <p>Tokens Burnt: {{balances.burnedAmount}} oSWAP</p>
         </div>
       </div>
-      <div class="flex flex-col p-3 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-500 dark:text-gray-300">
+      <div class="flex flex-col p-3 bg-gray-100 dark:bg-slightDark rounded-md text-gray-500 dark:text-gray-300">
         <p class="text-sm mb-3">Token Supply</p>
         <div class="flex space-x-2 mb-3 items-center">
           <i class="las la-hand-holding-usd text-xl"></i>

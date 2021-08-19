@@ -1,30 +1,35 @@
 <template>
-    <div class="grid grid-cols-3 st5 st5-all ss:divide-y ss:divide-x-0 md:divide-y-0 md:divide-x divide-gray-300 dark:divide-oswapDark-gray w-full ss:mt-6 ss:mb-6 xs:mt-12 xs:mb-12 rounded-3xl shadow-2xl bg-gray-100 dark:bg-slightDark">
-    <FarmDetails :TVL="TVL" :TAPR="APRs.tAPR"  />
+  <div class="flex w-full h-full ss:mt-3 ss:mb-6 xs:mt-8 xs:mb-12">
+    <div class="flex ss:flex-1 xs:flex-none flex-col mdd:flex-row ss:h-344 xs:h-408 mdd:h-216 bg-slightGray dark:bg-slightDark p-3 rounded-3xl shadow-2xl">
 
-    <OtherDetails :PVL="PVL" :PAPR="APRs.pAPR" />
+      <div class="flex items-center">
+        <Chart :poolName="data.chartData.name" :liquidity="data.chartData.liquidity" />
+        <Total :TVL="data.TVL" :TAPR="data.APRs.tAPR" />
+      </div>
 
-    <RewardsDetails :details="totalRewards" />
+      <div class="flex items-center mdd:divide-x mdd:divide-oswapGreen">
+        <div class="mdd:flex hidden"></div>
+        <Personal :TVL="data.PVL" :PAPR="data.APRs.pAPR" :REWARDS="data.rewardsPending" />
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
-  import FarmDetails from "@/components/farm/FarmHeader/FarmDetails";
-  import OtherDetails from "@/components/farm/FarmHeader/OtherDetails";
-  import RewardsDetails from "@/components/farm/FarmHeader/RewardsDetails";
+  import Chart from "@/components/farm/FarmHeader/Chart";
+  import Total from "@/components/farm/FarmHeader/Total";
+  import Personal from "@/components/farm/FarmHeader/Personal";
 
   export default {
     name: 'FarmHeader',
     components: {
-      FarmDetails,
-      OtherDetails,
-      RewardsDetails
+      Chart,
+      Total,
+      Personal
     },
     props: {
-      totalRewards: Number,
-      PVL: Number,
-      TVL: Number,
-      APRs: Object
+      data: Object,
     },
     mounted: function() {
       setInterval(

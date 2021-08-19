@@ -68,7 +68,10 @@
       this.personalLiquidityValue = await this.getLiquidityValue(this.pool, pvalue0.toFixed(4), pvalue1.toFixed(4))
       let TVLData = {}
       TVLData.pvl = this.personalLiquidityValue[1]
-      TVLData.tvl = this.totalLiquidityValue[1]
+      TVLData.pool = {
+        name: this.poolData.pool.pair,
+        TVL: this.totalLiquidityValue[1]
+      }
       this.$emit("updateTVL", TVLData)
       let value = {}
       
