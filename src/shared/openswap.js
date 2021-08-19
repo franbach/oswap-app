@@ -55,6 +55,89 @@ export default {
         const balance = await provider.getBalance(userAddress);
         return balance
     },
+    getETHTokenBalance: async function(token){
+      const abi = [
+        // balanceOf
+        {
+          constant: true,
+          inputs: [{ name: "_owner", type: "address" }],
+          name: "balanceOf",
+          outputs: [{ name: "balance", type: "uint256" }],
+          type: "function"
+        },
+        // decimals
+        {
+          constant: true,
+          inputs: [],
+          name: "decimals",
+          outputs: [{ name: "", type: "uint8" }],
+          type: "function"
+        }
+      ];
+      const provider = new ethers.providers.InfuraProvider('mainnet',
+      '998f0142cce3485ba1cb3c4e9d9990ab')
+      const userAddress = this.getUserAddress();
+
+      if (token.ethAddress == "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+        const balance = await provider.getBalance(userAddress);
+
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      } else {
+        const contract = new ethers.Contract(token.ethAddress, abi, provider)
+        const balance = await contract
+            .balanceOf(userAddress)
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      }
+    
+
+    },
+    getBSCTokenBalance: async function(token){
+      const abi = [
+        // balanceOf
+        {
+          constant: true,
+          inputs: [{ name: "_owner", type: "address" }],
+          name: "balanceOf",
+          outputs: [{ name: "balance", type: "uint256" }],
+          type: "function"
+        },
+        // decimals
+        {
+          constant: true,
+          inputs: [],
+          name: "decimals",
+          outputs: [{ name: "", type: "uint8" }],
+          type: "function"
+        }
+      ];
+      const provider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/", {chainId: 56, name: "Binance"})
+      const userAddress = this.getUserAddress();
+      console.log(token)
+      if (token.bscAddress == "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+        const balance = await provider.getBalance(userAddress);
+
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      } else {
+        const contract = new ethers.Contract(token.bscAddress, abi, provider)
+        const balance = await contract
+            .balanceOf(userAddress)
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      }
+    
+
+    },
     getTokenBalance: async function(token){
       const abi = [
         // balanceOf

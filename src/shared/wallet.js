@@ -14,6 +14,9 @@ export default {
   
         connectWallet: async function() {
           console.log("connecting wallet")
+          if(window.onewallet){
+            console.log("onewallet coming soon")
+          }
 
           if (window.ethereum !== undefined){
             const provider = new ethers.providers.Web3Provider(window.ethereum);

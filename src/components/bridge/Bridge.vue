@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="flex w-full pl-2">
-        <p class="text-xs dark:text-gray-400">Available: 218.702645 ONE</p>
+        <p class="text-xs dark:text-gray-400">Available: {{balance}} </p>
       </div>
       <div class="flex">
         <!-- Active buttons if tokens selected -->
@@ -28,7 +28,7 @@
             <p class="text-sm text-gray-500 dark:text-oswapBlue-light">reset</p>
           </div>
           <div class="flex h-full w-28 relative">
-            <BridgeButton />
+            <BridgeButton :token="this.getToken()['token1']" />
           </div>
         </div>
 
@@ -56,9 +56,11 @@
   import BridgeTokenSelect from '@/components/bridge/BridgeTokenSelect';
   import BridgeButton from '@/components/bridge/BridgeButton';
   import InputWithValidation from '@/components/InputWithValidation';
-
+  import openswap from "@/shared/openswap.js";
+  import { mapGetters } from 'vuex';
   export default {
     name: 'Bridge',
+    mixins: [openswap],
     components: {
       BridgeTokenSelect,
       BridgeButton,
@@ -67,7 +69,35 @@
     data() {
       return {
         amount: '0.0',
+        balance: 0,
         errors: {}
+      }
+    },
+     mounted: async function() {
+       if(this.getToken()['token1'] != undefined){
+         this.getTokenBalance()
+       }
+       
+     },
+
+    methods: {
+      ...mapGetters('migrate', ['getToken']),
+      selectToken(token) {
+        this.$emit('triggerModal', token)
+      },
+      getTokenBalance: async function(){
+      
+        if(this.getToken()['token1'].bscAddress != undefined){
+          console.log("bsc token")
+          this.balance =  await this.getBSCTokenBalance(this.getToken()['token1'])
+        }
+        if(this.getToken()['token1'].ethAddress != undefined){
+          console.log("eth token")
+          this.balance = await this.getETHTokenBalance(this.getToken()['token1'])
+        }
+      },
+      setMax(){
+          this.amount = this.balance
       }
     }
   }

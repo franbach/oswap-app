@@ -32,7 +32,7 @@
       }
     },
     methods: {
-      ...mapGetters('exchange', ['getToken']),
+      ...mapGetters('migrate', ['getToken']),
 
       // Helper
       // It Checks if token1 and or token2 have been already stored.

@@ -25,15 +25,19 @@
         <p class="text-sm mb-3">Token Supply</p>
         <div class="flex space-x-2 mb-3 items-center">
           <i class="las la-hand-holding-usd text-xl"></i>
-          <p>Circ. : {{balances.circSupply}} oSWAP</p>
+          <p>Circ: {{balances.circSupply}} oSWAP</p>
         </div>
         <div class="flex space-x-2 mb-3 items-center">
           <i class="lab la-dev text-xl"></i>
           <p>Locked: {{balances.devLocked}} oSWAP</p>
         </div>
-        <div class="flex space-x-2 items-center">
+        <div class="flex space-x-2 mb-3  items-center">
           <i class="las la-globe-europe text-xl"></i>
           <p>Total: {{balances.totalSupply}} oSWAP</p>
+        </div>
+        <div class="flex space-x-2 items-center">
+          <i class="las la-hourglass-end text-xl"></i>
+          <p>Max: <i class="text-xl pl-2 pr-2">&#8734;</i>  oSWAP</p>
         </div>
       </div>
     </tooltip-me-content>
