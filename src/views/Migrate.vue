@@ -11,7 +11,7 @@
 
          <transition name="horizontal" appear>
       <div v-if="this.getStepState('swap')">
-        <Bridge @triggerModal="triggerModal" />
+        <Bridge :key="whichToken" @triggerModal="triggerModal" />
       </div>
     </transition>
 

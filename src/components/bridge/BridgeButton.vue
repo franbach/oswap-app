@@ -47,18 +47,24 @@
 </template>
 
 <script>
-//const { BridgeSDK, TOKEN, NETWORK_TYPE, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
-//const configs = require('bridge-sdk/lib/configs');
+const { BridgeSDK, TOKEN, NETWORK_TYPE, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+const configs = require('bridge-sdk/lib/configs');
 
   export default {
     name: 'BridgeButton',
      props: {
       token: Object
     },
+    data() {
+      return {
+        balance: '0'
+      } 
+    },
     mounted(){
 
+
     },
-    methods: {/*
+    methods: {
       bridge: async function() {
         this.getTokenOrigin()
         const bridgeSDK = new BridgeSDK({ logLevel: 2 })
@@ -78,7 +84,7 @@
           console.log("eth token")
           return NETWORK_TYPE.ETHEREUM
         }
-      }*/
+      }
     }
   }
 </script>
