@@ -1,8 +1,10 @@
 <template>
-  <div class="flex relative items-center">
-    <apexchart type="donut" height="224" width="200" :options="chartOptions" :series="series"></apexchart>
-    <div class="flex flex-col items-center text-gray-500 dark:text-gray-300 center-component">
-      <p class="text-7xl">{{totalPools}}</p>
+  <div class="flex flex-none relative items-center ss:h-36 xs:h-48">
+    <div class="flex z-30">
+      <apexchart type="donut" width="200" height="224" :options="chartOptions" :series="series"></apexchart>
+    </div>
+    <div class="flex flex-col z-20 items-center text-gray-500 dark:text-gray-300 center-component">
+      <p class="ss:text-5xl xs:text-7xl">{{totalPools}}</p>
       <p class="text-xs">Farm Pools</p>
     </div>
   </div>
@@ -40,6 +42,15 @@
           chart: {
             type: 'donut',
           },
+          responsive: [{
+            breakpoint: 540,
+            options: {
+              chart: {
+                width: 150,
+                height: 168
+              }
+            }
+          }],
           labels: [],
           plotOptions: {
             pie: {

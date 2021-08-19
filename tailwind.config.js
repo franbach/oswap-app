@@ -43,6 +43,7 @@ module.exports = {
       xs: '540px',
       sm: '640px',
       md: '768px',
+      mdd: '900px',
       lg: '1024px',
       lgg: '1100px',
       xl: '1280px',
@@ -427,7 +428,10 @@ module.exports = {
       screen: '100vh',
       ss: '450px',
       xs: '500px',
-      sm: '600px'
+      sm: '600px',
+      216: '216px',
+      344: '344px',
+      408: '408px'
     }),
     inset: (theme, { negative }) => ({
       auto: 'auto',
@@ -518,6 +522,7 @@ module.exports = {
       half: '50%',
       full: '100%',
       screen: '100vh',
+      344: '344px'
     }),
     maxWidth: (theme, { breakpoints }) => ({
       none: 'none',
@@ -542,6 +547,7 @@ module.exports = {
     }),
     minHeight: {
       0: '0px',
+      216: '216px',
       half: '50%',
       full: '100%',
       screen: '100vh',

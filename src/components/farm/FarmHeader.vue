@@ -1,11 +1,17 @@
 <template>
-  <div class="grid grid-cols-3 st5 w-full ss:mt-3 ss:mb-6 xs:mt-8 xs:mb-12">
-    <div class="flex col-span-2 bg-slightGray dark:bg-slightDark p-3 rounded-3xl shadow-2xl">
-      <Chart :poolName="data.chartData.name" :liquidity="data.chartData.liquidity" />
-      <div class="flex w-full ml-3 items-center divide-x divide-oswapGreen">
+  <div class="flex w-full h-full ss:mt-3 ss:mb-6 xs:mt-8 xs:mb-12">
+    <div class="flex ss:flex-1 xs:flex-none flex-col mdd:flex-row ss:h-344 xs:h-408 mdd:h-216 bg-slightGray dark:bg-slightDark p-3 rounded-3xl shadow-2xl">
+
+      <div class="flex items-center">
+        <Chart :poolName="data.chartData.name" :liquidity="data.chartData.liquidity" />
         <Total :TVL="data.TVL" :TAPR="data.APRs.tAPR" />
+      </div>
+
+      <div class="flex items-center mdd:divide-x mdd:divide-oswapGreen">
+        <div class="mdd:flex hidden"></div>
         <Personal :TVL="data.PVL" :PAPR="data.APRs.pAPR" :REWARDS="data.rewardsPending" />
       </div>
+
     </div>
   </div>
 </template>
