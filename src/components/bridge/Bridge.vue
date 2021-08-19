@@ -95,6 +95,9 @@
           console.log("eth token")
           this.balance = await this.getETHTokenBalance(this.getToken()['token1'])
         }
+      },
+      setMax(){
+          this.amount = this.balance
       }
     }
   }
