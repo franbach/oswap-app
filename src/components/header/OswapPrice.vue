@@ -13,31 +13,33 @@
           <p>oSWAP Price: ${{oswapPrice}}</p>
         </div>
         <div class="flex space-x-2 mb-3 items-center">
-          <i class="las la-coins text-xl"></i>
+          <i class="las la-coins text-xl text-yellow-500"></i>
           <p>Circ. Market Cap: ${{marketCap}} USD</p>
         </div>
         <div class="flex space-x-2 items-center">
-          <i class="las la-fire-alt text-xl"></i>
+          <i class="las la-fire-alt text-xl text-red-400"></i>
           <p>Tokens Burnt: {{balances.burnedAmount}} oSWAP</p>
         </div>
       </div>
       <div class="flex flex-col p-3 bg-gray-100 dark:bg-slightDark rounded-md text-gray-500 dark:text-gray-300">
         <p class="text-sm mb-3">Token Supply</p>
         <div class="flex space-x-2 mb-3 items-center">
-          <i class="las la-hand-holding-usd text-xl"></i>
+          <i class="las la-hand-holding-usd text-xl text-green-500"></i>
           <p>Circ: {{balances.circSupply}} oSWAP</p>
         </div>
         <div class="flex space-x-2 mb-3 items-center">
-          <i class="lab la-dev text-xl"></i>
+          <i class="lab la-dev text-xl text-oswapBlue-light"></i>
           <p>Locked: {{balances.devLocked}} oSWAP</p>
         </div>
-        <div class="flex space-x-2 mb-3  items-center">
-          <i class="las la-globe-europe text-xl"></i>
+        <div class="flex space-x-2 mb-3 items-center">
+          <i class="las la-globe-europe text-xl text-oswapBlue-light"></i>
           <p>Total: {{balances.totalSupply}} oSWAP</p>
         </div>
         <div class="flex space-x-2 items-center">
           <i class="las la-hourglass-end text-xl"></i>
-          <p>Max: <i class="text-xl pl-2 pr-2">&#8734;</i>  oSWAP</p>
+          <p>Max:</p>
+          <i class="las la-infinity text-xl"></i>
+          <p>oSWAP</p>
         </div>
       </div>
     </tooltip-me-content>
