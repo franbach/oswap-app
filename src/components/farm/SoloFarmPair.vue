@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-3 st5 st5-all group bg-gray-200 hover:bg-slightGray dark:hover:bg-slightDark dark:bg-gray-700 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+  <div class="flex flex-col p-3 st5 st5-all group bg-gradient-to-l dark:from-slightDark from-slightGray to-transparent dark:hover:bg-slightDark hover:bg-slightGray border-l border-oswapGreen rounded-3xl">
     <!-- Header -->
      <PoolHeader :pool="pool" :poolData="poolData"/>
     <!-- Body -->
@@ -61,15 +61,13 @@
       },
       setPool(value) {
         if (value == 'open') {
-          this.$el.classList.remove('ring-1', 'ring-black', 'ring-opacity-5');
-          this.$el.classList.add('row-span-3', 'ensure-height', 'ring-2', 'ring-inset', 'ring-oswapGreen');
+          this.$el.classList.add('row-span-3', 'ensure-height', 'ring-1', 'ring-inset', 'ring-oswapGreen');
           this.poolStatsOff = false
           this.poolStatsOn = true
         }
 
         if (value == 'close') {
-          this.$el.classList.remove('row-span-3', 'ensure-height', 'ring-2', 'ring-inset', 'ring-oswapGreen');
-          this.$el.classList.add('ring-1', 'ring-black', 'ring-opacity-5');
+          this.$el.classList.remove('row-span-3', 'ensure-height', 'ring-1', 'ring-inset', 'ring-oswapGreen');
           this.poolStatsOn = false
           this.poolStatsOff = true
         }

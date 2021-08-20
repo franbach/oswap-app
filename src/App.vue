@@ -1,14 +1,14 @@
 <template>
-  <div id="root" :class="darkmode ? 'dark bg-wave-dark' : 'bg-wave'" class="antialiased pt-18 bg-no-repeat bg-bottom">
-    <div id="header" :class="scrolled ? 'shadow-xl' : ''" class="flex flex-1 fixed inset-x-0 top-0 st5 dark:bg-oswapDark-gray bg-gray-200 z-50">
+  <div id="root" :class="darkmode ? 'dark' : ''" class="antialiased pt-18">
+    <div id="header" :class="scrolled ? 'shadow-xl' : ''" class="flex flex-1 fixed inset-x-0 top-0 st5 bg-gradient-to-r dark:from-oswapDark-gray dark:to-slightDark from-gray-300 to-slightGray z-50">
       <Header />
     </div>
 
-    <div id="body" class="flex w-full oswap-layout z-20">
+    <div id="body" class="flex w-full oswap-layout z-20 st5 bg-gradient-to-r from-gray-300 to-slightGray dark:from-oswapDark-gray dark:to-slightDark">
       <router-view />
     </div>
 
-    <div id="footer" class="w-full h-full z-40">
+    <div id="footer" class="w-full h-full z-40 st5 bg-gradient-to-r from-gray-300 to-slightGray dark:from-oswapDark-gray dark:to-slightDark">
       <Footer @dark-mode="changeColor()" :colorMode="this.darkmode" />
     </div>
   </div>
@@ -64,3 +64,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .bg-dark-grad {
+    background-color: #12c2e9;  /* fallback for old browsers */
+    background-color: -webkit-linear-gradient(to right, #f64f59, #c471ed, #12c2e9);  /* Chrome 10-25, Safari 5.1-6 */
+    background-color: linear-gradient(to right, #f64f59, #c471ed, #12c2e9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+</style>

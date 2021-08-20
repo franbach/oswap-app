@@ -1,7 +1,7 @@
 <template>
   <Menu as="div" class="relative">
     <MenuButton class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group cursor-pointer dark:text-oswapGreen focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-      <i class="las la-icons text-xl group-hover:text-oswapGreen"></i>
+      <i class="las la-braille text-xl group-hover:text-oswapGreen"></i>
       <p class="text-sm hidden md:block group-hover:text-oswapBlue-light">More</p>
     </MenuButton>
 

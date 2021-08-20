@@ -35,6 +35,8 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Alata", ...defaultTheme.fontFamily.sans],
+        libre: ["'Libre Franklin'"],
+        nunito: ["Nunito"]
       }
     },
     screens: {

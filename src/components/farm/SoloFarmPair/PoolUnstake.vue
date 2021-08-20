@@ -6,10 +6,10 @@
           <i class="las la-hand-holding-usd text-xl text-oswapGreen"></i>
           <p class="text-sm dark:text-gray-300">Withdraw your LP Tokens</p>
         </div>
-        <div class="flex flex-col dark:bg-gray-700 bg-gray-200 rounded-2xl">
+        <div class="flex flex-col dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
           <div class="flex flex-1 shadow-lg rounded-2xl">
             <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :errorTop="'pt-10'">
-              <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{pool.pair}}</p>
+              <p class="text-xs z-20 right-1 absolute bg-gray-200 dark:bg-gray-700 rounded-lg p-2">{{pool.pair}}</p>
             </InputWithValidation>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-3 pb-3 px-3">
@@ -22,10 +22,10 @@
                 <p class="text-lg dark:text-gray-400">{{parseFloat(this.getEthUnits(this.maxAmount)).toFixed(5)}}</p>
               </div>
             </div>
-            <div class="flex items-center justify-end">
-              <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 space-x-2">
-                <i class="las la-wallet text-xl"></i>
-                <p class="">MAX</p>
+            <div class="flex items-center justify-end group-scope">
+              <div @click="setMax()" class="flex items-center group-scope-hover:bg-oswapGreen text-oswapGreen-dark dark:text-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer p-3 rounded-xl space-x-2">
+                <i class="las la-wallet text-xl dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100"></i>
+                <p class="dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100">MAX</p>
               </div>
             </div>
           </div>
@@ -33,9 +33,9 @@
       </div>
       <div class="flex justify-between items-center mb-0.5 h-9">
         <!-- back to Stats -->
-        <div @click="setPool()" class="flex h-9 items-center space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 cursor-pointer">
-          <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-500 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-oswapGreen border-2 border-gray-200 dark:border-gray-700"></i>
-          <p class="text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
+        <div @click="setPool()" class="flex h-9 items-center space-x-2 ss:space-x-0 sm:space-x-2 md:space-x-0 xl:space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 ss:pr-0 sm:pr-3 md:pr-0 xl:pr-3 cursor-pointer">
+          <i class="las la-arrow-left text-lg p-2 text-gray-500 dark:text-oswapBlue-light rounded-full bg-gray-100 dark:bg-oswapDark-gray group-hover:bg-oswapGreen dark:group-hover:text-oswapDark-gray group-hover:text-gray-100 border-2 border-gray-200 dark:border-gray-700"></i>
+          <p class="ss:hidden sm:block md:hidden xl:block text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
         </div>
         
         <div class="flex items-center w-28 h-full relative">

@@ -70,7 +70,7 @@ html {
   @apply flex w-28 h-full justify-between items-center border;
   @apply border-oswapGreen-dark dark:border-oswapGreen dark:hover:bg-oswapGreen;
   @apply hover:bg-oswapGreen space-x-1 p-2 pl-3 rounded-full;
-  @apply dark:bg-gray-700 bg-gray-200 relative;
+  @apply dark:bg-slightDark bg-slightGray relative;
   z-index: 2;
 }
 
