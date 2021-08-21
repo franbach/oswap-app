@@ -5,7 +5,7 @@
       <p class="text-sm dark:text-gray-200">Bridge</p>
     </div>
     <div class="flex flex-col space-y-3">
-      <BridgeNetworkSelect />
+      <BridgeNetworkSelect  v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
 
       <BridgeTokenSelect @click="selectToken('token1')" whichToken="token1" />
       <div class="flex flex-1 items-center space-x-3">
@@ -73,11 +73,13 @@
         amount: '0.0',
         balance: 0,
         errors: {},
-        tokenSymbol: ' ? '
+        tokenSymbol: ' ? ',
+        token: null
       }
     },
     mounted: async function() {
       if (this.getToken()['token1'] != undefined) {
+        this.token = this.getToken()['token1']
         this.getTokenBalance()
       }
     },

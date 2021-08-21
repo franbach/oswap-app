@@ -1,6 +1,6 @@
 <template>
   <!-- shows if not selected any network V-IF -->
-  <div v-if="!this.getFromNetwork">
+  <div  v-if="!this.getFromNetwork">
     <tooltip-me>
       <div class="flex flex-1 h-10 w-32 items-center justify-center ring-1 ring-black dark:ring-gray-600 ring-opacity-10 hover:bg-gray-100 dark:hover:bg-oswapDark-gray bg-opacity-100 hover:bg-opacity-30 cursor-pointer overflow-hidden rounded-xl space-x-2">
         <p class="text-sm dark:text-gray-200">From</p>
@@ -9,7 +9,7 @@
       <tooltip-me-content :options="tooltip" class="flex w-44 rounded-xl shadow-xl ring-1 ring-black dark:ring-gray-600 ring-opacity-25 bg-gray-100 dark:bg-slightDark text-gray-500 dark:text-gray-300">
         <div class="flex flex-1 flex-col text-xs">
           <div v-for="(network, index) in this.getNetworks" :key="index" class="flex flex-1 cursor-pointer">
-            <div @click="selectNetwork(network)" class="flex flex-1 items-center space-x-3 p-3 group hover:bg-slightGray dark:hover:bg-oswapDark-gray rounded-xl">
+            <div class="flex flex-1 items-center space-x-3 p-3 group hover:bg-slightGray dark:hover:bg-oswapDark-gray rounded-xl">
               <img :src="network.icon" class="h-4" alt="">
               <p>{{network.name}}</p>
             </div>
@@ -29,7 +29,7 @@
       <tooltip-me-content :options="tooltip" class="flex w-44 rounded-xl shadow-xl ring-1 ring-black dark:ring-gray-600 ring-opacity-10 bg-gray-100 dark:bg-slightDark text-gray-500 dark:text-gray-300">
         <div class="flex flex-1 flex-col text-xs">
           <div v-for="(network, index) in this.getNetworks" :key="index" class="flex flex-1 cursor-pointer">
-            <div @click="selectNetwork(network)" class="flex flex-1 items-center space-x-3 p-3 group hover:bg-slightGray dark:hover:bg-oswapDark-gray rounded-xl">
+            <div class="flex flex-1 items-center space-x-3 p-3 group hover:bg-slightGray dark:hover:bg-oswapDark-gray rounded-xl">
               <img :src="network.icon" class="h-4" alt="">
               <p>{{network.name}}</p>
             </div>
@@ -46,6 +46,9 @@
 
   export default {
     name: 'From',
+     props: {
+      token: Object
+    },
     data() {
       return {
         tooltip: {
@@ -57,23 +60,47 @@
           speed: 200,
           shift: 37
         },
+        from: {}
       }
     },
     computed: {
-      ...mapGetters('migrate', ['getNetworks', 'getFromNetwork', 'getToNetwork']),
+      ...mapGetters('migrate', [ 'getFromNetwork', 'getToNetwork']),
+    },
+    mounted: function(){
+        var network = this.getNetworks();
+        console.log(network[1])
+        if(this.getTokenOrigin(this.getToken()['token1']) == 'bsc'){
+          this.selectNetwork(network[1], network[0])
+        }else{
+          this.selectNetwork(network[2], network[0])
+        }
+        
     },
     methods: {
-      ...mapActions('migrate', ['setFromNetwork']),
+      ...mapActions('migrate', ['setFromNetwork', 'setToNetwork', 'resetNetworks']),
+      ...mapGetters('migrate', ['getNetworks', 'getToken']),
+      getTokenOrigin(token){
+        if(token.bscAddress != undefined){
+          console.log('bsc')
+          return 'bsc'
+        }
+        if(token.ethAddress != undefined){
+                    console.log('eth')
 
-      selectNetwork(network) {
-        if (this.getToNetwork && this.getToNetwork.name === network.name) {
+          return 'eth'
+        }
+      },
+      selectNetwork(networkFrom, networkTo) {
+        if (this.getToNetwork && this.getToNetwork.name === networkFrom.name) {
           toastMe('warning', {
             title: 'Network Selection',
-            msg: `You already picked ${network.name} ! Choose another.`,
+            msg: `You already picked ${networkFrom.name} ! Choose another.`,
             link: false,
           })
         } else {
-          this.setFromNetwork(network)  
+          this.resetNetworks()
+          this.setFromNetwork(networkFrom)
+          this.setToNetwork(networkTo)
         }
       }
     }

@@ -134,7 +134,9 @@ export default {
     },
 
     setFromNetwork({ commit }, value) {
+      
       commit('_setFromNetwork', value)
+      
     },
 
     setToNetwork({ commit }, value) {
@@ -163,7 +165,9 @@ export default {
     },
 
     _setFromNetwork: (state, value) => {
+ 
       state.from = value
+  
     },
 
     _setToNetwork: (state, value) => {

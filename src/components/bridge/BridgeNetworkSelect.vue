@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-1 justify-between">
     <!-- from network -->
-    <From />
+    <From :key="token"/>
     <!-- switch network -->
     <Switch />
     <!-- to network button -->
-    <To />
+    <To/>
   </div>
 </template>
 
@@ -20,6 +20,10 @@
       From,
       Switch,
       To
-    }
+    },
+    props: {
+      token: Object
+    },
+
   }
 </script>
