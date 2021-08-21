@@ -1,5 +1,5 @@
 const { ethtokens } = require("./exchange_tokens/ethTokens.js");
-const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
+//const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
 const { bsctokens } = require("./exchange_tokens/bscTokens.js");
 
 export default {

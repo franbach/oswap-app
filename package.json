@@ -15,6 +15,7 @@
     "@fontsource/alata": "^4.3.0",
     "@fontsource/libre-franklin": "^4.5.0",
     "@fontsource/nunito": "^4.5.0",
+    "@harmony-js/crypto": "^0.1.56",
     "@headlessui/vue": "^1.2.0",
     "@makerdao/multicall": "^0.12.0",
     "@tailwindcss/postcss7-compat": "^2.2.7",

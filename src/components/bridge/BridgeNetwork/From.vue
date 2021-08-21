@@ -81,12 +81,9 @@
       ...mapGetters('migrate', ['getNetworks', 'getToken']),
       getTokenOrigin(token){
         if(token.bscAddress != undefined){
-          console.log('bsc')
           return 'bsc'
         }
         if(token.ethAddress != undefined){
-                    console.log('eth')
-
           return 'eth'
         }
       },
