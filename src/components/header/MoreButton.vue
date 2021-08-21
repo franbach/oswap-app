@@ -1,24 +1,24 @@
 <template>
   <Menu as="div" class="relative">
     <MenuButton class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group cursor-pointer dark:text-oswapGreen focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
-      <i class="las la-icons text-xl group-hover:text-oswapGreen"></i>
+      <i class="las la-braille text-xl group-hover:text-oswapGreen"></i>
       <p class="text-sm hidden md:block group-hover:text-oswapBlue-light">More</p>
     </MenuButton>
 
     <transition
-      enter-active-class="transform transition duration-200 ease-out"
-      enter-from-class="translate-x-4 opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-150 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-4 opacity-0"
+      enter-active-class="transform transition duration-200 ease-in-out"
+      enter-from-class="-translate-y-4 opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transform transition duration-200 ease-in-out"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="-translate-y-4 opacity-0"
     >
       <MenuItems class="absolute z-50 focus:outline-none st5-all">
         <div class="absolute z-10 w-72 mt-3 ss:-left-44 md:-left-28 lg:left-0">
-          <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-            <div class="relative grid gap-8 bg-white dark:bg-gray-700 p-4 md:grid-cols-1">
+          <div class="overflow-hidden rounded-lg shadow-lg">
+            <div class="relative grid gap-8 bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent p-4 md:grid-cols-1">
               <MenuItem>
-                <router-link to="/pairs" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/pairs" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg rounded-b-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
                     <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
                       <i class="las la-balance-scale text-3xl text-oswapGreen group-hover:text-oswapBlue-light"></i>

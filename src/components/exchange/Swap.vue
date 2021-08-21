@@ -1,5 +1,5 @@
 <template>  
-  <div class="flex flex-col st5 p-4 bg-gray-200 dark:bg-gray-700 dark:text-gray-400 ss:w-80 xs:w-96 rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+  <div class="flex flex-col st5 p-4 bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent text-gray-500 dark:text-gray-300 ss:w-80 xs:w-96 rounded-3xl swap-border">
     <div class="flex items-center space-x-2 mb-3">
       <i class="las la-random text-xl"></i>
       <p class="text-sm">Swap</p>

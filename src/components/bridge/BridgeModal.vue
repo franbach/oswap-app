@@ -65,36 +65,11 @@
       },
 
       selectToken(token) {
-        if (this.whichToken == 'token1') {
-          if (this.getToken()['token2'] && this.getToken()['token2'].Symbol == token.Symbol) {
-            toastMe('warning', {
-              title: 'Token Selection',
-              msg: `You already picked ${token.Symbol} ! Choose another token.`,
-              link: false,
-            })
-          } else {
-            this.setToken({ tokenRef: this.whichToken, token: token });
-            // Resets search field
-            this.search = ''
-            // closes the modal
-            this.goTo('swap');
-          }
-        }
-        if (this.whichToken == 'token2') {
-          if (this.getToken()['token1'] && this.getToken()['token1'].Symbol == token.Symbol) {
-            toastMe('warning', {
-              title: 'Token Selection',
-              msg: `You already picked ${token.Symbol} ! Choose another token.`,
-              link: false,
-            })
-          } else {
-            this.setToken({ tokenRef: this.whichToken, token: token });
-            // Resets search field
-            this.search = ''
-            // closes the modal
-            this.goTo('swap');
-          }
-        }
+        this.setToken({ tokenRef: this.whichToken, token: token });
+        // Resets search field
+        this.search = ''
+        // closes the modal
+        this.goTo('swap');
       },
     },
   }

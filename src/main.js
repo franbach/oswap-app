@@ -18,7 +18,10 @@ import PerfectScrollbar from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 import "./assets/style/app.scss"
+
 import "@fontsource/alata"
+import "@fontsource/libre-franklin"
+import "@fontsource/nunito"
 
 import 'animate.css';
 

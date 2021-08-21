@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-none relative items-center ss:h-36 xs:h-48">
+  <div class="flex flex-none items-center relative">
     <div class="flex z-30">
       <apexchart type="donut" width="200" height="224" :options="chartOptions" :series="series"></apexchart>
     </div>
@@ -40,7 +40,7 @@
         series: [],
         chartOptions: {
           chart: {
-            type: 'donut',
+            type: 'donut'
           },
           responsive: [{
             breakpoint: 540,
@@ -56,7 +56,7 @@
             pie: {
               expandOnClick: false,
               donut: {
-                size: '85%',
+                size: '85%'
               }
             }
           },

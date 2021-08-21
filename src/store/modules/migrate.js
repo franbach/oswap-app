@@ -3,12 +3,6 @@ const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
 const { bsctokens } = require("./exchange_tokens/bscTokens.js");
 
 export default {
-  // --------------------------------------------------------------------------
-  // Everything Related to Swap Component -------------------------------------
-  // to map this functions to components you must add:
-  // ...mapGetters('exchange', ['functionName, ...'])
-  // then to call the function in the component: this.functionName()
-  // --------------------------------------------------------------------------
   namespaced: true,
 
   state: {
@@ -20,17 +14,34 @@ export default {
 
     swap: {},
 
+    from: null,
+    to: null,
+
     allTokens: [
-        { 
-            name: 'Binance Smart Chain Tokens', 
-            icon: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
-            tokens: bsctokens 
-        },
-        { 
-            name: 'Ethereum Bridged Tokens', 
-            icon: 'https://openfi.dev/tokens/default/ETH.png',
-            tokens: ethtokens 
-        }
+      { 
+        name: 'Binance Smart Chain Tokens', 
+        icon: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
+        tokens: bsctokens 
+      },
+      { 
+        name: 'Ethereum Bridged Tokens', 
+        icon: 'https://openfi.dev/tokens/default/ETH.png',
+        tokens: ethtokens 
+      }
+    ],
+    networks: [
+      {
+        name: 'Harmony Network',
+        icon: 'https://openfi.dev/tokens/default/ONE.png',
+      },
+      {
+        name: 'Binance Smart Chain',
+        icon: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
+      },
+      {
+        name: 'Ethereum Network', 
+        icon: 'https://openfi.dev/tokens/default/ETH.png',
+      }
     ]
   },
 
@@ -86,6 +97,19 @@ export default {
     getStepState: (state) => (step) => {
       return state.step[step]
     },
+
+    // get networks
+    getNetworks: (state) => {
+      return state.networks
+    },
+
+    getFromNetwork: (state) => {
+      return state.from
+    },
+
+    getToNetwork: (state) => {
+      return state.to
+    },
   },
   
   actions: {
@@ -105,6 +129,22 @@ export default {
       commit('_switchTokens')
     },
 
+    switchNetwork({ commit }) {
+      commit('_switchNetwork')
+    },
+
+    setFromNetwork({ commit }, value) {
+      commit('_setFromNetwork', value)
+    },
+
+    setToNetwork({ commit }, value) {
+      commit('_setToNetwork', value)
+    },
+
+    resetNetworks({ commit }) {
+      commit('_resetNetworks')
+    },
+
     // Resets the token selection
     resetTokens({ commit }) {
       commit('_resetTokens')
@@ -122,86 +162,29 @@ export default {
       state.swap[value.tokenRef] = value.token
     },
 
+    _setFromNetwork: (state, value) => {
+      state.from = value
+    },
+
+    _setToNetwork: (state, value) => {
+      state.to = value
+    },
+
+    _switchNetwork: (state) => {
+      [state.from, state.to] = [state.to, state.from]
+    },
+
     _switchTokens: (state) => {
       [state.swap.token1, state.swap.token2] = [state.swap.token2, state.swap.token1]
     },
 
     _resetTokens: (state) => {
       state.swap = {}
-    }
-  },
+    },
 
-  modules: {
-    // ------------------------------------------------------------------------
-    // Everything Related to Swapper Component --------------------------------
-    // ------------------------------------------------------------------------
-    swapper: {
-      namespaced: true,
-
-      state: {
-        buttons: {
-          approve: {
-            disabled: true,
-            approve: false,
-            approved: false,
-            approving: false,
-          },
-          swap: {
-            disabled: true,
-            swap: false,
-            swapped: false,
-            swapping: false 
-          }
-        }
-      },
-  
-      getters: {
-        getBtnState: (state) => (value) => {
-          // Grabs the button name passed in as argument
-          let btn = Object.keys(value)[0];
-          // Grabs the desired button state passed in as argument
-          let btnState = value[btn];
-
-          return state.buttons[btn][btnState];
-        }
-      },
-
-      actions: {
-        setBtnState({ commit }, value) {
-          commit('_setBtnState', value)
-        },
-
-        resetButton({ commit }, value) {
-          commit('_resetButton', value)
-        }
-      },
-
-      mutations: {
-        _resetButton: (state, button) => {
-          Object.keys(state.buttons[button]).forEach((s) => {
-            s == 'disabled' ? 
-              state.buttons[button][s] = true :
-              state.buttons[button][s] = false
-          })
-        },
-
-        _setBtnState: (state, value) => {
-          // Grabs the button name passed in as argument
-          let btn = Object.keys(value)[0];
-          // Grabs the desired button state passed in as argument
-          let btnState = value[btn];
-          
-          // Iterates over the desired button state and check
-          // if the state argument matches so it can be changed to true.
-          // All other button states should be false, we cannot have more than
-          // one true state per button.
-          Object.keys(state.buttons[btn]).forEach((s) => {
-            s == String(btnState) ? 
-              state.buttons[btn][s] = true :
-              state.buttons[btn][s] = false
-          })
-        }
-      }
+    _resetNetworks: (state) => {
+      state.from = null;
+      state.to = null;
     }
   }
 }
