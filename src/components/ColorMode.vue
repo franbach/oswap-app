@@ -1,7 +1,7 @@
 <template>  
   <div
-    class="relative w-20 h-8 flex items-center bg-gray-200 dark:bg-gray-700 rounded-full p-1 duration-300 cursor-pointer"
-    :class="{ 'bg-oswapGreen-dark': value }"
+    class="relative w-20 h-8 flex items-center bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent rounded-full p-1 duration-300 cursor-pointer"
+    :class="{ '': value }"
     :aria-checked="value.toString()"
     @click="toggle"
   >
