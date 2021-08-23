@@ -55,7 +55,7 @@ export default {
         const balance = await provider.getBalance(userAddress);
         return balance
     },
-    getETHTokenBalance: async function(token){
+    getETHTokenBalance: async function(token, address){
       const abi = [
         // balanceOf
         {
@@ -76,7 +76,7 @@ export default {
       ];
       const provider = new ethers.providers.InfuraProvider('mainnet',
       '998f0142cce3485ba1cb3c4e9d9990ab')
-      const userAddress = this.getUserAddress();
+      const userAddress = address
 
       if (token.ethAddress == "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
         const balance = await provider.getBalance(userAddress);
@@ -97,7 +97,7 @@ export default {
     
 
     },
-    getBSCTokenBalance: async function(token){
+    getBSCTokenBalance: async function(token, address){
       const abi = [
         // balanceOf
         {
@@ -117,8 +117,8 @@ export default {
         }
       ];
       const provider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/", {chainId: 56, name: "Binance"})
-      const userAddress = this.getUserAddress();
-      console.log(token)
+      const userAddress = address
+      
       if (token.bscAddress == "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
         const balance = await provider.getBalance(userAddress);
 
