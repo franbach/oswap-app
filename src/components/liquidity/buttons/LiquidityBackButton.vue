@@ -1,7 +1,7 @@
 <template>
   <!-- back to Liquidity -->
-  <div @click="back" class="flex st5 st5-all items-center space-x-2 ss:space-x-0 xs:space-x-2 rounded-full group hover:bg-gray-100 dark:hover:bg-oswapDark-gray bg-opacity-100 hover:bg-opacity-30 pr-3 ss:pr-0 xs:pr-3 cursor-pointer">
-    <i class="las la-arrow-left text-lg p-2 text-gray-200 dark:text-gray-600 rounded-full bg-oswapGreen dark:bg-oswapBlue-light dark:group-hover:bg-oswapGreen group-hover:bg-oswapGreen-dark"></i>
+  <div @click="back" class="flex h-9 items-center space-x-2 ss:space-x-0 xs:space-x-2 rounded-full group bg-gray-100 hover:bg-gray-200 dark:bg-oswapDark-gray dark:hover:bg-gray-900 pr-3 ss:pr-0 xs:pr-3 cursor-pointer">
+    <i class="las la-arrow-left text-lg p-2 text-gray-500 dark:text-oswapBlue-light rounded-full bg-gray-100 dark:bg-oswapDark-gray group-hover:bg-oswapGreen dark:group-hover:text-oswapDark-gray group-hover:text-gray-100 border-2 border-gray-200 dark:border-gray-700"></i>
     <p class="ss:hidden xs:block text-sm text-gray-500 dark:text-oswapBlue-light">back</p>
   </div>
 </template>

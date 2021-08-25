@@ -2,12 +2,14 @@
   <div class="flex flex-col rounded-xl mt-3">
     <div class="flex items-center space-x-3">
       <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
-        <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-lg p-2">{{this.getToken()['token1'].Symbol}}</p>
+        <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-10">{{this.getToken()['token1'].Symbol}}</p>
       </InputWithValidation>
 
-      <div @click="setMax()" class="flex items-center bg-oswapGreen dark:bg-oswapGreen-dark hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen cursor-pointer p-3 rounded-xl text-gray-50 xs:space-x-2">
-        <i class="ss:hidden xs:block las la-wallet"></i>
-        <p class="text-xs">MAX</p>
+      <div class="flex flex-1 items-center justify-end group-scope">
+        <div @click="setMax()" class="flex h-10 items-center group-scope-hover:bg-oswapGreen text-oswapGreen-dark dark:text-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer px-3 rounded-xl ss:space-x-0 xs:space-x-2">
+          <i class="las la-wallet ss:hidden xs:block text-xl dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100"></i>
+          <p class="dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100">MAX</p>
+        </div>
       </div>
     </div>
     <div class="flex space-x-2 items-center pt-2">

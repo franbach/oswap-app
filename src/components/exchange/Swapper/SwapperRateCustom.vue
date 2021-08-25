@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div @click="toggleCustomRate" :class="checkCustom ? 'border-l-2 border-oswapGreen' : 'hover:bg-gray-50 dark:hover:bg-gray-500'" class="flex items-center justify-center cursor-pointer w-8 h-6 relative hover:bg-gray-50 dark:hover:bg-gray-500 dark:bg-gray-600 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
+    <div @click="toggleCustomRate" :class="checkCustom ? 'border-l-2 border-oswapGreen' : 'hover:bg-gray-50 dark:hover:bg-slightDark'" class="flex items-center justify-center cursor-pointer w-8 h-6 relative hover:bg-gray-50 dark:hover:bg-slightDark dark:bg-oswapDark-gray bg-gray-100 rounded-lg focus:outline-none">
       <i class="las la-sliders-h text-lg absolute dark:text-gray-300"></i>
     </div>
     
@@ -15,7 +15,7 @@
       leave-to-class="-translate-y-3 opacity-0"
     >
       <div class="absolute z-50 w-48 mt-2 right-0" v-if="isOpen">
-        <div class="relative flex flex-col space-y-2 py-2 border-l-2 border-oswapGreen shadow-lg rounded-lg p-1 px-2 bg-gray-100 dark:bg-gray-600">
+        <div class="relative flex flex-col space-y-2 py-2 border-l-2 border-oswapGreen shadow-lg rounded-lg p-1 px-2 bg-gray-100 dark:bg-slightDark">
           <div class="flex items-center space-x-2">
             <p class="dark:text-gray-300">Custom Rate</p>
             <tooltip-me>
@@ -37,7 +37,7 @@
             </tooltip-me>
           </div>
           <InputWithValidation @keyup.enter="toggleCustomRate" :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-lg'" :placeholder="'%'" :errorTop="'pt-8'">
-            <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-md p-1 px-2">%</p>
+            <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-8">%</p>
           </InputWithValidation>
         </div>
       </div>
