@@ -138,6 +138,47 @@ export default {
     
 
     },
+    getHMYTokenBalance: async function(token){
+      const abi = [
+        // balanceOf
+        {
+          constant: true,
+          inputs: [{ name: "_owner", type: "address" }],
+          name: "balanceOf",
+          outputs: [{ name: "balance", type: "uint256" }],
+          type: "function"
+        },
+        // decimals
+        {
+          constant: true,
+          inputs: [],
+          name: "decimals",
+          outputs: [{ name: "", type: "uint8" }],
+          type: "function"
+        }
+      ];
+      const provider = new ethers.providers.JsonRpcProvider("https://api.s0.t.hmny.io", {chainId: 1666600000, name: "Binance"})
+      const userAddress = this.getUserAddress();
+
+      if (token.oneZeroxAddress == this.WONE()) {
+        const balance = await provider.getBalance(userAddress);
+
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      } else {
+        const contract = new ethers.Contract(token.oneZeroxAddress, abi, provider)
+        const balance = await contract
+            .balanceOf(userAddress)
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      }
+    
+
+    },
     getTokenBalance: async function(token){
       const abi = [
         // balanceOf

@@ -45,7 +45,7 @@
         </div>
 
         <div class="flex h-full w-28 relative">
-          <BridgeButton @bridge="bridgeCheckAndExecute" :token="this.getToken()['token1']" />
+          <BridgeButton @bridge="bridgeCheckAndExecute" :buttonState="buttonState" :token="this.getToken()['token1']" />
         </div>
       </div>
 
@@ -86,7 +86,8 @@
         warnings: {},
         tokenSymbol: ' ? ',
         token: null,
-        userAddress: ''
+        userAddress: '',
+        buttonState: 'disabled'
       }
     },
     mounted: async function() {
@@ -108,7 +109,6 @@
     methods: {
       ...mapGetters('migrate', ['getToken', 'getToNetwork']),
       ...mapGetters('wallet', ['getUserAddress']),
-
       ...mapActions('migrate', ['resetTokens']),
 
       selectToken(token) {
@@ -125,22 +125,18 @@
 
  
      
-        this.Bridge(network)
+        await this.Bridge(network)
       
-
-        console.log()
-        //if(getToNetwork)
-       
         
         console.log(TOKEN)
         console.log(this.token)
         console.log('BRIDGE MATE')
       },
       Bridge: async function(tokenNetwork){
-        const bridgeSDK = new BridgeSDK({ logLevel: 2 })
+        const bridgeSDK = new BridgeSDK({ logLevel: 3, sdk: "web3" })
         await bridgeSDK.init(configs.mainnet);
-        bridgeSDK.setUseMetamask(true);
-
+        await bridgeSDK.setUseMetamask(true);
+        //await bridgeSDK.setUseOneWallet(true);
         //this sets network to binance
         var network = this.getTokenOrigin()
         //this set mode (ONE TO ETH or ETH to ONE depending bridge route selected)
@@ -157,12 +153,17 @@
 
         let operationId;
         //sets token type based on native token or not else selects erc20 mode
-        if(isNative){
+        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
+          if(isNative){
           tokenType = TOKEN.ETH
         }
         else{
           tokenType = TOKEN.ERC20
         }
+        }else{
+          tokenType = TOKEN.HRC20
+        }
+        
         //Gets the ERC20Token address (returns harmony 0x version if bridge to harmony)
         erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
 
@@ -250,23 +251,29 @@
       },
       checkChainId: async function(tokenNetwork){
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
         const network = await provider.getNetwork();
         const chainID = await network.chainId;
         console.log(chainID)
         if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
           if (chainID != 1 && tokenNetwork == NETWORK_TYPE.ETHEREUM ) {
             this.warnings['Network'] = 'You are on the wrong network. change network to ETHEREUM in metamask'
+            this.buttonState = 'disabled'
           }
           else if (chainID != 56 && tokenNetwork == NETWORK_TYPE.BINANCE ) {
             this.warnings['Network'] = 'You are on the wrong network. change network to BINANCE in metamask'
+            this.buttonState = 'disabled'
           }
           else{
             delete this.warnings['Network']
+            this.buttonState = 'active'
           }
         }else{
           if (chainID != 1666600000 ) {
             this.warnings['Network'] = 'You are on the wrong network. change network to Harmony in metamask'
+            this.buttonState = 'disabled'
+          }else{
+            delete this.warnings['Network']
+            this.buttonState = 'active'
           }
         }
       },
@@ -281,7 +288,10 @@
             this.balance = await this.getETHTokenBalance(this.getToken()['token1'], this.userAddress)
           }
         }else{
-           this.balance = await this.getTokenBalance(this.getToken()['token1'])
+           this.balance = await this.getHMYTokenBalance(this.getToken()['token1'])
+        }
+        if(this.balance != 0 ){
+          this.buttonState = 'active'
         }
         
       },

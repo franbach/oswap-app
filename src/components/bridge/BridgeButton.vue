@@ -65,12 +65,13 @@
   export default {
     name: 'BridgeButton',
     props: {
-      token: Object
+      token: Object,
+      buttonState: String
     },
     data() {
       return {
         balance: '0',
-        buttonState: 'active',
+        /*buttonState: 'active',*/
       } 
     },
     mounted(){},
