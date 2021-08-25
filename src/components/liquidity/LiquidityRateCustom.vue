@@ -15,12 +15,12 @@
       leave-to-class="-translate-y-3 opacity-0"
     >
       <div class="absolute z-50 w-48 mt-2 right-0" v-if="isOpen">
-        <div class="relative flex flex-col space-y-2 py-2 st5 border-l-2 border-oswapGreen shadow-lg rounded-lg p-1 px-2 bg-gray-100 dark:bg-gray-600">
+        <div class="relative flex flex-col space-y-2 py-2 st5 border-l-2 border-oswapGreen shadow-lg rounded-lg p-1 px-2 bg-gray-100 dark:bg-slightDark">
           <div class="flex items-center space-x-2">
             <p class="dark:text-gray-300">Custom Rate</p>
           </div>
           <InputWithValidation @keyup.enter="toggleCustomRate" :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-lg'" :placeholder="'%'" :errorTop="'pt-8'">
-            <p class="text-xs z-30 right-1 absolute bg-gray-200 dark:bg-gray-600 rounded-md p-1 px-2">%</p>
+            <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-8">%</p>
           </InputWithValidation>
         </div>
       </div>

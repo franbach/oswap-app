@@ -2,11 +2,11 @@
   <div class="flex flex-col pb-5 pt-2.5">
     <div class="flex flex-col p-4 st5 bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent ss:w-80 xs:w-96 rounded-3xl border-l border-oswapGreen h-auto">
       <div class="flex items-center space-x-2 mb-3">
-        <i class="las la-random text-xl dark:text-gray-400"></i>
-        <p class="text-sm dark:text-gray-400">Swap</p>
+        <i class="las la-random text-xl dark:text-gray-300"></i>
+        <p class="text-sm dark:text-gray-300">Swap</p>
       </div>
-      <div class="flex flex-col st5 dark:bg-gray-600 bg-gray-100 rounded-2xl">
-        <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray p-3 rounded-2xl">
+      <div class="flex flex-col st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
+        <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
           <SwapperToken :key="amountOut" whichToken="token1" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
           <SwapperToken :key="amountOut" whichToken="token2" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
         </div>

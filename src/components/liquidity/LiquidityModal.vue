@@ -5,7 +5,7 @@
     <div class="fixed z-40 flex flex-col shadow-xl rounded-t-3xl rounded-b-2xl inset-x-0 p-2 bg-slightGray dark:bg-slightDark focus-within:text-oswapGreen dark:focus-within:text-oswapGreen border-b border-black border-opacity-10">
       <div class="flex w-full h-10 pb-2 items-center justify-between">
         <p class="dark:text-gray-200 text-gray-500 pl-3">Select a Token</p>
-        <div @click="goTo('swap')" class="flex h-10 items-center">
+        <div @click="goTo('settokens')" class="flex h-10 items-center">
           <i class="las la-times text-2xl p-2 dark:text-gray-500 dark:hover:text-oswapGreen hover:text-oswapGreen cursor-pointer text-gray-300"></i>
         </div>
       </div>

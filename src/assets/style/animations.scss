@@ -214,7 +214,7 @@
 
 // Fade-In Transition
 .fade-in-enter-active {
-  @apply transform transition-all duration-500 ease-out
+  @apply transform transition-all duration-300 ease-out
 }
 .fade-in-enter-from {
   @apply opacity-0
@@ -223,7 +223,7 @@
   @apply opacity-100
 }
 .fade-in-leave-active {
-  @apply transform transition-all duration-500 ease-out absolute
+  @apply transform transition-all duration-300 ease-out
 }
 .fade-in-leave-from {
   @apply opacity-100

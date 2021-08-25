@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full">
-    <div class="flex w-full z-30 rounded-b-xl st5 bg-gray-100 dark:bg-gray-600 dark:text-gray-300 shadow-lg">
+    <div class="flex w-full z-30 rounded-b-xl st5 bg-gray-100 dark:bg-slightDark dark:text-gray-300 text-gray-500 shadow-lg">
       <div class="flex w-full flex-col p-3 space-y-3">
         <div class="flex flex-1 flex-col space-y-1 px-1">
           <p class="text-xs">Available:</p>

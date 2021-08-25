@@ -8,29 +8,29 @@
             <p>{{selectedRate}}%</p>
           </div>
         </div>
-        <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-gray-600 bg-gray-100'" />
-        <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-gray-600 bg-gray-100'" />
-        <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-gray-500" :class="'dark:text-gray-300 dark:bg-gray-600 bg-gray-100'" />
+        <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
+        <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
+        <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
         <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-2 py-2 min-w-0">
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Median Rate</p>
         <p class="text-el">{{mRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Current Rate</p>
         <p class="text-el">{{cRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Next Rate</p>
         <p class="text-el">{{nRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-gray-600 bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
+      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Price Impact</p>
         <p class="text-el">{{pImpact}}%</p>
       </div>

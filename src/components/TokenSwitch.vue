@@ -1,12 +1,12 @@
 <template>
-  <div v-if="token('token1', 'token2')" @click="this.switchTokens()" class="flex items-center justify-center relative z-20 cursor-pointer">
-    <div class="flex absolute items-center justify-center w-7 h-7 rounded-lg glow-oswapBlue-light-lg border border-oswapGreen-dark dark:border-oswapBlue-dark dark:bg-oswapBlue-light bg-oswapGreen hover:bg-oswapGreen-dark dark:hover:bg-oswapGreen st5">
-      <i class="las la-exchange-alt text-lg text-gray-200 dark:text-gray-700 st5"></i>
+  <div v-if="token('token1', 'token2')" @click="this.switchTokens()" class="flex items-center justify-center relative z-20 group cursor-pointer">
+    <div class="flex absolute items-center justify-center w-7 h-7 rounded-lg glow-oswapBlue-light-lg bg-slightGray dark:bg-slightDark border border-oswapGreen group-hover:bg-oswapGreen st5">
+      <i class="las la-exchange-alt text-lg text-oswapGreen group-hover:text-gray-50 st5"></i>
     </div>
   </div>
 
   <div v-else class="flex items-center justify-center relative z-20">
-    <div class="flex absolute items-center justify-center w-7 h-7 rounded-lg ring-1 ring-black dark:ring-gray-600 ring-opacity-5 bg-opacity-100 dark:bg-gray-700 bg-gray-200 st5">
+    <div class="flex absolute items-center justify-center w-7 h-7 rounded-lg border border-black border-opacity-10 dark:bg-slightDark bg-slightGray st5">
       <i class="las la-exchange-alt text-lg text-gray-300 dark:text-gray-500 st5"></i>
     </div>
   </div>
