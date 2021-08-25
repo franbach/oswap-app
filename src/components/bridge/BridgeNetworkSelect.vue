@@ -3,7 +3,7 @@
     <!-- from network -->
     <From :key="token"/>
     <!-- switch network -->
-    <Switch />
+    <Switch @updateBalances="updateBalances" />
     <!-- to network button -->
     <To/>
   </div>
@@ -24,6 +24,11 @@
     props: {
       token: Object
     },
+    methods: {
+      updateBalances(){
+        this.$emit('updateBalances')
+      }
+    }
 
   }
 </script>

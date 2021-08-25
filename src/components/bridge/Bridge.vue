@@ -5,7 +5,7 @@
       <p class="text-sm dark:text-gray-200">Bridge</p>
     </div>
     <div class="flex flex-col space-y-3">
-      <BridgeNetworkSelect  v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
+      <BridgeNetworkSelect @updateBalances="updateBalances"  v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
 
       <BridgeTokenSelect @click="selectToken('token1')" whichToken="token1" />
       <div class="flex flex-1 items-center space-x-3">
@@ -114,7 +114,9 @@
       selectToken(token) {
         this.$emit('triggerModal', token)
       },
-
+      updateBalances(){
+        this.getTokenBalance()
+      },
       resetSelection() {
         this.resetTokens();
         this.tokenSymbol = ' ? '
@@ -136,6 +138,7 @@
         const bridgeSDK = new BridgeSDK({ logLevel: 3, sdk: "web3" })
         await bridgeSDK.init(configs.mainnet);
         await bridgeSDK.setUseMetamask(true);
+         await bridgeSDK.setUseOneWallet(false);
         //await bridgeSDK.setUseOneWallet(true);
         //this sets network to binance
         var network = this.getTokenOrigin()
@@ -148,24 +151,34 @@
         var oneAddress = toBech32(this.userAddress)
         //returns true if token is native (aka one, eth, bsc tokens)
         var isNative = this.isNative(this.getToken()['token1'])
-
-        var hrc20 = this.getHrcForBridge(this.getToken()['token1'], isNative)
+        var hrc20 = null
+       
 
         let operationId;
         //sets token type based on native token or not else selects erc20 mode
+        console.log(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE)
         if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
           if(isNative){
           tokenType = TOKEN.ETH
         }
         else{
           tokenType = TOKEN.ERC20
+          erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
         }
+         
         }else{
-          tokenType = TOKEN.HRC20
+          if(isNative){
+          tokenType = TOKEN.ETH
+        }
+        else{
+          tokenType = TOKEN.ERC20
+          erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
+          hrc20 = this.getHrcForBridge(this.getToken()['token1'], isNative) 
+        }
         }
         
         //Gets the ERC20Token address (returns harmony 0x version if bridge to harmony)
-        erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
+       
 
         let intervalId = setInterval(async () => {
           if (operationId) {
@@ -174,21 +187,22 @@
               console.log(operation)
               if (operation.status !== STATUS.IN_PROGRESS) {
                 clearInterval(intervalId);
-                process.exit();
               }  
           }
         }, 4000);
         try {
+          console.log('Native? : ' + isNative)
           console.log('bridgeMode : ' + bridgeMode)
           console.log('tokenType : ' + tokenType)
           console.log('netwrk : ' + tokenNetwork)
           console.log('erc20 : ' + erc20)
-          await bridgeSDK.sendToken({
+         console.log('hrc20 : ' + hrc20)
+         await bridgeSDK.sendToken({
             type: bridgeMode,
             token: tokenType,
             amount: 0.0001,
             erc20Address: erc20,
-            /*hrc20Address: hrc20,*/
+           /* hrc20Address: hrc20,*/
             oneAddress: oneAddress,
             ethAddress: this.userAddress,
             network: tokenNetwork
@@ -198,7 +212,7 @@
             this.warnings['Error'] = 'Failed :' + e.message
             console.log(e)
         }
-        process.exit();
+        
       },
       getBridgeMode:  function(){
         if(this.getToNetwork().name == 'Harmony Network'){
@@ -224,7 +238,7 @@
           else if(network == NETWORK_TYPE.ETHEREUM){
             return token.ethAddress
           }
-        }else{
+       }else{
           return token.oneZeroxAddress
         }
       },
