@@ -13,7 +13,7 @@
         <SwapperReserves />
       </div>
       <Warning :warnings="warnings" />
-      <SwapperAmount @amount="setAmount" :balance="balance1" />
+      <!-- <SwapperAmount @amount="setAmount" :balance="balance1" /> -->
       <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @setSlippageRate="setSlippageRate" @priceImpact="setPriceImpact" @path="setPath" />
       
       <div class="flex pt-3">

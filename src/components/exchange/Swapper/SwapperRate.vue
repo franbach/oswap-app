@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col px-1 mt-2">
-    <div class="flex items-center justify-between text-xs pb-2 min-w-0 st5-all">
+  <div class="flex flex-col mt-3 space-y-3">
+    <div class="flex items-center justify-between text-xs min-w-0 px-1">
       <p class="dark:text-gray-300 text-el">Slippage Rate &nbsp;</p>
       <div class="flex items-center ss:space-x-1 xs:space-x-2">
         <div class="flex">
@@ -14,21 +14,21 @@
         <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-2 py-2 min-w-0">
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
+    <div class="grid grid-cols-2 gap-2 min-w-0 px-1">
+      <!-- <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Median Rate</p>
         <p class="text-el">{{mRate}}</p>
-      </div>
+      </div> -->
 
       <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
-        <p>Current Rate</p>
+        <p>Rate</p>
         <p class="text-el">{{cRate}}</p>
       </div>
 
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
+      <!-- <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Next Rate</p>
         <p class="text-el">{{nRate}}</p>
-      </div>
+      </div> -->
 
       <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
         <p>Price Impact</p>

@@ -1,17 +1,29 @@
 <template>
-  <div class="flex items-center space-x-2">
-    <img :src="this.getToken()[whichToken].imgSrc" class="h-12 w-12 rounded-full flex items-center justify-center" alt="">            
-    <div class="flex flex-1 items-center justify-between">
-      <div class="flex flex-1 flex-col">
-        <p class="text-xs text-oswapGreen-dark">{{this.getToken()[whichToken].Symbol}}</p>
-        <p class="text-xs">{{this.getToken()[whichToken].name}}</p>
+  <div class="flex flex-1 items-center">
+    <!-- Left side -->
+    <div class="flex flex-col space-y-1 w-1/3 min-w-0">
+      <!-- Token img and name -->
+      <div class="flex space-x-2 items-center h-10">
+        <img :src="this.getToken()[whichToken].imgSrc" class="h-8 w-8 rounded-full flex items-center justify-center" alt="">
+        <div class="flex flex-1 items-center min-w-0">
+          <p class="text-sm text-el text-oswapGreen-dark">{{this.getToken()[whichToken].Symbol}}</p>
+        </div>
       </div>
-      <div class="flex flex-col w-24 min-w-0">
-        <p class="text-xs text-right dark:text-oswapGreen-dark">Balance</p>
-        <p class="text-sm text-right text-el text-gray-600 dark:text-gray-300">{{parseFloat(balance).toFixed(8)}}</p>
-
-        <p v-if="whichToken == 'token1'" class="text-xs text-right text-el text-oswapBlue-light"> - {{balanceOut}}</p>
-        <p v-if="whichToken == 'token2'" class="text-xs text-right text-el text-oswapGreen"> {{balanceIn}}</p>
+      <!-- Network name -->
+      <div class="flex pl-1 space-x-2 h-4">
+        <p class="text-xs text-el">{{this.getToken()[whichToken].name}}</p>
+      </div>
+    </div>
+    <!-- Right side -->
+    <div class="flex flex-col space-y-1 flex-1 w-2/3 min-w-0">
+      <div class="flex h-10">
+        <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+          <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-10">MAX</p>
+        </InputWithValidation>
+      </div>
+      <div class="flex pl-2 space-x-2 h-4">
+        <p class="text-xs flex-none dark:text-oswapGreen-dark">Balance :</p>
+        <p class="text-xs text-el text-gray-600 dark:text-gray-300">{{parseFloat(balance).toFixed(8)}}</p>
       </div>
     </div>
   </div>
@@ -19,11 +31,15 @@
 
 <script>
 
+  import InputWithValidation from '@/components/InputWithValidation';
   import openswap from "@/shared/openswap.js";
   import { mapGetters } from 'vuex';
 
   export default {
     name: 'SwapperToken',
+    components: {
+      InputWithValidation
+    },
     props: {
       amount: String,
       amountOut: String,
@@ -39,7 +55,9 @@
       return {
         balance: 0.0,
         balanceOut: "-",
-        balanceIn: "-"
+        balanceIn: "-",
+        errors: {},
+        amount: '0.0'
       }
     },
     
