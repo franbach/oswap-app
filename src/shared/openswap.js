@@ -55,7 +55,7 @@ export default {
         const balance = await provider.getBalance(userAddress);
         return balance
     },
-    getETHTokenBalance: async function(token){
+    getETHTokenBalance: async function(token, address){
       const abi = [
         // balanceOf
         {
@@ -76,7 +76,7 @@ export default {
       ];
       const provider = new ethers.providers.InfuraProvider('mainnet',
       '998f0142cce3485ba1cb3c4e9d9990ab')
-      const userAddress = this.getUserAddress();
+      const userAddress = address
 
       if (token.ethAddress == "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
         const balance = await provider.getBalance(userAddress);
@@ -97,7 +97,7 @@ export default {
     
 
     },
-    getBSCTokenBalance: async function(token){
+    getBSCTokenBalance: async function(token, address){
       const abi = [
         // balanceOf
         {
@@ -117,8 +117,8 @@ export default {
         }
       ];
       const provider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/", {chainId: 56, name: "Binance"})
-      const userAddress = this.getUserAddress();
-      console.log(token)
+      const userAddress = address
+      
       if (token.bscAddress == "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
         const balance = await provider.getBalance(userAddress);
 
@@ -128,6 +128,47 @@ export default {
         return formatedbalance;
       } else {
         const contract = new ethers.Contract(token.bscAddress, abi, provider)
+        const balance = await contract
+            .balanceOf(userAddress)
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      }
+    
+
+    },
+    getHMYTokenBalance: async function(token){
+      const abi = [
+        // balanceOf
+        {
+          constant: true,
+          inputs: [{ name: "_owner", type: "address" }],
+          name: "balanceOf",
+          outputs: [{ name: "balance", type: "uint256" }],
+          type: "function"
+        },
+        // decimals
+        {
+          constant: true,
+          inputs: [],
+          name: "decimals",
+          outputs: [{ name: "", type: "uint8" }],
+          type: "function"
+        }
+      ];
+      const provider = new ethers.providers.JsonRpcProvider("https://api.s0.t.hmny.io", {chainId: 1666600000, name: "Binance"})
+      const userAddress = this.getUserAddress();
+
+      if (token.oneZeroxAddress == this.WONE()) {
+        const balance = await provider.getBalance(userAddress);
+
+        let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
+        
+
+        return formatedbalance;
+      } else {
+        const contract = new ethers.Contract(token.oneZeroxAddress, abi, provider)
         const balance = await contract
             .balanceOf(userAddress)
         let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();

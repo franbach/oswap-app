@@ -1,5 +1,5 @@
 const { ethtokens } = require("./exchange_tokens/ethTokens.js");
-const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
+//const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
 const { bsctokens } = require("./exchange_tokens/bscTokens.js");
 
 export default {
@@ -134,7 +134,9 @@ export default {
     },
 
     setFromNetwork({ commit }, value) {
+      
       commit('_setFromNetwork', value)
+      
     },
 
     setToNetwork({ commit }, value) {
@@ -163,7 +165,9 @@ export default {
     },
 
     _setFromNetwork: (state, value) => {
+ 
       state.from = value
+  
     },
 
     _setToNetwork: (state, value) => {

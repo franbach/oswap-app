@@ -5,13 +5,14 @@
       <p class="text-sm dark:text-gray-200">Bridge</p>
     </div>
     <div class="flex flex-col space-y-3">
-      <BridgeNetworkSelect />
+      <BridgeNetworkSelect @updateBalances="updateBalances"  v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
 
       <BridgeTokenSelect @click="selectToken('token1')" whichToken="token1" />
       <div class="flex flex-1 items-center space-x-3">
         <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
           <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-10">{{tokenSymbol}}</p>
         </InputWithValidation>
+        
 
         <div class="flex flex-1 items-center justify-end group-scope">
           <div @click="setMax()" class="flex h-10 items-center group-scope-hover:bg-oswapGreen text-oswapGreen-dark dark:text-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer px-3 rounded-xl space-x-2">
@@ -20,6 +21,7 @@
           </div>
         </div>
       </div>
+      <Warning :warnings="warnings" />
       <div class="flex w-full pl-2">
         <p class="text-xs dark:text-gray-400">Available: {{balance}}</p>
       </div>
@@ -43,7 +45,7 @@
         </div>
 
         <div class="flex h-full w-28 relative">
-          <BridgeButton :token="this.getToken()['token1']" />
+          <BridgeButton @bridge="bridgeCheckAndExecute" :buttonState="buttonState" :token="this.getToken()['token1']" />
         </div>
       </div>
 
@@ -56,7 +58,14 @@
   import BridgeTokenSelect from '@/components/bridge/BridgeTokenSelect';
   import BridgeButton from '@/components/bridge/BridgeButton';
   import InputWithValidation from '@/components/InputWithValidation';
+  import Warning from '@/components/exchange/Warning'
+
+    import { toBech32 } from '@harmony-js/crypto'
+  import { ethers } from "ethers";
+  const { BridgeSDK, TOKEN, NETWORK_TYPE, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+  const configs = require('bridge-sdk/lib/configs');
   import openswap from "@/shared/openswap.js";
+
   import { mapActions, mapGetters } from 'vuex';
   
   export default {
@@ -66,47 +75,240 @@
       BridgeNetworkSelect,
       BridgeTokenSelect,
       BridgeButton,
-      InputWithValidation
+      InputWithValidation,
+      Warning
     },
     data() {
       return {
         amount: '0.0',
         balance: 0,
         errors: {},
-        tokenSymbol: ' ? '
+        warnings: {},
+        tokenSymbol: ' ? ',
+        token: null,
+        userAddress: '',
+        buttonState: 'disabled'
       }
     },
     mounted: async function() {
+       const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        this.userAddress = await signer.getAddress();
       if (this.getToken()['token1'] != undefined) {
+        
+        this.token = this.getToken()['token1']
         this.getTokenBalance()
+        const network = this.getTokenOrigin()
+        await this.checkChainId(network)
+        window.ethereum.on('chainChanged',() => {
+          this.checkChainId(network)
+      });
       }
     },
     methods: {
-      ...mapGetters('migrate', ['getToken']),
+      ...mapGetters('migrate', ['getToken', 'getToNetwork']),
+      ...mapGetters('wallet', ['getUserAddress']),
       ...mapActions('migrate', ['resetTokens']),
 
       selectToken(token) {
         this.$emit('triggerModal', token)
       },
-
+      updateBalances(){
+        this.getTokenBalance()
+      },
       resetSelection() {
         this.resetTokens();
         this.tokenSymbol = ' ? '
       },
+      bridgeCheckAndExecute:async function(){
+        const network = this.getTokenOrigin()
+        await this.checkChainId(network)
 
-      getTokenBalance: async function(){
-        if (this.getToken()['token1'].bscAddress != undefined) {
-          console.log("bsc token")
-          this.tokenSymbol = this.getToken()['token1'].Symbol
-          this.balance = await this.getBSCTokenBalance(this.getToken()['token1'])
+ 
+     
+        await this.Bridge(network)
+      
+        
+        console.log(TOKEN)
+        console.log(this.token)
+        console.log('BRIDGE MATE')
+      },
+      Bridge: async function(tokenNetwork){
+        const bridgeSDK = new BridgeSDK({ logLevel: 3, sdk: "web3" })
+        await bridgeSDK.init(configs.mainnet);
+        await bridgeSDK.setUseMetamask(true);
+         await bridgeSDK.setUseOneWallet(false);
+        //await bridgeSDK.setUseOneWallet(true);
+        //this sets network to binance
+        var network = this.getTokenOrigin()
+        //this set mode (ONE TO ETH or ETH to ONE depending bridge route selected)
+        var bridgeMode = this.getBridgeMode()
+        var tokenType
+        var erc20;
+        var amount = 0.0001;
+        //gets bech32 user address
+        var oneAddress = toBech32(this.userAddress)
+        //returns true if token is native (aka one, eth, bsc tokens)
+        var isNative = this.isNative(this.getToken()['token1'])
+        var hrc20 = null
+       
+
+        let operationId;
+        //sets token type based on native token or not else selects erc20 mode
+        console.log(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE)
+        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
+          if(isNative){
+          tokenType = TOKEN.ETH
         }
-        if (this.getToken()['token1'].ethAddress != undefined) {
-          console.log("eth token")
-          this.tokenSymbol = this.getToken()['token1'].Symbol
-          this.balance = await this.getETHTokenBalance(this.getToken()['token1'])
+        else{
+          tokenType = TOKEN.ERC20
+          erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
+        }
+         
+        }else{
+          if(isNative){
+          tokenType = TOKEN.ETH
+        }
+        else{
+          tokenType = TOKEN.ERC20
+          erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
+          hrc20 = this.getHrcForBridge(this.getToken()['token1'], isNative) 
+        }
+        }
+        
+        //Gets the ERC20Token address (returns harmony 0x version if bridge to harmony)
+       
+
+        let intervalId = setInterval(async () => {
+          if (operationId) {
+              const operation = await bridgeSDK.api.getOperation(operationId);
+              this.warnings['Network'] = 'Support Ticket : ' + String(operationId)
+              console.log(operation)
+              if (operation.status !== STATUS.IN_PROGRESS) {
+                clearInterval(intervalId);
+              }  
+          }
+        }, 4000);
+        try {
+          console.log('Native? : ' + isNative)
+          console.log('bridgeMode : ' + bridgeMode)
+          console.log('tokenType : ' + tokenType)
+          console.log('netwrk : ' + tokenNetwork)
+          console.log('erc20 : ' + erc20)
+         console.log('hrc20 : ' + hrc20)
+         await bridgeSDK.sendToken({
+            type: bridgeMode,
+            token: tokenType,
+            amount: 0.0001,
+            erc20Address: erc20,
+           /* hrc20Address: hrc20,*/
+            oneAddress: oneAddress,
+            ethAddress: this.userAddress,
+            network: tokenNetwork
+          }, id => (operationId = id))
+        }catch (e) {
+            console.log(e.message);
+            this.warnings['Error'] = 'Failed :' + e.message
+            console.log(e)
+        }
+        
+      },
+      getBridgeMode:  function(){
+        if(this.getToNetwork().name == 'Harmony Network'){
+          return EXCHANGE_MODE.ETH_TO_ONE
+        }else{
+          return EXCHANGE_MODE.ONE_TO_ETH
         }
       },
+      isNative(token){
+        if(token.Symbol == 'ONE' || token.Symbol == 'eETH' ||  token.Symbol == 'bBNB'){
+          return true
+        }else{
+          return false
+        }
+      },
+      get0xForBridge(token, network, native){
+        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
+          if(native){
+            return null
+          }else if(network == NETWORK_TYPE.BINANCE){
+            return token.bscAddress
+          }
+          else if(network == NETWORK_TYPE.ETHEREUM){
+            return token.ethAddress
+          }
+       }else{
+          return token.oneZeroxAddress
+        }
+      },
+      getHrcForBridge(token, native){
+        if(this.getBridgeMode() != EXCHANGE_MODE.ETH_TO_ONE ){
+          if(native){
+            return null
+          }else {
+            return token.oneZeroxAddress
+          }
+        }else{
+          return null
+        }
+        
 
+      },
+      getTokenOrigin(){
+        if(this.token.bscAddress != undefined){
+          return NETWORK_TYPE.BINANCE
+        }
+        if(this.token.ethAddress != undefined){
+          return NETWORK_TYPE.ETHEREUM
+        }
+      },
+      checkChainId: async function(tokenNetwork){
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const network = await provider.getNetwork();
+        const chainID = await network.chainId;
+        console.log(chainID)
+        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
+          if (chainID != 1 && tokenNetwork == NETWORK_TYPE.ETHEREUM ) {
+            this.warnings['Network'] = 'You are on the wrong network. change network to ETHEREUM in metamask'
+            this.buttonState = 'disabled'
+          }
+          else if (chainID != 56 && tokenNetwork == NETWORK_TYPE.BINANCE ) {
+            this.warnings['Network'] = 'You are on the wrong network. change network to BINANCE in metamask'
+            this.buttonState = 'disabled'
+          }
+          else{
+            delete this.warnings['Network']
+            this.buttonState = 'active'
+          }
+        }else{
+          if (chainID != 1666600000 ) {
+            this.warnings['Network'] = 'You are on the wrong network. change network to Harmony in metamask'
+            this.buttonState = 'disabled'
+          }else{
+            delete this.warnings['Network']
+            this.buttonState = 'active'
+          }
+        }
+      },
+      getTokenBalance: async function(){
+        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE){
+          if (this.getToken()['token1'].bscAddress != undefined) {
+          this.tokenSymbol = this.getToken()['token1'].Symbol
+          this.balance = await this.getBSCTokenBalance(this.getToken()['token1'], this.userAddress)
+          }
+          else if (this.getToken()['token1'].ethAddress != undefined) {
+            this.tokenSymbol = this.getToken()['token1'].Symbol
+            this.balance = await this.getETHTokenBalance(this.getToken()['token1'], this.userAddress)
+          }
+        }else{
+           this.balance = await this.getHMYTokenBalance(this.getToken()['token1'])
+        }
+        if(this.balance != 0 ){
+          this.buttonState = 'active'
+        }
+        
+      },
       setMax(){
         this.amount = this.balance
       }

@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-1 justify-between">
     <!-- from network -->
-    <From />
+    <From :key="token"/>
     <!-- switch network -->
-    <Switch />
+    <Switch @updateBalances="updateBalances" />
     <!-- to network button -->
-    <To />
+    <To/>
   </div>
 </template>
 
@@ -20,6 +20,15 @@
       From,
       Switch,
       To
+    },
+    props: {
+      token: Object
+    },
+    methods: {
+      updateBalances(){
+        this.$emit('updateBalances')
+      }
     }
+
   }
 </script>
