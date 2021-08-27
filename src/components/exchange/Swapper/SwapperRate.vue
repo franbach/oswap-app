@@ -1,39 +1,16 @@
 <template>
-  <div class="flex flex-col mt-3 space-y-3">
-    <div class="flex items-center justify-between text-xs min-w-0 px-1">
-      <p class="dark:text-gray-300 text-el">Slippage Rate &nbsp;</p>
-      <div class="flex items-center ss:space-x-1 xs:space-x-2">
-        <div class="flex">
-          <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
-            <p>{{selectedRate}}%</p>
-          </div>
+  <div class="flex items-center justify-between text-xs min-w-0 px-1 mt-3">
+    <p class="dark:text-gray-300 text-el">Slippage Rate &nbsp;</p>
+    <div class="flex items-center ss:space-x-1 xs:space-x-2">
+      <div class="flex">
+        <div class="flex pr-1 items-center rounded-lg text-oswapGreen">
+          <p>{{selectedRate}}%</p>
         </div>
-        <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
-        <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
-        <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
-        <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2 min-w-0 px-1">
-      <!-- <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
-        <p>Median Rate</p>
-        <p class="text-el">{{mRate}}</p>
-      </div> -->
-
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
-        <p>Rate</p>
-        <p class="text-el">{{cRate}}</p>
-      </div>
-
-      <!-- <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
-        <p>Next Rate</p>
-        <p class="text-el">{{nRate}}</p>
-      </div> -->
-
-      <div class="flex flex-col border-l-2 st5 border-oswapGreen px-2 dark:bg-oswapDark-gray bg-gray-100 p-1 rounded-lg justify-between dark:text-gray-300 text-xs">
-        <p>Price Impact</p>
-        <p class="text-el">{{pImpact}}%</p>
-      </div>
+      <SelectRate rate="0.1" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
+      <SelectRate rate="0.3" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
+      <SelectRate rate="0.5" :picked="selectedRate" @selectRate="updateSelectedRate" hover="hover:bg-gray-50" darkHover="dark:hover:bg-slightDark" :class="'dark:text-gray-300 dark:bg-oswapDark-gray bg-gray-100'" />
+      <SwapperRateCustom :picked="selectedRate" @selectRate="updateSelectedRate"/>
     </div>
   </div>
 </template>
@@ -69,7 +46,6 @@
     mounted: async function() {
       this.updateData();
     },
-    async created(){},
     methods: {
       ...mapGetters('exchange', ['getToken']),
       ...mapActions('exchange', ['goTo']),
@@ -80,7 +56,7 @@
         this.updateData();
       },
 
-      updateData:async function(){
+      updateData: async function(){
         let token1 = this.getToken()['token1']
         let token2 = this.getToken()['token2']
         let units = this.getUnits(this.amount, token1)
@@ -93,8 +69,6 @@
         this.inputAmount = await bestRoute.inputAmount.toFixed(8)
         this.outputAmount = await this.getAmountOutWithSlippage(this.amount, bestRoute, this.selectedRate, token1, token2)
         let path = this.getPath(bestRoute);
-
-
 
         this.$emit("setSlippageRate", this.selectedRate);
         this.$emit("path", path);

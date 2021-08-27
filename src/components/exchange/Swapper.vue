@@ -6,16 +6,19 @@
         <p class="text-sm dark:text-gray-300">Swap</p>
       </div>
       <div class="flex flex-col st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
-        <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
-          <SwapperToken :key="amountOut" whichToken="token1" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
-          <SwapperToken :key="amountOut" whichToken="token2" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
+        <div class="flex flex-col st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
+          <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
+            <SwapperToken0 :key="amountOut" whichToken="token1" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
+            <SwapperToken1 :key="amountOut" whichToken="token2" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
+          </div>
+          <SwapperReserves />
         </div>
-        <SwapperReserves />
+        <SwapperRateInpact />
       </div>
-      <Warning :warnings="warnings" />
-      <!-- <SwapperAmount @amount="setAmount" :balance="balance1" /> -->
       <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @setSlippageRate="setSlippageRate" @priceImpact="setPriceImpact" @path="setPath" />
       
+      <Warning :warnings="warnings" />
+      <!-- <SwapperAmount @amount="setAmount" :balance="balance1" /> -->
       <div class="flex pt-3">
         <div class="flex w-full h-10 items-center">
           <SwapperBackButton />
@@ -34,10 +37,12 @@
 </template>
 
 <script>
-  import SwapperToken from '@/components/exchange/Swapper/SwapperToken'
+  import SwapperToken0 from '@/components/exchange/Swapper/SwapperToken0'
+  import SwapperToken1 from '@/components/exchange/Swapper/SwapperToken1'
   import SwapperReserves from '@/components/exchange/Swapper/SwapperReserves'
   import SwapperAmount from '@/components/exchange/Swapper/SwapperAmount'
   import SwapperRate from '@/components/exchange/Swapper/SwapperRate'
+  import SwapperRateInpact from '@/components/exchange/Swapper/SwapperRateInpact'
   import SwapperBackButton from '@/components/exchange/Swapper/SwapperBackButton'
   import SwapperApprove from '@/components/exchange/Swapper/SwapperApprove'
   import SwapperSwap from '@/components/exchange/Swapper/SwapperSwap'
@@ -47,10 +52,12 @@
   export default {
     name: 'Swapper',
     components: {
-      SwapperToken,
+      SwapperToken0,
+      SwapperToken1,
       SwapperReserves,
       SwapperAmount,
       SwapperRate,
+      SwapperRateInpact,
       SwapperBackButton,
       SwapperApprove,
       SwapperSwap,
@@ -71,18 +78,20 @@
       this.setBtnState({swap: 'disabled'});
     },
     computed: {
-      ...mapGetters('exchange/swapper', ['getBtnState']),
+      ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
     },
     methods: {
-      ...mapActions('exchange/swapper', ['setBtnState']),
-      reload(value){
-       this.$emit('reload', true)
+      ...mapActions('exchange/swapper/buttons', ['setBtnState']),
+
+      reload(value) {
+        this.$emit('reload', true)
       },
-      setAmountOut(value){
+
+      setAmountOut(value) {
         this.amountOut = value;
       },
 
-      setPriceImpact(value){
+      setPriceImpact(value) {
         this.priceImpact = value;
         if (this.priceImpact > 3) { 
           this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'

@@ -60,7 +60,7 @@
       path: Array,
     },
     computed: {
-      ...mapGetters('exchange/swapper', ['getBtnState']),
+      ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
     },
     watch: {
       amount() {
@@ -74,7 +74,7 @@
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
-      ...mapActions('exchange/swapper', ['setBtnState']),
+      ...mapActions('exchange/swapper/buttons', ['setBtnState']),
       
       parseAndExecuteSwap: async function() { 
         let token0 = await this.getToken()['token1'];

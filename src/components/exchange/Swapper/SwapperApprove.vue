@@ -59,7 +59,7 @@
       amount: String,
     },
     computed: {
-      ...mapGetters('exchange/swapper', ['getBtnState']),
+      ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
     },
     mounted: async function() {
       this.token1 = this.getToken()['token1'];
@@ -88,7 +88,7 @@
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
       
-      ...mapActions('exchange/swapper', ['setBtnState']),
+      ...mapActions('exchange/swapper/buttons', ['setBtnState']),
 
       approve: async function(){
         this.token1 = this.getToken()['token1'];

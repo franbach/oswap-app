@@ -144,67 +144,128 @@ export default {
       namespaced: true,
 
       state: {
-        buttons: {
-          approve: {
-            disabled: true,
-            approve: false,
-            approved: false,
-            approving: false,
-          },
-          swap: {
-            disabled: true,
-            swap: false,
-            swapped: false,
-            swapping: false 
-          }
-        }
+        amount: {
+          0: '0.0',
+          1: '0.0'
+        },
+        balance: {
+          0: '0.0',
+          1: '0.0'
+        },
+        slippageRate: '0.0',
+        priceImpact: '0.0'
       },
-  
       getters: {
-        getBtnState: (state) => (value) => {
-          // Grabs the button name passed in as argument
-          let btn = Object.keys(value)[0];
-          // Grabs the desired button state passed in as argument
-          let btnState = value[btn];
-
-          return state.buttons[btn][btnState];
+        getInputAmount: (state) => (token) => {
+          return state.amount[token];
+        },
+        getTokenBalance: (state) => (token) => {
+          return state.amount[token];
+        },
+        getSlippageRate: (state) => {
+          return state.slippageRate;
+        },
+        getPriceImpact: (state) => {
+          return state.priceImpact;
         }
       },
-
       actions: {
-        setBtnState({ commit }, value) {
-          commit('_setBtnState', value)
+        setInputAmount({commit}, value) {
+          commit('_setInputAmount', value);
         },
+        setSlippageRate({commit}, value) {
+          commit('_setSlippageRate', value);
+        },
+        setTokenBalance({commit}, value) {
+          commit('_setTokenBalance', value);
+        }
+      },
+      mutations: {
+        _setInputAmount: (state, value) => {
+          let token = Object.keys(value)[0];
+          let amount = value[token];
 
-        resetButton({ commit }, value) {
-          commit('_resetButton', value)
+          state.amount[token] = amount
+        },
+        _setSlippageRate: (state, value) => {
+          state.slippageRate = value;
+        },
+        _setTokenBalance: (state, value) => {
+          let token = Object.keys(value)[0];
+          let balance = value[token];
+
+          state.balance[token] = balance;
         }
       },
 
-      mutations: {
-        _resetButton: (state, button) => {
-          Object.keys(state.buttons[button]).forEach((s) => {
-            s == 'disabled' ? 
-              state.buttons[button][s] = true :
-              state.buttons[button][s] = false
-          })
-        },
-
-        _setBtnState: (state, value) => {
-          // Grabs the button name passed in as argument
-          let btn = Object.keys(value)[0];
-          // Grabs the desired button state passed in as argument
-          let btnState = value[btn];
-          
-          // Iterates over the desired button state and check
-          // if the state argument matches so it can be changed to true.
-          // All other button states should be false, we cannot have more than
-          // one true state per button.
-          Object.keys(state.buttons[btn]).forEach((s) => {
-            s == String(btnState) ? 
-              state.buttons[btn][s] = true :
-              state.buttons[btn][s] = false
-          })
+      modules: {
+        buttons: {
+          namespaced: true,
+  
+          state: {
+            buttons: {
+              approve: {
+                disabled: true,
+                approve: false,
+                approved: false,
+                approving: false,
+              },
+              swap: {
+                disabled: true,
+                swap: false,
+                swapped: false,
+                swapping: false 
+              }
+            }
+          },
+      
+          getters: {
+            getBtnState: (state) => (value) => {
+              // Grabs the button name passed in as argument
+              let btn = Object.keys(value)[0];
+              // Grabs the desired button state passed in as argument
+              let btnState = value[btn];
+    
+              return state.buttons[btn][btnState];
+            }
+          },
+    
+          actions: {
+            setBtnState({ commit }, value) {
+              commit('_setBtnState', value)
+            },
+    
+            resetButton({ commit }, value) {
+              commit('_resetButton', value)
+            }
+          },
+    
+          mutations: {
+            _resetButton: (state, button) => {
+              Object.keys(state.buttons[button]).forEach((s) => {
+                s == 'disabled' ? 
+                  state.buttons[button][s] = true :
+                  state.buttons[button][s] = false
+              })
+            },
+    
+            _setBtnState: (state, value) => {
+              // Grabs the button name passed in as argument
+              let btn = Object.keys(value)[0];
+              // Grabs the desired button state passed in as argument
+              let btnState = value[btn];
+              
+              // Iterates over the desired button state and check
+              // if the state argument matches so it can be changed to true.
+              // All other button states should be false, we cannot have more than
+              // one true state per button.
+              Object.keys(state.buttons[btn]).forEach((s) => {
+                s == String(btnState) ? 
+                  state.buttons[btn][s] = true :
+                  state.buttons[btn][s] = false
+              })
+            }
+          }
         }
       }
     }

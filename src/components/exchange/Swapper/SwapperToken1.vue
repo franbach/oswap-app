@@ -17,9 +17,13 @@
     <!-- Right side -->
     <div class="flex flex-col space-y-1 flex-1 w-2/3 min-w-0">
       <div class="flex h-10">
-        <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
-          <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-10">MAX</p>
-        </InputWithValidation>
+        <Input1 :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+          <div class="flex flex-1 st5-all items-center justify-end group-scope z-30 absolute right-0">
+            <div @click="setMax()" class="flex h-10 items-center group-scope-hover:bg-oswapGreen text-oswapGreen-dark dark:text-oswapGreen border-l border-black border-opacity-10 cursor-pointer px-3 rounded-xl">
+              <p class="text-sm dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100">MAX</p>
+            </div>
+          </div>
+        </Input1>
       </div>
       <div class="flex pl-2 space-x-2 h-4">
         <p class="text-xs flex-none dark:text-oswapGreen-dark">Balance :</p>
@@ -31,14 +35,14 @@
 
 <script>
 
-  import InputWithValidation from '@/components/InputWithValidation';
+  import Input1 from '@/components/exchange/Swapper/Input1';
   import openswap from "@/shared/openswap.js";
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'SwapperToken',
+    name: 'SwapperToken1',
     components: {
-      InputWithValidation
+      Input1
     },
     props: {
       amount: String,

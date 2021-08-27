@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col space-y-2 pt-2 pb-3 px-3 min-w-0">
+  <div class="flex flex-col space-y-2 pt-2 pb-3 px-3 min-w-0 rounded-b-2xl shadow-lg">
     <p class="text-sm dark:text-gray-300">Reserves</p>
     <div class="flex items-center space-x-4">
       <div class="flex w-1/2 items-center space-x-2">
