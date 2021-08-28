@@ -145,28 +145,40 @@ export default {
 
       state: {
         amount: {
-          0: '0.0',
+          0: '1.0',
           1: '0.0'
         },
         balance: {
           0: '0.0',
           1: '0.0'
         },
-        slippageRate: '0.0',
-        priceImpact: '0.0'
+        slippageRate: '0.5',
+        priceImpact: '0.0',
+        priceRate: '0.0',
+        path: null,
+        warnings: {}
       },
       getters: {
         getInputAmount: (state) => (token) => {
           return state.amount[token];
         },
-        getTokenBalance: (state) => (token) => {
-          return state.amount[token];
+        getBalanceToken: (state) => (token) => {
+          return state.balance[token];
         },
         getSlippageRate: (state) => {
           return state.slippageRate;
         },
         getPriceImpact: (state) => {
           return state.priceImpact;
+        },
+        getPriceRate: (state) => {
+          return state.priceRate;
+        },
+        getThePath: (state) => {
+          return state.path;
+        },
+        getWarnings: (state) => {
+          return state.warnings;
         }
       },
       actions: {
@@ -176,8 +188,26 @@ export default {
         setSlippageRate({commit}, value) {
           commit('_setSlippageRate', value);
         },
-        setTokenBalance({commit}, value) {
-          commit('_setTokenBalance', value);
+        setBalanceToken({commit}, value) {
+          commit('_setBalanceToken', value);
+        },
+        setPriceImpact({commit}, value) {
+          commit('_setPriceImpact', value);
+        },
+        setPriceRate({commit}, value) {
+          commit('_setPriceRate', value);
+        },
+        setThePath({commit}, value) {
+          commit('_setThePath', value);
+        },
+        setWarning({commit}, value) {
+          commit('_setWarning', value);
+        },
+        deleteWarning({commit}, value) {
+          commit('_deleteWarning', value);
+        },
+        resetAll({commit}) {
+          commit('_resetAll');
         }
       },
       mutations: {
@@ -190,11 +220,40 @@ export default {
         _setSlippageRate: (state, value) => {
           state.slippageRate = value;
         },
-        _setTokenBalance: (state, value) => {
+        _setBalanceToken: (state, value) => {
           let token = Object.keys(value)[0];
           let balance = value[token];
 
           state.balance[token] = balance;
+        },
+        _setPriceImpact: (state, value) => {
+          state.priceImpact = value;
+        },
+        _setPriceRate: (state, value) => {
+          state.priceRate = value;
+        },
+        _setThePath: (state, value) => {
+          state.path = value;
+        },
+        _setWarning: (state, value) => {
+          let warningType = Object.keys(value)[0];
+          let message = value[warningType];
+
+          state.warnings[warningType] = message;
+        },
+        _deleteWarning: (state, type) => {
+          delete state.warnings[type]
+        },
+        _resetAll: (state) => {
+          state.amount[0] = '1.0';
+          state.amount[1] = '0.0';
+          state.balance[0] = '0.0';
+          state.balance[1] = '0.0';
+          state.slippageRate = '0.5';
+          state.priceImpact = '0.0';
+          state.priceRate = '0.0';
+          state.path = null;
+          state.warnings = {};
         }
       },
 

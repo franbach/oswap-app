@@ -8,26 +8,26 @@
       <div class="flex flex-col st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
         <div class="flex flex-col st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
           <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray bg-gray-100 p-3 rounded-2xl">
-            <SwapperToken0 :key="amountOut" whichToken="token1" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
-            <SwapperToken1 :key="amountOut" whichToken="token2" :amount="this.amount" :amountOut="amountOut" @balance="setBalance" />
+            <SwapperToken0 />
+            <SwapperToken1 />
           </div>
           <SwapperReserves />
         </div>
         <SwapperRateInpact />
       </div>
-      <SwapperRate :key="amount" :amount="amount" @amountOut="setAmountOut" @setSlippageRate="setSlippageRate" @priceImpact="setPriceImpact" @path="setPath" />
+      <SwapperRate />
       
-      <Warning :warnings="warnings" />
-      <!-- <SwapperAmount @amount="setAmount" :balance="balance1" /> -->
+      <Warning :warnings="getWarnings" />
+
       <div class="flex pt-3">
         <div class="flex w-full h-10 items-center">
           <SwapperBackButton />
           <div class="flex flex-1 h-full space-x-2 justify-end">
             <div class="flex items-center w-28 h-full relative">
-              <SwapperApprove :amount="this.amount" />
+              <SwapperApprove />
             </div>
             <div class="flex items-center w-28 h-full relative">
-              <SwapperSwap @reload='reload' :key="amountOut"  :amount="amount" :amountOut="amountOut" :slippageRate="slippageRate" :path="path" />
+              <SwapperSwap @reload='reload' />
             </div>
           </div>
         </div>
@@ -40,7 +40,6 @@
   import SwapperToken0 from '@/components/exchange/Swapper/SwapperToken0'
   import SwapperToken1 from '@/components/exchange/Swapper/SwapperToken1'
   import SwapperReserves from '@/components/exchange/Swapper/SwapperReserves'
-  import SwapperAmount from '@/components/exchange/Swapper/SwapperAmount'
   import SwapperRate from '@/components/exchange/Swapper/SwapperRate'
   import SwapperRateInpact from '@/components/exchange/Swapper/SwapperRateInpact'
   import SwapperBackButton from '@/components/exchange/Swapper/SwapperBackButton'
@@ -55,7 +54,6 @@
       SwapperToken0,
       SwapperToken1,
       SwapperReserves,
-      SwapperAmount,
       SwapperRate,
       SwapperRateInpact,
       SwapperBackButton,
@@ -63,60 +61,20 @@
       SwapperSwap,
       Warning
     },
-    data() {
-      return {
-        amount: '1',
-        amountOut: "0",
-        balance1: "0",
-        balance2: "0",
-        slippageRate: '0.5',
-        path: [],
-        warnings: {}
-      }
-    },
-    mounted: async function() {
-      this.setBtnState({swap: 'disabled'});
+    unmounted() {
+      this.resetAll();
     },
     computed: {
       ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
+      ...mapGetters('exchange/swapper', ['getWarnings']),
     },
     methods: {
       ...mapActions('exchange/swapper/buttons', ['setBtnState']),
+      ...mapActions('exchange/swapper', ['resetAll']),
 
       reload(value) {
         this.$emit('reload', true)
       },
-
-      setAmountOut(value) {
-        this.amountOut = value;
-      },
-
-      setPriceImpact(value) {
-        this.priceImpact = value;
-        if (this.priceImpact > 3) { 
-          this.warnings['impact'] = 'Price impact high. Check reserves. Continue only if you know what you are doing.'
-        } else { delete this.warnings['impact'] }
-      },
-
-      setAmount(value) {
-        this.amount = value;
-        if (this.amount !== '' && this.getBtnState({approve: 'approved'})) {
-          this.setBtnState({swap: 'swap'})
-        }
-      },
-
-      setPath(value){
-        this.path = value;
-      },
-
-      setSlippageRate(value){
-        this.slippageRate = value;
-      },
-      
-      setBalance(value) {
-        if (value.token == 'token1') { this.balance1 = value.balance } 
-        if (value.token == 'token2') { this.balance2 = value.balance }
-      }
     }
   }
 </script>
