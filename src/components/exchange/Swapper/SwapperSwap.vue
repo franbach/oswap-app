@@ -1,7 +1,7 @@
 <template>
   <!-- Swap disabled -->
   <transition tag="div" name="swap-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({swap: 'disabled'})" class="flex w-28 st5 st5-all justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+    <div v-if="this.getBtnState({swap: 'disabled'})" class="flex w-28 st5 st5-all justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Swap</p>
       </div>
@@ -53,28 +53,13 @@
   export default {
     name: 'SwapperApprove',
     mixins: [openswap],
-    props: {
-      amount: String,
-      amountOut: String,
-      slippageRate: String,
-      path: Array,
-    },
     computed: {
-      ...mapGetters('exchange/swapper', ['getBtnState']),
-    },
-    watch: {
-      amount() {
-        if (this.amount == '') { this.setBtnState({swap: 'disabled'}) }
-        // Checks if the value is not empty and if its already approved.
-        // If so, set button state to 'swap'
-        if (this.amount !== '' && this.getBtnState({approve: 'approved'})) {
-          this.setBtnState({swap: 'swap'})
-        }
-      }
+      ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
+      ...mapGetters('exchange/swapper', ['getInputAmount', 'getThePath'])
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
-      ...mapActions('exchange/swapper', ['setBtnState']),
+      ...mapActions('exchange/swapper/buttons', ['setBtnState']),
       
       parseAndExecuteSwap: async function() { 
         let token0 = await this.getToken()['token1'];
@@ -82,17 +67,27 @@
         this.setBtnState({swap: 'swapping'});
 
         if(token0.oneZeroxAddress != this.WONE() && token1.oneZeroxAddress != this.WONE()){
-          await this.swapExactTokensForTokens(this.amount, this.amountOut, this.path, token0, token1)
+          // await this.swapExactTokensForTokens(this.amount, this.amountOut, this.path, token0, token1)
+          await this.swapExactTokensForTokens(
+            this.getInputAmount(0), this.getInputAmount(1), this.getThePath, token0, token1
+          )
           this.setBtnState({swap: 'swapped'});
         }
         if(token0.oneZeroxAddress == this.WONE()){
-          await this.swapETHForExactTokens(this.amount, this.amountOut, this.path, token1)
+          // await this.swapETHForExactTokens(this.amount, this.amountOut, this.path, token1)
+          await this.swapETHForExactTokens(
+            this.getInputAmount(0), this.getInputAmount(1), this.getThePath, token1
+          )
           this.setBtnState({swap: 'swapped'});
         }
         if(token1.oneZeroxAddress == this.WONE()){
-          await this.swapTokensForExactETH(this.amount, this.amountOut, this.path, token0)
+          // await this.swapTokensForExactETH(this.amount, this.amountOut, this.path, token0)
+          await this.swapTokensForExactETH(
+            this.getInputAmount(0), this.getInputAmount(1), this.getThePath, token0
+          )
           this.setBtnState({swap: 'swapped'});
         }
+
         this.$emit('reload', true)
       }
 
