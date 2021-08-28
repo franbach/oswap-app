@@ -4,8 +4,21 @@ import SushiMaker from "openswap-core/build/contracts/SushiMaker.json";
 import IERC20 from "openswap-core/build/contracts/IERC20.json";
 
 import { ethers } from "ethers";
+
+import { Harmony } from '@harmony-js/core';
+import { ChainType } from '@harmony-js/utils'
+import oneWallet from './OneWallet.js'
+
+const hmy = new Harmony(
+  // let's assume we deploy smart contract to this end-point URL
+  'https://api.s0.t.hmny.io',
+  {
+    chainType: ChainType.Harmony,
+    chainId: 1,
+  },
+);
 import { mapGetters, mapActions } from 'vuex';
-const { Route, Price, Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
+const { Route, Price, Token, Fetcher, ChainId, Trade, TokenAmount, TradeType, Percent} = require("openswap-sdk");
 const { Pools } = require("../store/modules/farm/pools.js");
 
 import { toastMe } from '@/components/toaster/toaster.js';
@@ -16,13 +29,17 @@ export default {
 
   },
   methods: {
-    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet']),
+    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet', 'getWalletType']),
     ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
     ...mapActions('exchange/swapper', ['setBtnState']),
     ...mapActions('liquidity/buttons', ['setBtnState']),
-    getProvider: function(){
-      if(this.getUserSignedIn() == true){
+    getProvider: function(call){
+      if(this.getUserSignedIn() == true && this.getWalletType() == 'metamask' && call == undefined){
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        return provider
+      }
+      if(call){
+        const provider = new ethers.providers.JsonRpcProvider("https://api.harmony.one", {chainId: 1666600000, name: "Harmony"})
         return provider
       }
       else{
@@ -32,13 +49,15 @@ export default {
     },
     getOswapPrice: async function () {
         this.balances = [];
-        const Oswap = await Fetcher.fetchTokenData(
+        const Oswap = new Token(
           ChainId.MAINNET,
-          "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC"
+          "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+          18
         );
-        const Busd = await Fetcher.fetchTokenData(
+        const Busd = new Token(
           ChainId.MAINNET,
-          "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"
+          "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA",
+          18
         );
 
         const pair = await Fetcher.fetchPairData(Oswap, Busd).catch(error => {
@@ -50,7 +69,7 @@ export default {
 
     },
     getOneBalance: async function(){
-        const provider = this.getProvider()
+        const provider = this.getProvider(true)
         const userAddress = this.getUserAddress();
         const balance = await provider.getBalance(userAddress);
         return balance
@@ -198,7 +217,7 @@ export default {
           type: "function"
         }
       ];
-      const provider = this.getProvider()
+      const provider = this.getProvider(true)
       const userAddress = this.getUserAddress();
 
       if (token.oneZeroxAddress == this.WONE()) {
@@ -221,7 +240,7 @@ export default {
 
     },
     getAllRewards: async function () {
-      const provider = this.getProvider()
+      const provider = this.getProvider(true)
       const address = this.getUserAddress();
       if (address != "0x0000000000000000000000000000000000000003") {
         var i = 0, n;
@@ -255,7 +274,7 @@ export default {
     },
     getSingleRewards: async function(){
       var totalUnclaimedRewards = ethers.BigNumber.from("0");
-      const provider = this.getProvider()
+      const provider = this.getProvider(true)
       const address = this.getUserAddress();
       const abi = MasterChef.abi;
       const masterChef = this.oSWAPCHEF();
@@ -297,7 +316,7 @@ export default {
             ]
 
 
-
+          if(this.getWalletType() == 'metamask'){
             const provider = this.getProvider()
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
@@ -317,64 +336,134 @@ export default {
               })
               return
             })
+            let transaction = tx.hash
+            let explorer = 'https://explorer.harmony.one/#/tx/'
+              toastMe('info', {
+                title: 'Transaction Sent',
+                msg: "Collect All Sent to network. waiting for confirmation",
+                link: false,
+                href: `${explorer}${transaction}`
+              })
+              
+              await tx.wait(1)
+              toastMe('success', {
+                title: 'Tx Succesfull',
+                msg: "Explore : " + transaction,
+                link: true,
+                href: `${explorer}${transaction}`
+              })
+          }
+          if(this.getWalletType() == 'oneWallet'){
+            let options = { gasPrice: "0x3B9ACA00" };
+            const unattachedContract = hmy.contracts.createContract(abi,"0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B");
+            let wallet = new oneWallet()
+            await wallet.signin()
+            let contract = wallet.attachToContract(unattachedContract)
+            //const gas = await contract.methods.collectAll().estimateGas(options).catch();
+            //console.log(gas)
+            options = {
+              gasPrice: 1000000000,
+              gasLimit: 2000000
+              };
+            var tx = await contract.methods.collectAll().send(options)
+            if(tx.transaction.txStatus == 'CONFIRMED'){
+              let transaction = tx.transaction.id
+            let explorer = 'https://explorer.harmony.one/#/tx/'
+               toastMe('success', {
+                title: 'Tx Succesfull',
+                msg: "Explore : " + transaction,
+                link: true,
+                href: `${explorer}${transaction}`
+              })
+            }
             
-            this.getAllRewards();
-            return tx;
+          }
+          this.getAllRewards();
+
+          return tx;
     },
     collectOSWAP: async function(pool){
-      
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
-      const provider = this.getProvider()
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(masterChef, abi, signer);
       const pid = parseInt(pool.pid)
-      const tx = await contract.withdraw(pid, '0').catch(err => {
 
-        var message;
-        if(!err.data?.message){
-          message = err.message
-        }else{
-          message = err.data.message
-        }
-        toastMe('error', {
-          title: 'Error :',
-          msg: message,
-          link: false
+      if(this.getWalletType() == 'metamask'){
+        const provider = this.getProvider()
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(masterChef, abi, signer);
+        
+        const tx = await contract.withdraw(pid, '0').catch(err => {
+
+          var message;
+          if(!err.data?.message){
+            message = err.message
+          }else{
+            message = err.data.message
+          }
+          toastMe('error', {
+            title: 'Error :',
+            msg: message,
+            link: false
+          })
+          return
         })
-        return
-      })
-      let explorer = 'https://explorer.harmony.one/#/tx/'
-      let transaction = tx.hash
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = tx.hash
 
-      toastMe('info', {
-        title: 'Transaction Sent',
-        msg: "Collect request sent to network. Waiting for confirmation",
-        link: false,
-        href: `${explorer}${transaction}`
-      })
-      await tx.wait(1)
-      toastMe('success', {
-        title: 'Tx Successful',
-        msg: "Explore : " + transaction,
-        link: true,
-        href: `${explorer}${transaction}`
-      })
+        toastMe('info', {
+          title: 'Transaction Sent',
+          msg: "Collect request sent to network. Waiting for confirmation",
+          link: false,
+          href: `${explorer}${transaction}`
+        })
+        await tx.wait(1)
+        toastMe('success', {
+          title: 'Tx Successful',
+          msg: "Explore : " + transaction,
+          link: true,
+          href: `${explorer}${transaction}`
+        })
+      }
+      if(this.getWalletType() == 'oneWallet'){
+            let options = { gasPrice: "0x3B9ACA00" };
+            const unattachedContract = hmy.contracts.createContract(abi, masterChef);
+            let wallet = new oneWallet()
+            await wallet.signin()
+            let contract = wallet.attachToContract(unattachedContract)
+            //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+            //console.log(gas)
+            options = {
+              gasPrice: 1000000000,
+              gasLimit: 700000
+              };
+            var tx = await contract.methods.withdraw(pid, '0').send(options)
+            if(tx.transaction.txStatus == 'CONFIRMED'){
+              let transaction = tx.transaction.id
+            let explorer = 'https://explorer.harmony.one/#/tx/'
+               toastMe('success', {
+                title: 'Tx Succesfull',
+                msg: "Explore : " + transaction,
+                link: true,
+                href: `${explorer}${transaction}`
+              })
+            }
+            
+          
+      }
 
     },
     unstakeLP: async function(pool, amount){
-      
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
+      const pid = parseInt(pool.pid)
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+
+
+      if(this.getWalletType == 'metamask'){
       const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
-      const pid = parseInt(pool.pid)
-      
-      let tempToken = {decimals: 18};
-      console.log(amount)
-      amount = this.getUnits(amount, tempToken)
-      console.log(amount)
       const tx = await contract.withdraw(pid, amount).catch(err => {
 
         var message;
@@ -406,27 +495,97 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+    }
+      if(this.getWalletType() == 'oneWallet'){
+            let options = { gasPrice: "0x3B9ACA00" };
+            const unattachedContract = hmy.contracts.createContract(abi, masterChef);
+            let wallet = new oneWallet()
+            await wallet.signin()
+            let contract = wallet.attachToContract(unattachedContract)
+            //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+            //console.log(gas)
+            options = {
+              gasPrice: 1000000000,
+              gasLimit: 700000
+              };
+            var tx = await contract.methods.withdraw(pid, amount.toString()).send(options)
+            if(tx.transaction.txStatus == 'CONFIRMED'){
+              let transaction = tx.transaction.id
+            let explorer = 'https://explorer.harmony.one/#/tx/'
+               toastMe('success', {
+                title: 'Tx Succesfull',
+                msg: "Explore : " + transaction,
+                link: true,
+                href: `${explorer}${transaction}`
+              })
+            }
+          }
 
     },
     approveSpending: async function(token1, contractAddr){
       //biggest wei denomination
       const wei =
-        ethers.BigNumber.from("115792089237316195423570985008687907853269984665640564039457584007913129639935");
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const address = this.getUserAddress();
+          ethers.BigNumber.from("115792089237316195423570985008687907853269984665640564039457584007913129639935");
       const abi = IERC20.abi;
+      if(this.getWalletType() == 'metamask'){
+        
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const address = this.getUserAddress();
+        
 
-      const contract = new ethers.Contract(token1.oneZeroxAddress, abi, signer);
+        const contract = new ethers.Contract(token1.oneZeroxAddress, abi, signer);
 
-      const tx = await contract.approve(contractAddr, wei).catch( error => {
-        throw error
-      })
-      return tx;
+        const tx = await contract.approve(contractAddr, wei).catch( error => {
+          throw error
+        })
+        let explorer = 'https://explorer.harmony.one/#/tx/'
+        let transaction = tx.hash
+
+        toastMe('info', {
+          title: 'Transaction Sent',
+          msg: "Approval Sent to network. Waiting for confirmation",
+          link: false,
+          href: `${explorer}${transaction}`
+        })
+        await tx.wait(1)
+        toastMe('success', {
+          title: 'Tx Successful',
+          msg: "Explore : " + transaction,
+          link: true,
+          href: `${explorer}${transaction}`
+        })
+      }
+      if(this.getWalletType() == 'oneWallet'){
+            let options = { gasPrice: "0x3B9ACA00" };
+            const unattachedContract = hmy.contracts.createContract(abi, token1.oneZeroxAddress);
+            let wallet = new oneWallet()
+            await wallet.signin()
+            let contract = wallet.attachToContract(unattachedContract)
+            //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+            //console.log(gas)
+            options = {
+              gasPrice: 1000000000,
+              gasLimit: 700000
+              };
+            var tx = await contract.methods.approve(contractAddr, wei.toString()).send(options)
+            if(tx.transaction.txStatus == 'CONFIRMED'){
+              let transaction = tx.transaction.id
+            let explorer = 'https://explorer.harmony.one/#/tx/'
+               toastMe('success', {
+                title: 'Tx Succesfull',
+                msg: "Explore : " + transaction,
+                link: true,
+                href: `${explorer}${transaction}`
+              })
+            
+              
+            }
+          
+      }
     },
     checkAllowance: async function(token1, contractAddr){
-      const provider = this.getProvider()
+      const provider = this.getProvider(true)
       const address = this.getUserAddress();
       const abi = IERC20.abi;
       const contract = new ethers.Contract(token1.oneZeroxAddress, abi, provider);
@@ -489,14 +648,12 @@ export default {
       
     },
     burnPool: async function(pool){
-  
-      const abi = SushiMaker.abi;
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
-
       
-
+      const abi = SushiMaker.abi;
+      if(this.getWalletType() == 'metamask'){
+         const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
       const tx = await contract.convert(pool.token0address, pool.token1address).catch(err => {
         var message;
         if(!err.data?.message){
@@ -528,8 +685,33 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.oSWAPMAKER());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 700000
+          };
+        var tx = await contract.methods.convert(pool.token0address, pool.token1address).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
       return
-
     },
     
     //----------------------------------------SDK------------------------------------------
@@ -587,10 +769,8 @@ export default {
         reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(8));
       } else {
         reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(8));
-
         reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(8));
       }
-
       return reserves;
     },
     getLiquidityValueSolo: async function(pool, staked){
@@ -600,11 +780,13 @@ export default {
       let rate = this.getRate(pair, token0)
       return parseFloat(rate * this.getEthUnits(staked.toString())).toFixed(5)
     },
-    getLiquidityValue: async function(pool, tt0s, tt1s){
+    
+      getLiquidityValue: async function(pool, tt0sBN, tt1sBN){
       let is0Stable = this.isStablecoin(pool.token0address)
       let is1Stable = this.isStablecoin(pool.token1address)
       
- 
+      let tt0s = parseFloat(this.getFormatedUnitsDecimals(tt0sBN.toString(), pool.decimals[0]))
+      let tt1s = parseFloat(this.getFormatedUnitsDecimals(tt1sBN.toString(), pool.decimals[1]))
       if(is0Stable == true ){
         return [ethers.utils.commify(parseFloat(tt0s).toFixed(2) * 2), parseFloat(tt0s).toFixed(2) *2];
       }
@@ -615,10 +797,10 @@ export default {
         var Token0 = {oneZeroxAddress: pool.token0address} 
         let Token1 = {oneZeroxAddress: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"}
         let wei = ethers.utils.parseUnits('1', 18)
-        var route = await this.getBestRoute(wei, Token0, Token1);
+        var route = await this.getBestRouteFarms(wei, Token0, Token1);
         
         
-        return  [ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(4)  * tt0s * 2).toFixed(4)) ,
+        return  [ethers.utils.commify(parseFloat(route.route.midPrice.toFixed(8)  * tt0s * 2).toFixed(2)) ,
           parseFloat(route.route.midPrice.toFixed(8)  * tt0s).toFixed(8) * 2]
       }
     },
@@ -638,17 +820,91 @@ export default {
                 ChainId.MAINNET,
                 token1.oneZeroxAddress
                 ),
+        new Token(
+                ChainId.MAINNET,
+                "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+                18
+                ),
+        new Token(
+                ChainId.MAINNET,
+                "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+                18
+                ),
+        new Token(
+                ChainId.MAINNET,
+                "0xE176EBE47d621b984a73036B9DA5d834411ef734",
+                18
+                )
+      ]);
+
+      const pairTHATEXISTS = await Fetcher.fetchPairData(TokenZ, TokenY)
+
+      const [
+             pair01,
+             paira,
+             pairab,
+             pairc,
+             paircd,
+             paire,
+             pairef
+            ] = await Promise.all([
+              Fetcher.fetchPairData(Token0, Token1).catch(() => {
+                      return pairTHATEXISTS
+              }), 
+              Fetcher.fetchPairData(Token0, TokenX).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(TokenX, Token1).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(Token0, TokenY).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(TokenY, Token1).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(Token0, TokenZ).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(TokenZ, Token1).catch(() => {
+                      return pairTHATEXISTS
+              })
+            ]);
+
+      const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
+
+      return bestRoute[0]
+    },
+    getBestRouteFarms: async function(parsedAmount, token0, token1) {
+
+      const [
+      Token0,
+      Token1,
+      TokenX,
+      TokenY,
+      TokenZ] = await Promise.all([
         Fetcher.fetchTokenData(
                 ChainId.MAINNET,
-                "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a"
+                token0.oneZeroxAddress
                 ),
         Fetcher.fetchTokenData(
                 ChainId.MAINNET,
-                "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC"
+                token1.oneZeroxAddress
                 ),
-        Fetcher.fetchTokenData(
+        new Token(
                 ChainId.MAINNET,
-                "0xE176EBE47d621b984a73036B9DA5d834411ef734"
+                "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+                18
+                ),
+        new Token(
+                ChainId.MAINNET,
+                "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+                18
+                ),
+        new Token(
+                ChainId.MAINNET,
+                "0xE176EBE47d621b984a73036B9DA5d834411ef734",
+                18
                 )
       ]);
 
@@ -694,7 +950,7 @@ export default {
       var i = 0;
       var path = [];
       while(bestRoute.route.path.length > i){
-        console.log(i)
+        
         path.push(bestRoute.route.path[i].address)
         i++
       }
@@ -713,7 +969,7 @@ export default {
       return trade;
     },
     getOswapPerBlock: async function(){
-      const provider = this.getProvider()
+      const provider = this.getProvider(true)
       const abi = MasterChef.abi;
       const contract = new ethers.Contract(this.oSWAPCHEF(), abi, provider);
 
@@ -729,13 +985,15 @@ export default {
     
     getRewardValue: async function(pool, poolWeight) {
       //onst BN = require("bn.js");
-      const token0 = await Fetcher.fetchTokenData(
+      const token0 = new Token(
         ChainId.MAINNET,
-        this.oSWAPTOKEN()
+        this.oSWAPTOKEN(),
+        18
       );
-      const token1 = await Fetcher.fetchTokenData(
+      const token1 = new Token(
         ChainId.MAINNET,
-        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA" //BUSD
+        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA", //BUSD
+        18
       );
 
       
@@ -816,19 +1074,20 @@ export default {
     },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
-      
-      let deadline = this.getDeadline()
-      let valueOveride = {
-        value: ethers.utils.parseEther(amountIn)
-      }
-
-      let amountOutParsed = this.getUnits(amountOutMin, token1)
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const value = ethers.utils.parseEther(amountIn)
+      const deadline = this.getDeadline()
+      const amountOutParsed = this.getUnits(amountOutMin, token1)
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
 
+
+      if(this.getWalletType() == 'metamask'){
+      let valueOveride = {
+        value: value
+      }
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
       const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
 
@@ -863,19 +1122,45 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000,
+          value: String(value)
+          };
+        var tx = await contract.methods.swapETHForExactTokens(amountOutParsed.toString(), path, address, deadline).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
 
     },
     swapTokensForExactETH: async function(amountIn, amountOutMin, path, token0){
       let deadline = this.getDeadline()
       let amoutInParsed = this.getUnits(amountIn, token0)
       let amountOutParsed = ethers.utils.parseEther(amountOutMin)
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
 
+      if(this.getWalletType() == 'metamask'){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
       const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline).catch(err => {
 
         var message;
@@ -909,17 +1194,45 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000
+          };
+        var tx = await contract.methods.swapTokensForExactETH(amountOutParsed.toString(), amoutInParsed.toString(), path, address, deadline).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
 
     },
     swapExactTokensForTokens: async function(amountIn, amountOutMin, path, token0, token1){
       let deadline = this.getDeadline()
       let amoutInParsed = this.getUnits(amountIn, token0)
       let amountOutParsed = this.getUnits(amountOutMin, token1)
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
+
+      if(this.getWalletType() == 'metamask'){
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const address = this.getUserAddress();
-      const abi = IUniswapV2Router02.abi;
+
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
 
       const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
@@ -955,20 +1268,45 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000
+          };
+        var tx = await contract.methods.swapExactTokensForTokens(amoutInParsed.toString(), amountOutParsed.toString(), path, address, deadline).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
     },
     stakeLP: async function(pool,amount){
-  
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
+      const pid = parseInt(pool.pid)
+      let tempToken = {decimals: 18};
+      amount = this.getUnits(amount, tempToken)
+
+      if(this.getWalletType() == 'metamask'){
+      
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
-      const pid = parseInt(pool.pid)
-      
-      let tempToken = {decimals: 18};
-      amount = this.getUnits(amount, tempToken)
       const tx = await contract.deposit(pid, amount).catch(err => {
-
         var message;
         if(!err.data?.message){
           message = err.message
@@ -998,6 +1336,31 @@ export default {
         link: true,
         href: `${explorer}${transaction}`
       })
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, masterChef);
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000
+          };
+        var tx = await contract.methods.deposit(pid, amount.toString()).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
       
     },
     //----------------------------------------Liquidity--------------------------------------
@@ -1013,16 +1376,16 @@ export default {
       }
     },
     removeLiquidityETH: async function(token0, amount){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const address = this.getUserAddress();
-      const abi = IUniswapV2Router02.abi;
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-
       let tempToken = {decimals: 18};
       let deadline = this.getDeadline();
       amount = this.getUnits(amount, tempToken)
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
 
+      if(this.getWalletType() == 'metamask'){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
       let tx = await contract.removeLiquidityETH(
         token0.oneZeroxAddress,
         amount,
@@ -1047,7 +1410,7 @@ export default {
         
         return
       })
-      if(tx !== undefined){
+    if(tx !== undefined){
       let explorer = 'https://explorer.harmony.one/#/tx/'
       let transaction = tx.hash
 
@@ -1066,24 +1429,56 @@ export default {
         href: `${explorer}${transaction}`
       }) 
       this.setBtnState({remove: 'removed'})
-      
     }
-
+    }
+    if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000
+          };
+        var tx = await contract.methods.removeLiquidityETH(
+                token0.oneZeroxAddress,
+                amount.toString(),
+                '10',
+                '10', 
+                address,
+                deadline
+              ).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          this.setBtnState({remove: 'removed'})
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
 
 
     },
     removeLiquidityToken: async function(token0, token1, amount){
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-
       let tempToken = {decimals: 18};
       amount = this.getUnits(amount, tempToken)
       let deadline = this.getDeadline();
 
+
+      if(this.getWalletType() == 'metamask'){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
       let tx = await contract
       .removeLiquidity(
         token0.oneZeroxAddress,
@@ -1128,6 +1523,39 @@ export default {
         })
         this.setBtnState({remove: 'removed'})
       }
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000
+          };
+        var tx = await contract.methods.removeLiquidity(
+        token0.oneZeroxAddress,
+        token1.oneZeroxAddress,
+        amount.toString(),
+        '10',
+        '10',
+        address,
+        deadline).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          let transaction = tx.transaction.id
+          this.setBtnState({remove: 'removed'})
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
     },
 
     addLiquidityParse: async function(token0, token1, amount0, amount1, slippage){
@@ -1144,19 +1572,20 @@ export default {
 
 
     addLiquidityETH: async function(token0, token1, amount0, amount1, slippage){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const address = this.getUserAddress();
-      const abi = IUniswapV2Router02.abi;
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      
       let amountA = this.getUnits(amount0, token0)
       let valueOveride = {value: amountA}
-      console.log(valueOveride.value.toString())
+      const address = this.getUserAddress();
+      const abi = IUniswapV2Router02.abi;
       let amountB = this.getUnits(amount1, token1)
       let amountAmin = await this.calculateSlippage(amountA, '90');
       let amountBmin = await this.calculateSlippage(amountB, '90')
       let deadline = this.getDeadline();
+
+      if(this.getWalletType() == 'metamask'){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      
 
       const tx = await contract
           .addLiquidityETH(
@@ -1201,21 +1630,55 @@ export default {
         href: `${explorer}${transaction}`
       })
       this.setBtnState({add: 'added'})
-    }
+      }
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000,
+          value: amountA.toString()
+          };
+        var tx = await contract.methods.addLiquidityETH(
+            token1.oneZeroxAddress,
+            amountB.toString(),
+            amountAmin.toString(),
+            amountBmin.toString(),
+            address,
+            deadline).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          this.setBtnState({add: 'added'})
+          let transaction = tx.transaction.id
+          this.setBtnState({remove: 'removed'})
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
     },
     addLiquidityToken: async function(token0, token1, amount0, amount1, slippage){
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-
       let amountA = this.getUnits(amount0, token0)
       let amountB = this.getUnits(amount1, token1)
       let amountAmin = await this.calculateSlippage(amountA, '90');
       let amountBmin = await this.calculateSlippage(amountB, '90');
       let deadline = this.getDeadline();
-
+      if(this.getWalletType() == 'metamask'){
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
       const tx = await contract
         .addLiquidity(
           token0.oneZeroxAddress,
@@ -1260,7 +1723,42 @@ export default {
         href: `${explorer}${transaction}`
       })
       this.setBtnState({add: 'added'})
-    }
+      }
+      }
+      if(this.getWalletType() == 'oneWallet'){
+        let options = { gasPrice: "0x3B9ACA00" };
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        let wallet = new oneWallet()
+        await wallet.signin()
+        let contract = wallet.attachToContract(unattachedContract)
+        //const gas = await contract.methods.withdraw(pid, '0').estimateGas(options).catch();
+        //console.log(gas)
+        options = {
+          gasPrice: 1000000000,
+          gasLimit: 3000000
+          };
+        var tx = await contract.methods.addLiquidity(
+          token0.oneZeroxAddress,
+          token1.oneZeroxAddress,
+          amountA.toString(),
+          amountB.toString(),
+          amountAmin.toString(),
+          amountBmin.toString(),
+          address,
+          deadline).send(options)
+        if(tx.transaction.txStatus == 'CONFIRMED'){
+          this.setBtnState({add: 'added'})
+          let transaction = tx.transaction.id
+          this.setBtnState({remove: 'removed'})
+          let explorer = 'https://explorer.harmony.one/#/tx/'
+           toastMe('success', {
+            title: 'Tx Succesfull',
+            msg: "Explore : " + transaction,
+            link: true,
+            href: `${explorer}${transaction}`
+          })
+        }
+      }
     
     },
     calculateSlippage: async function(amount, slippage) {
@@ -1323,8 +1821,16 @@ export default {
       return amountOut;
 
     },
+    getBN: function(amount){
+      const bn = ethers.BigNumber.from(amount);
+      return bn
+    },
     getUnits: function(amount, token){
       let parsedunits = ethers.utils.parseUnits(amount, token.decimals);
+      return parsedunits;
+    },
+    getUnitsD: function(amount, decimals){
+      let parsedunits = ethers.utils.parseUnits(String(amount), decimals);
       return parsedunits;
     },
     getFormatedUnits: function(amount, token){

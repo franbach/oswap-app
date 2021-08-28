@@ -29,7 +29,7 @@
             </div>
             <div class="flex flex-col h-full justify-between">
               <p class="text-xs text-oswapBlue-light">Stake Weight</p>
-              <p class="text-lg dark:text-gray-400">{{stakeWeight}} %</p>
+              <p class="text-lg dark:text-gray-400">{{stakeWeight.toString()}} %</p>
             </div>
           </div>
           <div class="flex h-12 space-x-2">
@@ -158,17 +158,17 @@ import openswap from "@/shared/openswap.js";
     },
     mounted: async function(){
     
-      this.stakeWeight = this.getStakeWeight(this.poolData.lpBalanceStaked, this.poolData.lpStakedTotal)
-      let rewards = await this.getRewardValue(this.pool, this.stakeWeight);
+      this.stakeWeight = this.poolData.stakeWeight.toFixed(5)
+      let rewards = await this.getRewardValue(this.pool, this.poolData.stakeWeight);
   
       this.weeklyRewards = rewards[0];
       this.monthlyRewards = rewards[1];
 
-      await setInterval( function (){
-        var poolData = this.updatePoolState(this.pool);
-        this.pt0s = poolData.token0Pstaked
-        this.pt1s = poolData.token1Pstaked
-      }.bind(this), 1000);
+     
+       
+        this.pt0s = parseFloat(this.getFormatedUnitsDecimals(this.poolData.token0Pstaked.toString(), this.pool.decimals[0])).toFixed(8)
+        this.pt1s = parseFloat(this.getFormatedUnitsDecimals(this.poolData.token1Pstaked.toString(), this.pool.decimals[1])).toFixed(8)
+      
     },
     methods: {
       ...mapGetters('farm/farmData', ['getFarmData']),

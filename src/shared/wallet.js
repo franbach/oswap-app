@@ -1,24 +1,38 @@
 import { mapGetters, mapActions } from 'vuex';
 import { ethers } from "ethers";
 import { toastMe } from '@/components/toaster/toaster.js';
+import { fromBech32 } from '@harmony-js/crypto'
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 export default {
     mounted: function () {
+
       
     },
     computed: {
-        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress']),
+        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWalletType']),
     },
     methods: {
-        ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet']),
+        ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet','setWalletType']),
   
         connectWallet: async function() {
           console.log("connecting wallet")
           if(window.onewallet){
+            this.setWalletType('oneWallet');
             console.log("onewallet coming soon")
+            const isOneWallet = window.onewallet && window.onewallet.isOneWallet;
+            const onewallet = window.onewallet;
+            const getAccount = await onewallet.getAccount();
+            
+            this.setdefaultWallet()
+            this.setUserAddress(fromBech32(getAccount.address));
+              
+              this.setSignedIn( true );
+
+
+
           }
 
-          if (window.ethereum !== undefined){
+          if (window.ethereum !== undefined && !window.wallet){
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
             const signer = await provider.getSigner();
@@ -35,6 +49,7 @@ export default {
             }
             
               const accounts = await signer.getAddress();
+              this.setWalletType('metamask');
               console.log(accounts)
               this.setUserAddress(accounts);
               
@@ -47,11 +62,11 @@ export default {
               })
               this.walletConnected = true;
               return true;
-          }else{
+          }else if(window.ethereum == undefined && !onewallet){
                 
                 toastMe('warning', {
                   title: 'Wallet :',
-                  msg: "It seems you don't have Metamask installed !",
+                  msg: "It seems you don't have Metamask or One Wallet installed !",
                   link: false,
                 })
                 return false

@@ -113,27 +113,30 @@ import { ethers } from "ethers";
         }
       });
       var rewardValue = await this.getRewardValue(this.pool, 100)
-      var iid =  await setInterval( async function (){
+
         var poolData = this.updatePoolState(this.pool);
-        this.tt0s = poolData.token0Tstaked;
-        this.tt1s = poolData.token1Tstaked;
-        this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(poolData.lpStakedTotal)).toFixed(5));
-        var liquidityValue = poolData.totalLiquidityValue;
-        if(liquidityValue !== undefined){
+ 
+        var liquidityValue = await this.getLiquidityValue(this.pool, this.poolData.token0Tstaked, this.poolData.token1Tstaked);
+        console.log('liquidity value : ' + liquidityValue[1])
+      
           this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
           if(this.rewards != '0'){
             var APRData = {}
           APRData.pAPR = this.rewards,
           APRData.tAPR = this.rewards,
+        this.tt0s = ethers.utils.commify(parseFloat(this.getFormatedUnitsDecimals(this.poolData.token0Tstaked.toString(), this.pool.decimals[0])).toFixed(0))
+        this.tt1s = ethers.utils.commify(parseFloat(this.getFormatedUnitsDecimals(this.poolData.token1Tstaked.toString(), this.pool.decimals[1])).toFixed(8))
+        this.tas = ethers.utils.commify(parseFloat(this.getFormatedUnitsDecimals(this.poolData.lpStakedTotal.toString(), this.pool.decimals[0])).toFixed(8))
           APRData.staked = poolData.lpBalanceStaked
         
+          
+        
           this.$emit("updateAPR", APRData)
-          clearInterval( iid );
-          }
+          
            
         }
          
-      }.bind(this), 1000);
+    
       
 
     
