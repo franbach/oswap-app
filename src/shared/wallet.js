@@ -27,7 +27,7 @@ export default {
             this.setUserAddress(fromBech32(getAccount.address));
               
               this.setSignedIn( true );
-
+              this.walletConnected = true;
 
 
           }
@@ -62,11 +62,11 @@ export default {
               })
               this.walletConnected = true;
               return true;
-          }else if(window.ethereum == undefined && !onewallet){
+          }else if(window.ethereum == undefined && window.onewallet == undefined){
                 
                 toastMe('warning', {
                   title: 'Wallet :',
-                  msg: "It seems you don't have Metamask or One Wallet installed !",
+                  msg: "It seems you don't have Metamask or One Wallet installed!",
                   link: false,
                 })
                 return false

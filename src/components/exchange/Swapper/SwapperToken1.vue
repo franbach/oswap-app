@@ -95,7 +95,7 @@
         }
 
         this.setInputAmount({
-          0: await this.getAmountOutWithSlippage(this.getInputAmount(1), bestRoute, this.getSlippageRate, token1, token0)
+          0: await this.getAmountInWithSlippage(this.getInputAmount(1), bestRoute, this.getSlippageRate, token1, token0)
         })
 
       }

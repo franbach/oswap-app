@@ -3,6 +3,9 @@
     <div class="absolute xl:left-0 left-3 flex items-center ss:pt-4 ns:pt-0">
       <ColorMode @dark-mode="setColorMode()" :value="colorMode" />
     </div>
+    <div class="relative xl:left-0 left-3 flex items-center ss:pt-4 ns:pt-0">
+      <WalletMode @walletMode="walletMode()" :value="walletMode" />
+    </div>
     <div class="flex flex-col items-center ss:pt-4 ns:pt-0 space-y-2">
       <h1 class="text-sm dark:text-oswapGreen">{{ $route.name }}</h1>
       <div class="flex items-center space-x-3">
@@ -25,18 +28,24 @@
 
 <script>
   import ColorMode from '@/components/ColorMode';
-
+  import WalletMode from '@/components/walletMode';
   export default {
     name: 'Footer',
     components: {
-      ColorMode
+      ColorMode,
+      WalletMode
     },
     props: {
-      colorMode: Boolean
+      colorMode: Boolean,
+      walletMode: Boolean,
     },
     methods: {
       setColorMode() {
         this.$emit('dark-mode');
+      },
+      walletMode() {
+        this.$emit('walletMode');
+        console.log('sec')
       }
     },
     computed: {

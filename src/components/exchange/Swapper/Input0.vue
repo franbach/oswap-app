@@ -47,7 +47,8 @@
         'setPriceImpact', 
         'setThePath',
         'setWarning', 
-        'deleteWarning'
+        'deleteWarning',
+        'setLastSelected'
       ]),
 
       setInput(event) {
@@ -73,7 +74,7 @@
         } else {
           this.deleteWarning('impact')
         }
-
+        this.setLastSelected(0)
         this.setInputAmount({
           1: await this.getAmountOutWithSlippage(this.getInputAmount(0), bestRoute, this.getSlippageRate, token0, token1)
         })

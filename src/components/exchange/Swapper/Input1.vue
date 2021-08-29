@@ -47,7 +47,8 @@
         'setPriceImpact', 
         'setThePath',
         'setWarning', 
-        'deleteWarning'
+        'deleteWarning',
+        'setLastSelected'
       ]),
 
       setInput(event) {
@@ -61,8 +62,8 @@
         let token1 = this.getToken()['token2']
 
         let units = this.getUnits(this.getInputAmount(1), token1)
-        let bestRoute = await this.getBestRoute(units, token1, token0)
-        
+        let bestRoute = await this.getBestRoute(units, token0, token1)
+        console.log(bestRoute)
         this.setPriceImpact(bestRoute.priceImpact.toFixed(2))
 
         // Validation
@@ -73,9 +74,10 @@
         } else {
           this.deleteWarning('impact')
         }
-
+        console.log(bestRoute.route.path)
+        this.setLastSelected(1)
         this.setInputAmount({
-          0: await this.getAmountOutWithSlippage(this.getInputAmount(1), bestRoute, this.getSlippageRate, token1, token0)
+          0: await this.getAmountInWithSlippage(this.getInputAmount(1), bestRoute, token0, token1,this.getSlippageRate)
         })
       }
     }

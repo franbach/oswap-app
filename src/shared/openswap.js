@@ -1821,6 +1821,22 @@ export default {
       return amountOut;
 
     },
+    getAmountInWithSlippage: async function(amount, bestRoute, token1, token2){
+
+      let parsedAmount = this.getUnits(amount, token1);
+      const provider = this.getProvider(true)
+      const address = this.getUserAddress();
+      let path = this.getPath(bestRoute)
+      const abi = IUniswapV2Router02.abi;
+      console.log(path)
+      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, provider);
+      let allowance = await contract.getAmountsIn(parsedAmount, path)
+      console.log(allowance.toString())
+      let amountIn = this.getFormatedUnits(allowance[0].toString(), token2)
+      return amountIn;
+
+
+    },
     getBN: function(amount){
       const bn = ethers.BigNumber.from(amount);
       return bn

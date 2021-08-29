@@ -9,7 +9,7 @@
     </div>
 
     <div id="footer" class="w-full h-full z-40 st5 bg-gradient-to-r from-gray-300 to-slightGray dark:from-oswapDark-gray dark:to-slightDark">
-      <Footer @dark-mode="changeColor()" :colorMode="this.darkmode" />
+      <Footer @dark-mode="changeColor()" @walletMode="changeWallet()" :walletMode="this.walletmode" :colorMode="this.darkmode" />
     </div>
   </div>
 </template>
@@ -28,6 +28,7 @@ export default {
     return {
       scrolled: false,
       darkmode: false,
+      walletmode: false //false == metamask
     };
   },
   created() {
@@ -35,7 +36,14 @@ export default {
   },
   mounted() {
     const theme = localStorage.getItem("dark\_theme");
+    const mode = localStorage.getItem("walletmode");
+    if(mode){
+      if(mode == "false"){
+        this.walletmode = true
 
+      }else
+      this.walletmode = false
+    }
     if (theme) {
       if (theme == "true") {
         document.body.classList.remove('bg-gray-200');
@@ -57,6 +65,12 @@ export default {
       } else {
         document.body.classList.add('bg-gray-200');
       }
+    },
+    changeWallet(){
+      this.walletmode = !this.walletmode
+      localStorage.setItem("walletmode", this.walletmode.toString());
+      console.log('this')
+
     },
     handleScroll () {
       this.scrolled = window.scrollY > 0;
