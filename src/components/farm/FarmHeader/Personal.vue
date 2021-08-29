@@ -103,22 +103,8 @@
       },
       collectAllButton: async function(){
         const tx = await this.collectAll()
-        let explorer = 'https://explorer.harmony.one/#/tx/'
-        let transaction = tx.hash
-
-        toastMe('info', {
-          title: 'Transaction Sent',
-          msg: "Collect All Sent to network. waiting for confirmation",
-          link: false,
-          href: `${explorer}${transaction}`
-        })
-        await tx.wait(1)
-        toastMe('success', {
-          title: 'Tx Succesfull',
-          msg: "Explore : " + transaction,
-          link: true,
-          href: `${explorer}${transaction}`
-        })
+        
+        
       }
     }
   }

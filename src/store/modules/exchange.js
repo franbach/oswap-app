@@ -152,6 +152,7 @@ export default {
           0: '0.0',
           1: '0.0'
         },
+        lastSelected: 0,
         slippageRate: '0.5',
         priceImpact: '0.0',
         priceRate: '0.0',
@@ -182,6 +183,9 @@ export default {
         }
       },
       actions: {
+        setLastSelected({commit}, value) {
+          commit('_setLastSelected', value);
+        },
         setInputAmount({commit}, value) {
           commit('_setInputAmount', value);
         },
@@ -211,6 +215,9 @@ export default {
         }
       },
       mutations: {
+        _setLastSelected: (state, value) => {
+          state.lastSelected = value
+        },
         _setInputAmount: (state, value) => {
           let token = Object.keys(value)[0];
           let amount = value[token];

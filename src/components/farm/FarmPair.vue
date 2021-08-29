@@ -61,6 +61,7 @@
       },
       updateAPR(value){
         this.$emit("updateAPR", value)
+        console.log(value)
       },
       setPool(value) {
         if (value == 'open') {

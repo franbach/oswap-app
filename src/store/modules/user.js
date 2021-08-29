@@ -2,37 +2,26 @@ export default {
   namespaced: true,
 
   state: {
-    signedIn: false,
+    isNew: true,
     signedOut: true,
     address: "0x0000000000000000000000000000000000000003",
-    wallet: null,
-    walletType: null,
-    explorer: "https://explorer.harmony.one/#/tx/"
+    
   },
   mutations: {
-    _hasSignedIn(state, hasSignedIn) {
-      state.signedIn = hasSignedIn;
-    },
-    _hasSignedOut(state, hasSignedOut) {
-      state.signedOut = hasSignedOut;
+    _setIsNew(state, isNewUser) {
+      state.isNew = isNewUser;
     },
     _setUserAddress(state, address) {
       state.address = address;
     },
     _setUserWallet(state, wallet) {
       state.wallet = wallet;
-    },
-    _setWalletType(state, walletType) {
-      state.walletType = walletType;
     }
   },
   getters:{
-  	getUserSignedIn: (state) => {
-  		return state.signedIn;
+  	getIsNew: (state) => {
+  		return state.isNew;
   	},
-    getWalletType: (state) => {
-      return state.walletType;
-    },
   	getUserSignedOut: (state) => {
   		return state.signedOut;
   	},
@@ -45,11 +34,8 @@ export default {
 
   },
   actions: {
-    setWalletType({ commit }, value){
-      commit('_setWalletType', value);
-    },
-  	setSignedIn({ commit }, value){
-  		commit('_hasSignedIn', value);
+  	setIsNew({ commit }, value){
+  		commit('_setIsNew', value);
   	},
   	setSignedOut({ commit }, value){
   		commit('_hasSignedOut', value);

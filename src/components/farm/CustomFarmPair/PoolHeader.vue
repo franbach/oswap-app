@@ -95,15 +95,32 @@
       });
 
      var rewardValue = await this.getRewardValue(this.pool, 100)
-      setInterval(async function (){
+    
         var poolData = this.updatePoolState(this.pool);
         this.tas = ethers.utils.commify(parseFloat(this.getEthUnits(this.poolData.lpStakedTotal)).toFixed(5));
         var liquidityValue = parseFloat(await this.getLiquidityValueSolo(this.pool, this.poolData.lpStakedTotal))
-        if(liquidityValue !== undefined){
-          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue) * 12) * 100).toFixed(2)
+      
+          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+          
+
+          var iid =  await setInterval( async function (){
+          if(liquidityValue !== undefined){
+          this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
+          if(this.rewards != '0'){
+            console.log(this.rewards)
+            var APRData = {}
+          APRData.pAPR = this.rewards,
+          APRData.tAPR = this.rewards,
+          APRData.staked = poolData.lpBalanceStaked
+        
+          this.$emit("updateAPR", APRData)
+          clearInterval( iid );
+          }
         }
+
+        
          
-      }.bind(this), 1000);
+      
     },
     methods: {
            ...mapGetters('farm/farmData', ['getSoloData']),

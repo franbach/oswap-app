@@ -58,14 +58,11 @@
     mounted: async function (){
 
       this.pendingReward = this.getEthUnits(this.poolData.pendingReward)
-      var [token0Pstaked, token1Pstaked, token0Tstaked, token1Tstaked, pvalue0, pvalue1, tvalue0, tvalue1] = await this.getTokenAmounts(
-          this.poolData.pool,
-          this.poolData.lpTokenTotalSupply.toString(),
-          this.poolData.lpBalanceStaked.toString(),
-          this.poolData.lpStakedTotal.toString()
-        );
-      this.totalLiquidityValue = await this.getLiquidityValue(this.pool, tvalue0.toFixed(4), tvalue1.toFixed(4))
-      this.personalLiquidityValue = await this.getLiquidityValue(this.pool, pvalue0.toFixed(4), pvalue1.toFixed(4))
+
+      
+      this.totalLiquidityValue = await this.getLiquidityValue(this.pool, this.poolData.token0Tstaked, this.getBN(this.poolData.token1Tstaked))
+    
+      this.personalLiquidityValue = await this.getLiquidityValue(this.pool, this.poolData.token0Pstaked, this.getBN(this.poolData.token1Pstaked))
       let TVLData = {}
       TVLData.pvl = this.personalLiquidityValue[1]
       TVLData.pool = {
@@ -73,29 +70,6 @@
         TVL: this.totalLiquidityValue[1]
       }
       this.$emit("updateTVL", TVLData)
-      let value = {}
-      
-      let farmData = {}
-      farmData.pool = this.poolData.pool
-      farmData.lpBalance = this.poolData.lpBalance
-      farmData.lpBalanceStaked = this.poolData.lpBalanceStaked
-      farmData.lpStakedTotal = this.poolData.lpStakedTotal
-      farmData.lpTokenTotalSupply = this.poolData.lpTokenTotalSupply
-      farmData.pendingReward = this.poolData.pendingReward
-      farmData.token0Pstaked = token0Pstaked
-      farmData.token1Pstaked = token1Pstaked
-      farmData.token0Tstaked = token0Tstaked
-      farmData.token1Tstaked = token1Tstaked
-      farmData.tvalue0 = tvalue0
-      farmData.tvalue1 = tvalue1
-      farmData.totalLiquidityValue = this.totalLiquidityValue
-      farmData.personalLiquidityValue = this.personalLiquidityValue
-
-
-      value.i = this.poolData.pool.i
-      value.data = farmData
-      this.setPoolDataState(value)
-      
 
 
 
