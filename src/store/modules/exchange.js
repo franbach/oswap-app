@@ -144,67 +144,187 @@ export default {
       namespaced: true,
 
       state: {
-        buttons: {
-          approve: {
-            disabled: true,
-            approve: false,
-            approved: false,
-            approving: false,
-          },
-          swap: {
-            disabled: true,
-            swap: false,
-            swapped: false,
-            swapping: false 
-          }
-        }
+        amount: {
+          0: '1.0',
+          1: '0.0'
+        },
+        balance: {
+          0: '0.0',
+          1: '0.0'
+        },
+        slippageRate: '0.5',
+        priceImpact: '0.0',
+        priceRate: '0.0',
+        path: null,
+        warnings: {}
       },
-  
       getters: {
-        getBtnState: (state) => (value) => {
-          // Grabs the button name passed in as argument
-          let btn = Object.keys(value)[0];
-          // Grabs the desired button state passed in as argument
-          let btnState = value[btn];
-
-          return state.buttons[btn][btnState];
+        getInputAmount: (state) => (token) => {
+          return state.amount[token];
+        },
+        getBalanceToken: (state) => (token) => {
+          return state.balance[token];
+        },
+        getSlippageRate: (state) => {
+          return state.slippageRate;
+        },
+        getPriceImpact: (state) => {
+          return state.priceImpact;
+        },
+        getPriceRate: (state) => {
+          return state.priceRate;
+        },
+        getThePath: (state) => {
+          return state.path;
+        },
+        getWarnings: (state) => {
+          return state.warnings;
         }
       },
-
       actions: {
-        setBtnState({ commit }, value) {
-          commit('_setBtnState', value)
+        setInputAmount({commit}, value) {
+          commit('_setInputAmount', value);
         },
+        setSlippageRate({commit}, value) {
+          commit('_setSlippageRate', value);
+        },
+        setBalanceToken({commit}, value) {
+          commit('_setBalanceToken', value);
+        },
+        setPriceImpact({commit}, value) {
+          commit('_setPriceImpact', value);
+        },
+        setPriceRate({commit}, value) {
+          commit('_setPriceRate', value);
+        },
+        setThePath({commit}, value) {
+          commit('_setThePath', value);
+        },
+        setWarning({commit}, value) {
+          commit('_setWarning', value);
+        },
+        deleteWarning({commit}, value) {
+          commit('_deleteWarning', value);
+        },
+        resetAll({commit}) {
+          commit('_resetAll');
+        }
+      },
+      mutations: {
+        _setInputAmount: (state, value) => {
+          let token = Object.keys(value)[0];
+          let amount = value[token];
 
-        resetButton({ commit }, value) {
-          commit('_resetButton', value)
+          state.amount[token] = amount
+        },
+        _setSlippageRate: (state, value) => {
+          state.slippageRate = value;
+        },
+        _setBalanceToken: (state, value) => {
+          let token = Object.keys(value)[0];
+          let balance = value[token];
+
+          state.balance[token] = balance;
+        },
+        _setPriceImpact: (state, value) => {
+          state.priceImpact = value;
+        },
+        _setPriceRate: (state, value) => {
+          state.priceRate = value;
+        },
+        _setThePath: (state, value) => {
+          state.path = value;
+        },
+        _setWarning: (state, value) => {
+          let warningType = Object.keys(value)[0];
+          let message = value[warningType];
+
+          state.warnings[warningType] = message;
+        },
+        _deleteWarning: (state, type) => {
+          delete state.warnings[type]
+        },
+        _resetAll: (state) => {
+          state.amount[0] = '1.0';
+          state.amount[1] = '0.0';
+          state.balance[0] = '0.0';
+          state.balance[1] = '0.0';
+          state.slippageRate = '0.5';
+          state.priceImpact = '0.0';
+          state.priceRate = '0.0';
+          state.path = null;
+          state.warnings = {};
         }
       },
 
-      mutations: {
-        _resetButton: (state, button) => {
-          Object.keys(state.buttons[button]).forEach((s) => {
-            s == 'disabled' ? 
-              state.buttons[button][s] = true :
-              state.buttons[button][s] = false
-          })
-        },
-
-        _setBtnState: (state, value) => {
-          // Grabs the button name passed in as argument
-          let btn = Object.keys(value)[0];
-          // Grabs the desired button state passed in as argument
-          let btnState = value[btn];
-          
-          // Iterates over the desired button state and check
-          // if the state argument matches so it can be changed to true.
-          // All other button states should be false, we cannot have more than
-          // one true state per button.
-          Object.keys(state.buttons[btn]).forEach((s) => {
-            s == String(btnState) ? 
-              state.buttons[btn][s] = true :
-              state.buttons[btn][s] = false
-          })
+      modules: {
+        buttons: {
+          namespaced: true,
+  
+          state: {
+            buttons: {
+              approve: {
+                disabled: true,
+                approve: false,
+                approved: false,
+                approving: false,
+              },
+              swap: {
+                disabled: true,
+                swap: false,
+                swapped: false,
+                swapping: false 
+              }
+            }
+          },
+      
+          getters: {
+            getBtnState: (state) => (value) => {
+              // Grabs the button name passed in as argument
+              let btn = Object.keys(value)[0];
+              // Grabs the desired button state passed in as argument
+              let btnState = value[btn];
+    
+              return state.buttons[btn][btnState];
+            }
+          },
+    
+          actions: {
+            setBtnState({ commit }, value) {
+              commit('_setBtnState', value)
+            },
+    
+            resetButton({ commit }, value) {
+              commit('_resetButton', value)
+            }
+          },
+    
+          mutations: {
+            _resetButton: (state, button) => {
+              Object.keys(state.buttons[button]).forEach((s) => {
+                s == 'disabled' ? 
+                  state.buttons[button][s] = true :
+                  state.buttons[button][s] = false
+              })
+            },
+    
+            _setBtnState: (state, value) => {
+              // Grabs the button name passed in as argument
+              let btn = Object.keys(value)[0];
+              // Grabs the desired button state passed in as argument
+              let btnState = value[btn];
+              
+              // Iterates over the desired button state and check
+              // if the state argument matches so it can be changed to true.
+              // All other button states should be false, we cannot have more than
+              // one true state per button.
+              Object.keys(state.buttons[btn]).forEach((s) => {
+                s == String(btnState) ? 
+                  state.buttons[btn][s] = true :
+                  state.buttons[btn][s] = false
+              })
+            }
+          }
         }
       }
     }

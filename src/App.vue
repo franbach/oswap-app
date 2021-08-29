@@ -64,11 +64,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-  .bg-dark-grad {
-    background-color: #12c2e9;  /* fallback for old browsers */
-    background-color: -webkit-linear-gradient(to right, #f64f59, #c471ed, #12c2e9);  /* Chrome 10-25, Safari 5.1-6 */
-    background-color: linear-gradient(to right, #f64f59, #c471ed, #12c2e9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  }
-</style>

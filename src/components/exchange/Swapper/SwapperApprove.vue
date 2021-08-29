@@ -1,7 +1,7 @@
 <template>
   <!-- Approve disabled -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({approve: 'disabled'})" class="flex w-28 st5 st5-all justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group dark:bg-gray-700 bg-gray-200 select-none">
+    <div v-if="this.getBtnState({approve: 'disabled'})" class="flex w-28 st5 st5-all justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group select-none">
       <div class="flex flex-1 items-center justify-center">
         <p class="text-sm text-gray-300 dark:text-gray-600">Approve</p>
       </div>
@@ -11,7 +11,7 @@
 
   <!-- Ready to Approve -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div @click="approve()" v-if="this.getBtnState({approve: 'approve'})" class="flex w-28">
+    <div @click="approve()" v-if="this.getBtnState({approve: 'approve'})" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-pointer st5">
         <div class="flex flex-1 items-center justify-center">
@@ -24,7 +24,7 @@
 
   <!-- Approving -->
   <transition tag="div" name="approve-btn" class="inline-block absolute">
-    <div v-if="this.getBtnState({approve: 'approving'})" class="flex w-28">
+    <div v-if="this.getBtnState({approve: 'approving'})" class="flex w-28 group">
       <div class="grab-attention-glowing"></div>
       <div class="grab-attention cursor-wait st5">
         <div class="flex flex-1 items-center justify-center">
@@ -55,11 +55,9 @@
   export default {
     name: 'SwapperApprove',
     mixins: [openswap],
-    props: {
-      amount: String,
-    },
     computed: {
-      ...mapGetters('exchange/swapper', ['getBtnState']),
+      ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
+      ...mapGetters('exchange/swapper', ['getInputAmount'])
     },
     mounted: async function() {
       this.token1 = this.getToken()['token1'];
@@ -70,7 +68,7 @@
       } else {
         this.setBtnState({approve: 'approving'});
         let routerAddr = this.UNIROUTERV2();
-        let parsedInput = this.getUnits(this.amount, this.token1);
+        let parsedInput = this.getUnits(this.getInputAmount(0), this.token1);
         let allowance = await this.checkAllowance(this.token1, routerAddr);
         let isAllowanceSufficient = parsedInput.lt(allowance);
 
@@ -88,7 +86,7 @@
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
       
-      ...mapActions('exchange/swapper', ['setBtnState']),
+      ...mapActions('exchange/swapper/buttons', ['setBtnState']),
 
       approve: async function(){
         this.token1 = this.getToken()['token1'];
