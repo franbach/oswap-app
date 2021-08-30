@@ -14,11 +14,10 @@ export default {
     methods: {
         ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet','setWalletType']),
   
-        connectWallet: async function() {
+        connectOneWallet: async function() {
           console.log("connecting wallet")
-          if(window.onewallet){
+          if(window.onewallet !== undefined){
             this.setWalletType('oneWallet');
-            console.log("onewallet coming soon")
             const isOneWallet = window.onewallet && window.onewallet.isOneWallet;
             const onewallet = window.onewallet;
             const getAccount = await onewallet.getAccount();
@@ -27,12 +26,30 @@ export default {
             this.setUserAddress(fromBech32(getAccount.address));
               
               this.setSignedIn( true );
+              localStorage.setItem("walletmode", '1');
               this.walletConnected = true;
-
-
+              return true;
+          }else if(window.ethereum == undefined && window.onewallet == undefined){
+                
+                toastMe('warning', {
+                  title: 'Wallet :',
+                  msg: "It seems you don't have Metamask or One Wallet installed!",
+                  link: false,
+                })
+                return false
           }
-
-          if (window.ethereum !== undefined && !window.wallet){
+          else{
+                
+                toastMe('warning', {
+                  title: 'Wallet :',
+                  msg: "It seems you don't have Harmony One Wallet installed! try switching Wallet Mode",
+                  link: false,
+                })
+                return false
+          }
+        },
+        connectMetamaskWallet: async function(){
+          if (window.ethereum !== undefined){
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
             const signer = await provider.getSigner();
@@ -52,7 +69,7 @@ export default {
               this.setWalletType('metamask');
               console.log(accounts)
               this.setUserAddress(accounts);
-              
+              localStorage.setItem("walletmode", '0');
               this.setSignedIn( true );
               this.setUserWallet( provider );
               toastMe('success', {
@@ -70,8 +87,15 @@ export default {
                   link: false,
                 })
                 return false
-              }    
-          
+          }
+          else if(window.ethereum == undefined){  
+                toastMe('warning', {
+                  title: 'Wallet :',
+                  msg: "It seems you don't have Metamask installed! try switching Wallet Mode",
+                  link: false,
+                })
+                return false
+          }  
         },
         disconnectWallet: function() {
             this.setSignedIn( false );
@@ -81,9 +105,7 @@ export default {
         },
         setdefaultWallet: function(){
           const provider =  new ethers.providers.JsonRpcProvider("https://api.s0.t.hmny.io", {chainId: 1666600000, name: "Harmony"})
-            this.setUserWallet( provider );
-            this.setUserAddress("0x0000000000000000000000000000000000000003");
-
+          this.setUserWallet( provider );
         }
     }
 };

@@ -129,7 +129,7 @@
         this.$emit("updateData")
       },
       setMax() {
-        console.log(this.maxAmount)
+        
         this.amount = this.getEthUnits(this.maxAmount.toString());
       },
       setPool() {

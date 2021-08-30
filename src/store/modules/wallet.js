@@ -6,7 +6,7 @@ export default {
     signedOut: true,
     address: "0x0000000000000000000000000000000000000003",
     wallet: null,
-    walletType: null,
+    walletType: 'metamask',
     explorer: "https://explorer.harmony.one/#/tx/"
   },
   getters:{
@@ -53,6 +53,7 @@ export default {
       } else if (state.walletType == 'oneWallet') {
         state.walletType = 'metamask';
       }
+      console.log(state.walletType)
     },
     _hasSignedIn(state, hasSignedIn) {
       state.signedIn = hasSignedIn;

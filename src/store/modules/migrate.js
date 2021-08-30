@@ -182,10 +182,6 @@ export default {
       [state.swap.token1, state.swap.token2] = [state.swap.token2, state.swap.token1]
     },
 
-    _resetTokens: (state) => {
-      state.swap = {}
-    },
-
     _resetNetworks: (state) => {
       state.from = null;
       state.to = null;

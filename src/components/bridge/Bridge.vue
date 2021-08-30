@@ -91,13 +91,14 @@
       }
     },
     mounted: async function() {
-       const provider = new ethers.providers.Web3Provider(window.ethereum);
+       const provider = this.getProvider()
         await provider.send("eth_requestAccounts", []);
         const signer = await provider.getSigner();
         this.userAddress = await signer.getAddress();
       if (this.getToken()['token1'] != undefined) {
         
         this.token = this.getToken()['token1']
+        console.log(this.token)
         this.getTokenBalance()
         const network = this.getTokenOrigin()
         await this.checkChainId(network)
@@ -125,7 +126,7 @@
         const network = this.getTokenOrigin()
         await this.checkChainId(network)
 
- 
+        this.token = this.getToken()['token1']
      
         await this.Bridge(network)
       
@@ -135,10 +136,10 @@
         console.log('BRIDGE MATE')
       },
       Bridge: async function(tokenNetwork){
-        const bridgeSDK = new BridgeSDK({ logLevel: 3, sdk: "web3" })
+        const bridgeSDK = new BridgeSDK({ logLevel: 3})
         await bridgeSDK.init(configs.mainnet);
-        await bridgeSDK.setUseMetamask(true);
-         await bridgeSDK.setUseOneWallet(false);
+        //await bridgeSDK.setUseMetamask(true);
+         await bridgeSDK.setUseOneWallet(true);
         //await bridgeSDK.setUseOneWallet(true);
         //this sets network to binance
         var network = this.getTokenOrigin()
@@ -148,7 +149,7 @@
         var erc20;
         var amount = 0.0001;
         //gets bech32 user address
-        var oneAddress = toBech32(this.userAddress)
+        var oneAddress = this.userAddress
         //returns true if token is native (aka one, eth, bsc tokens)
         var isNative = this.isNative(this.getToken()['token1'])
         var hrc20 = null
@@ -173,7 +174,6 @@
         else{
           tokenType = TOKEN.ERC20
           erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
-          hrc20 = this.getHrcForBridge(this.getToken()['token1'], isNative) 
         }
         }
         
@@ -215,6 +215,8 @@
         
       },
       getBridgeMode:  function(){
+        console.log(this.getToNetwork().name)
+        console.log(this.token)
         if(this.getToNetwork().name == 'Harmony Network'){
           return EXCHANGE_MODE.ETH_TO_ONE
         }else{
@@ -256,15 +258,16 @@
 
       },
       getTokenOrigin(){
-        if(this.token.bscAddress != undefined){
+        console.log(this.token)
+        if(this.getToken()['token1'].bscAddress != undefined){
           return NETWORK_TYPE.BINANCE
         }
-        if(this.token.ethAddress != undefined){
+        if(this.getToken()['token1'].ethAddress != undefined){
           return NETWORK_TYPE.ETHEREUM
         }
       },
       checkChainId: async function(tokenNetwork){
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = this.getProvider()
         const network = await provider.getNetwork();
         const chainID = await network.chainId;
         console.log(chainID)
