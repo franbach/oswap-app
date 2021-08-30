@@ -251,3 +251,43 @@
 .hzpool-leave-to {
   @apply -translate-x-4 opacity-0
 }
+
+// Fade-In and rotate Transition
+.fade-in-and-rotate-enter-active {
+  @apply transform transition-all duration-300 ease-out absolute
+}
+.fade-in-and-rotate-enter-from {
+  @apply opacity-0 rotate-180
+}
+.fade-in-and-rotate-enter-to {
+  @apply opacity-100 rotate-0
+}
+.fade-in-and-rotate-leave-active {
+  @apply transform transition-all duration-300 ease-out
+}
+.fade-in-and-rotate-leave-from {
+  @apply opacity-100 rotate-0
+}
+.fade-in-and-rotate-leave-to {
+  @apply opacity-0 rotate-180
+}
+
+// Fade-Out and rotate Transition
+.fade-out-and-rotate-enter-active {
+  @apply transform transition-all duration-300 ease-out absolute
+}
+.fade-out-and-rotate-enter-from {
+  @apply opacity-0 -rotate-180
+}
+.fade-out-and-rotate-enter-to {
+  @apply opacity-100 rotate-0
+}
+.fade-out-and-rotate-leave-active {
+  @apply transform transition-all duration-300 ease-out
+}
+.fade-out-and-rotate-leave-from {
+  @apply opacity-100 rotate-0
+}
+.fade-out-and-rotate-leave-to {
+  @apply opacity-0 rotate-180
+}

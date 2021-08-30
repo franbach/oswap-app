@@ -4,6 +4,7 @@ import migrate from './modules/migrate';
 import liquidity from './modules/liquidity';
 import farm from './modules/farm';
 import wallet from './modules/wallet';
+import user from './modules/user';
 import addressConstants from './modules/addressConstants';
 
 export default createStore({
@@ -13,6 +14,7 @@ export default createStore({
     liquidity,
     farm,
     wallet,
+    user,
     addressConstants
   }
 });

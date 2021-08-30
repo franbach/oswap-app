@@ -9,23 +9,6 @@ export default {
     walletType: null,
     explorer: "https://explorer.harmony.one/#/tx/"
   },
-  mutations: {
-    _hasSignedIn(state, hasSignedIn) {
-      state.signedIn = hasSignedIn;
-    },
-    _hasSignedOut(state, hasSignedOut) {
-      state.signedOut = hasSignedOut;
-    },
-    _setUserAddress(state, address) {
-      state.address = address;
-    },
-    _setUserWallet(state, wallet) {
-      state.wallet = wallet;
-    },
-    _setWalletType(state, walletType) {
-      state.walletType = walletType;
-    }
-  },
   getters:{
   	getUserSignedIn: (state) => {
   		return state.signedIn;
@@ -41,10 +24,12 @@ export default {
   	},
   	getWallet: (state) => {
   		return state.wallet;
-  	}
-
+  	},
   },
   actions: {
+    switchWalletType({ commit }) {
+      commit('_switchWalletType')
+    },
     setWalletType({ commit }, value){
       commit('_setWalletType', value);
     },
@@ -60,6 +45,30 @@ export default {
   	setUserWallet({ commit }, value){
   		commit('_setUserWallet', value);
   	}
+  },
+  mutations: {
+    _switchWalletType(state) {
+      if (state.walletType == 'metamask') {
+        state.walletType = 'oneWallet';
+      } else if (state.walletType == 'oneWallet') {
+        state.walletType = 'metamask';
+      }
+    },
+    _hasSignedIn(state, hasSignedIn) {
+      state.signedIn = hasSignedIn;
+    },
+    _hasSignedOut(state, hasSignedOut) {
+      state.signedOut = hasSignedOut;
+    },
+    _setUserAddress(state, address) {
+      state.address = address;
+    },
+    _setUserWallet(state, wallet) {
+      state.wallet = wallet;
+    },
+    _setWalletType(state, walletType) {
+      state.walletType = walletType;
+    }
   },
   modules: {}
 };
