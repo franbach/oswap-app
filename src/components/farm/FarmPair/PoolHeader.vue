@@ -117,7 +117,7 @@ import { ethers } from "ethers";
         var poolData = this.updatePoolState(this.pool);
  
         var liquidityValue = await this.getLiquidityValue(this.pool, this.poolData.token0Tstaked, this.poolData.token1Tstaked);
-        console.log('liquidity value : ' + liquidityValue[1])
+    
       
           this.rewards = parseFloat( ((rewardValue[1] / liquidityValue[1]) * 12) * 100).toFixed(2)
           if(this.rewards != '0'){

@@ -72,9 +72,7 @@
       this.$emit('tellStake', 'executing');
       
       let masterchefAddr = this.oSWAPCHEF();
-      console.log(masterchefAddr)
       let parsedInput = this.getUnits(this.amount, lpToken);
-      console.log(parsedInput)
       let allowance = await this.checkAllowance(lpToken, masterchefAddr);
       let isAllowanceSufficient = parsedInput.lt(allowance);
       if (isAllowanceSufficient) {

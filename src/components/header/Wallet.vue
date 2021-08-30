@@ -25,13 +25,17 @@
 <script>
 
 import wallet from '@/shared/wallet.js';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Wallet',
   mixins: [wallet],
-  mounted() {
-    this.connectWallet()
+  async mounted() {
+    let wallet = localStorage.getItem("walletmode");
+    console.log('wallet in wallet.vue : ' + wallet)
+    if(wallet !== undefined){
+      await this.connect()
+    }
   },
   data() {
     return {
@@ -42,12 +46,22 @@ export default {
   
   },
   methods: {
-    connect(){
-      this.walletConnected = this.connectWallet()
+     ...mapActions('wallet', ['switchWalletType']),
+    connect:async function(){
+     let wallet = localStorage.getItem("walletmode");
+      if(wallet !== undefined){
+        if (wallet == '0') {
+          this.connectMetamaskWallet()
+        }else{
+          this.connectOneWallet()
+        }
+      }else{
+        this.connectMetamaskWallet()
+      }
+      
     },
     disconnect(){
       this.walletConnected = this.disconnectWallet()
-      console.log('hlelelel')
     }
     
 

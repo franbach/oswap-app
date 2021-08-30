@@ -38,14 +38,6 @@
         localStorage.setItem("oSwap\_theme", 'dark');
       }
 
-      // Wallet Type
-      let wallet = localStorage.getItem("walletmode");
-
-      if (wallet) {
-        this.setWalletType(wallet);
-      } else {
-        localStorage.setItem("walletmode", 'metamask');
-      }
     },
 
     computed: {
@@ -54,7 +46,7 @@
     
     methods: {
       ...mapActions('user', ['setIsScrolled', 'setTheme']),
-      ...mapActions('wallet', ['setWalletType']),
+      ...mapActions('wallet', ['switchWalletType']),
 
 
       handleScroll() {

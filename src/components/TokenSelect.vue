@@ -36,9 +36,12 @@
 
       // Helper
       // It Checks if token1 and or token2 have been already stored.
-      token(tokenA) {
+      token(tokenA, tokenB) {
+        if (tokenA && tokenB) {
+          return this.getToken()[tokenA] && this.getToken()[tokenB] ? true : false
+        } else {
           return this.getToken()[tokenA] ? true : false
-        
+        }
       },
     }
   }

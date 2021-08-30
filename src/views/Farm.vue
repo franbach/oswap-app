@@ -293,7 +293,7 @@
       weight = this.getBN(String((weight * 10000000).toFixed(0)))
       let hund = this.getBN('100')
       let mil = this.getBN('10000000')
-      console.log(weight)
+   
       if(weight == 0){
         return 0
       }
