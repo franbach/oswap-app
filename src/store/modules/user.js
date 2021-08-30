@@ -2,50 +2,50 @@ export default {
   namespaced: true,
 
   state: {
-    isNew: true,
-    signedOut: true,
-    address: "0x0000000000000000000000000000000000000003",
-    
+		colorTheme: null,
+		isScrolled: false
   },
+	getters: {
+		getColorTheme: (state) => {
+			return state.colorTheme;
+		},
+		getIsScrolled: (state) => {
+			return state.isScrolled;
+		},
+		getDarkMode: (state) => {
+			if (state.colorTheme == 'dark') {
+				return true;
+			} else { 
+				return false
+			}
+		}
+	},
+	actions: {
+		setTheme({ commit }, value) {
+			commit('_setTheme', value);
+		},
+		setIsScrolled({ commit }, value) {
+			commit('_setIsScrolled', value);
+		},
+		switchTheme({ commit }) {
+			commit('_switchTheme');
+		}
+	},
   mutations: {
-    _setIsNew(state, isNewUser) {
-      state.isNew = isNewUser;
-    },
-    _setUserAddress(state, address) {
-      state.address = address;
-    },
-    _setUserWallet(state, wallet) {
-      state.wallet = wallet;
-    }
+		_setTheme(state, value) {
+			state.colorTheme = value;
+		},
+		_switchTheme(state) {
+			if (state.colorTheme == 'dark') { 
+				state.colorTheme = 'light' 
+				localStorage.setItem("oSwap\_theme", state.colorTheme);
+			} else if (state.colorTheme == 'light') { 
+				state.colorTheme = 'dark' 
+				localStorage.setItem("oSwap\_theme", state.colorTheme);
+			};
+		},
+		_setIsScrolled(state, value) {
+			state.isScrolled = value;
+		}
   },
-  getters:{
-  	getIsNew: (state) => {
-  		return state.isNew;
-  	},
-  	getUserSignedOut: (state) => {
-  		return state.signedOut;
-  	},
-  	getUserAddress: (state) => {
-  		return state.address
-  	},
-  	getWallet: (state) => {
-  		return state.wallet;
-  	}
-
-  },
-  actions: {
-  	setIsNew({ commit }, value){
-  		commit('_setIsNew', value);
-  	},
-  	setSignedOut({ commit }, value){
-  		commit('_hasSignedOut', value);
-  	},
-  	setUserAddress({ commit }, value){
-  		commit('_setUserAddress', value);
-  	},
-  	setUserWallet({ commit }, value){
-  		commit('_setUserWallet', value);
-  	}
-  },
-  modules: {}
 };
