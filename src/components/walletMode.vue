@@ -27,10 +27,13 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import wallet from '@/shared/wallet.js';
+
   import { toastMe } from '@/components/toaster/toaster.js'
 
   export default {
     name: 'walletMode',
+    mixins: [wallet],
     computed: {
       ...mapGetters('wallet', ['getWalletType'])
     },
@@ -40,11 +43,12 @@
     methods: {
       ...mapActions('wallet', ['switchWalletType']),
       setWalletType(){
-        
+          this.disconnectWallet()
           this.switchWalletType()
         if(this.getWalletType == 'oneWallet'){
            localStorage.setItem("walletmode", '1');
           var walletString = 'Harmony One Wallet'
+
         }else{
           var walletString = "Metamask Wallet"
           localStorage.setItem("walletmode", '0');
