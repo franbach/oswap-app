@@ -1,17 +1,26 @@
 <template>  
   <div
-    class="relative w-20 h-8 flex items-center bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent rounded-full p-1 duration-300 cursor-pointer"
-    :class="{ '': value }"
-    :aria-checked="value.toString()"
-    @click="toggle"
+    class="relative w-32 h-8 flex items-center bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent rounded-full p-1 duration-300 cursor-pointer"
+    :class="{ '': getWalletType == 'metamask' }"
+    :aria-checked="(getWalletType == 'metamask').toString()"
+    @click="switchWalletType"
   >
-    <p v-if="value" class="absolute center-y-component left-3 text-oswapGreen font-extralight text-sm">met</p>
-    <p v-if="!value" class="absolute center-y-component right-3 font-extralight text-sm">one</p>
+    <transition name="fade-in" appear>
+      <p v-if="getWalletType == 'metamask' " class="absolute center-y-component left-6 dark:text-gray-400 font-extralight text-sm">Harmony</p>
+    </transition>
+    <transition name="fade-in" appear>
+      <p v-if="getWalletType == 'oneWallet' " class="absolute center-y-component right-4 dark:text-gray-400  font-extralight text-sm">Metamask</p>
+    </transition>
     <div
-      class="flex bg-gray-50 dark:bg-oswapGreen w-6 h-6 items-center justify-center rounded-full shadow-md transform duration-300"
-      :class="{ 'translate-x-12': value }"
+      class="flex w-8 h-6 pl-3 items-center justify-center transform duration-300"
+      :class="{ 'translate-x-20': getWalletType == 'metamask' }"
     >
-      <i class="las la-sun text-lg text-gray-300 dark:text-gray-700"></i>
+      <transition name="fade-out-and-rotate" appear>
+        <img v-if="getWalletType == 'metamask'" src="@/assets/Metamask.png" alt="" class="h-5">
+      </transition>
+      <transition name="fade-in-and-rotate" appear>
+        <img v-if="getWalletType == 'oneWallet'" src="@/assets/Harmony.png" alt="" class="h-5">
+      </transition>
     </div>
   </div>
 </template>
@@ -21,17 +30,11 @@
 
   export default {
     name: 'walletMode',
-    props: {
-      value: {
-        type: Boolean,
-        default: false,
-      },
+    computed: {
+      ...mapGetters('wallet', ['getWalletType'])
     },
     methods: {
-      ...mapActions('wallet', ['setWalletType']),
-      toggle() {
-        this.$emit('walletMode')
-      }
+      ...mapActions('wallet', ['switchWalletType'])
     }
   }
 </script>
