@@ -31,7 +31,6 @@
       ...mapActions('wallet', ['setWalletType']),
       toggle() {
         this.$emit('walletMode')
-        console.log('firs')
       }
     }
   }
