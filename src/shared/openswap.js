@@ -460,7 +460,7 @@ export default {
       amount = this.getUnits(amount, tempToken)
 
 
-      if(this.getWalletType == 'metamask'){
+      if(this.getWalletType() == 'metamask'){
       const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);

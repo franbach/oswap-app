@@ -118,6 +118,7 @@
       updatePoolState: function(pool) {
         var farmData = this.getSoloData()
         var poolData = farmData[pool.i]
+        
         return poolData;
       },
       getWindowSize() {

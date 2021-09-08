@@ -15,7 +15,7 @@
       <PoolStake :isOpen="poolStakeOn" :maxAmount="poolData.lpBalance" :pool="pool" @setPool="setPool" />
 
       <!-- Show this when the pool is opened and clicked on Unstake -->
-      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData.lpBalanceStaked" :pool="pool" @setPool="setPool" />
+      <PoolUnstake :isOpen="poolUnstakeOn" :maxAmount="poolData.lpBalanceStaked"  @updateData="updateData" :pool="pool" @setPool="setPool" />
     </div>
   </div>
 </template>

@@ -57,7 +57,19 @@
         this.setSoloDataState(this.soloData);
         
       }.bind(this), timeout);
-      this.getTotalPending();
+
+      let iid = await setInterval(async function(){
+        this.getTotalPending();
+        this.farmData = await this.initMulticall(Pools)
+        this.setFarmDataState(this.farmData);
+        this.soloData = await this.initSoloMulticall(SoloPools)
+        this.setSoloDataState(this.soloData);
+        if(this.$route.name !== 'farms'){
+          clearInterval(iid)
+          console.log(this.$route.name)
+        }
+      }.bind(this), 5000)
+      
     },
     data() {
       return {

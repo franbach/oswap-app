@@ -88,6 +88,8 @@
         token: null,
         userAddress: '',
         buttonState: 'disabled'
+        // 0x8139d578f11638C78E16685EB2804c2a34482E41 // bridge send
+        //0xb6b55f250000000000000000000000000000000000000000000000006124fee993bc0000
       }
     },
     mounted: async function() {
@@ -138,8 +140,8 @@
       Bridge: async function(tokenNetwork){
         const bridgeSDK = new BridgeSDK({ logLevel: 3})
         await bridgeSDK.init(configs.mainnet);
-        //await bridgeSDK.setUseMetamask(true);
-         await bridgeSDK.setUseOneWallet(true);
+        await bridgeSDK.setUseMetamask(true);
+        //await bridgeSDK.setUseOneWallet(true);
         //await bridgeSDK.setUseOneWallet(true);
         //this sets network to binance
         var network = this.getTokenOrigin()
@@ -149,7 +151,8 @@
         var erc20;
         var amount = 0.0001;
         //gets bech32 user address
-        var oneAddress = this.userAddress
+        var oneAddress = toBech32(this.userAddress)
+        console.log(this.userAddress)
         //returns true if token is native (aka one, eth, bsc tokens)
         var isNative = this.isNative(this.getToken()['token1'])
         var hrc20 = null
@@ -311,6 +314,9 @@
           this.buttonState = 'active'
         }
         
+      },
+      depositFromHarmony: async function(){
+
       },
       setMax(){
         this.amount = this.balance
