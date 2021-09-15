@@ -93,25 +93,13 @@
         let routerAddr = this.UNIROUTERV2();
         this.setBtnState({approve: 'approving'})
 
-        let tx = await this.approveSpending(this.token1, routerAddr);
-        let explorer = 'https://explorer.harmony.one/#/tx/'
-        let transaction = tx.hash
+        await this.approveSpending(this.token1, routerAddr);
 
-        toastMe('info', {
-          title: 'Transaction Sent',
-          msg: "Approval Sent to network. Waiting for confirmation",
-          link: false,
-          href: `${explorer}${transaction}`
-        })
-        await tx.wait(1)
-        toastMe('success', {
-          title: 'Tx Successful',
-          msg: "Explore : " + transaction,
-          link: true,
-          href: `${explorer}${transaction}`
-        })
         this.setBtnState({approve: 'approved'})
-        this.setBtnState({swap: 'swap'});
+        if(this.token0Approved || this.getBtnState({approve: 'approved'})){   
+            this.setBtnState({swap: 'swap'})   
+            this.setBtnState({remove: 'remove'}); 
+      }
       }
 
     }

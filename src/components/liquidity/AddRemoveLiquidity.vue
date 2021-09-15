@@ -35,7 +35,7 @@
               </div>
 
               <div v-if="removeLiquidity" class="flex items-center w-28 h-full relative">
-                <LiquidityApproveButton :amount="getToken0Amount()" :token="pairToken" @set0approved="set0approved" />
+                <LiquidityApproveButton :amount="amount" :token="pairToken" @set0approved="set0approved" />
               </div>
 
               <div v-if="addLiquidity" class="flex items-center w-28 h-full relative">

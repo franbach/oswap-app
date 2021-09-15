@@ -65,7 +65,7 @@ export default {
           this.error = 1;
           this.errormessage = "Pool Doesn't Exist";
         });
-        return pair.token1Price.toSignificant(2);
+        return pair.token1Price.toSignificant(4);
 
     },
     getOneBalance: async function(){
@@ -320,7 +320,7 @@ export default {
             const provider = this.getProvider()
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
-            const contract = new ethers.Contract("0xd7723Ce2A90E552d264876e4AF72c6D960c58d5B", abi, signer);
+            const contract = new ethers.Contract("0xb1aD583BE88365B8031C7B4aA630411C59638d9A", abi, signer);
             const tx = await contract.collectAll().catch(err => {
 
               var message;
@@ -460,7 +460,7 @@ export default {
       amount = this.getUnits(amount, tempToken)
 
 
-      if(this.getWalletType == 'metamask'){
+      if(this.getWalletType() == 'metamask'){
       const provider = this.getProvider()
       const signer = provider.getSigner();
       const contract = new ethers.Contract(masterChef, abi, signer);
@@ -765,11 +765,11 @@ export default {
       if (
         pair["tokenAmounts"][0].currency.address != token1.oneZeroxAddress
       ) {
-        reserves[1] = ethers.utils.commify(pair.reserve0.toFixed(8));
-        reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(8));
+        reserves[1] = ethers.utils.commify(pair.reserve0.toFixed(6));
+        reserves[0] = ethers.utils.commify(pair.reserve1.toFixed(6));
       } else {
-        reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(8));
-        reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(8));
+        reserves[0] = ethers.utils.commify(pair.reserve0.toFixed(6));
+        reserves[1] = ethers.utils.commify(pair.reserve1.toFixed(6));
       }
       return reserves;
     },
@@ -811,7 +811,9 @@ export default {
       Token1,
       TokenX,
       TokenY,
-      TokenZ] = await Promise.all([
+      TokenZ,
+      EUSDC,
+      BUSDC] = await Promise.all([
         Fetcher.fetchTokenData(
                 ChainId.MAINNET,
                 token0.oneZeroxAddress
@@ -834,6 +836,16 @@ export default {
                 ChainId.MAINNET,
                 "0xE176EBE47d621b984a73036B9DA5d834411ef734",
                 18
+                ),
+        new Token(
+                ChainId.MAINNET,
+                "0x985458E523dB3d53125813eD68c274899e9DfAb4", //eusdc
+                6
+                ),
+        new Token(
+                ChainId.MAINNET,
+                "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa", //busdc
+                18
                 )
       ]);
 
@@ -846,7 +858,9 @@ export default {
              pairc,
              paircd,
              paire,
-             pairef
+             pairef,
+             pairfg,
+             pairgh,pairij
             ] = await Promise.all([
               Fetcher.fetchPairData(Token0, Token1).catch(() => {
                       return pairTHATEXISTS
@@ -868,10 +882,19 @@ export default {
               }),
               Fetcher.fetchPairData(TokenZ, Token1).catch(() => {
                       return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(Token1, EUSDC).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(BUSDC, EUSDC).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(EUSDC, BUSDC).catch(() => {
+                      return pairTHATEXISTS
               })
             ]);
 
-      const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
+      const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef, pairgh, pairij,pairfg,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
 
       return bestRoute[0]
     },

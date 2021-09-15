@@ -33,7 +33,7 @@ export default {
   async mounted() {
     let wallet = localStorage.getItem("walletmode");
     if(wallet !== undefined){
-      await this.connect()
+      await this.autoConnect()
     }
   },
   data() {
@@ -48,7 +48,7 @@ export default {
      ...mapActions('wallet', ['switchWalletType']),
     connect:async function(){
      let wallet = localStorage.getItem("walletmode");
-      if(wallet !== undefined){
+      if(wallet !== null){
         if (wallet == '0') {
           this.connectMetamaskWallet()
         }else{
@@ -56,6 +56,17 @@ export default {
         }
       }else{
         this.connectMetamaskWallet()
+      }
+      
+    },
+    autoConnect:async function(){
+     let wallet = localStorage.getItem("walletmode");
+      if(wallet !== null){
+        if (wallet == '0') {
+          this.connectMetamaskWallet()
+        }else{
+          this.connectOneWallet()
+        }
       }
       
     },

@@ -6,7 +6,7 @@
     
     <transition name="farm" appear>
       <div v-if="soloData != null" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" />
+        <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" @updateData="updateData"/>
         <FarmPair v-for="(pool, index) in Pools" @updateTVL="updateTVL" @updateAPR="updateAPR" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
       </div>
       <div v-else class="flex h-full items-center mt-16">
@@ -57,7 +57,19 @@
         this.setSoloDataState(this.soloData);
         
       }.bind(this), timeout);
-      this.getTotalPending();
+
+      let iid = await setInterval(async function(){
+        this.getTotalPending();
+        this.farmData = await this.initMulticall(Pools)
+        this.setFarmDataState(this.farmData);
+        this.soloData = await this.initSoloMulticall(SoloPools)
+        this.setSoloDataState(this.soloData);
+        if(this.$route.name !== 'farms'){
+          clearInterval(iid)
+          console.log(this.$route.name)
+        }
+      }.bind(this), 5000)
+      
     },
     data() {
       return {

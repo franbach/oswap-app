@@ -94,22 +94,7 @@
         this.btnApprove = 'approving';
 
         let tx = await this.approveSpending(lpToken, masterchefAddr);
-        let explorer = 'https://explorer.harmony.one/#/tx/'
-        let transaction = tx.hash
-
-        toastMe('info', {
-          title: 'Transaction Sent',
-          msg: "Approval Sent to network. Waiting for confirmation",
-          link: false,
-          href: `${explorer}${transaction}`
-        })
-        await tx.wait(1)
-        toastMe('success', {
-          title: 'Tx Successful',
-          msg: "Explore : " + transaction,
-          link: true,
-          href: `${explorer}${transaction}`
-        })
+        
         this.btnApprove = 'approved';
         this.$emit('tellStake', 'active');
       }
