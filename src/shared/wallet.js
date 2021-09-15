@@ -18,10 +18,12 @@ export default {
           console.log("connecting wallet")
           if(window.onewallet !== undefined){
             this.setWalletType('oneWallet');
-            const isOneWallet = window.onewallet && window.onewallet.isOneWallet;
+            //const isOneWallet = window.onewallet && window.onewallet.isOneWallet;
+            //await window.onewallet.forgetIdentity();
+            //window.onewallet.signin()
             const onewallet = window.onewallet;
             const getAccount = await onewallet.getAccount();
-            
+            console.log(getAccount)
             this.setdefaultWallet()
             this.setUserAddress(fromBech32(getAccount.address));
               
@@ -61,7 +63,7 @@ export default {
                 msg: `Please Use Harmony Network`,
                 link: false,
               })
-              this.disconnectWallet();
+              await this.disconnectWallet();
               return false
             }
             
@@ -97,9 +99,10 @@ export default {
                 return false
           }  
         },
-        disconnectWallet: function() {
+        disconnectWallet: async function() {
             this.setSignedIn( false );
             this.setdefaultWallet()
+      
             this.walletConnected = false;
             return false;
         },

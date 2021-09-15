@@ -93,25 +93,24 @@
       }
     },
     mounted: async function() {
-       const provider = this.getProvider()
-        await provider.send("eth_requestAccounts", []);
-        const signer = await provider.getSigner();
-        this.userAddress = await signer.getAddress();
+       
+        this.userAddress = this.getUserAddress();
       if (this.getToken()['token1'] != undefined) {
-        
         this.token = this.getToken()['token1']
         console.log(this.token)
         this.getTokenBalance()
         const network = this.getTokenOrigin()
         await this.checkChainId(network)
-        window.ethereum.on('chainChanged',() => {
-          this.checkChainId(network)
-      });
+        if(this.getWalletType() == 'metamask'){
+            window.ethereum.on('chainChanged',() => {
+            this.checkChainId(network)
+          });
+        }
       }
     },
     methods: {
       ...mapGetters('migrate', ['getToken', 'getToNetwork']),
-      ...mapGetters('wallet', ['getUserAddress']),
+      ...mapGetters('wallet', ['getUserAddress', 'getWalletType']),
       ...mapActions('migrate', ['resetTokens']),
 
       selectToken(token) {
@@ -139,9 +138,23 @@
       },
       Bridge: async function(tokenNetwork){
         const bridgeSDK = new BridgeSDK({ logLevel: 3})
-        await bridgeSDK.init(configs.mainnet);
-        await bridgeSDK.setUseMetamask(true);
-        //await bridgeSDK.setUseOneWallet(true);
+        let walletType = this.getWalletType();
+        var sdk
+        if(walletType == 'metamask'){
+          sdk = 'web3'
+          await bridgeSDK.init({...configs.mainnet, sdk: sdk});
+          await bridgeSDK.setUseMetamask(true);
+
+        }else{
+          sdk = 'hmy'
+          await bridgeSDK.init({...configs.mainnet, sdk: sdk});
+          await bridgeSDK.setUseOneWallet(true);
+        }
+
+        
+       
+        
+        //
         //await bridgeSDK.setUseOneWallet(true);
         //this sets network to binance
         var network = this.getTokenOrigin()
@@ -152,7 +165,7 @@
         var amount = 0.0001;
         //gets bech32 user address
         var oneAddress = toBech32(this.userAddress)
-        console.log(this.userAddress)
+        console.log("userAddress  " + this.userAddress)
         //returns true if token is native (aka one, eth, bsc tokens)
         var isNative = this.isNative(this.getToken()['token1'])
         var hrc20 = null
@@ -161,24 +174,15 @@
         let operationId;
         //sets token type based on native token or not else selects erc20 mode
         console.log(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE)
-        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
-          if(isNative){
+
+        if(isNative){
           tokenType = TOKEN.ETH
-        }
-        else{
+        }else{
           tokenType = TOKEN.ERC20
           erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
         }
          
-        }else{
-          if(isNative){
-          tokenType = TOKEN.ETH
-        }
-        else{
-          tokenType = TOKEN.ERC20
-          erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
-        }
-        }
+        
         
         //Gets the ERC20Token address (returns harmony 0x version if bridge to harmony)
        
@@ -199,7 +203,7 @@
           console.log('tokenType : ' + tokenType)
           console.log('netwrk : ' + tokenNetwork)
           console.log('erc20 : ' + erc20)
-         console.log('hrc20 : ' + hrc20)
+         //console.log('hrc20 : ' + hrc20)
          await bridgeSDK.sendToken({
             type: bridgeMode,
             token: tokenType,
@@ -215,6 +219,8 @@
             this.warnings['Error'] = 'Failed :' + e.message
             console.log(e)
         }
+
+        process.exit();
         
       },
       getBridgeMode:  function(){
@@ -270,32 +276,42 @@
         }
       },
       checkChainId: async function(tokenNetwork){
-        const provider = this.getProvider()
-        const network = await provider.getNetwork();
-        const chainID = await network.chainId;
-        console.log(chainID)
-        if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
-          if (chainID != 1 && tokenNetwork == NETWORK_TYPE.ETHEREUM ) {
-            this.warnings['Network'] = 'You are on the wrong network. change network to ETHEREUM in metamask'
-            this.buttonState = 'disabled'
-          }
-          else if (chainID != 56 && tokenNetwork == NETWORK_TYPE.BINANCE ) {
-            this.warnings['Network'] = 'You are on the wrong network. change network to BINANCE in metamask'
-            this.buttonState = 'disabled'
-          }
-          else{
-            delete this.warnings['Network']
-            this.buttonState = 'active'
-          }
-        }else{
-          if (chainID != 1666600000 ) {
-            this.warnings['Network'] = 'You are on the wrong network. change network to Harmony in metamask'
-            this.buttonState = 'disabled'
+        if(this.getWalletType() == 'metamask'){
+          const provider = this.getProvider()
+          const network = await provider.getNetwork();
+          const chainID = await network.chainId;
+          console.log(chainID)
+          if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE ){
+            if (chainID != 1 && tokenNetwork == NETWORK_TYPE.ETHEREUM ) {
+              this.warnings['Network'] = 'You are on the wrong network. change network to ETHEREUM in metamask'
+              this.buttonState = 'disabled'
+            }
+            else if (chainID != 56 && tokenNetwork == NETWORK_TYPE.BINANCE ) {
+              this.warnings['Network'] = 'You are on the wrong network. change network to BINANCE in metamask'
+              this.buttonState = 'disabled'
+            }
+            else{
+              delete this.warnings['Network']
+              this.buttonState = 'active'
+            }
+            }else{
+              if (chainID != 1666600000 ) {
+                this.warnings['Network'] = 'You are on the wrong network. change network to Harmony in metamask'
+                this.buttonState = 'disabled'
+              }else{
+                delete this.warnings['Network']
+                this.buttonState = 'active'
+              }
+            }
           }else{
-            delete this.warnings['Network']
-            this.buttonState = 'active'
+            if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE && this.getWalletType() != 'metamask'){
+              this.warnings['Network'] = "You can't Bridge from this network using this wallet. use Metamask"
+                this.buttonState = 'disabled'
+            }else{
+              delete this.warnings['Network']
+                this.buttonState = 'active'
+            }
           }
-        }
       },
       getTokenBalance: async function(){
         if(this.getBridgeMode() == EXCHANGE_MODE.ETH_TO_ONE){
