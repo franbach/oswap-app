@@ -22,15 +22,16 @@
     mixins: [openswap],
     
     mounted: async function() {
-      this.setPriceRate(
-        this.getRate(
-          await this.getPair(this.getToken()['token1'], this.getToken()['token2']), 
-          this.getToken()['token1']
-        )  
-      )
+      
+       let token0 = this.getToken()['token1']
+        let token1 = this.getToken()['token2']
+
+        let units = this.getUnits(this.getInputAmount(0), token0)
+        let bestRoute = await this.getBestRoute(units, token0, token1)
+        console.log(bestRoute)
     },
     computed: {
-      ...mapGetters('exchange/swapper', ['getPriceRate', 'getPriceImpact'])
+      ...mapGetters('exchange/swapper', ['getPriceRate', 'getPriceImpact', 'getSlippageRate','getInputAmount'])
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),

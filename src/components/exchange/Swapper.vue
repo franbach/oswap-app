@@ -61,12 +61,19 @@
       SwapperSwap,
       Warning
     },
+    mounted(){
+      if(!this.getUserSignedIn){
+        this.setBtnState({swap: 'swapped'})
+      }
+
+    },
     unmounted() {
       this.resetAll();
     },
     computed: {
       ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
       ...mapGetters('exchange/swapper', ['getWarnings']),
+      ...mapGetters('wallet', ['getUserSignedIn']),
     },
     methods: {
       ...mapActions('exchange/swapper/buttons', ['setBtnState']),

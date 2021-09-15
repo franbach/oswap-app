@@ -57,7 +57,7 @@
         this.setPriceImpact(bestRoute.priceImpact.toFixed(2));
 
         this.setInputAmount({
-          0: await bestRoute.inputAmount.toFixed(8)
+          0: await bestRoute.inputAmount.toFixed(6)
         })
 
         this.setInputAmount({

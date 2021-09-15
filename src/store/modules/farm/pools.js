@@ -205,7 +205,47 @@ export const Pools = {
     pid: "12",
     rewards: "2X",
     i: 14
-  }
+  },
+  eBUSDbBUSD: {
+    pair: "eBUSD/bBUSD",
+    pairaddress: "0xFdbabD9488DFc33F792eE2eE8F2a012994581346",
+    token0address: "0xE176EBE47d621b984a73036B9DA5d834411ef734",
+    token1address: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA",
+    imgtoken0: "https://openfi.dev/tokens/default/BUSD.png",
+    imgtoken1: "https://openfi.dev/tokens/default/BUSD.png",
+    name: ["bBUSD","eBUSD"],
+    decimals: [18, 18],
+    pid: "17",
+    rewards: "1X",
+    i: 15
+  },
+  eUSDCbUSDC: {
+    pair: "eUSDC/bUSDC",
+    pairaddress: "0x707F9349F74446724344E7C3E4eeb436aE66c896",
+    token0address: "0x985458E523dB3d53125813eD68c274899e9DfAb4",
+    token1address: "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa",
+    imgtoken0: "https://openfi.dev/tokens/default/USDC.png",
+    imgtoken1: "https://openfi.dev/tokens/default/USDC.png",
+    name: ["eUSDC","bUSDC"],
+    decimals: [18, 6],
+    pid: "18",
+    rewards: "1X",
+    i: 16
+  },
+  bBUSDeUSDC: {
+    pair: "bBUSD/eUSDC",
+    pairaddress: "0x6BA1b8d28dcDd95eE9B9e44D65986e1C967124e7",
+    token0address: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA",
+    token1address: "0x985458E523dB3d53125813eD68c274899e9DfAb4",
+    imgtoken0: "https://openfi.dev/tokens/default/BUSD.png",
+    imgtoken1: "https://openfi.dev/tokens/default/USDC.png",
+    name: ["bBUSD","eUSDC"],
+    decimals: [18, 6],
+    pid: "19",
+    rewards: "1X",
+    i: 17
+  },
+  //PID 20 == VALIDATOR TOKEN
 };
 export const SoloPools = {
   oSWAPWONE: {
