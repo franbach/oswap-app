@@ -137,6 +137,7 @@
         console.log('BRIDGE MATE')
       },
       Bridge: async function(tokenNetwork){
+        this.buttonState = 'executing'
         const bridgeSDK = new BridgeSDK({ logLevel: 3})
         let walletType = this.getWalletType();
         var sdk
@@ -144,6 +145,7 @@
           sdk = 'web3'
           await bridgeSDK.init({...configs.mainnet, sdk: sdk});
           await bridgeSDK.setUseMetamask(true);
+          await bridgeSDK.setUseOneWallet(true);
 
         }else{
           sdk = 'hmy'
@@ -164,7 +166,12 @@
         var erc20;
         var amount = 0.0001;
         //gets bech32 user address
-        var oneAddress = toBech32(this.userAddress)
+        if(this.getBridgeMode() == EXCHANGE_MODE.ONE_TO_ETH){
+            var oneAddress = this.userAddress
+        }else{
+          var oneAddress = this.userAddress
+        }
+        
         console.log("userAddress  " + this.userAddress)
         //returns true if token is native (aka one, eth, bsc tokens)
         var isNative = this.isNative(this.getToken()['token1'])
@@ -193,6 +200,8 @@
               this.warnings['Network'] = 'Support Ticket : ' + String(operationId)
               console.log(operation)
               if (operation.status !== STATUS.IN_PROGRESS) {
+                this.buttonState = 'finished'
+                this.getTokenBalance()
                 clearInterval(intervalId);
               }  
           }
@@ -207,9 +216,9 @@
          await bridgeSDK.sendToken({
             type: bridgeMode,
             token: tokenType,
-            amount: 0.0001,
+            amount: this.amount,
             erc20Address: erc20,
-           /* hrc20Address: hrc20,*/
+            //hrc20Address: erc20,
             oneAddress: oneAddress,
             ethAddress: this.userAddress,
             network: tokenNetwork
@@ -250,7 +259,12 @@
             return token.ethAddress
           }
        }else{
-          return token.oneZeroxAddress
+          if(network == NETWORK_TYPE.BINANCE){
+            return token.bscAddress
+          }
+          else if(network == NETWORK_TYPE.ETHEREUM){
+            return token.ethAddress
+          }
         }
       },
       getHrcForBridge(token, native){
@@ -336,7 +350,28 @@
       },
       setMax(){
         this.amount = this.balance
-      }
+      },
+      inputAmount(value){
+        // Checking if the input is in the right format.
+        // parseFloat seems to behave like this regex rule.
+        if (!value.match(/^\d*\.?\d*$/)) {
+          this.errors['format'] = 'Invalid format! e.g: 12345.678';
+        } else {
+          delete this.errors['format'];
+          this.amount = value
+        }
+        if (value == '') {
+          this.errors['blank'] = 'Amount can\'t be blank';
+        } else {
+          delete this.errors['blank']
+          this.amount = value        }
+        if (parseFloat(value) > parseFloat(this.balance)) {
+          this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
+        } else {
+          delete this.errors['exceed'];
+          this.amount = value
+        }
+      },
     }
   }
 </script>
