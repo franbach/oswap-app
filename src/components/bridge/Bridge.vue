@@ -145,7 +145,7 @@
           sdk = 'web3'
           await bridgeSDK.init({...configs.mainnet, sdk: sdk});
           await bridgeSDK.setUseMetamask(true);
-          await bridgeSDK.setUseOneWallet(true);
+          //await bridgeSDK.setUseOneWallet(true);
 
         }else{
           sdk = 'hmy'
@@ -167,9 +167,9 @@
         var amount = 0.0001;
         //gets bech32 user address
         if(this.getBridgeMode() == EXCHANGE_MODE.ONE_TO_ETH){
-            var oneAddress = this.userAddress
+            var oneAddress = toBech32(this.userAddress)
         }else{
-          var oneAddress = this.userAddress
+          var oneAddress = toBech32(this.userAddress)
         }
         
         console.log("userAddress  " + this.userAddress)

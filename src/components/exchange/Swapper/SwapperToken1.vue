@@ -3,7 +3,7 @@
     <!-- Left side -->
     <div class="flex flex-col space-y-1 w-1/3 min-w-0">
       <!-- Token img and name -->
-      <div class="flex space-x-2 items-center h-10">
+      <div @click="addTokenToMetamask(this.getToken()['token2'])" class="flex space-x-2 items-center h-10">
         <img :src="this.getToken()['token2'].imgSrc" class="h-8 w-8 rounded-full flex items-center justify-center" alt="">
         <div class="flex flex-1 items-center min-w-0">
           <p class="text-sm text-el text-oswapGreen-dark">{{this.getToken()['token2'].Symbol}}</p>
@@ -75,7 +75,6 @@
 
         this.setInputForToken0();
       },
-
       setInputForToken0: async function() {
         let token0 = this.getToken()['token1']
         let token1 = this.getToken()['token2']

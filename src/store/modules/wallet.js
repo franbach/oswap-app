@@ -4,7 +4,7 @@ export default {
   state: {
     signedIn: false,
     signedOut: true,
-    address: "0x0000000000000000000000000000000000000005",
+    address: "0x0000000000000000000000000000000000000009",
     wallet: null,
     walletType: 'metamask',
     explorer: "https://explorer.harmony.one/#/tx/"

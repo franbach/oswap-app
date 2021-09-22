@@ -47,6 +47,30 @@ export default {
         return provider
       }
     },
+    addTokenToMetamask: async function(token) {
+      const tokenAddress = token.oneZeroxAddress;
+      var tokenSymbol = token.Symbol;
+      if(tokenAddress == this.WONE()){
+        tokenSymbol = "WONE";
+      }
+      
+      const tokenDecimals = token.decimals;
+      const tokenImage = token.imgSrc;
+
+      const res = await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20", // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: tokenDecimals, // The number of decimals in the token
+            image: tokenImage // A string url of the token logo
+          }
+        }
+      });
+      console.log(res);
+      },
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = new Token(
@@ -1922,9 +1946,9 @@ export default {
     },
     checkSignedIn: function(){
       if(this.getUserAddress() == '0x0000000000000000000000000000000000000009'){
-        throw new Error("Signed in error");
+        return true
       }else{
-        return true;
+        return false;
       }
     },
     getStakeWeight: function(staked, totalStaked) {
