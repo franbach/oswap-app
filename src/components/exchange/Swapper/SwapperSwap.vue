@@ -68,6 +68,9 @@
 
         if(token0.oneZeroxAddress != this.WONE() && token1.oneZeroxAddress != this.WONE()){
           // await this.swapExactTokensForTokens(this.amount, this.amountOut, this.path, token0, token1)
+          console.log(this.getInputAmount(0))
+          console.log(this.getInputAmount(1))
+          console.log(this.getThePath)
           await this.swapExactTokensForTokens(
             this.getInputAmount(0), this.getInputAmount(1), this.getThePath, token0, token1
           )

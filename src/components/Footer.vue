@@ -7,7 +7,7 @@
       <WalletMode />
     </div>
     <div class="flex flex-col ss:items-end sm:items-center ss:pt-4 ns:pt-0 ss:space-y-1 xs:space-y-2">
-      <h1 class="ss:text-ns xs:text-sm dark:text-oswapGreen">{{ $route.name }} v2.0.7</h1>
+      <h1 class="ss:text-ns xs:text-sm dark:text-oswapGreen">{{ $route.name }} v2.0.8</h1>
       <div class="flex ss:space-x-1 sm:space-x-3 ss:text-xs xs:text-xl">
         <a href="https://twitter.com/OpenSwap_one">
           <i class="lab la-twitter hover:text-oswapGreen-dark dark:text-oswapGreen dark:hover:text-oswapGreen-light"></i>

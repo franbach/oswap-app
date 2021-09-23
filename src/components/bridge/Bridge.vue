@@ -88,8 +88,6 @@
         token: null,
         userAddress: '',
         buttonState: 'disabled'
-        // 0x8139d578f11638C78E16685EB2804c2a34482E41 // bridge send
-        //0xb6b55f250000000000000000000000000000000000000000000000006124fee993bc0000
       }
     },
     mounted: async function() {
@@ -117,7 +115,9 @@
         this.$emit('triggerModal', token)
       },
       updateBalances(){
+        const network = this.getTokenOrigin()
         this.getTokenBalance()
+        this.checkChainId(network)
       },
       resetSelection() {
         this.resetTokens();
@@ -145,7 +145,7 @@
           sdk = 'web3'
           await bridgeSDK.init({...configs.mainnet, sdk: sdk});
           await bridgeSDK.setUseMetamask(true);
-          //await bridgeSDK.setUseOneWallet(true);
+          await bridgeSDK.setUseOneWallet(true);
 
         }else{
           sdk = 'hmy'
@@ -340,9 +340,7 @@
         }else{
            this.balance = await this.getHMYTokenBalance(this.getToken()['token1'])
         }
-        if(this.balance != 0 ){
-          this.buttonState = 'active'
-        }
+
         
       },
       depositFromHarmony: async function(){
@@ -355,17 +353,26 @@
         // Checking if the input is in the right format.
         // parseFloat seems to behave like this regex rule.
         if (!value.match(/^\d*\.?\d*$/)) {
+          this.buttonState = 'disabled'
           this.errors['format'] = 'Invalid format! e.g: 12345.678';
         } else {
           delete this.errors['format'];
           this.amount = value
         }
+        if (value == '0.0') {
+          this.errors['blank'] = 'Amount can\'t be 0 blank';
+          this.buttonState = 'disabled'
+        } else {
+          delete this.errors['blank']
+          this.amount = value        }
         if (value == '') {
           this.errors['blank'] = 'Amount can\'t be blank';
+          this.buttonState = 'disabled'
         } else {
           delete this.errors['blank']
           this.amount = value        }
         if (parseFloat(value) > parseFloat(this.balance)) {
+          this.buttonState = 'disabled'
           this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
         } else {
           delete this.errors['exceed'];

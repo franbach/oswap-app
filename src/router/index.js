@@ -99,8 +99,8 @@ const routes = [
     component: () => import('../views/Tokens.vue')
   },
   {
-    path: '/migrate',
-    name: 'Migrate',
+    path: '/Bridge',
+    name: 'Bridge',
     component: () => import('../views/Migrate.vue')
   },
   {

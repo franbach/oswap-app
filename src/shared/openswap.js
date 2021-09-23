@@ -1189,7 +1189,7 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
+      const tx = await contract.swapExactETHForTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
 
         var message;
         if(!err.data?.message){
@@ -1236,7 +1236,7 @@ export default {
           gasLimit: 3000000,
           value: String(value)
           };
-        var tx = await contract.methods.swapETHForExactTokens(amountOutParsed.toString(), path, address, deadline).send(options)
+        var tx = await contract.methods.swapExactETHForTokens(amountOutParsed.toString(), path, address, deadline).send(options)
         if(tx.transaction.txStatus == 'CONFIRMED'){
           let transaction = tx.transaction.id
           let explorer = 'https://explorer.harmony.one/#/tx/'
@@ -1271,7 +1271,7 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline).catch(err => {
+      const tx = await contract.swapExactTokensForETH(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
 
         var message;
         if(!err.data?.message){
@@ -1317,7 +1317,7 @@ export default {
           gasPrice: 1000000000,
           gasLimit: 3000000
           };
-        var tx = await contract.methods.swapTokensForExactETH(amountOutParsed.toString(), amoutInParsed.toString(), path, address, deadline).send(options)
+        var tx = await contract.methods.swapExactTokensForETH(amoutInParsed.toString(),amountOutParsed.toString(), path, address, deadline).send(options)
         if(tx.transaction.txStatus == 'CONFIRMED'){
           let transaction = tx.transaction.id
           let explorer = 'https://explorer.harmony.one/#/tx/'

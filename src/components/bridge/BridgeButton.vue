@@ -1,14 +1,4 @@
 <template>
-  <!-- Swap disabled -->
-  <transition tag="div" name="swap-btn" class="inline-block center-y-component right-0">
-    <div v-if="balance == '0'" class="flex w-28 justify-between items-center border dark:border-gray-600 border-gray-300 space-x-1 p-2 pl-3 rounded-full group select-none">
-      <div class="flex flex-1 items-center justify-center">
-        <p class="text-sm text-gray-300 dark:text-gray-600">Bridge</p>
-      </div>
-      <i class="las la-times-circle text-xl text-gray-300 dark:text-gray-600"></i>
-    </div>
-  </transition>
-
   <!-- Swap -->
  <div class="flex items-center w-28 h-full relative">
           <!-- Unstake Disabled -->

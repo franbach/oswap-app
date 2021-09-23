@@ -19,6 +19,11 @@
         <p class="text-sm hidden md:block group-hover:text-oswapBlue-light">Farm</p>
       </router-link>
 
+      <router-link to="/Bridge" class="flex items-center space-x-2 p-2 px-1 md:px-3 rounded-lg group focus:outline-none focus:ring-1 focus:ring-black focus:ring-opacity-20">
+        <i class="las la-pallet text-xl group-hover:text-oswapGreen"></i>
+        <p class="text-sm hidden md:block group-hover:text-oswapBlue-light">Bridge</p>
+      </router-link>
+
       <!-- Menu 'More' (dropdown) -->
       <MoreButton />
       
