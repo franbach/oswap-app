@@ -43,19 +43,21 @@
                   </div>
                 </router-link>
               </MenuItem>
+              <!--
               <MenuItem>
-                <router-link to="/migrate" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                <router-link to="/Bridge" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
                     <div class="flex flex-1 dark:bg-oswapDark-gray h-full items-center bg-gray-100 justify-center rounded-lg">
                       <i class="las la-share text-3xl text-oswapGreen group-hover:text-oswapBlue-light"></i>
                     </div>
                   </div>
                   <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-900 dark:text-oswapGreen">Migrate</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-300">Migrate your assets</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-oswapGreen">Bridge</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">Bridge your assets</p>
                   </div>
                 </router-link>
               </MenuItem>
+              -->
               <MenuItem>
                 <router-link to="/information" class="flex items-center p-2 -m-3 transition group duration-150 ease-in-out rounded-lg hover:bg-gray-50 dark:hover:bg-oswapDark-gray focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                   <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">

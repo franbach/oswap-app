@@ -28,7 +28,7 @@
 
         let units = this.getUnits(this.getInputAmount(0), token0)
         let bestRoute = await this.getBestRoute(units, token0, token1)
-        console.log(bestRoute)
+        this.setPriceRate(bestRoute.executionPrice.toFixed(6))
     },
     computed: {
       ...mapGetters('exchange/swapper', ['getPriceRate', 'getPriceImpact', 'getSlippageRate','getInputAmount'])

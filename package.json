@@ -1,6 +1,6 @@
 {
   "name": "oswap-app",
-  "version": "2.0.4",
+  "version": "2.0.8",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -23,7 +23,7 @@
     "animate.css": "^4.1.1",
     "apexcharts": "^3.27.3",
     "autoprefixer": "^9.8.6",
-    "bridge-sdk": "2.3.0",
+    "bridge-sdk": "2.13.0",
     "core-js": "^3.6.5",
     "cryptocurrency-icons": "^0.18.0",
     "easy-circular-progress": "^1.0.4",
