@@ -26,7 +26,7 @@
       <Oswap />
       
       <!-- Wallet Button  -->
-      <Wallet/>
+      <WalletButton/>
     </div>
     <!-- Navigation End -->
   </header>
@@ -34,14 +34,14 @@
 
 <script>
   
-  import Wallet from '@/components/header/Wallet'
+  import WalletButton from '@/components/header/WalletButton'
   import Oswap from '@/components/header/OswapPrice'
   import MoreButton from '@/components/header/MoreButton'
 
   export default {
     name: 'Header',
     components: {
-      Wallet,
+      WalletButton,
       MoreButton,
       Oswap
     }
