@@ -1,6 +1,8 @@
 const { ethtokens } = require("./exchange_tokens/ethTokens.js");
 const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
 const { bsctokens } = require("./exchange_tokens/bscTokens.js");
+const { terratokens } = require("./exchange_tokens/terraTokens.js");
+const { polytokens } = require("./exchange_tokens/polyTokens.js");
 
 export default {
   // --------------------------------------------------------------------------
@@ -25,17 +27,28 @@ export default {
         name: 'Harmony Native Tokens',
         icon: 'https://openfi.dev/tokens/default/ONE.png',
         tokens:  hmytokens
-      }, 
-      { 
-        name: 'Ethereum Bridged Tokens', 
-        icon: 'https://openfi.dev/tokens/default/ETH.png',
-        tokens: ethtokens 
-      }, 
+      },
       { 
         name: 'Binance Smart Chain Tokens', 
         icon: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
         tokens: bsctokens 
+      },
+      { 
+        name: 'Ethereum Bridged Tokens', 
+        icon: 'https://openfi.dev/tokens/default/ETH.png',
+        tokens: ethtokens 
+      },
+      { 
+        name: 'Terra Chain Tokens', 
+        icon: 'https://bridge.terra.money/static/media/Terra.86bd7be6.png',
+        tokens: terratokens 
+      },
+      { 
+        name: 'Polygon Chain Tokens', 
+        icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png',
+        tokens: polytokens 
       }
+      
     ]
   },
 

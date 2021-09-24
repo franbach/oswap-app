@@ -47,6 +47,30 @@ export default {
         return provider
       }
     },
+    addTokenToMetamask: async function(token) {
+      const tokenAddress = token.oneZeroxAddress;
+      var tokenSymbol = token.Symbol;
+      if(tokenAddress == this.WONE()){
+        tokenSymbol = "WONE";
+      }
+      
+      const tokenDecimals = token.decimals;
+      const tokenImage = token.imgSrc;
+
+      const res = await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20", // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: tokenDecimals, // The number of decimals in the token
+            image: tokenImage // A string url of the token logo
+          }
+        }
+      });
+      console.log(res);
+      },
     getOswapPrice: async function () {
         this.balances = [];
         const Oswap = new Token(
@@ -290,7 +314,16 @@ export default {
     },
     collectAll: async function(){
       
-        
+        let isDefaultWallet = this.checkSignedIn()
+            if (isDefaultWallet){
+              toastMe('error', {
+                title: 'ERROR',
+                msg: `Not Signed In`,
+                link: false,
+                href: ''
+                })
+              return 1
+        }
         let abi = [
               {
                 "inputs": [],
@@ -317,6 +350,10 @@ export default {
 
 
           if(this.getWalletType() == 'metamask'){
+            
+              
+              
+            
             const provider = this.getProvider()
             const signer = provider.getSigner();
             // This is the collector contract that call the extWithdraw in masterchef. loops through and collects all pools
@@ -383,6 +420,16 @@ export default {
           return tx;
     },
     collectOSWAP: async function(pool){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
       const pid = parseInt(pool.pid)
@@ -453,6 +500,16 @@ export default {
 
     },
     unstakeLP: async function(pool, amount){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
       const pid = parseInt(pool.pid)
@@ -523,6 +580,16 @@ export default {
 
     },
     approveSpending: async function(token1, contractAddr){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       //biggest wei denomination
       const wei =
           ethers.BigNumber.from("115792089237316195423570985008687907853269984665640564039457584007913129639935");
@@ -1097,6 +1164,16 @@ export default {
     },
     //----------------------------------------Swap-------------------------------------------
     swapETHForExactTokens: async function(amountIn, amountOutMin, path, token1){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       const value = ethers.utils.parseEther(amountIn)
       const deadline = this.getDeadline()
       const amountOutParsed = this.getUnits(amountOutMin, token1)
@@ -1112,7 +1189,7 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      const tx = await contract.swapETHForExactTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
+      const tx = await contract.swapExactETHForTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
 
         var message;
         if(!err.data?.message){
@@ -1159,7 +1236,7 @@ export default {
           gasLimit: 3000000,
           value: String(value)
           };
-        var tx = await contract.methods.swapETHForExactTokens(amountOutParsed.toString(), path, address, deadline).send(options)
+        var tx = await contract.methods.swapExactETHForTokens(amountOutParsed.toString(), path, address, deadline).send(options)
         if(tx.transaction.txStatus == 'CONFIRMED'){
           let transaction = tx.transaction.id
           let explorer = 'https://explorer.harmony.one/#/tx/'
@@ -1174,6 +1251,16 @@ export default {
 
     },
     swapTokensForExactETH: async function(amountIn, amountOutMin, path, token0){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       let deadline = this.getDeadline()
       let amoutInParsed = this.getUnits(amountIn, token0)
       let amountOutParsed = ethers.utils.parseEther(amountOutMin)
@@ -1184,7 +1271,7 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
-      const tx = await contract.swapTokensForExactETH(amountOutParsed, amoutInParsed, path, address, deadline).catch(err => {
+      const tx = await contract.swapExactTokensForETH(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
 
         var message;
         if(!err.data?.message){
@@ -1230,7 +1317,7 @@ export default {
           gasPrice: 1000000000,
           gasLimit: 3000000
           };
-        var tx = await contract.methods.swapTokensForExactETH(amountOutParsed.toString(), amoutInParsed.toString(), path, address, deadline).send(options)
+        var tx = await contract.methods.swapExactTokensForETH(amoutInParsed.toString(),amountOutParsed.toString(), path, address, deadline).send(options)
         if(tx.transaction.txStatus == 'CONFIRMED'){
           let transaction = tx.transaction.id
           let explorer = 'https://explorer.harmony.one/#/tx/'
@@ -1245,6 +1332,16 @@ export default {
 
     },
     swapExactTokensForTokens: async function(amountIn, amountOutMin, path, token0, token1){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       let deadline = this.getDeadline()
       let amoutInParsed = this.getUnits(amountIn, token0)
       let amountOutParsed = this.getUnits(amountOutMin, token1)
@@ -1318,6 +1415,16 @@ export default {
       }
     },
     stakeLP: async function(pool,amount){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       const abi = MasterChef.abi
       const masterChef = this.oSWAPCHEF();
       const pid = parseInt(pool.pid)
@@ -1399,6 +1506,16 @@ export default {
       }
     },
     removeLiquidityETH: async function(token0, amount){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       let tempToken = {decimals: 18};
       let deadline = this.getDeadline();
       amount = this.getUnits(amount, tempToken)
@@ -1490,7 +1607,16 @@ export default {
 
     },
     removeLiquidityToken: async function(token0, token1, amount){
-      
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
       let tempToken = {decimals: 18};
@@ -1595,6 +1721,16 @@ export default {
 
 
     addLiquidityETH: async function(token0, token1, amount0, amount1, slippage){
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       let amountA = this.getUnits(amount0, token0)
       let valueOveride = {value: amountA}
       const address = this.getUserAddress();
@@ -1690,7 +1826,16 @@ export default {
       }
     },
     addLiquidityToken: async function(token0, token1, amount0, amount1, slippage){
-      
+      let isDefaultWallet = this.checkSignedIn()
+      if (isDefaultWallet){
+        toastMe('error', {
+          title: 'ERROR',
+          msg: `Not Signed In`,
+          link: false,
+          href: ''
+          })
+        return 1
+      }
       const address = this.getUserAddress();
       const abi = IUniswapV2Router02.abi;
       let amountA = this.getUnits(amount0, token0)
@@ -1798,6 +1943,13 @@ export default {
       var deadline = new Date();
       deadline = parseInt(deadline / 1000) + 480;
       return deadline;
+    },
+    checkSignedIn: function(){
+      if(this.getUserAddress() == '0x0000000000000000000000000000000000000009'){
+        return true
+      }else{
+        return false;
+      }
     },
     getStakeWeight: function(staked, totalStaked) {
       if (staked != 0) {
