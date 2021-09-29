@@ -1,5 +1,7 @@
 <template>
-  <p>harmony stats</p>
+  <transition as="template" name="horizontal-o" appear>
+    <p>harmony stats</p>
+  </transition>
 </template>
 
 <script>

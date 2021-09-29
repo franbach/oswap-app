@@ -34,6 +34,46 @@
   @apply -translate-x-4 opacity-0
 }
 
+// Left and Right Transitions Overflow
+.horizontal-o-enter-active {
+  @apply transform transition-all duration-200 ease-out z-60
+}
+.horizontal-o-enter-from {
+  @apply translate-x-4 opacity-0
+}
+.horizontal-o-enter-to {
+  @apply translate-x-0 opacity-100
+}
+.horizontal-o-leave-active {
+  @apply transform transition-all duration-150 ease-out z-60
+}
+.horizontal-o-leave-from {
+  @apply translate-x-0 opacity-100
+}
+.horizontal-o-leave-to {
+  @apply -translate-x-4 opacity-0
+}
+
+// Vertical Transitions
+.vertical-enter-active {
+  @apply transform transition-all duration-200 ease-out z-60
+}
+.vertical-enter-from {
+  @apply translate-y-4 opacity-0
+}
+.vertical-enter-to {
+  @apply translate-y-0 opacity-100
+}
+.vertical-leave-active {
+  @apply transform transition-all duration-150 ease-out z-60
+}
+.vertical-leave-from {
+  @apply translate-y-0 opacity-100
+}
+.vertical-leave-to {
+  @apply -translate-y-4 opacity-0
+}
+
 // Fall Transition
 .fall-enter-active {
   @apply transform transition-all duration-200 ease-out
