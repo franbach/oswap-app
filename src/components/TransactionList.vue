@@ -1,21 +1,27 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex w-full justify-between space-x-3 h-12 item-center">
-      <Divider title="Transactions" class="w-full" />
-      
-      <div class="flex h-12 flex-none">
-        <div class="flex relative st5-all focus-within:text-oswapGreen-dark dark:focus-within:text-oswapGreen">
+    <div class="grid grid-cols-6 w-full gap-3 h-12">
+      <div class="flex h-12 col-span-4">
+        <Divider title="Transactions" class="w-full" />
+      </div>
+      <!-- search field -->
+      <div class="flex h-12 col-span-2 item">
+        <div class="flex w-full relative st5-all focus-within:text-oswapGreen-dark dark:focus-within:text-oswapGreen">
           <i class="las la-search text-lg center-y-component pl-3"></i>
-          <input type="text" v-model="find" @input="findTx" class="flex rounded-full items-center ring-black st-5 ring-opacity-10 focus:ring-oswapGreen ring-1 focus:outline-none bg-slightGray dark:bg-slightDark pl-10" placeholder="transaction...">
+          <input type="text" v-model="find" @input="findTx" class="flex w-full rounded-full items-center ring-black st-5 ring-opacity-10 focus:ring-oswapGreen ring-1 focus:outline-none bg-slightGray dark:bg-slightDark pl-10" placeholder="find by | type, token, date, amount or tx | ...">
         </div>
       </div>
     </div>
-
+    
+    <!-- transaction item -->
     <transition-group as="template" name="vertical" appear>
       <TransactionItem v-for="(tx, index) in items" :key="index" :tx="tx" />
     </transition-group>
 
+    <!-- observer for infinite scroll -->
     <Observer @intersect="intersected"/>
+    
+    <!-- loading animation -->
     <div v-if="this.loadingChunk" class="flex w-full py-16 items-center justify-center">
       <svg class="animate-spin h-8 w-8 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -42,6 +48,7 @@
         find: '',
         loadingChunk: false,
         items: [],
+        // Dummy data
         txs: [
           {
             Symbol: 'eMATIC',

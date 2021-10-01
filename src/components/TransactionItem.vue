@@ -17,13 +17,12 @@
       <p class="text-sm">{{tx.type == 'Received' || tx.type == 'Swapped' ? '+' : '-' }} $ {{tx.totalWorth}}</p>
     </div>
 
-    <div class="flex flex-col col-span-6">
+    <div class="flex flex-col col-span-6 items-end pr-3">
       <p class="text-base font-bold">Transaction ID</p>
       <div class="flex items-center space-x-2">
-        <p class="text-sm text-el">{{tx.tx}}</p>
-        <button>
-          <i class="las la-search text-2xl text-oswapGreen"></i>
-        </button>
+        <a class="text-sm text-el hover:text-oswapGreen" target="_blank" :href="`https://explorer.harmony.one/tx/${tx.tx}`">
+          {{tx.tx}}
+        </a>
       </div>
     </div>
   </div>
