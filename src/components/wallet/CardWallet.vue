@@ -7,7 +7,7 @@
         <p class="text-sm font-bold">{{balanceData.networkName}}</p>
       </div>
       <div class="flex space-x-3 items-center">
-        <ProgressCircle :amount="balanceData.valuePercentage" :from="styleData.from" :to="styleData.to" :size="styleData.size" :stroke="styleData.stroke" />
+        <ProgressCircle :amount="balanceData.valuePercentage" :from="styleData.from" :to="styleData.to" :size="styleData.size" :stroke="styleData.stroke" :startAt="0" />
         <div class="flex flex-col">
           <p class="text-base">Balance</p>
           <p class="text-2xl font-bold">$ {{balanceData.value}}</p>

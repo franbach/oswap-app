@@ -173,6 +173,26 @@
   @apply opacity-0 max-h-0
 }
 
+/* liquidity squeeze */
+.squeeze-liq-enter-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.squeeze-liq-enter-from {
+  @apply opacity-0 max-h-0
+}
+.squeeze-liq-enter-to {
+  @apply opacity-100 max-h-96
+}
+.squeeze-liq-leave-active {
+  @apply transition-all duration-1000 ease-in-out
+}
+.squeeze-liq-leave-from {
+  @apply opacity-100 max-h-96
+}
+.squeeze-liq-leave-to {
+  @apply opacity-0 max-h-0
+}
+
 .warning-body-item-enter-active {
   @apply transition-all duration-1000 ease-in-out
 }

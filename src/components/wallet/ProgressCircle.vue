@@ -11,7 +11,7 @@
             <stop offset="100%" :stop-color="this.to" />
           </linearGradient>
         </defs>
-        <circle :id="this.name" :cx="this.size / 2" :cy="this.size / 2" :r="this.size / 2 - (this.stroke / 2)" stroke-linecap="round" :style="`stroke: url(#strokeGradientColor_${this.name}); stroke-width: ${this.stroke};`" />
+        <circle :id="this.name" :cx="this.size / 2" :cy="this.size / 2" :r="this.size / 2 - (this.stroke / 2)" stroke-linecap="round" :style="`stroke: url(#strokeGradientColor_${this.name}); stroke-width: ${this.stroke}; transform: rotate(${this.startAt}deg)`" />
       </svg>
 
       <svg class="strokeBackground" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="this.size + 'px'" :height="this.size + 'px'">
@@ -35,6 +35,10 @@
       amount: {
         type: Number,
         default: 1
+      },
+      startAt: {
+        type: Number,
+        default: 0
       },
       size: Number,
       stroke: Number,
@@ -64,7 +68,7 @@
     mounted() {
       this.circle = document.getElementById(this.name);
       this.radius = this.circle.r.baseVal.value;
-      this.circumference = this.radius * 2 * Math.PI;
+      this.circumference = (2 * Math.PI) * this.radius;
 
       this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
       this.circle.style.strokeDashoffset = `${this.circumference}`;
@@ -74,15 +78,15 @@
     },
     methods: {
       updateCounter() {
-        this.counter = setInterval(() => {
-          let speed  = 200
-          let increment = this.amount / speed
+        let speed = 200
+        let increment = this.amount / speed
 
+        this.counter = setInterval(() => {
           let offset = this.circumference - this.output / 100 * this.circumference;
           this.circle.style.strokeDashoffset = offset
 
           this.output = this.output + increment
-        }, 10)
+        }, increment)
       }
     }
   }
@@ -100,7 +104,7 @@
       fill: none;
       transition: 0.35s stroke-dashoffset;
       // axis compensation
-      transform: rotate(-90deg);
+      transform: rotate(0deg);
       transform-origin: 50% 50%;
     }
   }
