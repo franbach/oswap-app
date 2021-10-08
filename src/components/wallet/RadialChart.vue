@@ -1,21 +1,21 @@
 <template>
   <div class="flex flex-col items-center space-y-3">
-    <div class="relative flex flex-none items-center justify-center" :style="`width: ${this.size}px; height: ${this.size}px;`">
+    <div class="relative flex flex-none items-center justify-center" :style="`width: ${size}px; height: ${size}px;`">
       
-      <p class="flex font-bold rounded-full" :style="`font-size: ${this.size / 5}px`" >
+      <p class="flex font-bold rounded-full" :style="`font-size: ${size / 5}px`" >
         Total
       </p>
+<!-- <RadialChart :size="180" stroke="1.5" linecap="round" :sourceData="this.testData" /> -->
+      <RadialChartProgress v-for="(source, index) in sourceData" :key="index" :name="createName(index)" :amount="source.amount" :linecap="linecap" :from="source.from" :to="source.to" :size="size" :stroke="stroke" :startAt="parseStart(sourceData, index)"/>
 
-      <RadialChartProgress v-for="(source, index) in this.sourceData" :key="index" :name="index" :amount="source.amount" :linecap="this.linecap" :from="source.from" :to="source.to" :size="this.size" :stroke="this.stroke" :startAt="this.parseStart(this.sourceData, index)"/>
-
-      <svg class="strokeBackground" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="this.size + 'px'" :height="this.size + 'px'">
+      <svg class="strokeBackground" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="size + 'px'" :height="size + 'px'">
         <defs>
           <linearGradient id="strokeBackgroundColor">
             <stop offset="0%" stop-color="#f3f3f330" />
             <stop offset="100%" stop-color="#f3f3f330" />
           </linearGradient>
         </defs>
-        <circle class="strokeBackground" :cx="this.size / 2" :cy="this.size / 2" :r="this.size / 2 - (this.stroke / 2)" stroke-linecap="round"  :style="`stroke-width: ${this.stroke};`" />
+        <circle class="strokeBackground" :cx="size / 2" :cy="size / 2" :r="size / 2 - (stroke / 2)" stroke-linecap="round"  :style="`stroke-width: ${stroke};`" />
       </svg>
 
     </div>
@@ -32,7 +32,7 @@
     },
     props: {
       size: Number,
-      stroke: Number,
+      stroke: String,
       linecap: String,
       sourceData: Object
     },
@@ -49,9 +49,12 @@
           this.amounts.push(source[index].amount);
           return 0
         } else {
-          this.amounts.push(source[index].amount + source[index - 1].amount);
-          return this.amounts[index - 1] * 360 / 100
+          this.amounts.push(source[index].amount + this.amounts[index - 1]);
+          return this.amounts[index - 1] * 360 / 100;
         }
+      },
+      createName(index) {
+        return (new Date().getTime() + `_${index}`);
       }
     }
   }

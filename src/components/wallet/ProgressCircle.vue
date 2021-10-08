@@ -1,27 +1,27 @@
 <template>
   <div class="flex flex-col items-center space-y-3">
-    <div class="relative flex flex-none items-center justify-center" :style="`width: ${this.size}px; height: ${this.size}px;`">
+    <div class="relative flex flex-none items-center justify-center" :style="`width: ${size}px; height: ${size}px;`">
       
-      <p class="flex font-bold rounded-full" :style="`font-size: ${this.size / 5}px`" >{{Math.round(this.output.toFixed(2))}}%</p>
+      <p class="flex font-bold rounded-full" :style="`font-size: ${size / 5}px`" >{{Math.round(output.toFixed(2))}}%</p>
 
-      <svg class="strokeAmount" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="this.size + 'px'" :height="this.size + 'px'">
+      <svg class="strokeAmount" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="size + 'px'" :height="size + 'px'">
         <defs>
-          <linearGradient :id="`strokeGradientColor_${this.name}`">
-            <stop offset="0%" :stop-color="this.from" />
-            <stop offset="100%" :stop-color="this.to" />
+          <linearGradient :id="`strokeGradientColor_${name}`">
+            <stop offset="0%" :stop-color="from" />
+            <stop offset="100%" :stop-color="to" />
           </linearGradient>
         </defs>
-        <circle :id="this.name" :cx="this.size / 2" :cy="this.size / 2" :r="this.size / 2 - (this.stroke / 2)" stroke-linecap="round" :style="`stroke: url(#strokeGradientColor_${this.name}); stroke-width: ${this.stroke}; transform: rotate(${this.startAt}deg)`" />
+        <circle :id="name" :cx="size / 2" :cy="size / 2" :r="size / 2 - (stroke / 2)" stroke-linecap="round" :style="`stroke: url(#strokeGradientColor_${name}); stroke-width: ${stroke}; transform: rotate(${startAt}deg)`" />
       </svg>
 
-      <svg class="strokeBackground" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="this.size + 'px'" :height="this.size + 'px'">
+      <svg class="strokeBackground" xmlns="http://www.w3.org/2000/svg" version="1.1" :width="size + 'px'" :height="size + 'px'">
         <defs>
           <linearGradient id="strokeBackgroundColor">
             <stop offset="0%" stop-color="#f3f3f330" />
             <stop offset="100%" stop-color="#f3f3f330" />
           </linearGradient>
         </defs>
-        <circle class="strokeBackground" :cx="this.size / 2" :cy="this.size / 2" :r="this.size / 2 - (this.stroke / 2)" stroke-linecap="round"  :style="`stroke-width: ${this.stroke};`" />
+        <circle class="strokeBackground" :cx="size / 2" :cy="size / 2" :r="size / 2 - (stroke / 2)" stroke-linecap="round"  :style="`stroke-width: ${stroke};`" />
       </svg>
 
     </div>
@@ -66,15 +66,17 @@
       }
     },
     mounted() {
-      this.circle = document.getElementById(this.name);
-      this.radius = this.circle.r.baseVal.value;
-      this.circumference = (2 * Math.PI) * this.radius;
+      this.$nextTick(() => {
+        this.circle = document.getElementById(this.name);
+        this.radius = this.circle.r.baseVal.value;
+        this.circumference = (2 * Math.PI) * this.radius;
 
-      this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
-      this.circle.style.strokeDashoffset = `${this.circumference}`;
-      this.circle.style.stroke = this.stroke;
+        this.circle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
+        this.circle.style.strokeDashoffset = `${this.circumference}`;
+        this.circle.style.stroke = this.stroke;
 
-      this.updateCounter();
+        this.updateCounter();
+      });
     },
     methods: {
       updateCounter() {
