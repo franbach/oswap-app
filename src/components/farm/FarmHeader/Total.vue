@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-none flex-col pr-4 py-2 space-y-2">
+  <div class="flex flex-none flex-col ss:pr-0 xs:pr-4 py-2 space-y-2">
     <div class="flex flex-col text-gray-500 dark:text-gray-300">
       <div class="flex space-x-2 items-center ss:mb-2 xs:mb-3 ss:pl-1 xs:pl-3">
         <i class="las la-globe-europe text-lg dark:text-oswapGreen"></i>

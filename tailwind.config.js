@@ -36,7 +36,8 @@ module.exports = {
       fontFamily: {
         sans: ["Alata", ...defaultTheme.fontFamily.sans],
         libre: ["'Libre Franklin'"],
-        nunito: ["Nunito"]
+        nunito: ["Nunito"],
+        montserrat: ["Montserrat"]
       }
     },
     screens: {

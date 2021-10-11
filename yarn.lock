@@ -1221,6 +1221,11 @@
   "resolved" "https://registry.npmjs.org/@fontsource/libre-franklin/-/libre-franklin-4.5.0.tgz"
   "version" "4.5.0"
 
+"@fontsource/montserrat@^4.5.1":
+  "integrity" "sha512-xdMkzsnFlzDt5Vj9+AWuUp4Vd9F3hYN2I0GTZZYscWN/bQ20wVOGtdWLO8Okfv7SZ9t/z39/EayAAt+f/8tAvw=="
+  "resolved" "https://registry.npmjs.org/@fontsource/montserrat/-/montserrat-4.5.1.tgz"
+  "version" "4.5.1"
+
 "@fontsource/nunito@^4.5.0":
   "integrity" "sha512-bjj6j4zmnDhQ7kfga5E8W98GzUOn478Es2bipSs2xc1lB8pJKrQh9V9CgxcvSeLfGL2Ic+0tvUfhiOsOHLtkUQ=="
   "resolved" "https://registry.npmjs.org/@fontsource/nunito/-/nunito-4.5.0.tgz"
@@ -6286,6 +6291,7 @@
     "setimmediate" "^1.0.5"
 
 "ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
+  "integrity" "sha512-qs8G5KwnIO/thOQjv1RvR/4oiTsy6IaCsN+ory5dbiqFXz8sd239aWJH0wmsVNPimL5X1KzQheUpi6xAo6FU4w=="
   "resolved" "git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git#ee3994657fa7a427238e6ba92a84d0b529bbcde0"
   "version" "0.6.8"
   dependencies:
@@ -10628,10 +10634,10 @@
     "@openzeppelin/contracts" "^3.1.0"
     "@openzeppelin/test-helpers" "^0.5.11"
 
-"openswap-sdk@2.0.5":
-  "integrity" "sha512-H9Wcb3EpFvBqAZ0uQvG9e3NsB823ltVtug6Iml3Bb2JTaOm0MoKV4rhKhHZlg9Jggc7V/7ns2Tld0+HolcsgOw=="
-  "resolved" "https://registry.npmjs.org/openswap-sdk/-/openswap-sdk-2.0.5.tgz"
-  "version" "2.0.5"
+"openswap-sdk@3.0.2":
+  "integrity" "sha512-Fikhuej1ENrOTYH3yXoyne5/dEXU2DBaNxyYM2hz3UrG/BcF6iSR+95o6yAtmpeh0xlDcL0+hwUDv1q3ni2caQ=="
+  "resolved" "https://registry.npmjs.org/openswap-sdk/-/openswap-sdk-3.0.2.tgz"
+  "version" "3.0.2"
   dependencies:
     "big.js" "^5.2.2"
     "decimal.js-light" "^2.5.0"
@@ -12688,6 +12694,7 @@
   "version" "2.0.4"
 
 "scrypt-shim@github:web3-js/scrypt-shim":
+  "integrity" "sha512-6IAk8+6BiN9lMNh5kgAYRPbi7+ejRsJIOX0jh4/I1V7phSsoaizjBGfDrZHpeAcq1IwOVlNetHS4/a+JR2hyZA=="
   "resolved" "git+ssh://git@github.com/web3-js/scrypt-shim.git#aafdadda13e660e25e1c525d1f5b2443f5eb1ebb"
   "version" "0.1.0"
   dependencies:
