@@ -227,7 +227,7 @@ export const Pools = {
     imgtoken0: "https://openfi.dev/tokens/default/USDC.png",
     imgtoken1: "https://openfi.dev/tokens/default/USDC.png",
     name: ["eUSDC","bUSDC"],
-    decimals: [18, 6],
+    decimals: [6, 18],
     pid: "18",
     rewards: "1X",
     i: 16
