@@ -101,6 +101,31 @@ const routes = [
   {
     path: '/Bridge',
     name: 'Bridge',
+    meta: {
+      title: 'OpenSwap Bridge - Horizon ERC20 / BEP20 / HRC20 Bridge',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Openswap Decentralized Horizon Bridge on Harmony Blockchain. Harmony DEX. Buy, Sell, and Stake Crypto Assets. Earn Interest.'
+        },
+        {
+          property: 'og:description',
+          content: 'Openswap Decentralized Horizon Bridge on Harmony Blockchain. Harmony DEX. Buy, Sell, and Stake Crypto Assets. Earn Interest.'
+        },
+        {
+          property: 'og:image',
+          content: 'https://mainnet.app.openswap.one/img/oswap_logo.5eef90b2.png'
+        },
+        {
+          name: 'robots',
+          content: 'index,follow'
+        },
+        {
+          name: 'keywords',
+          content: 'Openswap Decentralized Horizon Bridge on Harmony Blockchain. Harmony DEX. Buy, Sell, and Stake Crypto Assets. Earn Interest.'
+        },
+      ]
+    },
     component: () => import('../views/Migrate.vue')
   },
   {

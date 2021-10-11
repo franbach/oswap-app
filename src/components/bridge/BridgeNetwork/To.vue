@@ -37,15 +37,7 @@
       ...mapActions('migrate', ['setToNetwork']),
 
       selectNetwork(network) {
-        if (this.getFromNetwork && this.getFromNetwork.name === network.name) {
-          toastMe('warning', {
-            title: 'Network Selection',
-            msg: `You already picked ${network.name} ! Choose another.`,
-            link: false,
-          })
-        } else {
-          this.setToNetwork(network)  
-        }
+          this.setToNetwork(network)
       }
     }
   }

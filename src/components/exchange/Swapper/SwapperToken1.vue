@@ -59,6 +59,7 @@
     },
     methods: {
       ...mapGetters('exchange', ['getToken']),
+      ...mapActions('exchange/swapper/buttons', ['setBtnState']),
       ...mapActions('exchange/swapper', [
         'setBalanceToken', 
         'setInputAmount', 
@@ -78,7 +79,7 @@
       setInputForToken0: async function() {
         let token0 = this.getToken()['token1']
         let token1 = this.getToken()['token2']
-
+        this.setBtnState({swap: 'loading'});
         let units = this.getUnits(this.getInputAmount(1), token1)
         let bestRoute = await this.getBestRoute(units, token1, token0)
         
@@ -96,7 +97,7 @@
         this.setInputAmount({
           0: await this.getAmountInWithSlippage(this.getInputAmount(1), bestRoute, this.getSlippageRate, token1, token0)
         })
-
+        this.setBtnState({swap: 'swap'});
       }
     }
   }

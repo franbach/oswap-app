@@ -1,7 +1,4 @@
-const { ethtokens } = require("./exchange_tokens/ethTokens.js");
-//const { hmytokens } = require("./exchange_tokens/hmyTokens.js");
-const { bsctokens } = require("./exchange_tokens/bscTokens.js");
-
+import {tokens} from "./exchange_tokens/tokens.js"
 export default {
   namespaced: true,
 
@@ -21,12 +18,12 @@ export default {
       { 
         name: 'Binance Smart Chain Tokens', 
         icon: 'https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png',
-        tokens: bsctokens 
+        tokens: tokens.bsctokens 
       },
       { 
         name: 'Ethereum Bridged Tokens', 
         icon: 'https://openfi.dev/tokens/default/ETH.png',
-        tokens: ethtokens 
+        tokens: tokens.ethtokens 
       }
     ],
     networks: [
@@ -47,14 +44,14 @@ export default {
 
   getters: {
     // Retrieves All tokens or by user input
-    retrieveTokens: (state) => (search) => {
+    retrieveTokens: (state) => (search, chain) => {
       let filtered = [];
       let regex = RegExp(`\w?${search}`, 'i')
   
       state.allTokens.forEach(network => {
         let tokenFound = {}
         
-        Object.entries(network.tokens).forEach(([k, v]) => {
+        Object.entries(network.tokens[chain]).forEach(([k, v]) => {
           if (v.Symbol.match(regex)) {
             tokenFound[k] = v
           }

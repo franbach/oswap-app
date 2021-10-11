@@ -11,13 +11,13 @@
       </div>
       <div class="flex w-full h-10 items-center">
         <i class="absolute las la-search text-2xl pl-2"></i>
-        <input type="text" v-model="search" @input="this.retrieveTokens(search)" class="flex w-full ring-1 focus:outline-none focus:ring-1 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-xl py-2 items-center pl-10 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
+        <input type="text" v-model="search" @input="this.retrieveTokens(search, getChainID)" class="flex w-full ring-1 focus:outline-none focus:ring-1 ring-black focus:ring-oswapGreen ring-opacity-5 rounded-xl py-2 items-center pl-10 dark:bg-oswapDark-gray dark:placeholder-gray-600 placeholder-gray-200" placeholder="Search Token">
       </div>
     </div>
     <!-- Token list body -->
     <div id="modalTokenList" class="flex z-30 w-full rounded-b-3xl overflow-x-hidden" style="margin-top: 98px;">
       <perfect-scrollbar class="flex flex-col flex-1 divide-y divide-black divide-opacity-10 w-full overflow-hidden">
-        <div class="flex text-gray-500 dark:text-gray-300" v-for="(network, index) in this.retrieveTokens(search)" :key="index" >
+        <div class="flex text-gray-500 dark:text-gray-300" v-for="(network, index) in this.retrieveTokens(search, getChainID)" :key="index" >
           <div class="w-full grid grid-cols-5 gap-2 p-2">
             <!-- network name -->
             <div class="flex h-4 col-span-5 px-2 py-4 rounded-b-2xl items-center space-x-2">
@@ -25,7 +25,7 @@
               <p class="flex text-sm items-center dark:text-gray-300">{{network.name}}</p>
             </div>
             <!-- icons table -->
-            <div @click="selectToken(token)" v-for="(token, idx) in network.tokens" :key="idx" class="flex flex-col space-y-2 h-16 rounded-xl items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+            <div @click="selectToken(token)" v-for="(token, idx) in network.tokens[getChainID]" :key="idx" class="flex flex-col space-y-2 h-16 rounded-xl items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
               <img :src="token.imgSrc" alt="" class="h-8 w-8 rounded-full flex items-center justify-center">
               <p class="text-xs dark:text-gray-300">
                 {{token.Symbol}}
@@ -60,6 +60,7 @@
     },
     computed: {
       ...mapGetters('exchange', ['retrieveTokens']),
+      ...mapGetters('wallet', ['getChainID'])
     },
     methods: {
       ...mapActions('exchange', ['setToken', 'goTo']),

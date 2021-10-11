@@ -106,10 +106,13 @@
         }
       }
     },
-    mounted: async function() {
+    mounted: async function(){
+      this.setInputAmount( {0: 0})
+      this.setInputAmount({1: 0})
      
       this.pair = await this.getPair(this.getToken()['token1'],this.getToken()['token2'])
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
         this.createNewPair = true
       })
       if(!this.createNewPair){
@@ -122,11 +125,14 @@
       
       
     },
-    computed: {},
+    computed: {
+      ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC', 'WONE']),
+    },
     methods: {
+      ...mapGetters('wallet', ['getChainID']),
       ...mapGetters('exchange', ['getToken']),
       ...mapGetters('liquidity/amounts', ['getToken0Amount','getToken1Amount']),
-      ...mapGetters('addressConstants', ['hMULTICALL', 'hRPC', 'WONE']),
+      ...mapActions('exchange/swapper', [ 'setInputAmount']),
       ...mapActions('liquidity/buttons', ['setBtnState']),
       executeRemoveLiquidity:async function(){
         this.setBtnState({remove: 'removing'})
@@ -166,19 +172,21 @@
         this.balances.token1 = this.getFormatedUnits(results[2]['value'].toString(), token1)
         this.balances.lpToken = this.getEthUnits(results[0]['value'])
         
-        if(token0.oneZeroxAddress == this.WONE()){
+        if(token0.oneZeroxAddress == this.WONE(this.getChainID())){
           this.balances.token0 = this.getEthUnits(await this.getOneBalance())
         }
-        if(token1.oneZeroxAddress == this.WONE()){
+        if(token1.oneZeroxAddress == this.WONE(this.getChainID())){
           this.balances.token1 = this.getEthUnits(await this.getOneBalance())
         }
      },
       initMulticall: async function(){
-        const MULTICALL = this.hMULTICALL();
-        const RPC = this.hRPC();
+        const MULTICALL = this.hMULTICALL(this.getChainID());
+        const RPC = this.hRPC(this.getChainID());
         const CALL = this.generateCalls();
         var results= [];
-
+        console.log(CALL)
+        console.log(MULTICALL)
+        console.log(RPC)
         const config = {
           rpcUrl: RPC,
           multicallAddress: MULTICALL

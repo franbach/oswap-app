@@ -90,7 +90,10 @@
       }
     },
     mounted: async function(){
-      this.oswapPrice = await this.getOswapPrice();
+      await setInterval(async function(){
+        this.oswapPrice = await this.getOswapPrice();
+      }.bind(this), 15000)
+      
     },
     computed: {
       pendingValue: function() {

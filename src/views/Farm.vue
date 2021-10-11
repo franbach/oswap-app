@@ -5,9 +5,9 @@
     </transition>
     
     <transition name="farm" appear>
-      <div v-if="soloData != null" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
-        <SoloFarmPair  v-for="(pool, index) in SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" @updateData="updateData"/>
-        <FarmPair v-for="(pool, index) in Pools" @updateTVL="updateTVL" @updateAPR="updateAPR" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
+      <div v-if="soloData != null && farmData != null" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
+        <SoloFarmPair  v-for="(pool, index) in this.SoloPools" @updateTVL="updateTVL" :key="index" :poolData="soloData[pool.i]" :pool="pool" @updateData="updateData"/>
+        <FarmPair v-for="(pool, index) in this.Pools" @updateTVL="updateTVL" @updateAPR="updateAPR" :key="index" :poolData="farmData[pool.i]" :pool="pool" @updateData="updateData"/>
       </div>
       <div v-else class="flex h-full items-center mt-16">
         <svg class="animate-spin h-8 w-8 text-oswapGreen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@
   import { createWatcher } from '@makerdao/multicall';
   import { mapGetters, mapActions } from 'vuex';
 
-  const { Pools, SoloPools, CustomPools } = require("@/store/modules/farm/pools.js")
+  const { pools } = require("@/store/modules/farm/pools.js")
 
   export default {
     name: 'Farm',
@@ -40,8 +40,9 @@
       SoloFarmPair
     },
     mounted: async function () {
-      this.Pools = Pools;
-      this.SoloPools = SoloPools;
+      
+      console.log(this.SoloPools)
+      console.log(this.Pools)
       let timeout
 
       if(this.getUserSignedIn()){
@@ -51,30 +52,35 @@
       }
 
       await setTimeout(async function (){
-        this.farmData = await this.initMulticall(Pools)
+        this.Pools = pools[this.getChainID()].pools;
+      this.SoloPools = pools[this.getChainID()].SoloPools;
+        this.farmData = await this.initMulticall(this.Pools)
         this.setFarmDataState(this.farmData);
-        this.soloData = await this.initSoloMulticall(SoloPools)
+        this.soloData = await this.initSoloMulticall(this.SoloPools)
+        console.log(soloData)
         this.setSoloDataState(this.soloData);
         
       }.bind(this), timeout);
 
       let iid = await setInterval(async function(){
-        this.getTotalPending();
-        this.farmData = await this.initMulticall(Pools)
+       
+        await this.getTotalPending();
+        this.farmData = await this.initMulticall(this.Pools)
+        console.log(this.farmData)
         this.setFarmDataState(this.farmData);
-        this.soloData = await this.initSoloMulticall(SoloPools)
+        this.soloData = await this.initSoloMulticall(this.SoloPools)
         this.setSoloDataState(this.soloData);
-        if(this.$route.name !== 'farms'){
+        if(this.$route.name != 'OpenSwap Farms'){
           clearInterval(iid)
           console.log(this.$route.name)
         }
-      }.bind(this), 5000)
+      }.bind(this), 15000)
       
     },
     data() {
       return {
-        Pools,
-        SoloPools,
+        Pools: null,
+        SoloPools: null,
         farmData: null,
         soloData: null,
         farmHeaderData: {
@@ -92,9 +98,12 @@
         },
       }
     },
-    methods: {
+    computed:{
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
-      ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn']),
+    },
+    methods: {
+      
+      ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn', 'getChainID']),
       ...mapActions('farm/farmData', ['setFarmDataState', 'setSoloDataState', 'setCustomDataState']),
 
       updateTVL: function(TVLData){
@@ -123,10 +132,10 @@
       },
 
       updateData: async function(){
-        this.farmData = await this.initMulticall(Pools)
+        this.farmData = await this.initMulticall(this.Pools)
         this.setFarmDataState(this.farmData);
 
-        this.soloData = await this.initMulticall(SoloPools)
+        this.soloData = await this.initMulticall(this.SoloPools)
         this.setSoloDataState(this.soloData);
       },
 
@@ -134,39 +143,31 @@
         let temp = 0;
 
         let userAddress = this.getUserAddress();
-        const MASTERCHEF = this.oSWAPCHEF();
+        const MASTERCHEF = this.oSWAPCHEF(this.getChainID());
         var i = 0;
         var poolByIndex = []
         var CALL = []
-        for (var n in SoloPools) {
+        for (var n in this.SoloPools) {
           //LP Balance CALLS
           CALL.push({
             target: MASTERCHEF,
-            call: ['pendingSushi(uint256,address)(uint256)', parseInt(SoloPools[n].pid), userAddress],
+            call: ['pendingSushi(uint256,address)(uint256)', parseInt(this.SoloPools[n].pid), userAddress],
             returns: [['PENDING_OF_' + n , val => val]]
           })
         }
-        for (var n in Pools) {
+        for (var n in this.Pools) {
           
           //LP Balance CALLS
           CALL.push({
             target: MASTERCHEF,
-            call: ['pendingSushi(uint256,address)(uint256)', parseInt(Pools[n].pid), userAddress],
+            call: ['pendingSushi(uint256,address)(uint256)', parseInt(this.Pools[n].pid), userAddress],
             returns: [['PENDING_OF_' + n , val => val]]
           })
         }
-        for (var n in CustomPools) {
-          
-          //LP Balance CALLS
-          CALL.push({
-            target: MASTERCHEF,
-            call: ['pendingSushi(uint256,address)(uint256)', parseInt(CustomPools[n].pid), userAddress],
-            returns: [['PENDING_OF_' + n , val => val]]
-          })
-        }
+        
 
-        const MULTICALL = this.hMULTICALL();
-        const RPC = this.hRPC();
+        const MULTICALL = this.hMULTICALL(this.getChainID());
+        const RPC = this.hRPC(this.getChainID());
         
         var results= [];
 
@@ -194,15 +195,17 @@
       },
       initMulticall: async function(pools) {
         //const OPENMAKER = this.oSWAPMAKER();
-        const MULTICALL = this.hMULTICALL();
-        const RPC = this.hRPC();
+        const MULTICALL = this.hMULTICALL(this.getChainID());
+        const RPC = this.hRPC(this.getChainID());
         const [CALL, poolByIndex] = this.generateCalls(pools);
         var results= [];
-
+        console.log(RPC)
+        console.log(MULTICALL)
         const config = {
           rpcUrl: RPC,
           multicallAddress: MULTICALL
         };
+        console.log(CALL)
 
         const watcher = createWatcher(
             CALL,
@@ -215,12 +218,13 @@
 
         var res = await this.parseResults(results, poolByIndex);
         watcher.stop();
+
         return res;
       },
       initSoloMulticall: async function(pools) {
         //const OPENMAKER = this.oSWAPMAKER();
-        const MULTICALL = this.hMULTICALL();
-        const RPC = this.hRPC();
+        const MULTICALL = this.hMULTICALL(this.getChainID());
+        const RPC = this.hRPC(this.getChainID());
         const [CALL, poolByIndex] = this.generateSoloCalls(pools);
         var results= [];
 
@@ -357,7 +361,9 @@
       generateCalls: function(pools){
         let CALL = [];
         let userAddress = this.getUserAddress();
-        const MASTERCHEF = this.oSWAPCHEF();
+        const MASTERCHEF = this.oSWAPCHEF(this.getChainID());
+        console.log(MASTERCHEF)
+        console.log("mass")
         var i = 0;
         var poolByIndex = []
 
@@ -417,7 +423,7 @@
       generateSoloCalls: function(pools){
         let CALL = [];
         let userAddress = this.getUserAddress();
-        const MASTERCHEF = this.oSWAPCHEF();
+        const MASTERCHEF = this.oSWAPCHEF(this.getChainID());
         var i = 0;
         var poolByIndex = []
 

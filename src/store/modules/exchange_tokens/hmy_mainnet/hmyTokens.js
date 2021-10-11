@@ -1,16 +1,3 @@
-//
-//
-//
-//
-//    NEED TO BE FINISHED FFS
-//
-//
-//
-//
-//
-//
-// * useless block comment ty
-
 export const hmytokens = {
   ONE: {
     Symbol: "ONE",
@@ -34,7 +21,7 @@ export const hmytokens = {
     oneAddress: "one1afvfayllrzc6ru0fhtr7705x4d32mhrewz4c77",
     oneZeroxAddress: "0xEa589E93Ff18b1a1F1e9BaC7EF3E86Ab62addc79",
     decimals: 18,
-    imgSrc: "https://miro.medium.com/fit/c/56/56/1*6X4n2JzQweFbOjpneSWiOw.png"
+    imgSrc: "https://assets.coingecko.com/coins/images/15305/large/0c4b902b40f14db918f4500956386414ab7ebcfe.jpeg?1620371961"
   },
   VINCI: {
     Symbol: "VINCI",
@@ -50,7 +37,6 @@ export const hmytokens = {
     name: "MochiSwap Token Harmony",
     oneAddress: "one1pht5pkufh8768w4d7uukmkkhq2mw34h4yrrvh2",
     oneZeroxAddress: "0x0dD740Db89B9fDA3Baadf7396DdAD702b6E8D6f5",
-    decimals: 18,
     imgSrc:
       "https://s3-us-west-1.amazonaws.com/tokens.mochiswap.io/images/hMOCHI-token-logo.png"
   },

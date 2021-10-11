@@ -5,7 +5,7 @@
       <p class="text-sm dark:text-gray-200">Bridge</p>
     </div>
     <div class="flex flex-col space-y-3">
-      <BridgeNetworkSelect @updateBalances="updateBalances"  v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
+      <BridgeNetworkSelect @updateBalances="updateBalances"   v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
 
       <BridgeTokenSelect @click="selectToken('token1')" whichToken="token1" />
       <div class="flex flex-1 items-center space-x-3">
@@ -137,6 +137,8 @@
         console.log('BRIDGE MATE')
       },
       Bridge: async function(tokenNetwork){
+
+
         this.buttonState = 'executing'
         const bridgeSDK = new BridgeSDK({ logLevel: 3})
         let walletType = this.getWalletType();
@@ -156,7 +158,7 @@
         
        
         
-        //
+    
         //await bridgeSDK.setUseOneWallet(true);
         //this sets network to binance
         var network = this.getTokenOrigin()
@@ -164,7 +166,6 @@
         var bridgeMode = this.getBridgeMode()
         var tokenType
         var erc20;
-        var amount = 0.0001;
         //gets bech32 user address
         if(this.getBridgeMode() == EXCHANGE_MODE.ONE_TO_ETH){
             var oneAddress = toBech32(this.userAddress)
@@ -189,11 +190,6 @@
           erc20 = this.get0xForBridge(this.getToken()['token1'], network, isNative)
         }
          
-        
-        
-        //Gets the ERC20Token address (returns harmony 0x version if bridge to harmony)
-       
-
         let intervalId = setInterval(async () => {
           if (operationId) {
               const operation = await bridgeSDK.api.getOperation(operationId);
@@ -358,24 +354,30 @@
         } else {
           delete this.errors['format'];
           this.amount = value
+           this.buttonState = 'active'
         }
         if (value == '0.0') {
-          this.errors['blank'] = 'Amount can\'t be 0 blank';
+          this.errors['null'] = 'Amount can\'t be 0';
           this.buttonState = 'disabled'
         } else {
-          delete this.errors['blank']
-          this.amount = value        }
+          delete this.errors['null']
+          this.amount = value        
+           this.buttonState = 'active'
+        }
         if (value == '') {
           this.errors['blank'] = 'Amount can\'t be blank';
           this.buttonState = 'disabled'
         } else {
           delete this.errors['blank']
-          this.amount = value        }
+           this.buttonState = 'active'
+          this.amount = value 
+       }
         if (parseFloat(value) > parseFloat(this.balance)) {
           this.buttonState = 'disabled'
           this.errors['exceed'] = 'Your input exceeds the amount available in your balance!';
         } else {
           delete this.errors['exceed'];
+           this.buttonState = 'active'
           this.amount = value
         }
       },
