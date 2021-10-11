@@ -22,6 +22,7 @@ import "./assets/style/app.scss"
 import "@fontsource/alata"
 import "@fontsource/libre-franklin"
 import "@fontsource/nunito"
+import "@fontsource/montserrat"
 
 import 'animate.css';
 

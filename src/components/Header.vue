@@ -1,6 +1,11 @@
 <template>
   <header class="max-w-screen-xl mx-auto w-full flex justify-between h-14 py-9 xl:px-0 px-3 items-center">
-    <img alt="OpenSwap" src="@/assets/oswap_logo.png" class="ss:h-6 xs:h-10">
+    <div class="ss:hidden xs:flex flex-none">
+      <img alt="OpenSwap" src="@/assets/oswap_logo.png" class="ss:h-6 xs:h-10">
+    </div>
+    <div class="ss:flex xs:hidden flex-none">
+      <img alt="OpenSwap" src="@/assets/oswap_logo_icon.png" class="ss:h-6">
+    </div>
     <!-- Navigation Start -->
     <div class="flex items-center space-x-2 text-gray-500 dark:text-oswapGreen st5">
 
