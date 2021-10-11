@@ -115,12 +115,12 @@
         if (width > 0 && width < 540) {
           // for tooltips at the middle right
           if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
-            this.tooltip.shift = 78
+            this.tooltip.shift = 65
           }
         } else if (width >= 540 && width < 1024) {
           // for tooltips at the middle right
           if ((this.ttpRec.width / 2 + this.ttpRec.left) > xMiddle) {
-            this.tooltip.shift = 68
+            this.tooltip.shift = 55
           }
         } else if (width > 1024) {
           this.tooltip.shift = 50
