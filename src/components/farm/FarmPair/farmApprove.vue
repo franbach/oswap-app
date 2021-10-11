@@ -71,7 +71,7 @@
       this.btnApprove = 'approving';
       this.$emit('tellStake', 'executing');
       
-      let masterchefAddr = this.oSWAPCHEF();
+      let masterchefAddr = this.oSWAPCHEF(this.getChainID());
       let parsedInput = this.getUnits(this.amount, lpToken);
       let allowance = await this.checkAllowance(lpToken, masterchefAddr);
       let isAllowanceSufficient = parsedInput.lt(allowance);
@@ -84,13 +84,17 @@
         this.$emit('tellStake', 'disabled');
       }
     },
+    computed: {
+      ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
+    },
     methods: {
       ...mapGetters('exchange', ['getToken']),
-      ...mapGetters('addressConstants', ['oSWAPCHEF', 'WONE']),
+      ...mapGetters('wallet', ['getChainID']),
+      
 
       approve: async function(){
         var lpToken = {oneZeroxAddress: this.pool.pairaddress, Decimals: 18}
-        let masterchefAddr = this.oSWAPCHEF();
+        let masterchefAddr = this.oSWAPCHEF(this.getChainID());
         this.btnApprove = 'approving';
 
         let tx = await this.approveSpending(lpToken, masterchefAddr);

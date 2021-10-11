@@ -37,18 +37,19 @@
       ...mapGetters('migrate', [ 'getFromNetwork', 'getToNetwork']),
     },
     mounted: function(){
-        var network = this.getNetworks();
-        console.log(network[1])
-        if(this.getTokenOrigin(this.getToken()['token1']) == 'bsc'){
-          this.selectNetwork(network[1], network[0])
-        }else{
-          this.selectNetwork(network[2], network[0])
+        this.selectNetworkAuto()
+        if(window.ethereum !== undefined){
+          window.ethereum.on('chainChanged', async function(){
+            this.switchNetwork()
+          }.bind(this))
         }
+          
         
     },
     methods: {
-      ...mapActions('migrate', ['setFromNetwork', 'setToNetwork', 'resetNetworks']),
+      ...mapActions('migrate', ['setFromNetwork', 'setToNetwork', 'resetNetworks','switchNetwork']),
       ...mapGetters('migrate', ['getNetworks', 'getToken']),
+      ...mapGetters('wallet', ['getChainID']),
       getTokenOrigin(token){
         if(token.bscAddress != undefined){
           return 'bsc'
@@ -58,17 +59,36 @@
         }
       },
       selectNetwork(networkFrom, networkTo) {
-        if (this.getToNetwork && this.getToNetwork.name === networkFrom.name) {
-          toastMe('warning', {
-            title: 'Network Selection',
-            msg: `You already picked ${networkFrom.name} ! Choose another.`,
-            link: false,
-          })
-        } else {
           this.resetNetworks()
           this.setFromNetwork(networkFrom)
           this.setToNetwork(networkTo)
+      },
+      getTokenOriginNetwork(token, network){
+        if(token.bscAddress != undefined){
+          return network[1]
         }
+        if(token.ethAddress != undefined){
+          return network[2]
+        }
+      },
+      selectNetworkAuto(){
+        var networks = this.getNetworks();
+        let token = this.getToken()['token1']
+        let byChainID = {
+          1666600000: networks[0],
+          1666700000: 0,
+          1: networks[2],
+          56: networks[1],
+        }
+        var chainID = this.getChainID();
+        if(chainID == 1666600000){
+          var fromNetwork = networks[0]
+          var toNetwork = this.getTokenOriginNetwork(token, networks)
+        }else{
+          var fromNetwork = this.getTokenOriginNetwork(token, networks)
+          var toNetwork = networks[0]
+        }
+        this.selectNetwork(fromNetwork, toNetwork)
       }
     }
   }

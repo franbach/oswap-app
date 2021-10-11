@@ -60,7 +60,7 @@
       token: Object
     },
     mounted: async function() {
-      if (this.token.oneZeroxAddress == this.WONE()) {
+      if (this.token.oneZeroxAddress == this.WONE(this.getChainID())) {
         this.setBtnState({approve: 'approved'});
         this.setBtnState({remove: 'remove'});
         this.$emit("set0approved", true);
@@ -69,7 +69,8 @@
         this.setBtnState({approve: 'approving'});
         this.setBtnState({add: 'disabled'});
         this.setBtnState({remove: 'disabled'});
-        let routerAddr = this.UNIROUTERV2();
+        let routerAddr = this.UNIROUTERV2(this.getChainID());
+        console.log(routerAddr)
         let parsedInput = this.getUnits(this.amount, this.token);
         let allowance = await this.checkAllowance(this.token, routerAddr);
         let isAllowanceSufficient = parsedInput.lt(allowance);
@@ -103,15 +104,17 @@
     
     computed: {
       ...mapGetters('liquidity/buttons', ['getBtnState']),
+      ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
     },
     
-    methods: {     
+    methods: {   
+    ...mapGetters('wallet', ['getChainID']),  
       ...mapActions('liquidity/buttons', ['setBtnState']),
       ...mapGetters('liquidity/buttons', ['getBtnState']),
        ...mapGetters('liquidity/amounts', ['getToken0Amount','getToken1Amount']),
-      ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
+      
       approve: async function(){
-        let routerAddr = this.UNIROUTERV2();
+        let routerAddr = this.UNIROUTERV2(this.getChainID());
         this.setBtnState({approve: 'approving'})
 
         await this.approveSpending(this.token, routerAddr).catch(error => {

@@ -1,6 +1,6 @@
 {
   "name": "oswap-app",
-  "version": "2.0.8",
+  "version": "2.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -29,7 +29,7 @@
     "line-awesome": "^1.3.0",
     "mitt": "^3.0.0",
     "npm": "^7.16.0",
-    "openswap-sdk": "2.0.5",
+    "openswap-sdk": "3.0.2",
     "postcss": "^7.0.36",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7",
     "tailwindcss-glow": "^2.0.0-alpha.1",

@@ -47,7 +47,6 @@
 </template>
 
 <script>
-
   import openswap from "@/shared/openswap.js"
   import { mapGetters, mapActions } from 'vuex'
   import { toastMe } from '@/components/toaster/toaster.js'
@@ -57,17 +56,18 @@
     mixins: [openswap],
     computed: {
       ...mapGetters('exchange/swapper/buttons', ['getBtnState']),
-      ...mapGetters('exchange/swapper', ['getInputAmount'])
+      ...mapGetters('exchange/swapper', ['getInputAmount']),
+       ...mapGetters('addressConstants', ['UNIROUTERV2', 'WONE']),
     },
     mounted: async function() {
       this.token1 = this.getToken()['token1'];
 
-      if (this.token1.oneZeroxAddress == this.WONE()) {
+      if (this.token1.oneZeroxAddress == this.WONE(this.getChainID())) {
         this.setBtnState({approve: 'approved'});
         this.setBtnState({swap: 'swap'});
       } else {
         this.setBtnState({approve: 'approving'});
-        let routerAddr = this.UNIROUTERV2();
+        let routerAddr = this.UNIROUTERV2(this.getChainID());
         let parsedInput = this.getUnits(this.getInputAmount(0), this.token1);
         let allowance = await this.checkAllowance(this.token1, routerAddr);
         let isAllowanceSufficient = parsedInput.lt(allowance);
@@ -90,7 +90,7 @@
 
       approve: async function(){
         this.token1 = this.getToken()['token1'];
-        let routerAddr = this.UNIROUTERV2();
+        let routerAddr = this.UNIROUTERV2(this.getChainID());
         this.setBtnState({approve: 'approving'})
 
         await this.approveSpending(this.token1, routerAddr);

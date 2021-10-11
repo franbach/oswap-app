@@ -1,4 +1,3 @@
-//https://api.ethplorer.io/getTokenInfo/0x45804880De22913dAFE09f4980848ECE6EcbAf78?apiKey=freekey
 
 export const ethtokens = {
   /*WETH: {
@@ -67,20 +66,7 @@ export const ethtokens = {
     oneZeroxAddress: "0x218532a12a389a4a92fC0C5Fb22901D1c19198aA",
     oneImg: "",
     decimals: 18
-  } /*
-    SXP: {
-    Symbol: "SXP",
-    name: "Swipe",
-    ethAddress: "0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9",
-    ethImg: "",
-    imgSrc: "https://openfi.dev/tokens/default/SXP.png",
-    oneAddress: "one1wlgyvc28zr7a7h9ru08gta8snaatc2punfx0su",
-    oneZeroxAddress: "0x77d046614710fdDf5CA3E3cE85F4f09f7ABC283c",
-    oneImg: "",
-    decimals: 18
   },
-*/,
-
   YFL: {
     Symbol: "eYFL",
     name: "YFLink",
@@ -92,23 +78,6 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-  /* NO LOGO, NO IMAGE
-
-	SMC:{
-		"Symbol" : "SMC",
-		"name" : "Space Crowns",
-		"ethAddress" : "0x2Dcd837f43F44A9D42e44055FD04bA96887D6464",
-		"ethImg" : "",
-		"imgSrc" : "https://openfi.dev/tokens/default/"
-		"oneAddress" : "one18glt4glde4lx7lyp8xnq6sqf4d7umm072nt794",
-		"oneZeroxAddress" : "",
-		"oneImg" : "",
-		"decimals" : 18,
-
-	},
-
-*/
-
   AAVE: {
     Symbol: "eAAVE",
     name: "Aave Token",
@@ -120,7 +89,6 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
   PAXG: {
     Symbol: "ePAXG",
     name: "Paxos Gold",
@@ -132,7 +100,6 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
   ZRX: {
     Symbol: "eZRX",
     name: "0x Protocol Token",
@@ -144,45 +111,6 @@ export const ethtokens = {
     decimals: 18,
     oneImg: ""
   },
-  // SHITCOIN ?
-  GST2: {
-    Symbol: "eGST2",
-    name: "Gastoken.io",
-    ethAddress: "0x0000000000b3F879cb30FE243b4Dfee438691c04",
-    ethImg: "",
-    imgSrc: "https://openfi.dev/tokens/default/GST2.png",
-    oneAddress: "one13c6dzdg7lrds4jkqppmpqa0n85rje46nkxuldu",
-    oneZeroxAddress: "0x8e34D1351ef8DB0AcAC008761075F33D072Cd753",
-    oneImg: "",
-    decimals: 2
-  },
-  //SHITCOIN ?
-  KEEP: {
-    Symbol: "eKEEP",
-    name: "KEEP Token",
-    ethAddress: "0x85Eee30c52B0b379b046Fb0F85F4f3Dc3009aFEC",
-    ethImg: "",
-    imgSrc: "https://openfi.dev/tokens/default/KEEP.png",
-    oneAddress: "one1gwlh0k670p9jvwj9j9qmmn04ea5c0ymdke6nzr",
-    oneZeroxAddress: "0x43bF77db5e784b263a459141BdCDf5Cf6987936d",
-    oneImg: "",
-    decimals: 18
-  },
-
-  /* NO LOGO ?
-	EMN:{
-		"Symbol" : "EMN"
-		"name" : "Eminence"
-		"ethAddress" : "0x5ade7aE8660293F2ebfcEfaba91d141d72d221e8"
-		"ethImg" : ""
-		"imgSrc" : "https://openfi.dev/tokens/default/"
-		"oneAddress" : "one14vccly9ah364hjau8kmxg28527jln0zelrlz0a"
-		"decimals" : 18
-		"oneImg" : ""
-	},
-
-*/
-
   USDT: {
     Symbol: "eUSDT",
     name: "Tether USD",
@@ -206,7 +134,7 @@ export const ethtokens = {
     decimals: 18,
     oneImg: ""
   },
-  //SHITCOIN ?
+/*
   MEME: {
     Symbol: "eMEME",
     name: "MEME",
@@ -230,7 +158,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
+*/
   UNI: {
     Symbol: "eUNI",
     name: "Uniswap",
@@ -243,6 +171,7 @@ export const ethtokens = {
     decimals: 18
   },
   //SHITCOIN
+  /*
   SWAG: {
     Symbol: "eSWAG",
     name: "Swag Token",
@@ -254,7 +183,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
+*/
   IDRT: {
     Symbol: "eIDRT",
     name: "Rupiah Token",
@@ -266,32 +195,6 @@ export const ethtokens = {
     oneImg: "",
     decimals: 2
   },
-  /*
-	T-HRC20:{
-		"Symbol" : "1T-HRC20"
-		"name" : "Test HRC20"
-		"ethAddress" : "0xBf19E2c73080872E4fB937CdDdb39cDd1AB78960"
-		"ethImg" : ""
-		"imgSrc" : "https://openfi.dev/tokens/default/"
-		"oneAddress" : "one1w4xway9ksf4slzpu3fy8psd3aegkd423flcesa"
-		"oneZeroxAddress" : ""
-		"oneImg" : ""
-		"decimals" : 18
-	},
-*/
-  //Duplicate from above but with other Ethereum Address <-ETH address is not Real BUSD token
-  /*
-	"Symbol" : "1BUSD"
-	"name" : "Binance USD"
-	"ethAddress" : "0xe27c5c07f7DE1D503bBCDa6E0Ee21A84f00BfcFC"
-	"ethImg" : ""
-	"imgSrc" : "https://openfi.dev/tokens/default/"
-	"oneAddress" : "one1u9mwheravgdesjnnqd4emfwcx3q3aae5hw36l2"
-	"oneZeroxAddress" : ""
-	"oneImg" : ""
-	"decimals" : 12
-	*/
-
   LMA: {
     Symbol: "eLMA",
     name: "LMA - Art - Gallery",
@@ -304,7 +207,7 @@ export const ethtokens = {
     decimals: 18
   },
   //FEE ON TRANSFER TOKEN....
-  ROT: {
+/*  ROT: {
     Symbol: "eROT",
     name: "RottenToken",
     ethAddress: "0xD04785C4d8195e4A54d9dEc3a9043872875ae9E2",
@@ -315,7 +218,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
+*/
   SUSHI: {
     Symbol: "eSUSHI",
     name: "SushiToken",
@@ -434,7 +337,7 @@ export const ethtokens = {
     oneZeroxAddress: "0x301259f392B551CA8c592C9f676FCD2f9A0A84C5",
     oneImg: "",
     decimals: 18
-  },
+  },/*
   //SHITCOIN ?
   HGT: {
     Symbol: "eHGT",
@@ -483,7 +386,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
+*/
   FRONT: {
     Symbol: "eFRONT",
     name: "Frontier Token",
@@ -495,7 +398,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   },
-
+/*
   SAND: {
     Symbol: "eSAND",
     name: "SAND",
@@ -518,7 +421,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 4
   },
-
+*/
   UNFI: {
     Symbol: "eUNFI",
     name: "UNFI",
@@ -553,8 +456,8 @@ export const ethtokens = {
     oneZeroxAddress: "0xf26D8c787e66254eE8B7A500073da8fb1ab1992D",
     oneImg: "",
     decimals: 8
-  },
-
+  }
+/*
   STORJ: {
     Symbol: "eSTORJ",
     name: "Storj Token",
@@ -578,7 +481,7 @@ export const ethtokens = {
     oneImg: "",
     decimals: 18
   }
-
+*/
   /*
 WONE
 "Symbol" : "1ONE"

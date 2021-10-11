@@ -9,10 +9,10 @@ export default {
       
     },
     computed: {
-        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWalletType']),
+        ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWalletType', 'getChainID']),
     },
     methods: {
-        ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet','setWalletType']),
+        ...mapActions('wallet', ['setSignedIn', 'setSignedOut', 'setUserAddress', 'setUserWallet','setWalletType','setChainID']),
   
         connectOneWallet: async function() {
           console.log("connecting wallet")
@@ -52,12 +52,54 @@ export default {
         },
         connectMetamaskWallet: async function(){
           if (window.ethereum !== undefined){
+            if(this.$route.name == 'Bridge'){
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = await provider.getSigner();
+                const { chainId } = await provider.getNetwork()
+                this.setChainID(chainId);
+                const accounts = await signer.getAddress();
+                this.setWalletType('metamask');
+                console.log(accounts)
+                this.setUserAddress(accounts);
+                localStorage.setItem("walletmode", '0');
+                this.setSignedIn( true );
+                this.setUserWallet( provider );
+                return true
+            }
+            window.ethereum.on('chainChanged', async function(){
+              if(this.$route.name != 'Bridge'){
+                window.location.reload(true);  
+              }else{
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = await provider.getSigner();
+                const { chainId } = await provider.getNetwork()
+                this.setChainID(chainId);
+                const accounts = await signer.getAddress();
+                this.setWalletType('metamask');
+                console.log(accounts)
+                this.setUserAddress(accounts);
+                localStorage.setItem("walletmode", '0');
+                this.setSignedIn( true );
+                this.setUserWallet( provider );
+                return true
+              }
+              
+            }.bind(this));
+            window.ethereum.on('accountsChanged', async function(){
+              window.location.reload(true);
+            }.bind(this));
+            console.log(this.$route)
+            if(this.$route.name == 'Bridge'){
+              return true
+            }
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
             const signer = await provider.getSigner();
-            const network = await provider.getNetwork();
-            const chainID = await network.chainId;
-            if (chainID != 1666600000) {
+            const { chainId } = await provider.getNetwork()
+            this.setChainID(chainId);
+            if (chainId != 1666600000 && chainId != 1666700000 && chainId != 1337) {
               toastMe('warning', {
                 title: 'Wrong Network',
                 msg: `Please Use Harmony Network`,
@@ -108,7 +150,7 @@ export default {
         },
         setdefaultWallet: function(){
           const provider =  new ethers.providers.JsonRpcProvider("https://api.s0.t.hmny.io", {chainId: 1666600000, name: "Harmony"})
-          this.setUserAddress("0x0000000000000000000000000000000000000005")
+          this.setUserAddress("0x0000000000000000000000000000000000000009")
           this.setUserWallet( provider );
         }
     }

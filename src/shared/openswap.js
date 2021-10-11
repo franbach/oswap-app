@@ -26,31 +26,61 @@ import { toastMe } from '@/components/toaster/toaster.js';
 export default {
   created: function () {},
   computed: {
-
+    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF','WONE' , 'UNIROUTERV2','oSWAPTOKEN', 'bBUSD', 'eBUSD', 'eUSDC', 'bUSDC', 'lockedAddress']),
+    ...mapGetters('wallet', ['getStateProvider'])
   },
   methods: {
-    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet', 'getWalletType']),
-    ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'WONE', 'UNIROUTERV2','oSWAPTOKEN']),
+    ...mapGetters('wallet', ['getUserSignedIn', 'getUserSignedOut', 'getUserAddress', 'getWallet', 'getWalletType',  'getChainID']),
+    
     ...mapActions('exchange/swapper', ['setBtnState']),
     ...mapActions('liquidity/buttons', ['setBtnState']),
     getProvider: function(call){
+       let networks = {
+      1:{
+        rpcURL: '',
+        provider: '',
+        name: ""
+      },
+      56: {
+        rpcURL: '',
+        provider: '',
+        name: ""
+      },
+      1666600000: {
+        rpcURL: 'https://api.harmony.one',
+        provider: new ethers.providers.JsonRpcProvider('https://api.harmony.one', {chainId: 1666600000, name: "Harmony Mainnet S0"}),
+        name: "mainnet harmony"
+      },
+      1666700000: {
+        rpcURL: 'https://api.s0.b.hmny.io',
+        provider: new ethers.providers.JsonRpcProvider('https://api.s0.b.hmny.io', {chainId: 1666700000, name: "Harmony Testnet S0"}),
+        name: "testnet"
+      },
+      1337:{
+        rpcURL: 'http://localhost:7545',
+        provider: new ethers.providers.JsonRpcProvider('http://localhost:7545', {chainId: 1337, name: "local"}),
+        name: "local"
+      }
+    }
+      let id = this.getChainID();
       if(this.getUserSignedIn() == true && this.getWalletType() == 'metamask' && call == undefined){
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         return provider
       }
       if(call){
-        const provider = new ethers.providers.JsonRpcProvider("https://api.harmony.one", {chainId: 1666600000, name: "Harmony"})
+        const provider = networks[this.getChainID()].provider
         return provider
       }
       else{
-        const provider =  new ethers.providers.JsonRpcProvider("https://api.harmony.one", {chainId: 1666600000, name: "Harmony"})
+        const provider = networks[this.getChainID()].provider
         return provider
       }
     },
+
     addTokenToMetamask: async function(token) {
       const tokenAddress = token.oneZeroxAddress;
       var tokenSymbol = token.Symbol;
-      if(tokenAddress == this.WONE()){
+      if(tokenAddress == this.WONE(this.getChainID())){
         tokenSymbol = "WONE";
       }
       
@@ -73,14 +103,17 @@ export default {
       },
     getOswapPrice: async function () {
         this.balances = [];
+        let chainID = this.getChainID()
+        console.log(chainID)
+        console.log(this.oSWAPTOKEN(chainID))
         const Oswap = new Token(
-          ChainId.MAINNET,
-          "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+          chainID,
+          this.oSWAPTOKEN(chainID),
           18
         );
         const Busd = new Token(
-          ChainId.MAINNET,
-          "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA",
+          chainID,
+          this.bBUSD(chainID),
           18
         );
 
@@ -89,11 +122,17 @@ export default {
           this.error = 1;
           this.errormessage = "Pool Doesn't Exist";
         });
-        return pair.token1Price.toSignificant(4);
+        console.log(pair)
+        if(pair.tokenAmounts[0].token.address == this.bBUSD(this.getChainID)){
+          return pair.token0Price.toSignificant(4);
+        }else {
+          return pair.token1Price.toSignificant(4);
+        }
+        
 
     },
     getOneBalance: async function(){
-        const provider = this.getProvider(true)
+        const provider = this.getProvider()
         const userAddress = this.getUserAddress();
         const balance = await provider.getBalance(userAddress);
         return balance
@@ -200,10 +239,10 @@ export default {
           type: "function"
         }
       ];
-      const provider = new ethers.providers.JsonRpcProvider("https://api.s0.t.hmny.io", {chainId: 1666600000, name: "Binance"})
+      const provider = this.getProvider(true)
       const userAddress = this.getUserAddress();
 
-      if (token.oneZeroxAddress == this.WONE()) {
+      if (token.oneZeroxAddress == this.WONE(this.getChainID())) {
         const balance = await provider.getBalance(userAddress);
 
         let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
@@ -241,10 +280,10 @@ export default {
           type: "function"
         }
       ];
-      const provider = this.getProvider(true)
+      const provider = this.getProvider()
       const userAddress = this.getUserAddress();
 
-      if (token.oneZeroxAddress == this.WONE()) {
+      if (token.oneZeroxAddress == this.WONE(this.getChainID())) {
         const balance = await provider.getBalance(userAddress);
 
         let formatedbalance = ethers.utils.formatUnits(balance.toString(), token.decimals).toString();
@@ -271,7 +310,7 @@ export default {
         var totalUnclaimedRewards = ethers.BigNumber.from("0");
 
         const abi = MasterChef.abi;
-        const masterChef = this.oSWAPCHEF();
+        const masterChef = this.oSWAPCHEF(this.getChainID());
         const contract = new ethers.Contract(masterChef, abi, provider);
 
         for (n in Pools) {
@@ -301,7 +340,7 @@ export default {
       const provider = this.getProvider(true)
       const address = this.getUserAddress();
       const abi = MasterChef.abi;
-      const masterChef = this.oSWAPCHEF();
+      const masterChef = this.oSWAPCHEF(this.getChainID());
       const contract = new ethers.Contract(masterChef, abi, provider);
       const i = 11;
       const pending = await contract.pendingSushi(i, address).catch(error => {
@@ -431,7 +470,7 @@ export default {
         return 1
       }
       const abi = MasterChef.abi
-      const masterChef = this.oSWAPCHEF();
+      const masterChef = this.oSWAPCHEF(this.getChainID());
       const pid = parseInt(pool.pid)
 
       if(this.getWalletType() == 'metamask'){
@@ -511,7 +550,7 @@ export default {
         return 1
       }
       const abi = MasterChef.abi
-      const masterChef = this.oSWAPCHEF();
+      const masterChef = this.oSWAPCHEF(this.getChainID());
       const pid = parseInt(pool.pid)
       let tempToken = {decimals: 18};
       amount = this.getUnits(amount, tempToken)
@@ -674,7 +713,7 @@ export default {
       const abi = SushiMaker.abi;
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
+      const contract = new ethers.Contract(this.oSWAPMAKER(this.getChainID()), abi, signer);
       
       
 
@@ -720,7 +759,9 @@ export default {
       if(this.getWalletType() == 'metamask'){
          const provider = new ethers.providers.Web3Provider(window.ethereum);
           const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.oSWAPMAKER(), abi, signer);
+          let makerAddr = this.oSWAPMAKER(this.getChainID())
+          
+      const contract = new ethers.Contract(makerAddr, abi, signer);
       const tx = await contract.convert(pool.token0address, pool.token1address).catch(err => {
         var message;
         if(!err.data?.message){
@@ -756,7 +797,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.oSWAPMAKER());
+        const unattachedContract = hmy.contracts.createContract(abi, this.oSWAPMAKER(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -784,14 +825,14 @@ export default {
     //----------------------------------------SDK------------------------------------------
     getPair: async function(token0, token1){
       const Token0 = await Fetcher.fetchTokenData(
-      ChainId.MAINNET,
+      this.getChainID(),
       token0.oneZeroxAddress
     );
     const Token1 = await Fetcher.fetchTokenData(
-      ChainId.MAINNET,
+      this.getChainID(),
       token1.oneZeroxAddress
     );
-    const pair = await Fetcher.fetchPairData(Token0, Token1).catch(error => {
+    const pair = await Fetcher.fetchPairData(Token0,Token1).catch(error => {
       console.log(error); 
       throw error 
     });
@@ -799,14 +840,14 @@ export default {
     },
     getPairAsToken: async function(token0, token1){
       const Token0 = await Fetcher.fetchTokenData(
-      ChainId.MAINNET,
+      this.getChainID(),
       token0.oneZeroxAddress
     );
     const Token1 = await Fetcher.fetchTokenData(
-      ChainId.MAINNET,
+      this.getChainID(),
       token1.oneZeroxAddress
     );
-    const pair = await Fetcher.fetchPairData(Token0, Token1).catch(error => {
+    const pair = await Fetcher.fetchPairData(Token0,Token1).catch(error => {
       console.log(error);  
     });
 
@@ -842,7 +883,7 @@ export default {
     },
     getLiquidityValueSolo: async function(pool, staked){
       let token0 = {oneZeroxAddress : pool.token0address} 
-      let token1 = {oneZeroxAddress : "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"} //BUSD
+      let token1 = {oneZeroxAddress :this.bBUSD(this.getChainID())} //BUSD
       const pair = await this.getPair(token1, token0)
       let rate = this.getRate(pair, token0)
       return parseFloat(rate * this.getEthUnits(staked.toString())).toFixed(5)
@@ -862,7 +903,7 @@ export default {
         return [ethers.utils.commify(parseFloat(tt1s).toFixed(2) * 2), parseFloat(tt1s).toFixed(2) * 2];
       }else{
         var Token0 = {oneZeroxAddress: pool.token0address} 
-        let Token1 = {oneZeroxAddress: "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA"}
+        let Token1 = {oneZeroxAddress: this.bBUSD(this.getChainID())}
         let wei = ethers.utils.parseUnits('1', 18)
         var route = await this.getBestRouteFarms(wei, Token0, Token1);
         
@@ -882,36 +923,36 @@ export default {
       EUSDC,
       BUSDC] = await Promise.all([
         Fetcher.fetchTokenData(
-                ChainId.MAINNET,
+                this.getChainID(),
                 token0.oneZeroxAddress
                 ),
         Fetcher.fetchTokenData(
-                ChainId.MAINNET,
+                this.getChainID(),
                 token1.oneZeroxAddress
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+                this.getChainID(),
+                this.WONE(this.getChainID()),
                 18
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+                this.getChainID(),
+                this.oSWAPTOKEN(this.getChainID()),
                 18
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0xE176EBE47d621b984a73036B9DA5d834411ef734",
+                this.getChainID(),
+                this.bBUSD(this.getChainID()),
                 18
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0x985458E523dB3d53125813eD68c274899e9DfAb4", //eusdc
+                this.getChainID(),
+                this.eUSDC(this.getChainID()), //eusdc
                 6
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa", //busdc
+                this.getChainID(),
+                this.bUSDC(this.getChainID()), //busdc
                 18
                 )
       ]);
@@ -967,33 +1008,45 @@ export default {
     },
     getBestRouteFarms: async function(parsedAmount, token0, token1) {
 
-      const [
+            const [
       Token0,
       Token1,
       TokenX,
       TokenY,
-      TokenZ] = await Promise.all([
+      TokenZ,
+      EUSDC,
+      BUSDC] = await Promise.all([
         Fetcher.fetchTokenData(
-                ChainId.MAINNET,
+                this.getChainID(),
                 token0.oneZeroxAddress
                 ),
         Fetcher.fetchTokenData(
-                ChainId.MAINNET,
+                this.getChainID(),
                 token1.oneZeroxAddress
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a",
+                this.getChainID(),
+                this.WONE(this.getChainID()),
                 18
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0xc0431Ddcc0D213Bf27EcEcA8C2362c0d0208c6DC",
+                this.getChainID(),
+                this.oSWAPTOKEN(this.getChainID()),
                 18
                 ),
         new Token(
-                ChainId.MAINNET,
-                "0xE176EBE47d621b984a73036B9DA5d834411ef734",
+                this.getChainID(),
+                this.bBUSD(this.getChainID()),
+                18
+                ),
+        new Token(
+                this.getChainID(),
+                this.eUSDC(this.getChainID()), //eusdc
+                6
+                ),
+        new Token(
+                this.getChainID(),
+                this.bUSDC(this.getChainID()), //busdc
                 18
                 )
       ]);
@@ -1007,7 +1060,9 @@ export default {
              pairc,
              paircd,
              paire,
-             pairef
+             pairef,
+             pairfg,
+             pairgh,pairij
             ] = await Promise.all([
               Fetcher.fetchPairData(Token0, Token1).catch(() => {
                       return pairTHATEXISTS
@@ -1029,10 +1084,19 @@ export default {
               }),
               Fetcher.fetchPairData(TokenZ, Token1).catch(() => {
                       return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(Token1, EUSDC).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(BUSDC, EUSDC).catch(() => {
+                      return pairTHATEXISTS
+              }),
+              Fetcher.fetchPairData(EUSDC, BUSDC).catch(() => {
+                      return pairTHATEXISTS
               })
             ]);
 
-      const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
+      const bestRoute = await Trade.bestTradeExactIn([paira,pairab,pairc,paircd,paire,pairef, pairgh, pairij,pairfg,pair01, pairTHATEXISTS],new TokenAmount(Token0, parsedAmount), Token1)
 
       return bestRoute[0]
     },
@@ -1048,7 +1112,7 @@ export default {
     },
     getTrade: async function(route, amount, token0){
        const Token0 = await Fetcher.fetchTokenData(
-        ChainId.MAINNET,
+        this.getChainID(),
         token0.oneZeroxAddress
       );
       const trade = new Trade(
@@ -1059,9 +1123,9 @@ export default {
       return trade;
     },
     getOswapPerBlock: async function(){
-      const provider = this.getProvider(true)
+      const provider = this.getProvider()
       const abi = MasterChef.abi;
-      const contract = new ethers.Contract(this.oSWAPCHEF(), abi, provider);
+      const contract = new ethers.Contract(this.oSWAPCHEF(this.getChainID()), abi, provider);
 
       const oswapPerBlock = await contract.sushiPerBlock();
       const allocPoints = await contract.totalAllocPoint();
@@ -1074,21 +1138,9 @@ export default {
     },
     
     getRewardValue: async function(pool, poolWeight) {
-      //onst BN = require("bn.js");
-      const token0 = new Token(
-        ChainId.MAINNET,
-        this.oSWAPTOKEN(),
-        18
-      );
-      const token1 = new Token(
-        ChainId.MAINNET,
-        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA", //BUSD
-        18
-      );
-
+  
       
-      const pair = await Fetcher.fetchPairData(token0, token1);
-      const price = parseFloat(pair.token1Price.toFixed(4));
+      const price = await this.getOswapPrice()
       
       const aWeekly = await this.getOswapPerBlock();
       const aMonthly = aWeekly * 4;
@@ -1115,9 +1167,9 @@ export default {
         token1,
         tokenLP,
        ] = await Promise.all([
-         Fetcher.fetchTokenData(ChainId.MAINNET, pool.token0address),
-         Fetcher.fetchTokenData(ChainId.MAINNET, pool.token1address),
-         Fetcher.fetchTokenData(ChainId.MAINNET, pool.pairaddress)
+         Fetcher.fetchTokenData(this.getChainID(), pool.token0address),
+         Fetcher.fetchTokenData(this.getChainID(), pool.token1address),
+         Fetcher.fetchTokenData(this.getChainID(), pool.pairaddress)
        ]);
 
       
@@ -1148,7 +1200,7 @@ export default {
     getAmountsLiquidity: async function(pair, token0, token1, amount){
       
       const Token0 = await Fetcher.fetchTokenData(
-        ChainId.MAINNET,
+        this.getChainID(),
         token0.oneZeroxAddress
       );
       const route = new Route([pair], Token0);
@@ -1188,7 +1240,7 @@ export default {
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
       const tx = await contract.swapExactETHForTokens(amountOutParsed, path, address, deadline, valueOveride).catch(err => {
 
         var message;
@@ -1225,7 +1277,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1270,7 +1322,7 @@ export default {
       if(this.getWalletType() == 'metamask'){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
       const tx = await contract.swapExactTokensForETH(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
 
         var message;
@@ -1307,7 +1359,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1353,7 +1405,7 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
 
       const tx = await contract.swapExactTokensForTokens(amoutInParsed, amountOutParsed, path, address, deadline).catch(err => {
 
@@ -1391,7 +1443,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1426,7 +1478,7 @@ export default {
         return 1
       }
       const abi = MasterChef.abi
-      const masterChef = this.oSWAPCHEF();
+      const masterChef = this.oSWAPCHEF(this.getChainID());
       const pid = parseInt(pool.pid)
       let tempToken = {decimals: 18};
       amount = this.getUnits(amount, tempToken)
@@ -1525,7 +1577,7 @@ export default {
       if(this.getWalletType() == 'metamask'){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
       let tx = await contract.removeLiquidityETH(
         token0.oneZeroxAddress,
         amount,
@@ -1573,7 +1625,7 @@ export default {
     }
     if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1627,7 +1679,7 @@ export default {
       if(this.getWalletType() == 'metamask'){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
       let tx = await contract
       .removeLiquidity(
         token0.oneZeroxAddress,
@@ -1675,7 +1727,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1743,7 +1795,7 @@ export default {
       if(this.getWalletType() == 'metamask'){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
       
 
       const tx = await contract
@@ -1793,7 +1845,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1846,7 +1898,7 @@ export default {
       if(this.getWalletType() == 'metamask'){
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, signer);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, signer);
       const tx = await contract
         .addLiquidity(
           token0.oneZeroxAddress,
@@ -1895,7 +1947,7 @@ export default {
       }
       if(this.getWalletType() == 'oneWallet'){
         let options = { gasPrice: "0x3B9ACA00" };
-        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2());
+        const unattachedContract = hmy.contracts.createContract(abi, this.UNIROUTERV2(this.getChainID()));
         let wallet = new oneWallet()
         await wallet.signin()
         let contract = wallet.attachToContract(unattachedContract)
@@ -1961,12 +2013,13 @@ export default {
     },
     isStablecoin: function(tokenAddress){
       var stablecoins = [
-        "0x0aB43550A6915F9f67d0c454C2E90385E6497EaA", //bBUSD
-        "0x9A89d0e1b051640C6704Dde4dF881f73ADFEf39a", //bUSDT
-        "0x44cED87b9F1492Bf2DCf5c16004832569f7f6cBa", //bUSDC
-        "0xE176EBE47d621b984a73036B9DA5d834411ef734", //eBUSD
-        "0x985458E523dB3d53125813eD68c274899e9DfAb4", //eUSDC
-        "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f", //eUSDT
+      this.bBUSD(this.getChainID()), //bBUSD
+       // "0x9A89d0e1b051640C6704Dde4dF881f73ADFEf39a", //bUSDT
+       this.bUSDC(this.getChainID()),, //bUSDC
+       // "0xE176EBE47d621b984a73036B9DA5d834411ef734", //eBUSD
+       this.eUSDC(this.getChainID()), //eUSDC
+       // "0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f", //eUSDT
+       this.eBUSD(this.getChainID()),
       ]
       for(let i in stablecoins){
         if(stablecoins[i] == tokenAddress){
@@ -1979,7 +2032,7 @@ export default {
 
       let parsedAmount = this.getUnits(amount, token1);
       let Token0 = await Fetcher.fetchTokenData(
-        ChainId.MAINNET,
+        this.getChainID(),
         token1.oneZeroxAddress
         )
       const trade = new Trade(
@@ -2004,7 +2057,7 @@ export default {
       let path = this.getPath(bestRoute)
       const abi = IUniswapV2Router02.abi;
       console.log(path)
-      const contract = new ethers.Contract(this.UNIROUTERV2(), abi, provider);
+      const contract = new ethers.Contract(this.UNIROUTERV2(this.getChainID()), abi, provider);
       let allowance = await contract.getAmountsIn(parsedAmount, path)
       console.log(allowance.toString())
       let amountIn = this.getFormatedUnits(allowance[0].toString(), token2)
@@ -2038,9 +2091,9 @@ export default {
     },
     getBurnAndTotalSupply: async function() {
       
-      const oSWAPToken = this.oSWAPTOKEN();
+      const oSWAPToken = this.oSWAPTOKEN(this.getChainID());
       const burnAddress = "0xdEad000000000000000000000000000000000000";
-      const lockedAddress = "0x8c4245b6096EE6e3C7266f4289233E93B24f0b2d";
+      const lockedAddress = this.lockedAddress(this.getChainID())
 
       const abi = [
          // balanceOf
@@ -2061,7 +2114,7 @@ export default {
         }
       ];
       
-      const provider = new ethers.getDefaultProvider('https://api.harmony.one');
+      const provider = this.getProvider()
       const contract = new ethers.Contract(oSWAPToken, abi, provider);
 
       //Get Burned Balance

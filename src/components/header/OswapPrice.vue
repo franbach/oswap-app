@@ -78,7 +78,7 @@
     },
     mixins: [openswap],
     mounted: async function() {
-      this.$nextTick(function() {
+      this.$nextTick(async function() {
         // Grabs the tooltip element
         this.ttpObj = document.querySelector(`div[tooltipme="tooltip-me_${this.tooltip.name}"]`);
         // Format the tooltip the first time
@@ -87,15 +87,13 @@
         window.addEventListener('resize', () => {
           this.adjustTooltip();
         });
-      })
 
-      this.oswapPrice = await this.getOswapPrice();
-      this.balances = await this.getBurnAndTotalSupply();
-      this.marketCap = commify((this.balances.circSupply * this.oswapPrice).toFixed(2));
-      this.balances.devLocked = commify(this.balances.devLocked);
-      this.balances.circSupply = commify(this.balances.circSupply);
-      this.balances.totalSupply = commify(this.balances.totalSupply);
-      this.balances.burnedAmount = commify(this.balances.burnedAmount);
+        await this.loadData()
+      })
+      await setInterval(async function(){
+        await this.loadData()
+      }.bind(this), 15000)
+      
     },
     methods: {
       getWindowSize() {
@@ -103,6 +101,15 @@
           height: window.innerHeight,
           width: window.innerWidth
         }
+      },
+      loadData: async function(){
+      this.oswapPrice = await this.getOswapPrice();
+      this.balances = await this.getBurnAndTotalSupply();
+      this.marketCap = commify((this.balances.circSupply * this.oswapPrice).toFixed(2));
+      this.balances.devLocked = commify(this.balances.devLocked);
+      this.balances.circSupply = commify(this.balances.circSupply);
+      this.balances.totalSupply = commify(this.balances.totalSupply);
+      this.balances.burnedAmount = commify(this.balances.burnedAmount);
       },
       adjustTooltip() {
         // gets the tooltip location bounduary
