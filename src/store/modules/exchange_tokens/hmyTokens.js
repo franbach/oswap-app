@@ -34,7 +34,7 @@ export const hmytokens = {
     oneAddress: "one1afvfayllrzc6ru0fhtr7705x4d32mhrewz4c77",
     oneZeroxAddress: "0xEa589E93Ff18b1a1F1e9BaC7EF3E86Ab62addc79",
     decimals: 18,
-    imgSrc: "https://miro.medium.com/fit/c/56/56/1*6X4n2JzQweFbOjpneSWiOw.png"
+    imgSrc: "https://assets.coingecko.com/coins/images/15305/large/0c4b902b40f14db918f4500956386414ab7ebcfe.jpeg?1620371961"
   },
   VINCI: {
     Symbol: "VINCI",
