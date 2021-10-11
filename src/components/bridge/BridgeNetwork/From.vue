@@ -40,7 +40,7 @@
         this.selectNetworkAuto()
         if(window.ethereum !== undefined){
           window.ethereum.on('chainChanged', async function(){
-            this.switchNetwork()
+            this.selectNetworkAuto()
           }.bind(this))
         }
           
