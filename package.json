@@ -14,6 +14,7 @@
     "@ethersproject/solidity": "^5.3.0",
     "@fontsource/alata": "^4.3.0",
     "@fontsource/libre-franklin": "^4.5.0",
+    "@fontsource/montserrat": "^4.5.1",
     "@fontsource/nunito": "^4.5.0",
     "@harmony-js/crypto": "^0.1.56",
     "@headlessui/vue": "^1.2.0",
