@@ -1,21 +1,23 @@
 <template>
   <div class="flex flex-col flex-1 space-y-3">
     <div class="flex flex-1 space-x-3">
-      <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
-        <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-10">{{token0.Symbol}}/{{token1.Symbol}}</p>
-      </InputWithValidation>
-      <div class="flex flex-1 items-center justify-end group-scope">
-        <div @click="setMax()" class="flex h-10 items-center group-scope-hover:bg-oswapGreen text-oswapGreen-dark dark:text-oswapGreen border border-oswapGreen-dark dark:border-oswapGreen cursor-pointer px-3 rounded-xl ss:space-x-0 xs:space-x-2">
-          <i class="las la-wallet ss:hidden xs:block text-xl dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100"></i>
-          <p class="dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100">MAX</p>
+      <InputWithValidationLiquidity :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+        <div class="flex items-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl h-10">
+          <p class="px-3">{{token0.Symbol}}/{{token1.Symbol}}</p>
+
+          <div v-if="pair" class="flex flex-1 st5-all items-center justify-end group-scope">
+            <div @click="setMax()" class="flex h-10 items-center bg-gray-100 dark:bg-oswapDark-gray group-scope-hover:bg-oswapGreen text-oswapGreen-dark dark:text-oswapGreen border-l border-black border-opacity-10 cursor-pointer px-3 rounded-xl">
+              <p class="text-sm dark:group-scope-hover:text-oswapDark-gray group-scope-hover:text-gray-100">MAX</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </InputWithValidationLiquidity>
     </div>
   </div>
 </template>
 
 <script>
-  import InputWithValidation from '@/components/InputWithValidation';
+  import InputWithValidationLiquidity from '@/components/InputWithValidationLiquidity';
   import { mapGetters, mapActions } from 'vuex';
    import openswap from "@/shared/openswap.js";
 
@@ -23,14 +25,13 @@
     name: 'LiquidityAmount',
     mixins: [openswap],
     components: {
-      InputWithValidation
+      InputWithValidationLiquidity
     },
     props: {
       token0: Object,
       token1: Object,
       balances: Object
-
-      },
+    },
     data() {
       return {
         amount: '1.0',

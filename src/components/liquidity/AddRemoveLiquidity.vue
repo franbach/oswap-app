@@ -1,29 +1,35 @@
 <template>
   <div class="flex flex-1 flex-col ss:w-80 xs:w-96 pb-5 pt-2.5">
-    <div class="flex flex-1 flex-col p-4 st5 text-gray-500 dark:text-gray-300 bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent rounded-3xl h-auto">
+    <div class="flex flex-1 flex-col p-4 st5 text-gray-500 dark:text-gray-300 bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent border-l border-oswapGreen rounded-3xl h-auto">
       <div class="flex items-center space-x-2 mb-3">
         <i class="las la-tint text-xl"></i>
         <p class="text-sm">Liquidity</p>
       </div>
-      <div class="flex flex-col space-y-1 st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
-        <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray p-3 rounded-2xl">
-          <LiquidityPair :available="balances.lpToken"/>
+      <div class="flex flex-col st5 dark:bg-oswapDark-gray bg-gray-100 rounded-2xl">
+        <div class="flex shadow-lg flex-col st5 dark:bg-oswapDark-gray rounded-2xl">
+          <div class="flex shadow-lg flex-col st5 dark:bg-oswapDark-gray rounded-2xl">
+            <div class="flex shadow-lg flex-col space-y-3 st5 dark:bg-oswapDark-gray p-3 rounded-2xl">
+              <LiquidityPair :available="balances.lpToken"/>
+            </div>
+            <LiquidityInfo :pairAddress="pairAddress"/>
+          </div>
+          <button @click="toggleAdd" class="flex px-3 py-4 space-x-3 items-center focus:outline-none">
+            <i class="las la-plus-circle text-lg text-oswapGreen"></i>
+            <p class="text-sm">Add Liquidity</p>
+          </button>
+          <transition tag="div" name="squeeze-liq" class="flex overflow-hidden">
+            <div v-if="addLiquidity" ><AddLiquidity :key="createNewPair" :createNewPair="createNewPair" :balances="balances" @setSlippageRate="setSlippage" /></div>
+          </transition>
         </div>
-        <LiquidityInfo :pairAddress="pairAddress"/>
-      </div>
-      <div class="flex flex-1 pt-4">
-        <button @click="toggleAdd" :class="addLiquidity ? 'bg-gray-100 dark:bg-slightDark shadow-lg z-30' : 'bg-slightGray dark:bg-oswapDark-gray dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl st5 text-oswapGreen focus:outline-none">
-          <p class="text-sm">Add Liquidity</p>
-          <i class="las la-level-down-alt"></i>
-        </button>
-        <button @click="toggleRemove" :class="removeLiquidity ? 'bg-gray-100 dark:bg-slightDark shadow-lg z-30' : 'bg-slightGray dark:bg-oswapDark-gray dark:hover:bg-gray-600 hover:bg-gray-100 z-10'" class="flex flex-1 items-center justify-center p-3 space-x-2 rounded-t-xl st5 text-red-400 focus:outline-none">
+        <button @click="toggleRemove" class="flex px-3 py-4 space-x-3 items-center focus:outline-none">
+          <i class="las la-minus-circle text-lg text-red-300"></i>
           <p class="text-sm">Remove Liquidity</p>
-          <i class="las la-level-up-alt"></i>
         </button>
+        <transition tag="div" name="squeeze-liq" class="flex overflow-hidden">
+          <div v-if="removeLiquidity" ><RemoveLiquidity :balances="balances" /></div>
+        </transition>
       </div>
       
-      <div v-if="addLiquidity" ><AddLiquidity :key="createNewPair" :createNewPair="createNewPair" :balances="balances" @setSlippageRate="setSlippage" /></div>
-      <div v-if="removeLiquidity" ><RemoveLiquidity :balances="balances" /></div>
 
       <div class="flex pt-4">
         <div class="flex w-full h-10 items-center">
@@ -88,7 +94,7 @@
         token1Approved: false,
         slippageRate: '0.5',
         warnings: {},
-        addLiquidity: true,
+        addLiquidity: false,
         removeLiquidity: false,
         createNewPair: false,
         pairAddress: null,

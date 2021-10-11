@@ -13,6 +13,7 @@
       </div>
 
     </div>
+    <!-- <StakingInfo /> -->
   </div>
 </template>
 
@@ -20,13 +21,15 @@
   import Chart from "@/components/farm/FarmHeader/Chart";
   import Total from "@/components/farm/FarmHeader/Total";
   import Personal from "@/components/farm/FarmHeader/Personal";
+  import StakingInfo from "@/components/farm/StakingInfo"
 
   export default {
     name: 'FarmHeader',
     components: {
       Chart,
       Total,
-      Personal
+      Personal,
+      StakingInfo
     },
     props: {
       data: Object,

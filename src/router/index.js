@@ -132,7 +132,12 @@ const routes = [
     path: '/information',
     name: 'Information',
     component: () => import('../views/Information.vue')
-  }
+  },
+  {
+    path: '/wallet',
+    name: 'Wallet',
+    component: () => import('../views/Wallet.vue')
+  },
 ]
 
 const router = createRouter({
