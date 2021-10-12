@@ -1,19 +1,20 @@
 <template>
   <div class="flex w-full h-auto ss:mt-3 ss:mb-6 xs:mt-8 xs:mb-12">
-    <div class="flex flex-col ss:w-full xs:w-auto mdd:flex-row bg-gradient-to-l from-slightGray dark:from-slightDark to-transparent p-3 rounded-3xl">
+    <div class="grid grid-cols-3 gap-3 w-full">
 
-      <div class="flex flex-1 items-center">
-        <Chart :poolName="data.chartData.name" :liquidity="data.chartData.liquidity" />
+      <div class="flex flex-1 items-start">
         <Total :TVL="data.TVL" :TAPR="data.APRs.tAPR" />
       </div>
 
-      <div class="flex items-center mdd:divide-x mdd:divide-oswapGreen">
-        <div class="mdd:flex hidden"></div>
+      <div class="flex flex-1 items-start">
         <Personal :TVL="data.PVL" :PAPR="data.APRs.pAPR" :REWARDS="data.rewardsPending" />
       </div>
 
+      <div class="flex flex-1 items-start">
+        <StakingInfo />
+      </div>
+
     </div>
-    <!-- <StakingInfo /> -->
   </div>
 </template>
 
@@ -21,7 +22,7 @@
   import Chart from "@/components/farm/FarmHeader/Chart";
   import Total from "@/components/farm/FarmHeader/Total";
   import Personal from "@/components/farm/FarmHeader/Personal";
-  import StakingInfo from "@/components/farm/StakingInfo"
+  import StakingInfo from "@/components/farm/FarmHeader/StakingInfo"
 
   export default {
     name: 'FarmHeader',
