@@ -63,6 +63,7 @@
     import { toBech32 } from '@harmony-js/crypto'
   import { ethers } from "ethers";
   const { BridgeSDK, TOKEN, NETWORK_TYPE, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+  const DEFAULT_ADDRESS = '0x0000000000000000000000000000000000000009';
   const configs = require('bridge-sdk/lib/configs');
   import openswap from "@/shared/openswap.js";
 
@@ -173,11 +174,11 @@
         var tokenType
         var erc20;
         //gets bech32 user address
-        if(this.getBridgeMode() == EXCHANGE_MODE.ONE_TO_ETH){
-            var oneAddress = toBech32(this.userAddress)
-        }else{
-          var oneAddress = toBech32(this.userAddress)
+        if (this.useAddress === DEFAULT_ADDRESS) {
+          this.warnings['Network'] = 'Please make sure your wallet is connected before bridging.';
+          return 0;
         }
+        var oneAddress = toBech32(this.userAddress);
         
         console.log("userAddress  " + this.userAddress)
         //returns true if token is native (aka one, eth, bsc tokens)
