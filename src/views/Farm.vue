@@ -102,7 +102,6 @@
       ...mapGetters('addressConstants', ['oSWAPMAKER', 'oSWAPCHEF', 'hMULTICALL', 'hRPC']),
     },
     methods: {
-      
       ...mapGetters('wallet', ['getUserAddress', 'getUserSignedIn', 'getChainID']),
       ...mapActions('farm/farmData', ['setFarmDataState', 'setSoloDataState', 'setCustomDataState']),
 

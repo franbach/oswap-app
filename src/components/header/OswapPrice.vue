@@ -49,6 +49,7 @@
 <script>
   import openswap from "@/shared/openswap.js"
   import { commify } from '@ethersproject/units';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: "Oswap",
@@ -88,14 +89,30 @@
           this.adjustTooltip();
         });
 
-        await this.loadData()
+        
       })
+
+      let timeout
+
+      if(this.getUserSignedIn()){
+        timeout = 1
+      } else {
+        timeout = 1000
+      }
+
+      await setTimeout(async function (){
+      await this.loadData()
+      }.bind(this), timeout);
+
+
+
       await setInterval(async function(){
         await this.loadData()
       }.bind(this), 15000)
       
     },
     methods: {
+      ...mapGetters('wallet', ['getUserSignedIn']),
       getWindowSize() {
         return {
           height: window.innerHeight,
@@ -104,12 +121,12 @@
       },
       loadData: async function(){
       this.oswapPrice = await this.getOswapPrice();
-      this.balances = await this.getBurnAndTotalSupply();
-      this.marketCap = commify((this.balances.circSupply * this.oswapPrice).toFixed(2));
-      this.balances.devLocked = commify(this.balances.devLocked);
-      this.balances.circSupply = commify(this.balances.circSupply);
-      this.balances.totalSupply = commify(this.balances.totalSupply);
-      this.balances.burnedAmount = commify(this.balances.burnedAmount);
+      let tempBalances = await this.getBurnAndTotalSupply();
+      this.marketCap = commify((tempBalances.circSupply * this.oswapPrice).toFixed(2));
+      this.balances.devLocked = commify(tempBalances.devLocked);
+      this.balances.circSupply = commify(tempBalances.circSupply);
+      this.balances.totalSupply = commify(tempBalances.totalSupply);
+      this.balances.burnedAmount = commify(tempBalances.burnedAmount);
       },
       adjustTooltip() {
         // gets the tooltip location bounduary

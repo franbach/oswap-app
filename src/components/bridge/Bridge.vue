@@ -5,13 +5,13 @@
       <p class="text-sm dark:text-gray-200">Bridge</p>
     </div>
     <div class="flex flex-col space-y-3">
-      <BridgeNetworkSelect @updateBalances="updateBalances"   v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
+      <BridgeNetworkSelect @updateBalances="updateBalances" v-on:change='this.checkChainId()' v-if="(this.getToken()['token1'])" :token="this.getToken()['token1']" />
 
-      <BridgeTokenSelect @click="selectToken('token1')" whichToken="token1" />
+      <BridgeTokenSelect @click="selectToken('token1')" v-on:change='this.checkChainId()' whichToken="token1" />
       <div class="flex flex-1 items-center space-x-3">
-        <InputWithValidation :input="amount" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
+        <InputWithValidationBridge :input="amount" @updateAmounts="this.checkChainId()" :errors="errors" @catchInput="inputAmount" :rounded="'rounded-xl'" :placeholder="'Amount...'" :errorTop="'pt-10'">
           <p class="flex items-center justify-center text-xs z-30 right-0 absolute bg-gray-100 dark:bg-oswapDark-gray rounded-xl px-3 h-10">{{tokenSymbol}}</p>
-        </InputWithValidation>
+        </InputWithValidationBridge>
         
 
         <div class="flex flex-1 items-center justify-end group-scope">
@@ -57,12 +57,13 @@
   import BridgeNetworkSelect from '@/components/bridge/BridgeNetworkSelect';
   import BridgeTokenSelect from '@/components/bridge/BridgeTokenSelect';
   import BridgeButton from '@/components/bridge/BridgeButton';
-  import InputWithValidation from '@/components/InputWithValidation';
+  import InputWithValidationBridge from '@/components/InputWithValidationBridge';
   import Warning from '@/components/exchange/Warning'
 
     import { toBech32 } from '@harmony-js/crypto'
   import { ethers } from "ethers";
   const { BridgeSDK, TOKEN, NETWORK_TYPE, EXCHANGE_MODE, STATUS } = require('bridge-sdk');
+  const DEFAULT_ADDRESS = '0x0000000000000000000000000000000000000009';
   const configs = require('bridge-sdk/lib/configs');
   import openswap from "@/shared/openswap.js";
 
@@ -75,7 +76,7 @@
       BridgeNetworkSelect,
       BridgeTokenSelect,
       BridgeButton,
-      InputWithValidation,
+      InputWithValidationBridge,
       Warning
     },
     data() {
@@ -92,7 +93,7 @@
     },
     mounted: async function() {
        
-        this.userAddress = this.getUserAddress();
+      this.userAddress = this.getUserAddress();
       if (this.getToken()['token1'] != undefined) {
         this.token = this.getToken()['token1']
         console.log(this.token)
@@ -100,8 +101,8 @@
         const network = this.getTokenOrigin()
         await this.checkChainId(network)
         if(this.getWalletType() == 'metamask'){
-            window.ethereum.on('chainChanged',() => {
-            this.checkChainId(network)
+            window.ethereum.on('chainChanged',async function(){
+            await this.checkChainId(network)
           });
         }
       }
@@ -113,6 +114,10 @@
 
       selectToken(token) {
         this.$emit('triggerModal', token)
+      },
+      updatedAmounts(){
+        const network = this.getTokenOrigin()
+        this.checkChainId(network)
       },
       updateBalances(){
         const network = this.getTokenOrigin()
@@ -126,7 +131,9 @@
       bridgeCheckAndExecute:async function(){
         const network = this.getTokenOrigin()
         await this.checkChainId(network)
-
+        if(this.warnings['Network'] != undefined){
+          return 0
+        }
         this.token = this.getToken()['token1']
      
         await this.Bridge(network)
@@ -167,11 +174,11 @@
         var tokenType
         var erc20;
         //gets bech32 user address
-        if(this.getBridgeMode() == EXCHANGE_MODE.ONE_TO_ETH){
-            var oneAddress = toBech32(this.userAddress)
-        }else{
-          var oneAddress = toBech32(this.userAddress)
+        if (this.useAddress === DEFAULT_ADDRESS) {
+          this.warnings['Network'] = 'Please make sure your wallet is connected before bridging.';
+          return 0;
         }
+        var oneAddress = toBech32(this.userAddress);
         
         console.log("userAddress  " + this.userAddress)
         //returns true if token is native (aka one, eth, bsc tokens)

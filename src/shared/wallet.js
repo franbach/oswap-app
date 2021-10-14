@@ -146,6 +146,9 @@ export default {
             this.setdefaultWallet()
       
             this.walletConnected = false;
+            if(window.onewallet){
+              await window.onewallet.forgetIdentity();
+            }
             return false;
         },
         setdefaultWallet: function(){
