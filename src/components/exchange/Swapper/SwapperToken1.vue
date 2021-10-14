@@ -3,7 +3,8 @@
     <!-- Left side -->
     <div class="flex flex-col space-y-1 w-1/3 min-w-0">
       <!-- Token img and name -->
-      <div @click="addTokenToMetamask(this.getToken()['token2'])" class="flex space-x-2 items-center h-10">
+      <div class="relative flex space-x-2 items-center h-10">
+        <i @click="addTokenToMetamask(this.getToken()['token2'])" class="flex las la-plus text-sm p-1 text-oswapGreen absolute top-0 left-0 items-center justify-center bg-slightGray dark:bg-slightDark rounded-full cursor-pointer shadow hover:bg-oswapGreen dark:hover:bg-oswapGreen hover:text-slightGray dark:hover:text-slightDark"></i>
         <img :src="this.getToken()['token2'].imgSrc" class="h-8 w-8 rounded-full flex items-center justify-center" alt="">
         <div class="flex flex-1 items-center min-w-0">
           <p class="text-sm text-el text-oswapGreen-dark">{{this.getToken()['token2'].Symbol}}</p>
