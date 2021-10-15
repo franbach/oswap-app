@@ -48,6 +48,9 @@
 <script>
   import { ethers } from 'ethers';
   import openswap from "@/shared/openswap.js";
+  import { toastMe } from '@/components/toaster/toaster.js';
+  import { mapGetters } from 'vuex';
+
 
   export default {
     name: 'Personal',
@@ -64,6 +67,18 @@
       }
     },
     mounted: async function(){
+      let timeout
+
+      if(this.getUserSignedIn()){
+        timeout = 1
+      } else {
+        timeout = 1000
+      }
+
+      await setTimeout(async function (){
+        this.oswapPrice = await this.getOswapPrice();
+      }.bind(this), timeout);
+
       await setInterval(async function(){
         this.oswapPrice = await this.getOswapPrice();
       }.bind(this), 15000)
@@ -75,11 +90,12 @@
       }
     },
     methods: {
+      ...mapGetters('wallet', ['getUserSignedIn']),
       prettify: function(number){
         return  ethers.utils.commify(number)
       },
       collectAllButton: async function(){
-        const tx = await this.collectAll()
+        const tx = await this.collectAll() 
       }
     }
   }

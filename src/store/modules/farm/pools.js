@@ -19,5 +19,6 @@ export const pools = {
     1337: { 
         pools: local_pools,
         SoloPools: local_spools
-    },
-  }
+    }
+  
+};
