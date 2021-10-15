@@ -138,6 +138,11 @@ const routes = [
     name: 'Wallet',
     component: () => import('../views/Wallet.vue')
   },
+  {
+    path: '/validator/:address',
+    name: 'Validator',
+    component: () => import('../views/Validator.vue')
+  },
 ]
 
 const router = createRouter({

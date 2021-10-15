@@ -27,13 +27,16 @@
         </div>
       </div>
 
-      <div class="flex items-center space-x-3 w-full mt-6 col-span-2">
+      <div class="flex items-start space-x-3 w-full mt-6 col-span-2">
         <div class="flex w-12 h-12 items-center justify-center rounded-full bg-slightGray dark:bg-slightDark">
           <i class="las la-coins text-3xl dark:text-oswapGreen"></i>
         </div>
         <div class="flex flex-col text-gray-600 dark:text-gray-300">
           <p class="ss:text-xl xs:text-3xl font-extrabold">{{parseFloat(REWARDS).toFixed(2)}} / $ {{pendingValue}}</p>
           <p class="text-xs font-bold text-gray-500 dark:text-gray-400">Total Rewards</p>
+          <button @click="collectAllButton" class="flex mt-2 h-8 items-center justify-center rounded-md text-oswapGreen bg-slightGray dark:bg-slightDark w-24 hover:bg-oswapGreen hover:text-slightGray dark:hover:text-slightDark dark:hover:bg-oswapGreen">
+            <p class="text-sm">Claim All</p>
+          </button>
         </div>
       </div>
     </div>
@@ -45,7 +48,6 @@
 <script>
   import { ethers } from 'ethers';
   import openswap from "@/shared/openswap.js";
-  import { toastMe } from '@/components/toaster/toaster.js';
 
   export default {
     name: 'Personal',
@@ -58,15 +60,7 @@
     data() {
       return {
         oswapPrice: 0,
-        usdValue: 0.00,
-        tooltip: {
-          name: new Date().getTime(),
-          position: 'top',
-          color: 'rgba(24, 213, 187, 1)',
-          offset: 16,
-          speed: 200,
-          shift: 50
-        },
+        usdValue: 0.00
       }
     },
     mounted: async function(){
@@ -86,8 +80,6 @@
       },
       collectAllButton: async function(){
         const tx = await this.collectAll()
-        
-        
       }
     }
   }
